@@ -1,40 +1,58 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <main
-      style={{
-        fontFamily: "Arial",
-        textAlign: "center",
-        padding: "60px",
-      }}
-    >
-      <h1>🎓 PW Learning Hub</h1>
+    <main className="home-page">
+      <header className="home-header">
+        <div className="logo">🎓</div>
 
-      <h2>Welcome!</h2>
+        <div>
+          <p className="small-title">LEARN • PRACTISE • PROGRESS</p>
+          <h1>PW Learning Hub</h1>
+        </div>
+      </header>
 
-      <p>
-        This website is being built for Greta & Mathis.
-      </p>
+      <section className="welcome-card">
+        <p className="welcome-label">👋 Welcome back</p>
+        <h2>Small steps.<br />Big progress.</h2>
 
-      <hr />
+        <p>
+          A learning space for Greta and Mathis.
+        </p>
+      </section>
 
-      <h3>Choose a subject</h3>
+      <section className="student-section">
+        <h2>Choose a student</h2>
 
-      <button>📚 Spelling</button>
+        <div className="student-grid">
+          <div className="student-card">
+            <span>G</span>
+            <strong>Greta</strong>
+            <small>Ready to learn</small>
+          </div>
 
-      <br />
-      <br />
+          <div className="student-card">
+            <span>M</span>
+            <strong>Mathis</strong>
+            <small>Ready to learn</small>
+          </div>
+        </div>
+      </section>
 
-      <button>📖 Reading</button>
+      <section className="subject-section">
+        <h2>Choose a subject</h2>
 
-      <br />
-      <br />
+        <Link href="/spelling" className="subject-card">
+          <span className="subject-icon">📚</span>
 
-      <button>✏️ Grammar</button>
+          <div>
+            <h3>Spelling</h3>
+            <p>30 weeks of spelling practice</p>
+          </div>
 
-      <br />
-      <br />
-
-      <button>➗ Maths</button>
+          <strong>Start →</strong>
+        </Link>
+      </section>
     </main>
   );
 }
