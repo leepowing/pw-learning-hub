@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getSpellingWeek } from "@/data/spellingWeeks";
+import { getSpellingWeek } from "@/data/spellingWeeks-backup";
 
 const week = getSpellingWeek(1);
 

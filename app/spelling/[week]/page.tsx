@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getSpellingWeek } from "@/data/spellingWeeks";
+import { getStudentStorageKey } from "@/lib/studentStorage";
 
 const speak = (word: string, sentence: string) => {
   window.speechSynthesis.cancel();
@@ -46,8 +47,9 @@ export default function WeekPage(){
   const weekNumber = Number(params.week);
   const weekData = getSpellingWeek(weekNumber);
   const words = weekData?.words ?? [];
-  const storageKey = `week${weekNumber}Learned`;
-
+const storageKey = getStudentStorageKey(
+  `week${weekNumber}Learned`
+);
 
   const [completed, setCompleted] = useState<number[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);

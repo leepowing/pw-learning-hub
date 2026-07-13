@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { spellingWeeks } from "@/data/spellingWeeks";
 import { calculateLevel } from "@/lib/rewards";
 import { getAchievements } from "@/lib/achievements";
+import { getStudentStorageKey } from "@/lib/studentStorage";
 
 type WeekProgress = {
   learned: number;
@@ -18,14 +19,25 @@ export default function SpellingPage() {
   >({});
   const [reviewCount, setReviewCount] = useState(0);
   const [totalXP, setTotalXP] = useState(0);
+
+  const availableWeekNumbers = Object.keys(spellingWeeks).map(Number);
+  const totalWeeks = Math.max(...availableWeekNumbers);
+
   useEffect(() => {
     const loadedProgress: Record<number, WeekProgress> = {};
 
-    for (let weekNumber = 1; weekNumber <= 30; weekNumber++) {
-      const learnedKey = `week${weekNumber}Learned`;
-      const bestScoreKey = `week${weekNumber}BestScore`;
-      const masteredKey = `week${weekNumber}Mastered`;
+for (let weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
+const learnedKey = getStudentStorageKey(
+  `week${weekNumber}Learned`
+);
 
+const bestScoreKey = getStudentStorageKey(
+  `week${weekNumber}BestScore`
+);
+
+const masteredKey = getStudentStorageKey(
+  `week${weekNumber}Mastered`
+);
       let learned = 0;
       let bestScore = 0;
       let mastered = false;
@@ -68,13 +80,17 @@ export default function SpellingPage() {
 
     setProgress(loadedProgress);
 const savedXP = Number(
-  window.localStorage.getItem("pwTotalXP") ?? "0"
+  window.localStorage.getItem(
+  getStudentStorageKey("pwTotalXP")
+) ?? "0"
 );
 
 setTotalXP(savedXP);
     try {
   const savedReviewWords =
-    window.localStorage.getItem("reviewWords");
+window.localStorage.getItem(
+  getStudentStorageKey("reviewWords")
+);
 
   if (savedReviewWords) {
     const parsedReviewWords = JSON.parse(savedReviewWords);
@@ -88,7 +104,6 @@ setTotalXP(savedXP);
 }
   }, []);
 
-const availableWeekNumbers = Object.keys(spellingWeeks).map(Number);
 
 const totalAvailableWeeks = availableWeekNumbers.length;
 
@@ -259,7 +274,7 @@ const unlockedAchievements = achievements.filter(
 </section>
 
         <div className="week-grid">
-          {Array.from({ length: 30 }, (_, index) => {
+            {Array.from({ length: totalWeeks }, (_, index) => {
             const weekNumber = index + 1;
             const weekData = spellingWeeks[weekNumber];
             const weekProgress = progress[weekNumber] ?? {

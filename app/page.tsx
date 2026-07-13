@@ -1,8 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedStudent, setSelectedStudent] = useState("");
+
+  const chooseStudent = (student: string) => {
+    setSelectedStudent(student);
+    window.localStorage.setItem("currentStudent", student);
+  };
+
   return (
-    <main className="home-page">
+      <main className="home-page">
       <header className="home-header">
         <div className="logo">🎓</div>
 
@@ -25,13 +35,24 @@ export default function Home() {
         <h2>Choose a student</h2>
 
         <div className="student-grid">
-          <div className="student-card">
-            <span>G</span>
+<div
+  className={`student-card ${
+    selectedStudent === "greta" ? "student-card-selected" : ""
+  }`}
+  onClick={() => chooseStudent("greta")}
+>
+              <span>G</span>
             <strong>Greta</strong>
             <small>Ready to learn</small>
           </div>
 
-          <div className="student-card">
+<div
+  className={`student-card ${
+    selectedStudent === "mathis" ? "student-card-selected" : ""
+  }`}
+  onClick={() => chooseStudent("mathis")}
+>
+
             <span>M</span>
             <strong>Mathis</strong>
             <small>Ready to learn</small>
@@ -46,12 +67,24 @@ export default function Home() {
           <span className="subject-icon">📚</span>
 
           <div>
-            <h3>Spelling</h3>
+            <h3>Spelling - Year 7</h3>
             <p>30 weeks of spelling practice</p>
           </div>
 
           <strong>Start →</strong>
         </Link>
+
+        <article className="subject-card subject-card-disabled">
+  <span className="subject-icon">📚</span>
+
+  <div>
+    <h3>Spelling - Year 8</h3>
+    <p>Coming Soon</p>
+  </div>
+
+  <strong>Soon</strong>
+</article>
+
       </section>
     </main>
   );

@@ -1,4 +1,8 @@
-const XP_STORAGE_KEY = "pwTotalXP";
+import { getStudentStorageKey } from "./studentStorage";
+
+function getXPStorageKey() {
+  return getStudentStorageKey("pwTotalXP");
+}
 
 export function getTotalXP(): number {
   if (typeof window === "undefined") {
@@ -6,7 +10,7 @@ export function getTotalXP(): number {
   }
 
   const savedXP = window.localStorage.getItem(
-    XP_STORAGE_KEY
+    getXPStorageKey()
   );
 
   const parsedXP = Number(savedXP ?? "0");
@@ -19,7 +23,7 @@ export function addXP(amount: number): number {
   const newTotal = getTotalXP() + safeAmount;
 
   window.localStorage.setItem(
-    XP_STORAGE_KEY,
+    getXPStorageKey(),
     String(newTotal)
   );
 

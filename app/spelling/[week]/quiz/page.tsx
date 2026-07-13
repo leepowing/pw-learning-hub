@@ -8,6 +8,7 @@ import {
   addXP,
   calculateLevel,
 } from "@/lib/rewards";
+import { getStudentStorageKey } from "@/lib/studentStorage";
 
 
 export default function WeekQuizPage() {
@@ -15,8 +16,13 @@ export default function WeekQuizPage() {
   const weekNumber = Number(params.week);
   const weekData = getSpellingWeek(weekNumber);
   const quizWords = weekData?.words.map((item) => item.word) ?? [];
-  const bestScoreKey = `week${weekNumber}BestScore`;
-  const masteredKey = `week${weekNumber}Mastered`;
+const bestScoreKey = getStudentStorageKey(
+  `week${weekNumber}BestScore`
+);
+
+const masteredKey = getStudentStorageKey(
+  `week${weekNumber}Mastered`
+);
 
   const [shuffledWords] = useState(() =>
   [...quizWords].sort(() => Math.random() - 0.5)
@@ -157,12 +163,12 @@ useEffect(() => {
   });
 
   const savedReview: string[] = JSON.parse(
-    window.localStorage.getItem("reviewWords") ?? "[]"
+    window.localStorage.getItem(getStudentStorageKey("reviewWords")) ?? "[]"
   );
 
   if (!savedReview.includes(currentWord)) {
     window.localStorage.setItem(
-      "reviewWords",
+      getStudentStorageKey("reviewWords"),
       JSON.stringify([...savedReview, currentWord])
     );
   }
@@ -237,18 +243,18 @@ if (isCorrect) {
     return [...previousMistakes, currentWord];
   });
 const savedReviewWords: string[] = JSON.parse(
-  window.localStorage.getItem("reviewWords") ?? "[]"
+  window.localStorage.getItem(getStudentStorageKey("reviewWords")) ?? "[]"
 );
 
 if (!savedReviewWords.includes(currentWord)) {
   window.localStorage.setItem(
-    "reviewWords",
+    getStudentStorageKey("reviewWords"),
     JSON.stringify([...savedReviewWords, currentWord])
   );
 }
 
 const savedMistakeCounts: Record<string, number> = JSON.parse(
-  window.localStorage.getItem("reviewMistakeCounts") ?? "{}"
+  window.localStorage.getItem(getStudentStorageKey("reviewMistakeCounts")) ?? "{}"
 );
 
 const updatedMistakeCounts = {
@@ -257,7 +263,7 @@ const updatedMistakeCounts = {
 };
 
 window.localStorage.setItem(
-  "reviewMistakeCounts",
+  getStudentStorageKey("reviewMistakeCounts"),
   JSON.stringify(updatedMistakeCounts)
 );
 

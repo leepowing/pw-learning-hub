@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { findWord } from "@/data/spellingWeeks";
+import { findWord } from "@/data/spellingWeeks-backup";
 
 export default function ReviewPage() {
   const [reviewWords, setReviewWords] = useState<string[]>([]);

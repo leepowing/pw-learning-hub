@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getSpellingWeek } from "@/data/spellingWeeks";
+import { getSpellingWeek } from "@/data/spellingWeeks-backup";
 
 const speak = (word: string) => {
   const utterance = new SpeechSynthesisUtterance(word);
