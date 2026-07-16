@@ -8,8 +8,12 @@ import {
   addXP,
   calculateLevel,
 } from "@/lib/rewards";
-import { getStudentStorageKey } from "@/lib/studentStorage";
+import {
+  getCurrentStudent,
+  getStudentStorageKey,
+} from "@/lib/studentStorage";
 
+import { supabase } from "@/lib/supabase";
 
 export default function WeekQuizPage() {
   const params = useParams<{ week: string }>();
@@ -84,7 +88,7 @@ const currentWord = activeWords[question];
 const currentWordData = weekData?.words.find(
   (item) => item.word === currentWord
 );
-const finishQuiz = (finalScore: number) => {
+const finishQuiz = async (finalScore: number) => {
   const answerXP = practiceMode
     ? finalScore * 3
     : finalScore * 5;
@@ -100,6 +104,43 @@ const finishQuiz = (finalScore: number) => {
 
   setEarnedXP(gainedXP);
   setTotalXP(newTotalXP);
+if (!practiceMode) {
+  const student = getCurrentStudent();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    const { error: signInError } =
+      await supabase.auth.signInAnonymously();
+
+    if (signInError) {
+      console.error(
+        "Anonymous sign-in failed:",
+        signInError.message
+      );
+    }
+  }
+
+  const { error: saveError } = await supabase
+    .from("scores")
+    .insert({
+      student,
+      week: weekNumber,
+      score: finalScore,
+      best_score: finalScore,
+    });
+
+  if (saveError) {
+    console.error(
+      "Score could not be saved:",
+      saveError.message
+    );
+  } else {
+    console.log("Score saved to Supabase.");
+  }
+}
   setFinished(true);
 };
 
