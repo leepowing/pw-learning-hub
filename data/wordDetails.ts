@@ -6108,6 +6108,417 @@ recent: {
   chinese: "最近的",
   sentence: "Recent studies show encouraging results.",
 },
+unpopular: {
+  meaning: "not liked by many people",
+  chinese: "不受歡迎的",
+  sentence: "The decision was unpopular with students.",
+},
+
+disallow: {
+  meaning: "to refuse to allow something",
+  chinese: "禁止；不允許",
+  sentence: "The school disallows mobile phones in class.",
+},
+
+tempestuous: {
+  meaning: "very stormy or full of strong emotions",
+  chinese: "暴風雨般的；激烈的",
+  sentence: "They had a tempestuous relationship.",
+},
+
+absolutely: {
+  meaning: "completely; totally",
+  chinese: "完全地；絕對地",
+  sentence: "I absolutely agree with your idea.",
+},
+
+wreck: {
+  meaning: "to destroy badly; something badly damaged",
+  chinese: "毀壞；殘骸",
+  sentence: "The storm wrecked several boats.",
+},
+
+disobedient: {
+  meaning: "not willing to obey rules",
+  chinese: "不服從的",
+  sentence: "The disobedient child ignored the teacher.",
+},
+
+doubtful: {
+  meaning: "feeling uncertain or unlikely",
+  chinese: "懷疑的；未必的",
+  sentence: "It is doubtful that it will rain today.",
+},
+
+resuscitate: {
+  meaning: "to bring someone back to consciousness or life",
+  chinese: "使甦醒；使復甦",
+  sentence: "Doctors managed to resuscitate the patient.",
+},
+
+disembarking: {
+  meaning: "leaving a ship, plane or train",
+  chinese: "下船；下飛機；下車",
+  sentence: "Passengers were disembarking from the ferry.",
+},
+
+discover: {
+  meaning: "to find something for the first time",
+  chinese: "發現",
+  sentence: "Scientists hope to discover new planets.",
+},
+
+numb: {
+  meaning: "unable to feel because of cold or shock",
+  chinese: "麻木的",
+  sentence: "My fingers became numb in the cold.",
+},
+
+write: {
+  meaning: "to form letters or words",
+  chinese: "寫",
+  sentence: "Please write your name here.",
+},
+
+summoned: {
+  meaning: "officially called someone to come",
+  chinese: "召喚；傳喚",
+  sentence: "The witness was summoned to court.",
+},
+
+energy: {
+  meaning: "the power needed to do work",
+  chinese: "能量；精力",
+  sentence: "Children have lots of energy.",
+},
+
+juror: {
+  meaning: "a member of a jury",
+  chinese: "陪審員",
+  sentence: "Each juror listened carefully to the evidence.",
+},
+
+giraffe: {
+  meaning: "the tallest living animal with a long neck",
+  chinese: "長頸鹿",
+  sentence: "The giraffe reached the leaves easily.",
+},
+
+designed: {
+  meaning: "planned or created for a purpose",
+  chinese: "設計的",
+  sentence: "The bridge was designed by an engineer.",
+},
+
+"co-education": {
+  meaning: "the education of boys and girls together",
+  chinese: "男女同校教育",
+  sentence: "The school changed to co-education in 1995.",
+},
+
+bullion: {
+  meaning: "gold or silver in bars or blocks",
+  chinese: "金條；銀條",
+  sentence: "The bank stores gold bullion securely.",
+},
+
+ballast: {
+  meaning: "heavy material used to keep a ship stable",
+  chinese: "壓艙物",
+  sentence: "The ship carried ballast for stability.",
+},
+
+chorus: {
+  meaning: "a group of singers or the repeated part of a song",
+  chinese: "合唱團；副歌",
+  sentence: "Everyone sang the chorus together.",
+},
+
+horror: {
+  meaning: "a feeling of great fear or shock",
+  chinese: "恐懼；驚駭",
+  sentence: "She watched in horror as the tree fell.",
+},
+
+circumstantial: {
+  meaning: "based on indirect evidence rather than direct proof",
+  chinese: "間接的；依情況而定的",
+  sentence: "The police only had circumstantial evidence.",
+},
+sociable: {
+  meaning: "friendly and enjoying being with other people",
+  chinese: "善於交際的",
+  sentence: "She is very sociable and makes friends easily.",
+},
+
+naivety: {
+  meaning: "lack of experience or good judgement",
+  chinese: "天真；幼稚",
+  sentence: "His naivety made him trust strangers too easily.",
+},
+
+fancy: {
+  meaning: "to like or want something; decorative",
+  chinese: "喜歡；花俏的",
+  sentence: "I fancy a cup of tea.",
+},
+
+closing: {
+  meaning: "the act of shutting or ending something",
+  chinese: "關閉；結束",
+  sentence: "The shop is closing at six o'clock.",
+},
+
+surely: {
+  meaning: "certainly; without doubt",
+  chinese: "一定；當然",
+  sentence: "Surely you can finish this on time.",
+},
+
+interrogate: {
+  meaning: "to question someone closely",
+  chinese: "審問；盤問",
+  sentence: "The police interrogated the suspect.",
+},
+
+regatta: {
+  meaning: "a boat racing competition",
+  chinese: "划船比賽",
+  sentence: "The annual regatta attracted many visitors.",
+},
+
+correspond: {
+  meaning: "to communicate by letter or email; to match",
+  chinese: "通信；相符",
+  sentence: "The two friends correspond regularly by email.",
+},
+
+hessian: {
+  meaning: "a rough woven fabric made from jute",
+  chinese: "麻布",
+  sentence: "The potatoes were stored in hessian sacks.",
+},
+
+credible: {
+  meaning: "able to be believed",
+  chinese: "可信的",
+  sentence: "She gave a credible explanation.",
+},
+
+replied: {
+  meaning: "answered someone",
+  chinese: "回答；回覆",
+  sentence: "He replied to my email yesterday.",
+},
+
+crew: {
+  meaning: "the people who work on a ship, aircraft or film",
+  chinese: "船員；機組人員；工作人員",
+  sentence: "The flight crew welcomed the passengers.",
+},
+
+learn: {
+  meaning: "to gain knowledge or a skill",
+  chinese: "學習",
+  sentence: "Children learn quickly through practice.",
+},
+
+cosiest: {
+  meaning: "the most warm and comfortable",
+  chinese: "最舒適的",
+  sentence: "This is the cosiest room in the house.",
+},
+
+discussion: {
+  meaning: "a conversation about a subject",
+  chinese: "討論",
+  sentence: "We had a discussion about climate change.",
+},
+
+lucrative: {
+  meaning: "producing a lot of money",
+  chinese: "賺錢的；獲利豐厚的",
+  sentence: "He found a lucrative business opportunity.",
+},
+
+inexpert: {
+  meaning: "not skilled or experienced",
+  chinese: "不熟練的",
+  sentence: "His inexpert attempt was unsuccessful.",
+},
+
+saxophone: {
+  meaning: "a musical instrument in the woodwind family",
+  chinese: "薩克斯風",
+  sentence: "She practises the saxophone every evening.",
+},
+
+joystick: {
+  meaning: "a control stick used for games or machines",
+  chinese: "操縱桿；搖桿",
+  sentence: "He used the joystick to control the game.",
+},
+
+wretched: {
+  meaning: "very unhappy or in poor condition",
+  chinese: "悲慘的；糟糕的",
+  sentence: "They lived in wretched conditions.",
+},
+
+capable: {
+  meaning: "having the ability to do something",
+  chinese: "有能力的",
+  sentence: "She is capable of solving difficult problems.",
+},
+
+college: {
+  meaning: "a place of higher or further education",
+  chinese: "學院；大專院校",
+  sentence: "He hopes to attend college next year.",
+},
+
+rancour: {
+  meaning: "deep and lasting bitterness",
+  chinese: "怨恨；積怨",
+  sentence: "There was no rancour between the two teams.",
+},
+suburb: {
+  meaning: "an area outside the centre of a city where people live",
+  chinese: "市郊；郊區",
+  sentence: "They moved to a quiet suburb of London.",
+},
+
+illegal: {
+  meaning: "against the law",
+  chinese: "非法的",
+  sentence: "It is illegal to drive without insurance.",
+},
+
+exclaim: {
+  meaning: "to cry out or speak suddenly with strong feeling",
+  chinese: "驚呼；呼喊",
+  sentence: "\"What a wonderful surprise!\" she exclaimed.",
+},
+
+explode: {
+  meaning: "to burst violently with a loud noise",
+  chinese: "爆炸",
+  sentence: "The fireworks exploded in the sky.",
+},
+
+appalling: {
+  meaning: "very bad or shocking",
+  chinese: "駭人的；糟糕的",
+  sentence: "The weather was absolutely appalling.",
+},
+
+seize: {
+  meaning: "to take hold of suddenly or by force",
+  chinese: "抓住；奪取",
+  sentence: "The police seized the stolen goods.",
+},
+
+swollen: {
+  meaning: "made bigger because of injury or illness",
+  chinese: "腫脹的",
+  sentence: "His ankle was swollen after the match.",
+},
+
+vegetable: {
+  meaning: "a plant or part of a plant eaten as food",
+  chinese: "蔬菜",
+  sentence: "You should eat plenty of fresh vegetables.",
+},
+
+liaison: {
+  meaning: "communication or cooperation between people or groups",
+  chinese: "聯絡；聯繫",
+  sentence: "The school has close liaison with parents.",
+},
+
+ledge: {
+  meaning: "a narrow shelf of rock or a narrow flat edge",
+  chinese: "岩架；突出邊緣",
+  sentence: "The bird landed on the narrow ledge.",
+},
+
+orphan: {
+  meaning: "a child whose parents have died",
+  chinese: "孤兒",
+  sentence: "The orphan found a loving family.",
+},
+
+bludgeon: {
+  meaning: "a heavy stick used as a weapon; to hit heavily",
+  chinese: "棍棒；用棍棒重擊",
+  sentence: "The attacker carried a bludgeon.",
+},
+
+cement: {
+  meaning: "a grey powder used for making concrete",
+  chinese: "水泥",
+  sentence: "The workers mixed cement with sand.",
+},
+
+liquefy: {
+  meaning: "to make or become liquid",
+  chinese: "液化",
+  sentence: "The heat caused the chocolate to liquefy.",
+},
+
+photocopy: {
+  meaning: "a copy made using a photocopier",
+  chinese: "影印；影印本",
+  sentence: "Please photocopy this worksheet.",
+},
+
+twinge: {
+  meaning: "a sudden sharp pain",
+  chinese: "一陣刺痛",
+  sentence: "She felt a twinge in her back.",
+},
+
+exhibited: {
+  meaning: "displayed or showed publicly",
+  chinese: "展出；展示",
+  sentence: "The paintings were exhibited in the gallery.",
+},
+
+attribute: {
+  meaning: "a quality or feature of someone or something",
+  chinese: "特徵；屬性",
+  sentence: "Patience is an important attribute of a good teacher.",
+},
+
+repair: {
+  meaning: "to fix something that is broken",
+  chinese: "修理",
+  sentence: "Dad repaired my bicycle.",
+},
+
+alphabet: {
+  meaning: "the set of letters used in a language",
+  chinese: "字母表",
+  sentence: "Children learn the alphabet at school.",
+},
+
+inspire: {
+  meaning: "to encourage someone to do something creative or positive",
+  chinese: "激勵；啟發",
+  sentence: "Her speech inspired the whole class.",
+},
+
+threshold: {
+  meaning: "the entrance of a doorway; the point at which something begins",
+  chinese: "門檻；臨界點",
+  sentence: "She stood on the threshold of the house.",
+},
+
+database: {
+  meaning: "an organised collection of information stored electronically",
+  chinese: "資料庫",
+  sentence: "The customer details are stored in a secure database.",
+},
 
 
 // 更多單字……
