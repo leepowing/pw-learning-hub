@@ -109,3 +109,24 @@ export async function saveStudentMistake(
 
   return true;
 }
+
+export async function getStudentMistakes(
+  student: string,
+  course = "year7-spelling"
+) {
+  const { data, error } = await supabase
+    .from("mistakes")
+    .select("*")
+    .eq("student", student)
+    .eq("course", course)
+    .eq("mastered", false)
+    .order("week", { ascending: true })
+    .order("wrong_count", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
