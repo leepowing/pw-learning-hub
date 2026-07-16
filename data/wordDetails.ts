@@ -5739,12 +5739,6 @@ treason: {
   sentence: "The man was accused of treason.",
 },
 
-vinegar: {
-  meaning: "a sour liquid used in cooking",
-  chinese: "醋",
-  sentence: "She added vinegar to the salad dressing.",
-},
-
 unison: {
   meaning: "at the same time or together",
   chinese: "一致；齊聲",
@@ -5850,12 +5844,6 @@ wrapper: {
   meaning: "a covering around something",
   chinese: "包裝紙；包裝物",
   sentence: "Please throw the sweet wrapper into the bin.",
-},
-
-accommodation: {
-  meaning: "a place where someone lives or stays",
-  chinese: "住宿；住所",
-  sentence: "We booked accommodation near the beach.",
 },
 
 beautician: {
