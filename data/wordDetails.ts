@@ -6519,6 +6519,691 @@ database: {
   chinese: "資料庫",
   sentence: "The customer details are stored in a secure database.",
 },
+poultry: {
+  meaning: "birds such as chickens, ducks or turkeys kept for meat or eggs",
+  chinese: "家禽",
+  sentence: "The farm raises poultry for local markets.",
+},
+
+undertake: {
+  meaning: "to begin or agree to do something",
+  chinese: "承擔；著手進行",
+  sentence: "She will undertake the research project.",
+},
+
+slouch: {
+  meaning: "to sit or stand with a drooping posture",
+  chinese: "沒精打采地站／坐；無精打采的姿勢",
+  sentence: "Don't slouch when you are sitting at your desk.",
+},
+
+nutrition: {
+  meaning: "the food and nourishment needed for health",
+  chinese: "營養",
+  sentence: "Good nutrition helps children grow.",
+},
+
+consequence: {
+  meaning: "the result of an action or event",
+  chinese: "後果；結果",
+  sentence: "Every action has a consequence.",
+},
+
+artificial: {
+  meaning: "made by people rather than natural",
+  chinese: "人工的",
+  sentence: "The flowers looked artificial.",
+},
+
+matriarch: {
+  meaning: "the female head of a family",
+  chinese: "女家長；女族長",
+  sentence: "The family's matriarch was respected by everyone.",
+},
+
+danced: {
+  meaning: "moved rhythmically to music",
+  chinese: "跳舞（過去式）",
+  sentence: "The children danced happily together.",
+},
+
+unbeaten: {
+  meaning: "never defeated",
+  chinese: "未被擊敗的",
+  sentence: "The team remained unbeaten all season.",
+},
+
+numbed: {
+  meaning: "made unable to feel",
+  chinese: "使麻木",
+  sentence: "The cold numbed my fingers.",
+},
+
+muscle: {
+  meaning: "body tissue used for movement",
+  chinese: "肌肉",
+  sentence: "Exercise helps build muscle.",
+},
+
+polite: {
+  meaning: "showing good manners",
+  chinese: "有禮貌的",
+  sentence: "It is polite to say thank you.",
+},
+
+discolour: {
+  meaning: "to change the colour of something",
+  chinese: "使變色",
+  sentence: "Sunlight can discolour fabrics.",
+},
+
+ceiling: {
+  meaning: "the inside surface at the top of a room",
+  chinese: "天花板",
+  sentence: "A spider was hanging from the ceiling.",
+},
+
+conceited: {
+  meaning: "thinking you are better than others",
+  chinese: "自負的；自大的",
+  sentence: "He sounded rather conceited.",
+},
+
+civilian: {
+  meaning: "a person who is not in the armed forces",
+  chinese: "平民",
+  sentence: "The civilians were moved to safety.",
+},
+
+bamboozle: {
+  meaning: "to confuse or trick someone",
+  chinese: "欺騙；使困惑",
+  sentence: "The magician bamboozled the audience.",
+},
+
+loneliness: {
+  meaning: "the feeling of being alone",
+  chinese: "孤獨",
+  sentence: "Loneliness can affect mental health.",
+},
+
+optical: {
+  meaning: "relating to sight or light",
+  chinese: "視覺的；光學的",
+  sentence: "The microscope uses optical lenses.",
+},
+
+courageous: {
+  meaning: "very brave",
+  chinese: "勇敢的",
+  sentence: "The firefighter was courageous.",
+},
+
+organise: {
+  meaning: "to arrange or plan",
+  chinese: "組織；安排",
+  sentence: "Please organise your notes neatly.",
+},
+
+secretively: {
+  meaning: "in a way that hides what you are doing",
+  chinese: "偷偷地；秘密地",
+  sentence: "He secretively opened the letter.",
+},
+
+origami: {
+  meaning: "the Japanese art of paper folding",
+  chinese: "摺紙藝術",
+  sentence: "She made an origami crane.",
+},
+bilby: {
+  meaning: "a small Australian marsupial with long ears",
+  chinese: "兔耳袋狸",
+  sentence: "The bilby is a protected Australian animal.",
+},
+
+establish: {
+  meaning: "to set up or create something",
+  chinese: "建立；設立",
+  sentence: "They hope to establish a new sports club.",
+},
+
+written: {
+  meaning: "put into writing; the past participle of write",
+  chinese: "書寫的；寫好的",
+  sentence: "The report has already been written.",
+},
+
+literature: {
+  meaning: "books, poems and other written works",
+  chinese: "文學",
+  sentence: "She enjoys reading English literature.",
+},
+
+foreigner: {
+  meaning: "a person from another country",
+  chinese: "外國人",
+  sentence: "The foreigner spoke excellent English.",
+},
+
+annoy: {
+  meaning: "to make someone slightly angry or irritated",
+  chinese: "使惱怒；使煩惱",
+  sentence: "Loud noises annoy the neighbours.",
+},
+
+arrogant: {
+  meaning: "having an exaggerated opinion of yourself",
+  chinese: "傲慢的；自大的",
+  sentence: "He sounded arrogant during the interview.",
+},
+
+evident: {
+  meaning: "clear and easy to see",
+  chinese: "明顯的",
+  sentence: "It was evident that she had worked hard.",
+},
+
+lightning: {
+  meaning: "a bright flash of electricity in the sky",
+  chinese: "閃電",
+  sentence: "Lightning struck the tree during the storm.",
+},
+
+frigate: {
+  meaning: "a type of warship",
+  chinese: "護衛艦",
+  sentence: "The navy launched a new frigate.",
+},
+
+purest: {
+  meaning: "the most pure",
+  chinese: "最純淨的",
+  sentence: "This mountain has some of the purest water.",
+},
+
+search: {
+  meaning: "to look carefully for something",
+  chinese: "搜尋；尋找",
+  sentence: "The police began to search the building.",
+},
+
+resources: {
+  meaning: "useful supplies or materials",
+  chinese: "資源",
+  sentence: "The library provides many learning resources.",
+},
+
+continuous: {
+  meaning: "without stopping",
+  chinese: "持續的；連續的",
+  sentence: "There was continuous rain all afternoon.",
+},
+
+especially: {
+  meaning: "particularly; more than usual",
+  chinese: "尤其；特別",
+  sentence: "I enjoy science, especially biology.",
+},
+
+hoping: {
+  meaning: "wanting something to happen",
+  chinese: "希望",
+  sentence: "She is hoping to win the competition.",
+},
+
+cupboard: {
+  meaning: "a cabinet used for storing things",
+  chinese: "櫥櫃",
+  sentence: "The plates are in the kitchen cupboard.",
+},
+
+vigilance: {
+  meaning: "careful watchfulness",
+  chinese: "警覺；警戒",
+  sentence: "Drivers should show constant vigilance.",
+},
+
+dirtiest: {
+  meaning: "the most dirty",
+  chinese: "最骯髒的",
+  sentence: "This was the dirtiest room in the hotel.",
+},
+
+observant: {
+  meaning: "quick to notice things",
+  chinese: "善於觀察的",
+  sentence: "An observant detective noticed the clue.",
+},
+
+ignite: {
+  meaning: "to catch fire or cause something to burn",
+  chinese: "點燃；燃燒",
+  sentence: "A spark can ignite dry grass.",
+},
+
+manufactured: {
+  meaning: "made in a factory",
+  chinese: "製造的",
+  sentence: "The toys were manufactured overseas.",
+},
+
+haste: {
+  meaning: "great speed or urgency",
+  chinese: "匆忙；急速",
+  sentence: "In his haste, he forgot his keys.",
+},
+digging: {
+  meaning: "making holes in the ground with a tool",
+  chinese: "挖掘",
+  sentence: "They were digging a hole for the new tree.",
+},
+
+orchestra: {
+  meaning: "a large group of musicians playing instruments together",
+  chinese: "管弦樂團",
+  sentence: "The orchestra performed beautifully.",
+},
+
+fought: {
+  meaning: "past tense of fight",
+  chinese: "戰鬥；打架（fight 的過去式）",
+  sentence: "The soldiers fought bravely.",
+},
+
+insight: {
+  meaning: "a deep understanding of something",
+  chinese: "洞察力；深刻見解",
+  sentence: "The book gave me valuable insight into history.",
+},
+
+regiment: {
+  meaning: "a large military unit",
+  chinese: "軍團；團",
+  sentence: "The regiment marched through the town.",
+},
+
+beacon: {
+  meaning: "a light used as a signal or guide",
+  chinese: "燈塔；信標",
+  sentence: "The lighthouse acted as a beacon for ships.",
+},
+
+wholesome: {
+  meaning: "good for your health or well-being",
+  chinese: "健康的；有益身心的",
+  sentence: "Fresh fruit is a wholesome snack.",
+},
+
+miserably: {
+  meaning: "in an unhappy or uncomfortable way",
+  chinese: "悲慘地；痛苦地",
+  sentence: "He failed the test miserably.",
+},
+
+disappointed: {
+  meaning: "feeling unhappy because something was not as expected",
+  chinese: "失望的",
+  sentence: "She was disappointed with her result.",
+},
+
+wash: {
+  meaning: "to clean with water",
+  chinese: "洗",
+  sentence: "Remember to wash your hands before eating.",
+},
+
+cancellation: {
+  meaning: "the act of deciding that something will not happen",
+  chinese: "取消",
+  sentence: "The flight cancellation upset many passengers.",
+},
+
+white: {
+  meaning: "the colour of snow or milk",
+  chinese: "白色",
+  sentence: "She wore a white dress.",
+},
+
+shaking: {
+  meaning: "moving quickly from side to side",
+  chinese: "搖晃；顫抖",
+  sentence: "The table was shaking during the earthquake.",
+},
+
+wrapped: {
+  meaning: "covered with paper or another material",
+  chinese: "包裹；包裝",
+  sentence: "The gift was wrapped in colourful paper.",
+},
+
+weight: {
+  meaning: "how heavy something is",
+  chinese: "重量",
+  sentence: "The weight of the box was 20 kilograms.",
+},
+
+read: {
+  meaning: "to look at and understand written words",
+  chinese: "閱讀",
+  sentence: "I like to read before going to bed.",
+},
+
+unbridled: {
+  meaning: "not controlled or limited",
+  chinese: "不受控制的；放任的",
+  sentence: "The fans celebrated with unbridled excitement.",
+},
+
+illuminate: {
+  meaning: "to light up or explain clearly",
+  chinese: "照亮；闡明",
+  sentence: "Street lamps illuminate the road at night.",
+},
+
+visibly: {
+  meaning: "in a way that can clearly be seen",
+  chinese: "明顯地",
+  sentence: "He was visibly nervous before the speech.",
+},
+
+brake: {
+  meaning: "a device used to slow or stop a vehicle",
+  chinese: "煞車",
+  sentence: "Press the brake gently when stopping.",
+},
+
+abbreviation: {
+  meaning: "a shortened form of a word",
+  chinese: "縮寫",
+  sentence: "'UK' is an abbreviation for 'United Kingdom'.",
+},
+
+behaviour: {
+  meaning: "the way a person or animal acts",
+  chinese: "行為",
+  sentence: "Good behaviour is expected in class.",
+},
+
+kaleidoscope: {
+  meaning: "a tube with mirrors that creates changing patterns",
+  chinese: "萬花筒",
+  sentence: "The child looked through the kaleidoscope with delight.",
+},
+intriguing: {
+  meaning: "very interesting because it is unusual or mysterious",
+  chinese: "引人入勝的；耐人尋味的",
+  sentence: "The detective told an intriguing story.",
+},
+
+measured: {
+  meaning: "careful and controlled",
+  chinese: "慎重的；有分寸的",
+  sentence: "She gave a measured response.",
+},
+
+reaction: {
+  meaning: "something you do or feel because something has happened",
+  chinese: "反應",
+  sentence: "His reaction surprised everyone.",
+},
+
+therapeutic: {
+  meaning: "helping to heal or improve health",
+  chinese: "治療的；有療效的",
+  sentence: "Swimming can be very therapeutic.",
+},
+
+hurried: {
+  meaning: "done quickly because there is little time",
+  chinese: "匆忙的",
+  sentence: "She made a hurried decision.",
+},
+
+intravenous: {
+  meaning: "given directly into a vein",
+  chinese: "靜脈注射的",
+  sentence: "The patient received intravenous medicine.",
+},
+
+interrupt: {
+  meaning: "to stop someone while they are speaking or doing something",
+  chinese: "打斷；中斷",
+  sentence: "Please don't interrupt the teacher.",
+},
+
+scrupulous: {
+  meaning: "very careful to do things correctly and honestly",
+  chinese: "一絲不苟的；嚴謹的",
+  sentence: "She was scrupulous about checking her work.",
+},
+
+potential: {
+  meaning: "the ability to develop into something in the future",
+  chinese: "潛力；可能性",
+  sentence: "The young player has great potential.",
+},
+
+convince: {
+  meaning: "to make someone believe something",
+  chinese: "說服",
+  sentence: "He convinced me to join the team.",
+},
+
+discontent: {
+  meaning: "unhappiness or dissatisfaction",
+  chinese: "不滿；不滿情緒",
+  sentence: "There was growing discontent among workers.",
+},
+
+rumour: {
+  meaning: "information that may not be true",
+  chinese: "謠言",
+  sentence: "The rumour spread quickly through the school.",
+},
+
+rubbed: {
+  meaning: "moved something back and forth against a surface",
+  chinese: "擦；摩擦",
+  sentence: "He rubbed his eyes after waking up.",
+},
+
+thorough: {
+  meaning: "very careful and complete",
+  chinese: "徹底的；仔細的",
+  sentence: "The police carried out a thorough investigation.",
+},
+
+dustiest: {
+  meaning: "having the most dust",
+  chinese: "最多灰塵的",
+  sentence: "The attic was the dustiest room in the house.",
+},
+
+opportunity: {
+  meaning: "a chance to do something",
+  chinese: "機會",
+  sentence: "This is a great opportunity to learn.",
+},
+
+inconsiderate: {
+  meaning: "not thinking about other people's feelings",
+  chinese: "不體貼的；欠考慮的",
+  sentence: "It was inconsiderate to make so much noise.",
+},
+
+sailor: {
+  meaning: "a person who works on a ship",
+  chinese: "水手",
+  sentence: "The sailor had travelled around the world.",
+},
+
+mischievous: {
+  meaning: "playfully causing trouble",
+  chinese: "淘氣的；頑皮的",
+  sentence: "The mischievous child hid the keys.",
+},
+
+endeavour: {
+  meaning: "an attempt to achieve something",
+  chinese: "努力；嘗試",
+  sentence: "Learning English is a worthwhile endeavour.",
+},
+
+embezzlement: {
+  meaning: "the crime of stealing money that you are responsible for",
+  chinese: "侵吞公款；盜用資金",
+  sentence: "The accountant was charged with embezzlement.",
+},
+
+applicant: {
+  meaning: "a person who applies for a job or place",
+  chinese: "申請人",
+  sentence: "Each applicant was interviewed carefully.",
+},
+
+swimmer: {
+  meaning: "a person who swims",
+  chinese: "游泳者",
+  sentence: "She is an excellent swimmer.",
+},
+unite: {
+  meaning: "to join together as one group or whole",
+  chinese: "團結；聯合",
+  sentence: "The campaign helped unite the local community.",
+},
+
+skulk: {
+  meaning: "to move or hide quietly because you do not want to be seen",
+  chinese: "偷偷躲藏；鬼鬼祟祟地走",
+  sentence: "The fox began to skulk behind the bushes.",
+},
+
+institute: {
+  meaning: "an organisation created for education, research or a particular purpose",
+  chinese: "學院；研究所；機構",
+  sentence: "She works at a scientific research institute.",
+},
+
+wrinkle: {
+  meaning: "a small line or fold in skin or fabric",
+  chinese: "皺紋；摺痕",
+  sentence: "There was a wrinkle in his shirt.",
+},
+
+alpaca: {
+  meaning: "a South American animal related to the llama",
+  chinese: "羊駝",
+  sentence: "The alpaca had soft, thick wool.",
+},
+
+facilitate: {
+  meaning: "to make an action or process easier",
+  chinese: "促進；使更容易",
+  sentence: "The new software will facilitate communication between teams.",
+},
+
+environment: {
+  meaning: "the natural world or the surroundings in which people, animals or plants live",
+  chinese: "環境",
+  sentence: "We should all help protect the environment.",
+},
+
+unattached: {
+  meaning: "not joined, connected or in a relationship",
+  chinese: "未連接的；無附著的",
+  sentence: "The label had become unattached from the parcel.",
+},
+
+fatherhood: {
+  meaning: "the state or experience of being a father",
+  chinese: "父親身份；父職",
+  sentence: "He found fatherhood both challenging and rewarding.",
+},
+
+originally: {
+  meaning: "at first or at the beginning",
+  chinese: "原本；最初",
+  sentence: "The building was originally used as a school.",
+},
+
+while: {
+  meaning: "during the time that something else is happening",
+  chinese: "當……的時候；一段時間",
+  sentence: "She listened to music while doing her homework.",
+},
+
+document: {
+  meaning: "a written, printed or electronic record containing information",
+  chinese: "文件；文檔",
+  sentence: "Please save the document before closing the program.",
+},
+
+inaccessible: {
+  meaning: "difficult or impossible to reach, enter or use",
+  chinese: "無法到達的；不能使用的",
+  sentence: "The path became inaccessible after the flood.",
+},
+
+coloured: {
+  meaning: "having a particular colour or several colours",
+  chinese: "有顏色的；彩色的",
+  sentence: "The children used coloured pencils for the poster.",
+},
+
+membership: {
+  meaning: "the state of belonging to a group or organisation",
+  chinese: "會員資格；成員身份",
+  sentence: "Her gym membership lasts for one year.",
+},
+
+treasured: {
+  meaning: "greatly valued and cared for",
+  chinese: "珍愛的；珍藏的",
+  sentence: "The photograph was a treasured family possession.",
+},
+
+tolerant: {
+  meaning: "willing to accept people or ideas that are different",
+  chinese: "寬容的；包容的",
+  sentence: "A tolerant society respects different beliefs.",
+},
+
+despair: {
+  meaning: "a complete loss of hope",
+  chinese: "絕望",
+  sentence: "She refused to give in to despair.",
+},
+
+plough: {
+  meaning: "a farming tool used to turn over soil; to turn soil using this tool",
+  chinese: "犁；犁田",
+  sentence: "The farmer used a tractor to plough the field.",
+},
+
+dancing: {
+  meaning: "moving rhythmically to music",
+  chinese: "跳舞",
+  sentence: "They were dancing together at the celebration.",
+},
+
+precarious: {
+  meaning: "not secure and likely to become dangerous or fail",
+  chinese: "不穩定的；危險的",
+  sentence: "The climber stood in a precarious position.",
+},
+
+spread: {
+  meaning: "to extend over an area or cause something to reach more places",
+  chinese: "展開；傳播；擴散",
+  sentence: "The news spread quickly through the school.",
+},
+
+ginger: {
+  meaning: "a spicy root used in cooking and drinks",
+  chinese: "薑",
+  sentence: "She added fresh ginger to the soup.",
+},
 
 
 // 更多單字……
