@@ -2752,12 +2752,6 @@ familiar: {
   sentence: "Her voice sounded familiar.",
 },
 
-knight: {
-  meaning: "a soldier in the past who fought on horseback",
-  chinese: "騎士",
-  sentence: "The knight wore shining armour.",
-},
-
 vinegar: {
   meaning: "a sour liquid used in cooking",
   chinese: "醋",
@@ -2817,12 +2811,6 @@ floodlit: {
   sentence: "The floodlit football pitch could be seen from far away.",
 },
 
-aisle: {
-  meaning: "a passage between rows of seats or shelves",
-  chinese: "通道；走道",
-  sentence: "The flight attendant walked down the aisle.",
-},
-
 variety: {
   meaning: "a range of different types of things",
   chinese: "種類；多樣性",
@@ -2833,12 +2821,6 @@ autumn: {
   meaning: "the season between summer and winter",
   chinese: "秋天",
   sentence: "The leaves change colour in autumn.",
-},
-
-immediately: {
-  meaning: "at once; without delay",
-  chinese: "立即；馬上",
-  sentence: "Please tell the teacher immediately if you need help.",
 },
 
 rhythm: {
@@ -3160,12 +3142,6 @@ spinner: {
   sentence: "The spinner rotated quickly in the wind.",
 },
 
-audience: {
-  meaning: "the people watching or listening to a performance",
-  chinese: "觀眾；聽眾",
-  sentence: "The audience applauded at the end of the play.",
-},
-
 laboured: {
   meaning: "done with great effort or difficulty",
   chinese: "吃力的；費力的",
@@ -3243,12 +3219,6 @@ knotted: {
   sentence: "His daughter-in-law visited every weekend.",
 },
 
-necessary: {
-  meaning: "needed or required",
-  chinese: "必要的；必需的",
-  sentence: "It is necessary to wear a seat belt in a car.",
-},
-
 turkey: {
   meaning: "a large bird often eaten at Christmas",
   chinese: "火雞",
@@ -3285,11 +3255,6 @@ mythology: {
   sentence: "Greek mythology includes many famous heroes.",
 },
 
-annual: {
-  meaning: "happening once every year",
-  chinese: "每年的；年度的",
-  sentence: "The school holds its annual sports day in July.",
-},
 sculptor: {
   meaning: "a person who creates statues or sculptures",
   chinese: "雕塑家",
@@ -3537,12 +3502,6 @@ enamel: {
   meaning: "the hard outer covering of a tooth",
   chinese: "琺瑯；牙釉質",
   sentence: "Too much sugar can damage tooth enamel.",
-},
-
-persuasion: {
-  meaning: "the act of convincing someone to do something",
-  chinese: "說服；勸說",
-  sentence: "After some persuasion, he agreed to join the team.",
 },
 
 stepping: {
