@@ -461,9 +461,10 @@ a {
 }
 .dashboard-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin: 28px 0;
+  align-items: stretch;
 }
 
 .dashboard-card {
@@ -473,6 +474,24 @@ a {
   border: 1px solid rgba(120, 120, 160, 0.15);
   border-radius: 22px;
   box-shadow: 0 12px 30px rgba(40, 40, 90, 0.08);
+  min-width: 0;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
 }
 
 .dashboard-icon {
@@ -645,15 +664,19 @@ a {
   font-weight: 700;
 }
 .level-dashboard-card {
-  min-width: 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .level-progress-track {
   width: 100%;
+  max-width: 220px;
   height: 10px;
   background: #e5e7eb;
   border-radius: 999px;
-  margin: 10px 0;
+  margin: 12px auto 8px;
   overflow: hidden;
 }
 

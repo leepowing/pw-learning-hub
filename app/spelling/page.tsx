@@ -164,7 +164,7 @@ const unlockedAchievements = achievements.filter(
       <section className="student-section">
         <p className="small-title">SPELLING PROGRAMME</p>
 
-        <h1>30 Weeks of Spelling</h1>
+        <h1>52 Weeks of Spelling</h1>
 
         <p>
           Choose a week to learn, practise and complete a quiz.

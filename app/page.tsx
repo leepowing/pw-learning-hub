@@ -161,7 +161,7 @@ export default function Home() {
 
           <div>
             <h3>Spelling - Year 7</h3>
-            <p>30 weeks of spelling practice</p>
+            <p>52 weeks of spelling practice</p>
           </div>
 
           <strong>Start →</strong>
