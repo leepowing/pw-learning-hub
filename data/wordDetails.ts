@@ -4101,7 +4101,414 @@ lovely: {
   chinese: "可愛的；美麗的；令人愉快的",
   sentence: "We had a lovely afternoon in the park.",
 },
+grabbed: {
+  meaning: "took hold of something suddenly or firmly",
+  chinese: "抓住；一把拿起",
+  sentence: "She grabbed her coat before running outside.",
+},
 
+scintillate: {
+  meaning: "to sparkle or flash with small points of light",
+  chinese: "閃爍；發出火花",
+  sentence: "The stars seemed to scintillate in the clear night sky.",
+},
+
+glutinous: {
+  meaning: "sticky or having a thick, glue-like texture",
+  chinese: "黏稠的；有黏性的",
+  sentence: "The rice became soft and glutinous after cooking.",
+},
+
+specific: {
+  meaning: "clearly defined or relating to one particular thing",
+  chinese: "具體的；特定的",
+  sentence: "The teacher gave specific instructions for the project.",
+},
+
+skipping: {
+  meaning: "moving with light jumps or leaving something out",
+  chinese: "跳繩；蹦跳；略過",
+  sentence: "The children were skipping across the playground.",
+},
+
+suite: {
+  meaning: "a set of connected rooms or matching pieces",
+  chinese: "套房；一套",
+  sentence: "The family stayed in a spacious hotel suite.",
+},
+
+point: {
+  meaning: "a particular idea, detail, place or moment",
+  chinese: "重點；觀點；點",
+  sentence: "She made an important point during the discussion.",
+},
+
+logical: {
+  meaning: "based on clear reasoning and sensible ideas",
+  chinese: "合乎邏輯的；合理的",
+  sentence: "His explanation was clear and logical.",
+},
+
+sought: {
+  meaning: "past tense and past participle of seek",
+  chinese: "尋找；尋求（seek 的過去式及過去分詞）",
+  sentence: "The explorers sought shelter from the storm.",
+},
+
+frenzied: {
+  meaning: "wildly excited, frightened or uncontrolled",
+  chinese: "瘋狂的；狂亂的",
+  sentence: "There was a frenzied rush to buy the final tickets.",
+},
+
+organic: {
+  meaning: "produced without artificial chemicals; relating to living things",
+  chinese: "有機的；生物的",
+  sentence: "The shop sells locally grown organic vegetables.",
+},
+
+switch: {
+  meaning: "a device used to turn something on or off; to change",
+  chinese: "開關；轉換",
+  sentence: "Press the switch to turn on the light.",
+},
+feature: {
+  meaning: "an important part or characteristic of something",
+  chinese: "特徵；特色；功能",
+  sentence: "The best feature of the app is its simple design.",
+},
+
+chaos: {
+  meaning: "a state of complete confusion or disorder",
+  chinese: "混亂；混沌",
+  sentence: "The classroom was in chaos after the bell rang.",
+},
+
+ice: {
+  meaning: "frozen water",
+  chinese: "冰",
+  sentence: "The lake was covered with a layer of ice.",
+},
+
+bought: {
+  meaning: "past tense and past participle of buy",
+  chinese: "購買（buy 的過去式及過去分詞）",
+  sentence: "She bought a new backpack for school.",
+},
+
+receipt: {
+  meaning: "a written record showing that something has been paid for",
+  chinese: "收據",
+  sentence: "Keep the receipt in case you need to return the item.",
+},
+
+gymnasium: {
+  meaning: "a building or room used for sports and exercise",
+  chinese: "體育館；健身房",
+  sentence: "The students met in the gymnasium for assembly.",
+},
+
+exceeded: {
+  meaning: "went beyond a limit or expectation",
+  chinese: "超過；超出",
+  sentence: "Her results exceeded everyone's expectations.",
+},
+
+kayaking: {
+  meaning: "the sport or activity of travelling in a kayak",
+  chinese: "划獨木舟",
+  sentence: "We went kayaking on the river during the holiday.",
+},
+
+reception: {
+  meaning: "the way people react to something; also the front desk of a building",
+  chinese: "反應；接待處",
+  sentence: "The new book received a warm reception from readers.",
+},
+
+"non-conformist": {
+  meaning: "a person who does not follow traditional rules or behaviour",
+  chinese: "不墨守成規的人；不隨波逐流的人",
+  sentence: "The artist was known as a non-conformist who liked original ideas.",
+},
+marjoram: {
+  meaning: "a herb with small leaves used to flavour food",
+  chinese: "馬鬱蘭；墨角蘭",
+  sentence: "The cook added marjoram to the tomato sauce.",
+},
+
+breakable: {
+  meaning: "likely or able to be broken",
+  chinese: "易碎的；可打破的",
+  sentence: "Please handle the breakable items carefully.",
+},
+
+inactive: {
+  meaning: "not active or not currently working",
+  chinese: "不活躍的；停止運作的",
+  sentence: "The account became inactive after several months.",
+},
+
+applicator: {
+  meaning: "a tool used for applying a substance to a surface",
+  chinese: "塗敷器；敷用工具",
+  sentence: "Use the applicator to spread the glue evenly.",
+},
+
+giant: {
+  meaning: "an imaginary person of enormous size; something extremely large",
+  chinese: "巨人；巨大的事物",
+  sentence: "The story was about a friendly giant.",
+},
+
+debt: {
+  meaning: "money that is owed to another person or organisation",
+  chinese: "債務；欠款",
+  sentence: "He worked hard to repay his debt.",
+},
+
+figure: {
+  meaning: "a number, shape or person shown in a picture",
+  chinese: "數字；圖形；人物",
+  sentence: "The final figure in the report was incorrect.",
+},
+
+accord: {
+  meaning: "an official agreement between people, groups or countries",
+  chinese: "協議；一致",
+  sentence: "The two countries signed a peace accord.",
+},
+
+modern: {
+  meaning: "relating to the present time or using recent ideas",
+  chinese: "現代的；新式的",
+  sentence: "The library has a bright and modern design.",
+},
+
+intrusion: {
+  meaning: "the act of entering a place or situation without permission",
+  chinese: "闖入；侵擾；侵犯",
+  sentence: "The alarm protects the building from intrusion.",
+},
+
+auditorium: {
+  meaning: "a large room where an audience watches performances or meetings",
+  chinese: "禮堂；演講廳",
+  sentence: "The school concert was held in the auditorium.",
+},
+
+development: {
+  meaning: "the process of growing, changing or becoming more advanced",
+  chinese: "發展；成長；開發",
+  sentence: "The project is still in the early stages of development.",
+},
+brief: {
+  meaning: "short in time or length",
+  chinese: "簡短的；短暫的",
+  sentence: "The teacher gave a brief explanation before the test.",
+},
+
+anxious: {
+  meaning: "worried or nervous about something",
+  chinese: "焦慮的；擔心的",
+  sentence: "She felt anxious before the interview.",
+},
+
+boast: {
+  meaning: "to talk with too much pride about yourself or your achievements",
+  chinese: "吹噓；誇耀",
+  sentence: "He likes to boast about his football skills.",
+},
+
+championship: {
+  meaning: "an important competition to decide the best player or team",
+  chinese: "錦標賽；冠軍賽",
+  sentence: "The team won the national championship.",
+},
+
+beneficial: {
+  meaning: "helpful or producing a good result",
+  chinese: "有益的；有幫助的",
+  sentence: "Daily reading is beneficial to your vocabulary.",
+},
+
+centimetre: {
+  meaning: "a unit of length equal to one hundredth of a metre",
+  chinese: "厘米；公分",
+  sentence: "The insect was only one centimetre long.",
+},
+
+guaranteed: {
+  meaning: "promised that something will happen or be true",
+  chinese: "保證的；擔保的",
+  sentence: "The watch is guaranteed for two years.",
+},
+
+wreath: {
+  meaning: "a ring of flowers or leaves used as a decoration",
+  chinese: "花環；花圈",
+  sentence: "A Christmas wreath hung on the front door.",
+},
+
+bruised: {
+  meaning: "injured so that the skin becomes discoloured",
+  chinese: "瘀傷的；碰傷的",
+  sentence: "His knee was bruised after he fell off his bike.",
+},
+
+astronaut: {
+  meaning: "a person trained to travel in space",
+  chinese: "太空人；宇航員",
+  sentence: "The astronaut carried out experiments on the space station.",
+},
+
+catastrophe: {
+  meaning: "a terrible event causing great damage or suffering",
+  chinese: "災難；浩劫",
+  sentence: "The earthquake was a major catastrophe.",
+},
+
+confer: {
+  meaning: "to discuss something together; to give an honour or award",
+  chinese: "商議；授予",
+  sentence: "The judges met to confer before announcing the winner.",
+},
+euphemism: {
+  meaning: "a mild or indirect word used instead of one that may seem unpleasant",
+  chinese: "委婉語；婉轉說法",
+  sentence: "The phrase 'passed away' is a euphemism for 'died'.",
+},
+
+onslaught: {
+  meaning: "a strong and sudden attack or a large amount arriving at once",
+  chinese: "猛烈攻擊；大量湧來",
+  sentence: "The defenders prepared for the enemy's onslaught.",
+},
+
+disappoint: {
+  meaning: "to make someone feel unhappy because something was not as good as expected",
+  chinese: "使失望",
+  sentence: "I did not want to disappoint my teammates.",
+},
+
+lacerate: {
+  meaning: "to cut or tear skin or flesh badly",
+  chinese: "撕裂；割傷",
+  sentence: "Sharp rocks can lacerate unprotected skin.",
+},
+
+sewage: {
+  meaning: "waste matter and dirty water carried away through pipes",
+  chinese: "污水；下水道廢物",
+  sentence: "The treatment plant removes harmful substances from sewage.",
+},
+
+samurai: {
+  meaning: "a member of the warrior class in historical Japan",
+  chinese: "日本武士",
+  sentence: "The samurai carried a sword and followed a strict code of honour.",
+},
+
+favourite: {
+  meaning: "liked more than any other person or thing",
+  chinese: "最喜愛的；最喜歡的人或事物",
+  sentence: "Science is her favourite subject at school.",
+},
+
+informative: {
+  meaning: "providing useful or interesting information",
+  chinese: "提供資訊的；內容豐富的",
+  sentence: "The documentary was both interesting and informative.",
+},
+
+obvious: {
+  meaning: "easy to see, notice or understand",
+  chinese: "明顯的；顯而易見的",
+  sentence: "It was obvious that he had practised for the performance.",
+},
+
+plaintiff: {
+  meaning: "a person who brings a legal case against someone in court",
+  chinese: "原告",
+  sentence: "The plaintiff presented evidence to support the claim.",
+},
+
+gratitude: {
+  meaning: "the feeling of being thankful",
+  chinese: "感激；謝意",
+  sentence: "She expressed her gratitude for everyone's help.",
+},
+
+happily: {
+  meaning: "in a happy or cheerful way",
+  chinese: "快樂地；高興地",
+  sentence: "The children played happily in the garden.",
+},
+travelling: {
+  meaning: "going from one place to another",
+  chinese: "旅行；出行（英式拼法）",
+  sentence: "She enjoys travelling around Europe during the holidays.",
+},
+
+normality: {
+  meaning: "the state of being normal or usual",
+  chinese: "正常狀態",
+  sentence: "Life gradually returned to normality after the storm.",
+},
+
+luxuriant: {
+  meaning: "growing thickly and richly; abundant",
+  chinese: "茂盛的；繁茂的",
+  sentence: "The rainforest was full of luxuriant vegetation.",
+},
+
+mixture: {
+  meaning: "a combination of different things",
+  chinese: "混合物；混合",
+  sentence: "The cake mixture was ready for the oven.",
+},
+
+sandwich: {
+  meaning: "two slices of bread with food between them",
+  chinese: "三文治；夾心麵包",
+  sentence: "He ate a chicken sandwich for lunch.",
+},
+
+apparent: {
+  meaning: "easy to notice or understand",
+  chinese: "明顯的；顯然的",
+  sentence: "It became apparent that everyone agreed.",
+},
+
+paranoia: {
+  meaning: "an unreasonable fear or suspicion of others",
+  chinese: "偏執；妄想症",
+  sentence: "His paranoia made it difficult to trust people.",
+},
+
+quench: {
+  meaning: "to satisfy thirst or to put out a fire",
+  chinese: "解（渴）；撲滅",
+  sentence: "A glass of water helped quench her thirst.",
+},
+
+happiness: {
+  meaning: "the feeling of being happy",
+  chinese: "快樂；幸福",
+  sentence: "The children's laughter filled the room with happiness.",
+},
+
+topographic: {
+  meaning: "relating to the physical features of an area of land",
+  chinese: "地形的；地貌的",
+  sentence: "The hikers studied a topographic map before setting off.",
+},
+
+disease: {
+  meaning: "an illness that affects people, animals or plants",
+  chinese: "疾病",
+  sentence: "Doctors are working to prevent the spread of the disease.",
+},
 
 // 更多單字……
 
