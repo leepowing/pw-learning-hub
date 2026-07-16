@@ -13,9 +13,13 @@ import {
   getStudentStorageKey,
 } from "@/lib/studentStorage";
 
-import { supabase } from "@/lib/supabase";
+import {
+  supabase,
+  saveStudentMistake,
+} from "@/lib/supabase";
 
 export default function WeekQuizPage() {
+  const currentStudent = getCurrentStudent();
   const params = useParams<{ week: string }>();
   const weekNumber = Number(params.week);
   const weekData = getSpellingWeek(weekNumber);
@@ -27,6 +31,34 @@ const bestScoreKey = getStudentStorageKey(
 const masteredKey = getStudentStorageKey(
   `week${weekNumber}Mastered`
 );
+
+function saveMistake(word: string) {
+
+  const key = getStudentStorageKey("mistakeBook");
+
+  const saved = JSON.parse(
+    localStorage.getItem(key) ?? "[]"
+  );
+
+  const exists = saved.find(
+    (item: any) =>
+      item.week === weekNumber &&
+      item.word === word
+  );
+
+  if (!exists) {
+    saved.push({
+      week: weekNumber,
+      word,
+      date: new Date().toISOString(),
+    });
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(saved)
+    );
+  }
+}
 
   const [shuffledWords] = useState(() =>
   [...quizWords].sort(() => Math.random() - 0.5)
@@ -278,6 +310,13 @@ if (!weekData) {
 if (isCorrect) {
   setFeedback("✅ Correct!");
 } else {
+    void saveStudentMistake(
+    currentStudent,
+    weekNumber,
+    currentWord,
+    "year7-spelling"
+    );
+
   setMistakes((previousMistakes) => {
     if (previousMistakes.includes(currentWord)) {
       return previousMistakes;

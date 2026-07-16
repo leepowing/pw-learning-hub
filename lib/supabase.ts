@@ -49,3 +49,63 @@ export async function getStudentXP(
     0
   );
 }
+export async function saveStudentMistake(
+  student: string,
+  week: number,
+  word: string,
+  course = "year7-spelling"
+) {
+  const normalisedWord = word.trim().toLowerCase();
+
+  const { data: existing, error: readError } = await supabase
+    .from("mistakes")
+    .select("id, wrong_count")
+    .eq("student", student)
+    .eq("course", course)
+    .eq("word", normalisedWord)
+    .maybeSingle();
+
+  if (readError) {
+    console.error("Could not check mistake:", readError);
+    return false;
+  }
+
+  if (existing) {
+    const { error: updateError } = await supabase
+      .from("mistakes")
+      .update({
+        week,
+        wrong_count: existing.wrong_count + 1,
+        mastered: false,
+        last_wrong_at: new Date().toISOString(),
+      })
+      .eq("id", existing.id);
+
+    if (updateError) {
+      console.error("Could not update mistake:", updateError);
+      return false;
+    }
+
+    return true;
+  }
+
+  const { error: insertError } = await supabase
+    .from("mistakes")
+    .insert({
+      student,
+      course,
+      week,
+      word: normalisedWord,
+      wrong_count: 1,
+      correct_count: 0,
+      mastered: false,
+      last_wrong_at: new Date().toISOString(),
+    });
+
+  if (insertError) {
+    console.error("Could not save mistake:", insertError);
+    return false;
+  }
+
+  return true;
+}
