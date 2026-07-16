@@ -5709,6 +5709,418 @@ heavily: {
   chinese: "沉重地；大量地",
   sentence: "It rained heavily all afternoon.",
 },
+discontinue: {
+  meaning: "to stop doing or providing something",
+  chinese: "停止；中止",
+  sentence: "The company decided to discontinue the old product.",
+},
+
+signal: {
+  meaning: "a sign or message that gives information",
+  chinese: "信號；訊號",
+  sentence: "The traffic signal turned green.",
+},
+
+research: {
+  meaning: "careful study to discover new facts",
+  chinese: "研究",
+  sentence: "She is doing research on climate change.",
+},
+
+forgetfully: {
+  meaning: "in a way that shows you forget things easily",
+  chinese: "健忘地",
+  sentence: "He forgetfully left his bag on the bus.",
+},
+
+treason: {
+  meaning: "the crime of betraying your own country",
+  chinese: "叛國罪",
+  sentence: "The man was accused of treason.",
+},
+
+vinegar: {
+  meaning: "a sour liquid used in cooking",
+  chinese: "醋",
+  sentence: "She added vinegar to the salad dressing.",
+},
+
+unison: {
+  meaning: "at the same time or together",
+  chinese: "一致；齊聲",
+  sentence: "The choir sang in unison.",
+},
+
+sphere: {
+  meaning: "a round three-dimensional shape; an area of activity",
+  chinese: "球體；範圍",
+  sentence: "The Earth is almost a perfect sphere.",
+},
+
+bouquet: {
+  meaning: "a group of flowers arranged together",
+  chinese: "花束",
+  sentence: "She received a beautiful bouquet of roses.",
+},
+
+observation: {
+  meaning: "the act of carefully watching something",
+  chinese: "觀察",
+  sentence: "His observation helped solve the problem.",
+},
+
+puncture: {
+  meaning: "a small hole made by a sharp object",
+  chinese: "刺穿；穿孔",
+  sentence: "The bicycle tyre had a puncture.",
+},
+
+metropolis: {
+  meaning: "a very large and important city",
+  chinese: "大都市",
+  sentence: "London is a famous metropolis.",
+},
+
+increase: {
+  meaning: "to become or make greater",
+  chinese: "增加",
+  sentence: "The price of fuel may increase next year.",
+},
+
+decomposing: {
+  meaning: "breaking down naturally after death",
+  chinese: "腐爛的；分解中的",
+  sentence: "The decomposing leaves became part of the soil.",
+},
+
+perimeter: {
+  meaning: "the distance around the outside of a shape",
+  chinese: "周長",
+  sentence: "We calculated the perimeter of the rectangle.",
+},
+
+medical: {
+  meaning: "relating to medicine or doctors",
+  chinese: "醫療的",
+  sentence: "She received medical treatment immediately.",
+},
+
+shovelling: {
+  meaning: "moving something with a shovel",
+  chinese: "鏟；用鏟子搬運",
+  sentence: "They were shovelling snow from the path.",
+},
+
+dependency: {
+  meaning: "the state of relying on someone or something",
+  chinese: "依賴",
+  sentence: "Too much dependency on phones can be unhealthy.",
+},
+
+leopard: {
+  meaning: "a large wild cat with spotted fur",
+  chinese: "豹",
+  sentence: "The leopard climbed the tree quickly.",
+},
+
+delirious: {
+  meaning: "confused because of illness or extreme excitement",
+  chinese: "神志不清的；興奮得失去理智的",
+  sentence: "He became delirious with a high fever.",
+},
+
+inconsolable: {
+  meaning: "too sad to be comforted",
+  chinese: "傷心欲絕的",
+  sentence: "She was inconsolable after losing her pet.",
+},
+
+depression: {
+  meaning: "a period of great sadness; a mental health condition",
+  chinese: "抑鬱；沮喪",
+  sentence: "He spoke openly about living with depression.",
+},
+
+permitted: {
+  meaning: "allowed",
+  chinese: "被允許的",
+  sentence: "Mobile phones are not permitted during the exam.",
+},
+wrapper: {
+  meaning: "a covering around something",
+  chinese: "包裝紙；包裝物",
+  sentence: "Please throw the sweet wrapper into the bin.",
+},
+
+accommodation: {
+  meaning: "a place where someone lives or stays",
+  chinese: "住宿；住所",
+  sentence: "We booked accommodation near the beach.",
+},
+
+beautician: {
+  meaning: "a person who gives beauty treatments",
+  chinese: "美容師",
+  sentence: "The beautician recommended a new skincare routine.",
+},
+
+possession: {
+  meaning: "something that belongs to someone",
+  chinese: "財產；擁有物",
+  sentence: "The watch is one of his most valuable possessions.",
+},
+
+bargain: {
+  meaning: "something bought for less than its usual price",
+  chinese: "便宜貨；划算的交易",
+  sentence: "This jacket was a real bargain.",
+},
+
+sensational: {
+  meaning: "extremely good or exciting",
+  chinese: "極好的；轟動的",
+  sentence: "She gave a sensational performance.",
+},
+
+countries: {
+  meaning: "nations with their own governments",
+  chinese: "國家（複數）",
+  sentence: "Many countries celebrate New Year's Day.",
+},
+
+funniest: {
+  meaning: "the most amusing",
+  chinese: "最有趣的；最好笑的",
+  sentence: "That was the funniest joke I have ever heard.",
+},
+
+cellophane: {
+  meaning: "a thin transparent wrapping material",
+  chinese: "玻璃紙",
+  sentence: "The flowers were wrapped in cellophane.",
+},
+
+thoughtful: {
+  meaning: "kind and showing consideration for others",
+  chinese: "體貼的；細心的",
+  sentence: "It was thoughtful of you to help me.",
+},
+
+barrel: {
+  meaning: "a large round wooden or metal container",
+  chinese: "桶",
+  sentence: "The wine was stored in a wooden barrel.",
+},
+
+realm: {
+  meaning: "an area of activity or knowledge",
+  chinese: "領域；範圍",
+  sentence: "This discovery changed the realm of science.",
+},
+
+mercury: {
+  meaning: "a silver liquid metal; the closest planet to the Sun",
+  chinese: "水銀；水星",
+  sentence: "Mercury is the closest planet to the Sun.",
+},
+
+chord: {
+  meaning: "a group of musical notes played together",
+  chinese: "和弦",
+  sentence: "He played a C major chord on the piano.",
+},
+
+racquet: {
+  meaning: "a piece of sports equipment used to hit a ball",
+  chinese: "球拍",
+  sentence: "She bought a new tennis racquet.",
+},
+
+early: {
+  meaning: "before the expected time",
+  chinese: "早；提早",
+  sentence: "We arrived early for the concert.",
+},
+
+avoidance: {
+  meaning: "the act of staying away from something",
+  chinese: "避免；迴避",
+  sentence: "Avoidance of danger is important.",
+},
+
+comfortably: {
+  meaning: "in a way that feels relaxed and without discomfort",
+  chinese: "舒服地",
+  sentence: "The children sat comfortably on the sofa.",
+},
+
+league: {
+  meaning: "a group of sports teams that compete together",
+  chinese: "聯賽",
+  sentence: "Our team won the local football league.",
+},
+
+emperor: {
+  meaning: "the male ruler of an empire",
+  chinese: "皇帝",
+  sentence: "The emperor ruled the country wisely.",
+},
+
+unaccompanied: {
+  meaning: "without another person",
+  chinese: "無人陪同的",
+  sentence: "Children under twelve cannot travel unaccompanied.",
+},
+
+valuable: {
+  meaning: "worth a lot of money or very useful",
+  chinese: "有價值的；珍貴的",
+  sentence: "Honesty is a valuable quality.",
+},
+
+emerged: {
+  meaning: "came into view or became known",
+  chinese: "出現；浮現",
+  sentence: "The sun emerged from behind the clouds.",
+},
+unofficial: {
+  meaning: "not officially approved or recognised",
+  chinese: "非官方的",
+  sentence: "This is an unofficial report.",
+},
+
+applicable: {
+  meaning: "relevant or suitable for a particular situation",
+  chinese: "適用的",
+  sentence: "These rules are applicable to everyone.",
+},
+
+tour: {
+  meaning: "a journey to visit different places",
+  chinese: "旅行；遊覽",
+  sentence: "We went on a tour of the castle.",
+},
+
+effect: {
+  meaning: "the result of a change or action",
+  chinese: "效果；影響",
+  sentence: "Exercise has a positive effect on your health.",
+},
+
+accidental: {
+  meaning: "happening by chance and not planned",
+  chinese: "意外的；偶然的",
+  sentence: "The damage was accidental.",
+},
+
+fitted: {
+  meaning: "made the right size or shape",
+  chinese: "合適的；安裝好的",
+  sentence: "The new carpet was fitted yesterday.",
+},
+
+haul: {
+  meaning: "to pull or carry something heavy",
+  chinese: "拖；拉",
+  sentence: "They hauled the boat onto the beach.",
+},
+
+employ: {
+  meaning: "to give someone a job",
+  chinese: "僱用",
+  sentence: "The company employs over 500 people.",
+},
+
+corpses: {
+  meaning: "dead bodies",
+  chinese: "屍體（複數）",
+  sentence: "The police discovered several corpses.",
+},
+
+glance: {
+  meaning: "a quick look",
+  chinese: "瞥一眼",
+  sentence: "She took a quick glance at her watch.",
+},
+
+privileged: {
+  meaning: "having special advantages",
+  chinese: "享有特權的",
+  sentence: "He came from a privileged background.",
+},
+
+president: {
+  meaning: "the leader of a country or organisation",
+  chinese: "總統；主席",
+  sentence: "The president gave a speech on television.",
+},
+
+patrolled: {
+  meaning: "walked or travelled around an area to protect it",
+  chinese: "巡邏",
+  sentence: "Police officers patrolled the streets at night.",
+},
+
+comfortable: {
+  meaning: "feeling relaxed and without pain",
+  chinese: "舒適的",
+  sentence: "These shoes are very comfortable.",
+},
+
+wrist: {
+  meaning: "the joint between the hand and the arm",
+  chinese: "手腕",
+  sentence: "She wore a watch on her wrist.",
+},
+
+deserts: {
+  meaning: "large dry areas with very little rain",
+  chinese: "沙漠（複數）",
+  sentence: "Camels can survive in deserts.",
+},
+
+attire: {
+  meaning: "clothing, especially formal clothing",
+  chinese: "服裝；衣著",
+  sentence: "Formal attire is required for the ceremony.",
+},
+
+sausage: {
+  meaning: "a food made from minced meat inside a skin",
+  chinese: "香腸",
+  sentence: "We had sausages for breakfast.",
+},
+
+scarves: {
+  meaning: "pieces of cloth worn around the neck",
+  chinese: "圍巾（複數）",
+  sentence: "The children wore warm scarves in winter.",
+},
+
+peculiar: {
+  meaning: "strange or unusual",
+  chinese: "奇怪的；古怪的",
+  sentence: "There was a peculiar smell in the room.",
+},
+
+immature: {
+  meaning: "not fully grown or not behaving like an adult",
+  chinese: "不成熟的",
+  sentence: "His immature behaviour annoyed the teacher.",
+},
+
+obtained: {
+  meaning: "got or achieved something",
+  chinese: "獲得；取得",
+  sentence: "She obtained excellent exam results.",
+},
+
+recent: {
+  meaning: "having happened not long ago",
+  chinese: "最近的",
+  sentence: "Recent studies show encouraging results.",
+},
+
 
 // 更多單字……
 
