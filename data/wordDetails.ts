@@ -4509,6 +4509,415 @@ disease: {
   chinese: "疾病",
   sentence: "Doctors are working to prevent the spread of the disease.",
 },
+medicine: {
+  meaning: "a substance used to treat or prevent illness",
+  chinese: "藥；醫學",
+  sentence: "The doctor prescribed medicine for her cough.",
+},
+
+variety: {
+  meaning: "a number of different types of something",
+  chinese: "種類；多樣性",
+  sentence: "The shop sells a wide variety of fruit.",
+},
+
+although: {
+  meaning: "despite the fact that",
+  chinese: "雖然；儘管",
+  sentence: "Although it was raining, they went outside.",
+},
+
+dominant: {
+  meaning: "more important, powerful or noticeable than others",
+  chinese: "主導的；佔優勢的",
+  sentence: "Lions are the dominant predators in this area.",
+},
+
+proceed: {
+  meaning: "to continue or move forward",
+  chinese: "繼續；前進",
+  sentence: "Please proceed to the next question.",
+},
+
+guard: {
+  meaning: "to protect someone or something",
+  chinese: "守衛；保護",
+  sentence: "Security guards protect the building every night.",
+},
+
+conscience: {
+  meaning: "the inner sense of right and wrong",
+  chinese: "良心；道德感",
+  sentence: "His conscience told him to tell the truth.",
+},
+
+deceive: {
+  meaning: "to make someone believe something that is not true",
+  chinese: "欺騙；蒙騙",
+  sentence: "He tried to deceive his parents about the broken window.",
+},
+
+exercising: {
+  meaning: "doing physical activity to improve health",
+  chinese: "運動；鍛鍊",
+  sentence: "She enjoys exercising every morning.",
+},
+
+macaw: {
+  meaning: "a large, colourful parrot",
+  chinese: "金剛鸚鵡",
+  sentence: "The macaw has bright blue and yellow feathers.",
+},
+
+thoroughly: {
+  meaning: "completely and carefully",
+  chinese: "徹底地；仔細地",
+  sentence: "Please read the instructions thoroughly.",
+},
+
+satisfies: {
+  meaning: "meets a need or expectation",
+  chinese: "滿足；使滿意",
+  sentence: "This explanation satisfies my curiosity.",
+},
+dragged: {
+  meaning: "pulled something along the ground with effort",
+  chinese: "拖；拉",
+  sentence: "He dragged the heavy suitcase across the floor.",
+},
+
+jurisdiction: {
+  meaning: "the official power to make legal decisions or laws",
+  chinese: "司法管轄權；管轄範圍",
+  sentence: "The case falls under the court's jurisdiction.",
+},
+
+mangrove: {
+  meaning: "a tropical tree that grows in coastal water",
+  chinese: "紅樹；紅樹林植物",
+  sentence: "Many birds live in the mangrove forest.",
+},
+
+mayor: {
+  meaning: "the elected leader of a city or town",
+  chinese: "市長",
+  sentence: "The mayor opened the new sports centre.",
+},
+
+collision: {
+  meaning: "an accident in which two things crash into each other",
+  chinese: "碰撞；相撞",
+  sentence: "The collision blocked the road for several hours.",
+},
+
+adventures: {
+  meaning: "exciting or unusual experiences",
+  chinese: "冒險；奇遇",
+  sentence: "The children enjoyed reading about the explorer's adventures.",
+},
+
+xenophobia: {
+  meaning: "dislike or fear of people from other countries",
+  chinese: "排外；仇外心理",
+  sentence: "Education can help reduce xenophobia.",
+},
+
+luckier: {
+  meaning: "having more good luck than someone else",
+  chinese: "較幸運的",
+  sentence: "She was luckier than her brother in the competition.",
+},
+
+duress: {
+  meaning: "being forced to do something by threats or pressure",
+  chinese: "脅迫；威逼",
+  sentence: "He said he signed the document under duress.",
+},
+
+permanent: {
+  meaning: "lasting forever or for a very long time",
+  chinese: "永久的；長久的",
+  sentence: "She found a permanent job after university.",
+},
+
+chemist: {
+  meaning: "a scientist who studies chemistry; in the UK, a pharmacy",
+  chinese: "化學家；（英）藥房",
+  sentence: "She went to the chemist to buy some medicine.",
+},
+strength: {
+  meaning: "the quality of being physically strong or powerful",
+  chinese: "力量；強度",
+  sentence: "Regular exercise can improve your strength.",
+},
+
+satellite: {
+  meaning: "an object that moves around a planet or another object in space",
+  chinese: "衛星",
+  sentence: "The satellite sends weather information back to Earth.",
+},
+
+space: {
+  meaning: "the area beyond the Earth's atmosphere; an empty area",
+  chinese: "太空；空間",
+  sentence: "Scientists continue to explore space.",
+},
+
+undisputed: {
+  meaning: "accepted as true or correct by everyone",
+  chinese: "無可爭議的；公認的",
+  sentence: "She became the undisputed champion after winning every match.",
+},
+
+knot: {
+  meaning: "a fastening made by tying rope, string or similar material",
+  chinese: "結；繩結",
+  sentence: "He tied a strong knot in the rope.",
+},
+
+coax: {
+  meaning: "to gently persuade someone to do something",
+  chinese: "哄勸；勸誘",
+  sentence: "She managed to coax the frightened cat out from under the bed.",
+},
+
+adorable: {
+  meaning: "very attractive, charming or lovable",
+  chinese: "可愛的；討人喜愛的",
+  sentence: "The puppy looked absolutely adorable.",
+},
+
+archaeology: {
+  meaning: "the study of ancient people through objects and remains",
+  chinese: "考古學",
+  sentence: "She became interested in archaeology after visiting the ruins.",
+},
+
+insurance: {
+  meaning: "an arrangement that provides money if something is lost or damaged",
+  chinese: "保險",
+  sentence: "The family bought travel insurance before their holiday.",
+},
+
+technology: {
+  meaning: "scientific knowledge and equipment used for practical purposes",
+  chinese: "科技；技術",
+  sentence: "Modern technology has changed the way people communicate.",
+},
+
+rogue: {
+  meaning: "a dishonest or badly behaved person; something acting unpredictably",
+  chinese: "流氓；無賴；失控的",
+  sentence: "The story was about a charming rogue who travelled the world.",
+},
+
+vanquish: {
+  meaning: "to defeat someone completely",
+  chinese: "擊敗；征服",
+  sentence: "The hero managed to vanquish the enemy.",
+},
+infectious: {
+  meaning: "able to spread from one person or animal to another",
+  chinese: "傳染性的；感染性的",
+  sentence: "The doctor warned that the disease was highly infectious.",
+},
+
+syllable: {
+  meaning: "a unit of pronunciation in a word",
+  chinese: "音節",
+  sentence: "The word 'elephant' has three syllables.",
+},
+
+schnitzel: {
+  meaning: "a thin slice of meat coated with breadcrumbs and fried",
+  chinese: "炸肉排（德式）",
+  sentence: "We ordered chicken schnitzel for dinner.",
+},
+
+flapping: {
+  meaning: "moving up and down or backwards and forwards quickly",
+  chinese: "拍動；拍打",
+  sentence: "The bird was flapping its wings loudly.",
+},
+
+vultures: {
+  meaning: "large birds that feed on dead animals",
+  chinese: "禿鷹",
+  sentence: "The vultures circled high above the desert.",
+},
+
+myth: {
+  meaning: "an old traditional story or a widely believed but false idea",
+  chinese: "神話；迷思",
+  sentence: "The story of King Arthur is considered a myth by some historians.",
+},
+
+obscure: {
+  meaning: "not well known or difficult to understand",
+  chinese: "鮮為人知的；難懂的",
+  sentence: "The author wrote about an obscure historical event.",
+},
+
+cumbersome: {
+  meaning: "large, heavy or difficult to carry or use",
+  chinese: "笨重的；難處理的",
+  sentence: "The old computer was cumbersome to move.",
+},
+
+detriment: {
+  meaning: "damage or harm caused to something",
+  chinese: "損害；傷害",
+  sentence: "Too much screen time can be to the detriment of your eyesight.",
+},
+
+anoint: {
+  meaning: "to put oil on someone as part of a religious ceremony",
+  chinese: "塗油祝聖；膏立",
+  sentence: "The priest anointed the new king during the ceremony.",
+},
+
+exhumed: {
+  meaning: "dug up something, especially a buried body",
+  chinese: "掘出；發掘（遺體）",
+  sentence: "The remains were exhumed for further examination.",
+},
+belligerence: {
+  meaning: "aggressive or hostile behaviour",
+  chinese: "好鬥；敵對態度",
+  sentence: "His belligerence made it difficult to settle the argument.",
+},
+
+herd: {
+  meaning: "a group of animals that live or move together",
+  chinese: "獸群；牧群",
+  sentence: "A herd of elephants crossed the river.",
+},
+
+safari: {
+  meaning: "a journey to observe wild animals in their natural habitat",
+  chinese: "野生動物觀賞旅行",
+  sentence: "They went on a safari in Kenya during the summer.",
+},
+
+recognise: {
+  meaning: "to know or identify someone or something from previous experience",
+  chinese: "認出；辨認；承認",
+  sentence: "I recognised my friend across the playground.",
+},
+
+drawer: {
+  meaning: "a box-shaped compartment that slides in and out of furniture",
+  chinese: "抽屜",
+  sentence: "She kept her socks in the top drawer.",
+},
+
+mandatory: {
+  meaning: "required by law or rules",
+  chinese: "強制性的；必須的",
+  sentence: "Wearing a seatbelt is mandatory in the UK.",
+},
+
+esteem: {
+  meaning: "respect and admiration",
+  chinese: "尊敬；敬重",
+  sentence: "She is held in high esteem by her colleagues.",
+},
+
+archives: {
+  meaning: "a collection of historical documents or records",
+  chinese: "檔案館；檔案",
+  sentence: "The museum archives contain letters from the 1800s.",
+},
+
+evidence: {
+  meaning: "facts or information that show something is true",
+  chinese: "證據",
+  sentence: "The police collected evidence from the scene.",
+},
+
+watch: {
+  meaning: "to look at something carefully for a period of time",
+  chinese: "觀看；注視",
+  sentence: "We watched the football match together.",
+},
+
+tangerine: {
+  meaning: "a small sweet orange fruit",
+  chinese: "橘子；蜜橘",
+  sentence: "She peeled a tangerine for her lunch.",
+},
+
+scissors: {
+  meaning: "a tool with two blades used for cutting",
+  chinese: "剪刀",
+  sentence: "Use the scissors carefully when cutting paper.",
+},
+funnel: {
+  meaning: "a cone-shaped tool used for pouring liquids into a narrow opening",
+  chinese: "漏斗",
+  sentence: "She used a funnel to pour the oil into the bottle.",
+},
+
+embarrassment: {
+  meaning: "the feeling of being shy, awkward or ashamed",
+  chinese: "尷尬；難堪",
+  sentence: "He laughed to hide his embarrassment.",
+},
+
+correspondence: {
+  meaning: "letters, emails or messages exchanged between people",
+  chinese: "通信；往來信件",
+  sentence: "The office keeps all business correspondence on file.",
+},
+
+aggravate: {
+  meaning: "to make a problem or situation worse",
+  chinese: "使惡化；加劇",
+  sentence: "Running on the injured ankle could aggravate the injury.",
+},
+
+rhinoceros: {
+  meaning: "a large animal with thick skin and one or two horns on its nose",
+  chinese: "犀牛",
+  sentence: "The rhinoceros grazed peacefully on the grass.",
+},
+
+citizenship: {
+  meaning: "the legal status of being a citizen of a country",
+  chinese: "公民身份；國籍",
+  sentence: "She applied for British citizenship.",
+},
+
+accommodation: {
+  meaning: "a place where someone lives or stays",
+  chinese: "住宿；住處",
+  sentence: "The hotel provided comfortable accommodation.",
+},
+
+camouflage: {
+  meaning: "a way of hiding by looking like the surroundings",
+  chinese: "偽裝；保護色",
+  sentence: "The insect's camouflage made it difficult to see.",
+},
+
+superstition: {
+  meaning: "a belief that certain actions bring good or bad luck",
+  chinese: "迷信",
+  sentence: "Some people believe it is bad luck to walk under a ladder.",
+},
+
+eavesdrop: {
+  meaning: "to secretly listen to someone else's conversation",
+  chinese: "偷聽",
+  sentence: "It is rude to eavesdrop on private conversations.",
+},
+
+guilty: {
+  meaning: "responsible for doing something wrong or illegal",
+  chinese: "有罪的；感到內疚的",
+  sentence: "The jury found the defendant guilty.",
+},
+
 
 // 更多單字……
 
