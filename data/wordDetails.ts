@@ -4515,12 +4515,6 @@ medicine: {
   sentence: "The doctor prescribed medicine for her cough.",
 },
 
-variety: {
-  meaning: "a number of different types of something",
-  chinese: "種類；多樣性",
-  sentence: "The shop sells a wide variety of fruit.",
-},
-
 although: {
   meaning: "despite the fact that",
   chinese: "雖然；儘管",
@@ -4892,12 +4886,6 @@ accommodation: {
   meaning: "a place where someone lives or stays",
   chinese: "住宿；住處",
   sentence: "The hotel provided comfortable accommodation.",
-},
-
-camouflage: {
-  meaning: "a way of hiding by looking like the surroundings",
-  chinese: "偽裝；保護色",
-  sentence: "The insect's camouflage made it difficult to see.",
 },
 
 superstition: {
