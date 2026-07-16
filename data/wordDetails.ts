@@ -4995,12 +4995,6 @@ celebrity: {
   sentence: "A celebrity visited the school.",
 },
 
-rejuvenate: {
-  meaning: "to make young or fresh again",
-  chinese: "使恢復活力",
-  sentence: "The holiday rejuvenated her.",
-},
-
 recommend: {
   meaning: "to suggest something as good",
   chinese: "推薦",
@@ -5090,22 +5084,10 @@ telekinesis: {
   sentence: "Telekinesis exists only in fiction.",
 },
 
-ghoul: {
-  meaning: "an evil spirit in stories",
-  chinese: "食屍鬼",
-  sentence: "The ghoul haunted the old house.",
-},
-
 assert: {
   meaning: "to state something confidently",
   chinese: "斷言",
   sentence: "She asserted her rights.",
-},
-
-autumn: {
-  meaning: "the season after summer",
-  chinese: "秋天",
-  sentence: "Leaves fall in autumn.",
 },
 
 loaves: {
