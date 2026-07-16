@@ -2,14 +2,19 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getStudentScores } from "@/lib/supabase";
+import {
+  getStudentScores,
+  getStudentXP,
+} from "@/lib/supabase";
 
 type ScoreRecord = {
   id: number;
   student: string;
+  course: string;
   week: number;
   score: number;
   best_score: number;
+  xp: number;
   created_at: string;
 };
 
@@ -18,6 +23,8 @@ export default function Home() {
   const [gretaScores, setGretaScores] = useState<ScoreRecord[]>([]);
   const [mathisScores, setMathisScores] = useState<ScoreRecord[]>([]);
   const [loadingScores, setLoadingScores] = useState(true);
+  const [gretaXP, setGretaXP] = useState(0);
+  const [mathisXP, setMathisXP] = useState(0);
 
   useEffect(() => {
     const savedStudent =
@@ -27,21 +34,30 @@ export default function Home() {
       setSelectedStudent(savedStudent);
     }
 
-    async function loadScores() {
-      try {
-        const [gretaData, mathisData] = await Promise.all([
-          getStudentScores("greta"),
-          getStudentScores("mathis"),
-        ]);
+ async function loadScores() {
+  try {
+    const [
+      gretaData,
+      mathisData,
+      gretaXPData,
+      mathisXPData,
+    ] = await Promise.all([
+      getStudentScores("greta", "year7-spelling"),
+      getStudentScores("mathis", "year7-spelling"),
+      getStudentXP("greta"),
+      getStudentXP("mathis"),
+    ]);
 
-        setGretaScores(gretaData as ScoreRecord[]);
-        setMathisScores(mathisData as ScoreRecord[]);
-      } catch (error) {
-        console.error("Could not load scores:", error);
-      } finally {
-        setLoadingScores(false);
-      }
-    }
+    setGretaScores(gretaData as ScoreRecord[]);
+    setMathisScores(mathisData as ScoreRecord[]);
+    setGretaXP(gretaXPData);
+    setMathisXP(mathisXPData);
+  } catch (error) {
+    console.error("Could not load scores:", error);
+  } finally {
+    setLoadingScores(false);
+  }
+}
 
     loadScores();
   }, []);
@@ -111,6 +127,7 @@ export default function Home() {
                   ? `Best quiz score: ${gretaBestScore}`
                   : "No quiz score yet"}
             </small>
+            <p>⚡ XP: {gretaXP}</p>
           </div>
 
           <div
@@ -131,6 +148,7 @@ export default function Home() {
                   ? `Best quiz score: ${mathisBestScore}`
                   : "No quiz score yet"}
             </small>
+            <p>⚡ XP: {mathisXP}</p>
           </div>
         </div>
       </section>

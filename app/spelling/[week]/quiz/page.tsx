@@ -127,9 +127,11 @@ if (!practiceMode) {
     .from("scores")
     .insert({
       student,
+      course: "year7-spelling",
       week: weekNumber,
       score: finalScore,
       best_score: finalScore,
+      xp : gainedXP,
     });
 
   if (saveError) {
