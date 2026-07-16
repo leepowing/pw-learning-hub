@@ -5298,6 +5298,417 @@ rehearsing: {
   chinese: "排練中",
   sentence: "The choir is rehearsing for the concert.",
 },
+place: {
+  meaning: "a particular position, area or location",
+  chinese: "地方；位置；場所",
+  sentence: "This is a peaceful place to study.",
+},
+
+consternation: {
+  meaning: "a sudden feeling of worry, shock or confusion",
+  chinese: "驚愕；恐慌；不安",
+  sentence: "The unexpected announcement caused consternation among the students.",
+},
+
+appear: {
+  meaning: "to become visible or seem to be a particular way",
+  chinese: "出現；看起來",
+  sentence: "Dark clouds began to appear in the sky.",
+},
+
+engage: {
+  meaning: "to take part in something or attract someone's interest",
+  chinese: "參與；吸引",
+  sentence: "The teacher used games to engage the class.",
+},
+
+exclaimed: {
+  meaning: "said something suddenly and loudly because of surprise or excitement",
+  chinese: "驚叫；呼喊",
+  sentence: "She exclaimed with delight when she saw the puppy.",
+},
+
+perilous: {
+  meaning: "very dangerous",
+  chinese: "危險的",
+  sentence: "The climbers faced a perilous journey.",
+},
+
+rebellious: {
+  meaning: "unwilling to obey rules or authority",
+  chinese: "叛逆的；反抗的",
+  sentence: "The rebellious teenager ignored the rules.",
+},
+
+analyse: {
+  meaning: "to examine something carefully",
+  chinese: "分析",
+  sentence: "Scientists analyse the results carefully.",
+},
+
+nice: {
+  meaning: "pleasant, kind or enjoyable",
+  chinese: "友善的；令人愉快的",
+  sentence: "She is always nice to everyone.",
+},
+
+decrease: {
+  meaning: "to become smaller or less",
+  chinese: "減少；降低",
+  sentence: "The number of visitors began to decrease.",
+},
+
+thieve: {
+  meaning: "to steal (rare verb)",
+  chinese: "偷竊",
+  sentence: "He was caught trying to thieve from the shop.",
+},
+
+complimentary: {
+  meaning: "given free of charge or expressing praise",
+  chinese: "免費贈送的；讚美的",
+  sentence: "Guests received complimentary drinks.",
+},
+
+miscellaneous: {
+  meaning: "made up of many different kinds",
+  chinese: "各式各樣的；雜項的",
+  sentence: "The drawer contained miscellaneous items.",
+},
+
+directory: {
+  meaning: "a list of names, addresses or other information",
+  chinese: "目錄；名錄",
+  sentence: "I found the number in the telephone directory.",
+},
+
+unconscious: {
+  meaning: "not awake or aware",
+  chinese: "失去知覺的",
+  sentence: "The injured player was unconscious for a short time.",
+},
+
+involuntary: {
+  meaning: "done without choosing or intending to",
+  chinese: "不由自主的",
+  sentence: "He gave an involuntary smile.",
+},
+
+modicum: {
+  meaning: "a small amount of something",
+  chinese: "少量；些許",
+  sentence: "You need a modicum of patience.",
+},
+
+appropriate: {
+  meaning: "suitable for a particular situation",
+  chinese: "合適的；恰當的",
+  sentence: "Wear appropriate clothing for the weather.",
+},
+
+accusation: {
+  meaning: "a claim that someone has done something wrong",
+  chinese: "指控；控告",
+  sentence: "He denied the accusation.",
+},
+
+history: {
+  meaning: "the study of past events",
+  chinese: "歷史",
+  sentence: "History is one of my favourite subjects.",
+},
+
+oregano: {
+  meaning: "a herb used in cooking",
+  chinese: "牛至；奧勒岡草",
+  sentence: "Sprinkle some oregano on the pizza.",
+},
+
+cancelling: {
+  meaning: "deciding that something will not happen",
+  chinese: "取消",
+  sentence: "They are cancelling the match because of the rain.",
+},
+
+luscious: {
+  meaning: "pleasantly rich, sweet or appealing",
+  chinese: "甘美的；美味的",
+  sentence: "The cake had a luscious chocolate filling.",
+},
+tournament: {
+  meaning: "a competition involving many players or teams",
+  chinese: "錦標賽；聯賽",
+  sentence: "Our school won the football tournament.",
+},
+
+friend: {
+  meaning: "a person you know well and like",
+  chinese: "朋友",
+  sentence: "My best friend lives next door.",
+},
+
+leather: {
+  meaning: "a material made from animal skin",
+  chinese: "皮革",
+  sentence: "He bought a leather jacket.",
+},
+
+intuition: {
+  meaning: "the ability to understand something without conscious reasoning",
+  chinese: "直覺",
+  sentence: "She trusted her intuition.",
+},
+
+feasible: {
+  meaning: "possible and practical to do",
+  chinese: "可行的",
+  sentence: "The plan is feasible within our budget.",
+},
+
+professor: {
+  meaning: "a senior teacher at a university",
+  chinese: "教授",
+  sentence: "The professor gave an interesting lecture.",
+},
+
+crying: {
+  meaning: "shedding tears because of sadness or pain",
+  chinese: "哭泣",
+  sentence: "The baby started crying loudly.",
+},
+
+buried: {
+  meaning: "placed under the ground",
+  chinese: "埋葬；埋藏",
+  sentence: "The treasure was buried under the tree.",
+},
+
+observe: {
+  meaning: "to watch carefully or notice something",
+  chinese: "觀察",
+  sentence: "Scientists observe animals in the wild.",
+},
+
+denying: {
+  meaning: "saying something is not true",
+  chinese: "否認",
+  sentence: "He kept denying the accusation.",
+},
+
+behaviours: {
+  meaning: "the ways that people or animals act",
+  chinese: "行為（複數）",
+  sentence: "Good behaviours should be encouraged.",
+},
+
+misguided: {
+  meaning: "based on wrong ideas or poor judgement",
+  chinese: "被誤導的",
+  sentence: "It was a misguided decision.",
+},
+
+eccentric: {
+  meaning: "unusual or slightly strange",
+  chinese: "古怪的；與眾不同的",
+  sentence: "The old inventor was rather eccentric.",
+},
+
+dictionaries: {
+  meaning: "books or resources that explain words",
+  chinese: "字典（複數）",
+  sentence: "The library has many dictionaries.",
+},
+
+educational: {
+  meaning: "providing knowledge or learning",
+  chinese: "教育性的",
+  sentence: "The documentary was both entertaining and educational.",
+},
+
+independent: {
+  meaning: "not controlled by others; able to do things alone",
+  chinese: "獨立的",
+  sentence: "She has become more independent.",
+},
+
+incredible: {
+  meaning: "very impressive or difficult to believe",
+  chinese: "令人難以置信的",
+  sentence: "The magician performed an incredible trick.",
+},
+
+triumph: {
+  meaning: "a great success or victory",
+  chinese: "勝利；成功",
+  sentence: "Winning the championship was a great triumph.",
+},
+
+unattractive: {
+  meaning: "not appealing or pleasant to look at",
+  chinese: "不吸引人的",
+  sentence: "The old building looked unattractive.",
+},
+
+chronic: {
+  meaning: "lasting for a long time or happening often",
+  chinese: "長期的；慢性的",
+  sentence: "He suffers from chronic back pain.",
+},
+
+hopping: {
+  meaning: "jumping on one foot or with short jumps",
+  chinese: "跳躍",
+  sentence: "The rabbit was hopping across the field.",
+},
+
+future: {
+  meaning: "the time that is yet to come",
+  chinese: "未來",
+  sentence: "She hopes to become a doctor in the future.",
+},
+
+pure: {
+  meaning: "not mixed with anything else; clean",
+  chinese: "純淨的；純粹的",
+  sentence: "The mountain stream provided pure water.",
+},
+berries: {
+  meaning: "small, juicy fruits with seeds",
+  chinese: "漿果（複數）",
+  sentence: "The birds were eating berries from the bush.",
+},
+
+slimming: {
+  meaning: "intended to help someone lose weight",
+  chinese: "減肥的；瘦身的",
+  sentence: "She followed a slimming diet.",
+},
+
+electricity: {
+  meaning: "a form of energy used for power and light",
+  chinese: "電；電力",
+  sentence: "The electricity went off during the storm.",
+},
+
+literacy: {
+  meaning: "the ability to read and write",
+  chinese: "讀寫能力",
+  sentence: "Literacy is an essential life skill.",
+},
+
+jittery: {
+  meaning: "feeling nervous or unable to relax",
+  chinese: "緊張不安的",
+  sentence: "I felt jittery before the exam.",
+},
+
+calculated: {
+  meaning: "carefully planned or worked out",
+  chinese: "經過計算的；精心策劃的",
+  sentence: "It was a carefully calculated decision.",
+},
+
+barbarian: {
+  meaning: "a person regarded as uncivilised or cruel",
+  chinese: "野蠻人",
+  sentence: "The ancient stories described invading barbarians.",
+},
+
+verdant: {
+  meaning: "green with healthy plants or grass",
+  chinese: "翠綠的；草木茂盛的",
+  sentence: "The valley was covered with verdant fields.",
+},
+
+poking: {
+  meaning: "pushing with a finger or a pointed object",
+  chinese: "戳；刺（現在分詞）",
+  sentence: "Stop poking your brother.",
+},
+
+weird: {
+  meaning: "strange or unusual",
+  chinese: "奇怪的",
+  sentence: "That was a weird dream.",
+},
+
+friendly: {
+  meaning: "kind and pleasant towards others",
+  chinese: "友善的",
+  sentence: "The neighbours are very friendly.",
+},
+
+allergic: {
+  meaning: "having an allergy to something",
+  chinese: "過敏的",
+  sentence: "He is allergic to peanuts.",
+},
+
+liaise: {
+  meaning: "to communicate and work closely with others",
+  chinese: "聯絡；協調",
+  sentence: "Our team will liaise with the organisers.",
+},
+
+possibly: {
+  meaning: "perhaps; maybe",
+  chinese: "可能地",
+  sentence: "It will possibly rain tomorrow.",
+},
+
+suicide: {
+  meaning: "the act of a person intentionally causing their own death",
+  chinese: "自殺",
+  sentence: "The report discussed suicide prevention programmes.",
+},
+
+dictatorship: {
+  meaning: "a country ruled by one person with complete power",
+  chinese: "獨裁統治",
+  sentence: "The country was ruled under a dictatorship.",
+},
+
+discretion: {
+  meaning: "careful judgement about what should be done or said",
+  chinese: "謹慎；判斷力",
+  sentence: "Use discretion when sharing personal information.",
+},
+
+hallucination: {
+  meaning: "seeing or hearing something that is not really there",
+  chinese: "幻覺",
+  sentence: "The doctor explained that hallucinations can have medical causes.",
+},
+
+factories: {
+  meaning: "buildings where goods are made",
+  chinese: "工廠（複數）",
+  sentence: "Many factories produce cars and machinery.",
+},
+
+pierce: {
+  meaning: "to go through or make a hole in something",
+  chinese: "刺穿；穿透",
+  sentence: "The sharp thorn pierced his glove.",
+},
+
+laughing: {
+  meaning: "making sounds because something is funny",
+  chinese: "大笑；笑著",
+  sentence: "Everyone was laughing at the joke.",
+},
+
+irrational: {
+  meaning: "not based on reason or logical thinking",
+  chinese: "不理性的",
+  sentence: "His fear of butterflies was completely irrational.",
+},
+
+heavily: {
+  meaning: "to a great degree or with great force",
+  chinese: "沉重地；大量地",
+  sentence: "It rained heavily all afternoon.",
+},
 
 // 更多單字……
 
