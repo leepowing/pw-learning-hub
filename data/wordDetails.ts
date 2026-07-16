@@ -4905,7 +4905,417 @@ guilty: {
   chinese: "有罪的；感到內疚的",
   sentence: "The jury found the defendant guilty.",
 },
+villages: {
+  meaning: "small communities in the countryside",
+  chinese: "村莊",
+  sentence: "Many villages are surrounded by beautiful fields.",
+},
 
+manufacture: {
+  meaning: "to make goods in large quantities",
+  chinese: "製造",
+  sentence: "The company manufactures electric cars.",
+},
+
+apprenticeship: {
+  meaning: "training for a skilled job while working",
+  chinese: "學徒訓練",
+  sentence: "She started an apprenticeship as a chef.",
+},
+
+vacancies: {
+  meaning: "jobs or positions that are available",
+  chinese: "職位空缺",
+  sentence: "The company has several vacancies.",
+},
+
+prioritise: {
+  meaning: "to decide what is most important",
+  chinese: "優先處理",
+  sentence: "You should prioritise your homework.",
+},
+
+liqueur: {
+  meaning: "a sweet alcoholic drink",
+  chinese: "甜酒",
+  sentence: "The dessert contained a coffee liqueur.",
+},
+
+transitory: {
+  meaning: "lasting only a short time",
+  chinese: "短暫的",
+  sentence: "Success can sometimes be transitory.",
+},
+
+complaining: {
+  meaning: "expressing dissatisfaction",
+  chinese: "抱怨",
+  sentence: "He kept complaining about the weather.",
+},
+
+skeleton: {
+  meaning: "the framework of bones in a body",
+  chinese: "骨骼",
+  sentence: "The skeleton protects vital organs.",
+},
+
+alcohol: {
+  meaning: "a drink containing ethanol",
+  chinese: "酒精；酒",
+  sentence: "Children should never drink alcohol.",
+},
+
+enviable: {
+  meaning: "desirable enough to cause envy",
+  chinese: "令人羨慕的",
+  sentence: "She has an enviable collection of books.",
+},
+
+unnatural: {
+  meaning: "not normal or natural",
+  chinese: "不自然的",
+  sentence: "His smile looked unnatural.",
+},
+
+patient: {
+  meaning: "able to stay calm while waiting",
+  chinese: "有耐性的",
+  sentence: "Be patient while I explain.",
+},
+
+resurrect: {
+  meaning: "to bring back to life or use again",
+  chinese: "復活；恢復",
+  sentence: "The museum resurrected an old tradition.",
+},
+
+celebrity: {
+  meaning: "a famous person",
+  chinese: "名人",
+  sentence: "A celebrity visited the school.",
+},
+
+rejuvenate: {
+  meaning: "to make young or fresh again",
+  chinese: "使恢復活力",
+  sentence: "The holiday rejuvenated her.",
+},
+
+recommend: {
+  meaning: "to suggest something as good",
+  chinese: "推薦",
+  sentence: "I recommend this book.",
+},
+
+acknowledge: {
+  meaning: "to accept that something is true",
+  chinese: "承認",
+  sentence: "He acknowledged his mistake.",
+},
+
+obsessive: {
+  meaning: "thinking about something all the time",
+  chinese: "著迷的",
+  sentence: "He became obsessive about football.",
+},
+
+imaginative: {
+  meaning: "creative and full of new ideas",
+  chinese: "富想像力的",
+  sentence: "She wrote an imaginative story.",
+},
+
+health: {
+  meaning: "the condition of your body and mind",
+  chinese: "健康",
+  sentence: "Exercise improves your health.",
+},
+
+believe: {
+  meaning: "to think something is true",
+  chinese: "相信",
+  sentence: "I believe you.",
+},
+
+vindicate: {
+  meaning: "to clear someone of blame",
+  chinese: "證明……無罪；洗清罪名",
+  sentence: "The evidence vindicated him.",
+},
+half: {
+  meaning: "one of two equal parts",
+  chinese: "一半",
+  sentence: "I ate half the cake.",
+},
+
+annually: {
+  meaning: "once every year",
+  chinese: "每年",
+  sentence: "The event is held annually.",
+},
+
+manufacturing: {
+  meaning: "making goods in factories",
+  chinese: "製造業；製造",
+  sentence: "Manufacturing creates many jobs.",
+},
+
+trowel: {
+  meaning: "a small gardening tool",
+  chinese: "泥鏟",
+  sentence: "She used a trowel to plant flowers.",
+},
+
+travelled: {
+  meaning: "went from one place to another",
+  chinese: "旅行了",
+  sentence: "They travelled across Europe.",
+},
+
+miraculous: {
+  meaning: "very surprising and wonderful",
+  chinese: "奇蹟般的",
+  sentence: "It was a miraculous escape.",
+},
+
+proviso: {
+  meaning: "a condition attached to an agreement",
+  chinese: "附帶條件",
+  sentence: "The offer came with one proviso.",
+},
+
+telekinesis: {
+  meaning: "moving objects using the mind",
+  chinese: "念力",
+  sentence: "Telekinesis exists only in fiction.",
+},
+
+ghoul: {
+  meaning: "an evil spirit in stories",
+  chinese: "食屍鬼",
+  sentence: "The ghoul haunted the old house.",
+},
+
+assert: {
+  meaning: "to state something confidently",
+  chinese: "斷言",
+  sentence: "She asserted her rights.",
+},
+
+autumn: {
+  meaning: "the season after summer",
+  chinese: "秋天",
+  sentence: "Leaves fall in autumn.",
+},
+
+loaves: {
+  meaning: "plural of loaf",
+  chinese: "麵包（複數）",
+  sentence: "We bought two loaves of bread.",
+},
+
+proportion: {
+  meaning: "a part compared with the whole",
+  chinese: "比例",
+  sentence: "A large proportion passed the test.",
+},
+
+benevolent: {
+  meaning: "kind and generous",
+  chinese: "仁慈的",
+  sentence: "She was a benevolent leader.",
+},
+
+popped: {
+  meaning: "made a quick movement",
+  chinese: "突然出現；爆開",
+  sentence: "He popped into the shop.",
+},
+
+dropped: {
+  meaning: "fell or let something fall",
+  chinese: "掉下",
+  sentence: "She dropped her keys.",
+},
+
+supervision: {
+  meaning: "watching and directing work",
+  chinese: "監督",
+  sentence: "Children need adult supervision.",
+},
+
+inconsiderable: {
+  meaning: "very small or unimportant",
+  chinese: "微不足道的",
+  sentence: "The cost was inconsiderable.",
+},
+
+characters: {
+  meaning: "people in a story",
+  chinese: "角色",
+  sentence: "The novel has interesting characters.",
+},
+
+liking: {
+  meaning: "a feeling of enjoyment",
+  chinese: "喜愛",
+  sentence: "She took a liking to the puppy.",
+},
+
+obviously: {
+  meaning: "clearly",
+  chinese: "明顯地",
+  sentence: "He was obviously tired.",
+},
+
+navigator: {
+  meaning: "someone who plans or directs a route",
+  chinese: "導航員",
+  sentence: "The navigator checked the map.",
+},
+
+preparation: {
+  meaning: "the act of getting ready",
+  chinese: "準備",
+  sentence: "Preparation is important before exams.",
+},
+tidied: {
+  meaning: "made neat and organised",
+  chinese: "整理了",
+  sentence: "She tidied her bedroom.",
+},
+
+fumigate: {
+  meaning: "to remove pests using gas",
+  chinese: "熏蒸消毒",
+  sentence: "The warehouse was fumigated.",
+},
+
+incognito: {
+  meaning: "with one's identity hidden",
+  chinese: "隱姓埋名地",
+  sentence: "The actor travelled incognito.",
+},
+
+transfusion: {
+  meaning: "the transfer of blood into a person",
+  chinese: "輸血",
+  sentence: "The patient needed a blood transfusion.",
+},
+
+memories: {
+  meaning: "things remembered from the past",
+  chinese: "回憶",
+  sentence: "The photos brought back happy memories.",
+},
+
+knives: {
+  meaning: "plural of knife",
+  chinese: "刀（複數）",
+  sentence: "Keep sharp knives safely stored.",
+},
+
+decorum: {
+  meaning: "proper behaviour",
+  chinese: "禮儀；得體",
+  sentence: "Everyone behaved with decorum.",
+},
+
+gymkhana: {
+  meaning: "a competition involving horses or games",
+  chinese: "馬術競賽",
+  sentence: "The children enjoyed the gymkhana.",
+},
+
+which: {
+  meaning: "asking about one from a group",
+  chinese: "哪一個",
+  sentence: "Which book is yours?",
+},
+
+boycott: {
+  meaning: "to refuse to buy or support",
+  chinese: "抵制",
+  sentence: "Many people boycotted the product.",
+},
+
+discomfort: {
+  meaning: "slight pain or uneasiness",
+  chinese: "不適",
+  sentence: "He felt discomfort in his knee.",
+},
+
+employment: {
+  meaning: "having paid work",
+  chinese: "就業",
+  sentence: "Employment increased this year.",
+},
+
+elocution: {
+  meaning: "clear and expressive speaking",
+  chinese: "演說技巧",
+  sentence: "She took elocution lessons.",
+},
+
+attention: {
+  meaning: "careful listening or watching",
+  chinese: "注意力",
+  sentence: "Please pay attention.",
+},
+
+flag: {
+  meaning: "a piece of cloth representing a country",
+  chinese: "旗幟",
+  sentence: "The flag flew proudly.",
+},
+
+option: {
+  meaning: "a choice",
+  chinese: "選擇",
+  sentence: "You have two options.",
+},
+
+sceptical: {
+  meaning: "not easily convinced",
+  chinese: "懷疑的",
+  sentence: "She was sceptical about the plan.",
+},
+
+contempt: {
+  meaning: "a feeling that something deserves no respect",
+  chinese: "輕視",
+  sentence: "He looked at them with contempt.",
+},
+
+persuade: {
+  meaning: "to convince someone",
+  chinese: "說服",
+  sentence: "She persuaded me to join.",
+},
+
+upholsterer: {
+  meaning: "someone who covers furniture with fabric",
+  chinese: "家具裝飾工",
+  sentence: "The upholsterer repaired the old chair.",
+},
+
+grandeur: {
+  meaning: "great beauty or impressiveness",
+  chinese: "宏偉",
+  sentence: "We admired the grandeur of the castle.",
+},
+
+odour: {
+  meaning: "a smell",
+  chinese: "氣味",
+  sentence: "There was a strange odour in the room.",
+},
+
+rehearsing: {
+  meaning: "practising for a performance",
+  chinese: "排練中",
+  sentence: "The choir is rehearsing for the concert.",
+},
 
 // 更多單字……
 
