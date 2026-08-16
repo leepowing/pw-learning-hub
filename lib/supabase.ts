@@ -515,3 +515,33 @@ export async function migrateLegacyMistakes(
 
   return true;
 }
+
+export type FamilySpellingOverviewRow = {
+  student: string;
+  week: number | null;
+  learned_count: number;
+  best_score: number;
+  total_xp: number;
+  review_count: number;
+};
+
+export async function getFamilySpellingOverview(
+  course = "year7-spelling"
+) {
+  const { data, error } = await supabase.rpc(
+    "get_family_spelling_overview",
+    {
+      p_course: course,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Could not load family spelling overview:",
+      error
+    );
+    return [];
+  }
+
+  return (data ?? []) as FamilySpellingOverviewRow[];
+}
