@@ -5,13 +5,29 @@ import { useEffect, useState } from "react";
 import { spellingWeeks } from "@/data/spellingWeeks";
 import { calculateLevel } from "@/lib/rewards";
 import { getAchievements } from "@/lib/achievements";
-import { getStudentStorageKey } from "@/lib/studentStorage";
+import { getCurrentStudent } from "@/lib/studentStorage";
+import {
+  getSpellingProgress,
+  getStudentMistakes,
+  getStudentXP,
+  mergeLegacySpellingProgress,
+  migrateLegacyXP,
+  migrateLegacyMistakes,
+} from "@/lib/supabase";
 
 type WeekProgress = {
   learned: number;
   bestScore: number;
   mastered: boolean;
 };
+
+type SpellingProgressRow = {
+  week: number;
+  learned_words: string[] | null;
+  best_score: number | null;
+  mastered: boolean | null;
+};
+
 
 export default function SpellingPage() {
   const [progress, setProgress] = useState<
@@ -23,87 +39,450 @@ export default function SpellingPage() {
   const availableWeekNumbers = Object.keys(spellingWeeks).map(Number);
   const totalWeeks = Math.max(...availableWeekNumbers);
 
-  useEffect(() => {
-    const loadedProgress: Record<number, WeekProgress> = {};
+useEffect(() => {
+  let cancelled = false;
 
-for (let weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
-const learnedKey = getStudentStorageKey(
-  `week${weekNumber}Learned`
-);
+async function migrateLocalProgress(
+  student: string,
+  course: string
+) {
+  const migrationKey =
+    `${student}_fullLocalStorageMigrationV3`;
 
-const bestScoreKey = getStudentStorageKey(
-  `week${weekNumber}BestScore`
-);
+  if (
+    window.localStorage.getItem(migrationKey) === "true"
+  ) {
+    return;
+  }
 
-const masteredKey = getStudentStorageKey(
-  `week${weekNumber}Mastered`
-);
-      let learned = 0;
-      let bestScore = 0;
-      let mastered = false;
+  let allSucceeded = true;
 
-      try {
-        const savedLearned =
-          window.localStorage.getItem(learnedKey);
+  function getFirstValue(keys: string[]) {
+    for (const key of keys) {
+      const value = window.localStorage.getItem(key);
 
-        if (savedLearned) {
-          const parsedLearned = JSON.parse(savedLearned);
-
-          if (Array.isArray(parsedLearned)) {
-            learned = parsedLearned.length;
-          }
-        }
-
-        const savedBestScore =
-          window.localStorage.getItem(bestScoreKey);
-
-        if (savedBestScore) {
-          bestScore = Number(savedBestScore);
-        }
-        
-        const savedMastered =
-          window.localStorage.getItem(masteredKey);
-
-          mastered = savedMastered === "true";
-
-      } catch {
-        learned = 0;
-        bestScore = 0;
+      if (value !== null) {
+        return value;
       }
-
-       loadedProgress[weekNumber] = {
-          learned,
-          bestScore,
-          mastered,
-        };
     }
 
-    setProgress(loadedProgress);
-const savedXP = Number(
-  window.localStorage.getItem(
-  getStudentStorageKey("pwTotalXP")
-) ?? "0"
-);
+    return null;
+  }
 
-setTotalXP(savedXP);
+  // 搬移每星期已學單字、最佳分數和完成狀態
+  for (
+    let weekNumber = 1;
+    weekNumber <= totalWeeks;
+    weekNumber++
+  ) {
+    const learnedValue = getFirstValue([
+      `${student}_week${weekNumber}Learned`,
+      `week${weekNumber}Learned`,
+    ]);
+
+    const bestScoreValue = getFirstValue([
+      `${student}_week${weekNumber}BestScore`,
+      `week${weekNumber}BestScore`,
+    ]);
+
+    const masteredValue = getFirstValue([
+      `${student}_week${weekNumber}Mastered`,
+      `week${weekNumber}Mastered`,
+    ]);
+
+    const hasLocalProgress =
+      learnedValue !== null ||
+      bestScoreValue !== null ||
+      masteredValue !== null;
+
+    if (!hasLocalProgress) {
+      continue;
+    }
+
+    let learnedWords: string[] = [];
+
     try {
-  const savedReviewWords =
-window.localStorage.getItem(
-  getStudentStorageKey("reviewWords")
-);
+      const parsed = learnedValue
+        ? JSON.parse(learnedValue)
+        : [];
 
-  if (savedReviewWords) {
-    const parsedReviewWords = JSON.parse(savedReviewWords);
+      if (Array.isArray(parsed)) {
+        learnedWords = parsed
+          .map((item) => {
+            if (typeof item === "string") {
+              return item;
+            }
 
-    if (Array.isArray(parsedReviewWords)) {
-      setReviewCount(parsedReviewWords.length);
+            if (typeof item === "number") {
+              return spellingWeeks[
+                weekNumber
+              ]?.words[item]?.word;
+            }
+
+            return undefined;
+          })
+          .filter(
+            (word): word is string =>
+              typeof word === "string"
+          );
+      }
+    } catch {
+      learnedWords = [];
+    }
+
+    learnedWords = [...new Set(learnedWords)];
+
+    const parsedScore = Number(
+      bestScoreValue ?? "0"
+    );
+
+    const bestScore = Number.isFinite(parsedScore)
+      ? parsedScore
+      : 0;
+
+    const mastered = masteredValue === "true";
+
+    const saved =
+      await mergeLegacySpellingProgress(
+        student,
+        course,
+        weekNumber,
+        learnedWords,
+        bestScore,
+        mastered
+      );
+
+    if (!saved) {
+      allSucceeded = false;
     }
   }
-} catch {
-  setReviewCount(0);
-}
-  }, []);
 
+  // 搬移舊 XP；只補回 Supabase 尚欠的 XP
+  const xpKeys = [
+    `${student}_pwTotalXP`,
+    `${student}_totalXP`,
+    "pwTotalXP",
+    "totalXP",
+  ];
+
+  const xpValues = xpKeys
+    .map((key) =>
+      Number(window.localStorage.getItem(key))
+    )
+    .filter(
+      (value) =>
+        Number.isFinite(value) && value >= 0
+    );
+
+  const legacyTotalXP =
+    xpValues.length > 0
+      ? Math.max(...xpValues)
+      : 0;
+
+  if (legacyTotalXP > 0) {
+    const xpSaved = await migrateLegacyXP(
+      student,
+      legacyTotalXP,
+      course
+    );
+
+    if (!xpSaved) {
+      allSucceeded = false;
+    }
+  }
+
+  // 尋找單字屬於哪一星期
+  function findWeekForWord(word: string) {
+    const normalisedWord =
+      word.trim().toLowerCase();
+
+    for (
+      let weekNumber = 1;
+      weekNumber <= totalWeeks;
+      weekNumber++
+    ) {
+      const found = spellingWeeks[
+        weekNumber
+      ]?.words.some(
+        (item) =>
+          item.word.trim().toLowerCase() ===
+          normalisedWord
+      );
+
+      if (found) {
+        return weekNumber;
+      }
+    }
+
+    return 1;
+  }
+
+  const mistakeCounts = new Map<
+    string,
+    number
+  >();
+
+  const countKeys = [
+    `${student}_reviewMistakeCounts`,
+    "reviewMistakeCounts",
+  ];
+
+  for (const key of countKeys) {
+    const savedCounts =
+      window.localStorage.getItem(key);
+
+    if (!savedCounts) {
+      continue;
+    }
+
+    try {
+      const parsed = JSON.parse(savedCounts);
+
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        !Array.isArray(parsed)
+      ) {
+        Object.entries(parsed).forEach(
+          ([word, value]) => {
+            const normalisedWord =
+              word.trim().toLowerCase();
+
+            const count = Number(value);
+
+            if (
+              normalisedWord &&
+              Number.isFinite(count)
+            ) {
+              mistakeCounts.set(
+                normalisedWord,
+                Math.max(
+                  mistakeCounts.get(
+                    normalisedWord
+                  ) ?? 0,
+                  count,
+                  1
+                )
+              );
+            }
+          }
+        );
+      }
+    } catch {
+      console.error(
+        `Could not read localStorage key: ${key}`
+      );
+    }
+  }
+
+  const legacyMistakeMap = new Map<
+    string,
+    {
+      word: string;
+      week: number;
+      wrongCount: number;
+    }
+  >();
+
+  function addLegacyMistake(
+    word: string,
+    week?: number,
+    wrongCount?: number
+  ) {
+    const normalisedWord =
+      word.trim().toLowerCase();
+
+    if (!normalisedWord) {
+      return;
+    }
+
+    const validWeek =
+      typeof week === "number" &&
+      Number.isFinite(week) &&
+      week >= 1
+        ? week
+        : findWeekForWord(normalisedWord);
+
+    const validCount = Math.max(
+      Number.isFinite(wrongCount)
+        ? Number(wrongCount)
+        : 1,
+      mistakeCounts.get(normalisedWord) ?? 1,
+      1
+    );
+
+    const existing =
+      legacyMistakeMap.get(normalisedWord);
+
+    legacyMistakeMap.set(normalisedWord, {
+      word: normalisedWord,
+      week: existing?.week ?? validWeek,
+      wrongCount: Math.max(
+        existing?.wrongCount ?? 1,
+        validCount
+      ),
+    });
+  }
+
+  // 搬移 Review Centre 的單字
+  const reviewWordKeys = [
+    `${student}_reviewWords`,
+    "reviewWords",
+  ];
+
+  for (const key of reviewWordKeys) {
+    const savedWords =
+      window.localStorage.getItem(key);
+
+    if (!savedWords) {
+      continue;
+    }
+
+    try {
+      const parsed = JSON.parse(savedWords);
+
+      if (Array.isArray(parsed)) {
+        parsed.forEach((word) => {
+          if (typeof word === "string") {
+            addLegacyMistake(word);
+          }
+        });
+      }
+    } catch {
+      console.error(
+        `Could not read localStorage key: ${key}`
+      );
+    }
+  }
+
+  // 搬移舊版 mistakeBook
+  const mistakeBookKeys = [
+    `${student}_mistakeBook`,
+    "mistakeBook",
+  ];
+
+  for (const key of mistakeBookKeys) {
+    const savedBook =
+      window.localStorage.getItem(key);
+
+    if (!savedBook) {
+      continue;
+    }
+
+    try {
+      const parsed = JSON.parse(savedBook);
+
+      if (Array.isArray(parsed)) {
+        parsed.forEach((item) => {
+          if (
+            item &&
+            typeof item.word === "string"
+          ) {
+            addLegacyMistake(
+              item.word,
+              Number(item.week),
+              1
+            );
+          }
+        });
+      }
+    } catch {
+      console.error(
+        `Could not read localStorage key: ${key}`
+      );
+    }
+  }
+
+  // 即使單字只存在於次數紀錄，也要搬移
+  mistakeCounts.forEach((count, word) => {
+    addLegacyMistake(word, undefined, count);
+  });
+
+  const legacyMistakes = [
+    ...legacyMistakeMap.values(),
+  ];
+
+  if (legacyMistakes.length > 0) {
+    const mistakesSaved =
+      await migrateLegacyMistakes(
+        student,
+        legacyMistakes,
+        course
+      );
+
+    if (!mistakesSaved) {
+      allSucceeded = false;
+    }
+  }
+
+  // 全部成功後才寫入完成標記
+  if (allSucceeded) {
+    window.localStorage.setItem(
+      migrationKey,
+      "true"
+    );
+  }
+}
+
+  async function loadDashboard() {
+    const student = getCurrentStudent();
+    const course = "year7-spelling";
+
+    if (student === "guest") {
+      console.error("No student has been selected.");
+
+      if (!cancelled) {
+        setProgress({});
+        setTotalXP(0);
+        setReviewCount(0);
+      }
+
+      return;
+    }
+
+await migrateLocalProgress(student, course);
+
+    const [progressRows, xp, mistakes] = await Promise.all([
+      getSpellingProgress(student, course),
+      getStudentXP(student, course),
+      getStudentMistakes(student, course),
+    ]);
+
+    if (cancelled) {
+      return;
+    }
+
+    const loadedProgress: Record<number, WeekProgress> = {};
+
+    for (let weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
+      loadedProgress[weekNumber] = {
+        learned: 0,
+        bestScore: 0,
+        mastered: false,
+      };
+    }
+
+    (progressRows as SpellingProgressRow[]).forEach((row) => {
+      loadedProgress[row.week] = {
+        learned: Array.isArray(row.learned_words)
+          ? row.learned_words.length
+          : 0,
+        bestScore: row.best_score ?? 0,
+        mastered: row.mastered ?? false,
+      };
+    });
+
+    setProgress(loadedProgress);
+    setTotalXP(xp);
+    setReviewCount(mistakes.length);
+  }
+
+  loadDashboard();
+
+  return () => {
+    cancelled = true;
+  };
+}, [totalWeeks]);
 
 const totalAvailableWeeks = availableWeekNumbers.length;
 
@@ -121,6 +500,18 @@ const learnedWords = availableWeekNumbers.reduce(
 
 const masteredWeeks = availableWeekNumbers.filter(
   (weekNumber) => progress[weekNumber]?.mastered
+).length;
+
+const completedWeeks = availableWeekNumbers.filter(
+  (weekNumber) => {
+    const totalWeekWords =
+      spellingWeeks[weekNumber]?.words.length ?? 0;
+
+    return (
+      totalWeekWords > 0 &&
+      progress[weekNumber]?.learned === totalWeekWords
+    );
+  }
 ).length;
 
 const attemptedWeeks = availableWeekNumbers.filter(
@@ -194,9 +585,11 @@ const unlockedAchievements = achievements.filter(
 </div>
   <div className="dashboard-card">
     <span className="dashboard-icon">🏆</span>
-    <strong>{masteredWeeks} / {totalAvailableWeeks}</strong>
-    <p>Weeks Mastered</p>
-  </div>
+<strong>
+  {completedWeeks} / {totalAvailableWeeks}
+</strong>
+
+<p>Weeks Completed</p>  </div>
 
   <div className="dashboard-card">
     <span className="dashboard-icon">📚</span>

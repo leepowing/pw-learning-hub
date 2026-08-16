@@ -4,17 +4,14 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { getSpellingWeek } from "@/data/spellingWeeks";
-import {
-  addXP,
-  calculateLevel,
-} from "@/lib/rewards";
-import {
-  getCurrentStudent,
-  getStudentStorageKey,
-} from "@/lib/studentStorage";
+import { calculateLevel } from "@/lib/rewards";
+import { getCurrentStudent } from "@/lib/studentStorage";
 
 import {
   supabase,
+  getSpellingProgress,
+  getStudentXP,
+  saveSpellingProgress,
   saveStudentMistake,
 } from "@/lib/supabase";
 
@@ -24,41 +21,7 @@ export default function WeekQuizPage() {
   const weekNumber = Number(params.week);
   const weekData = getSpellingWeek(weekNumber);
   const quizWords = weekData?.words.map((item) => item.word) ?? [];
-const bestScoreKey = getStudentStorageKey(
-  `week${weekNumber}BestScore`
-);
 
-const masteredKey = getStudentStorageKey(
-  `week${weekNumber}Mastered`
-);
-
-function saveMistake(word: string) {
-
-  const key = getStudentStorageKey("mistakeBook");
-
-  const saved = JSON.parse(
-    localStorage.getItem(key) ?? "[]"
-  );
-
-  const exists = saved.find(
-    (item: any) =>
-      item.week === weekNumber &&
-      item.word === word
-  );
-
-  if (!exists) {
-    saved.push({
-      week: weekNumber,
-      word,
-      date: new Date().toISOString(),
-    });
-
-    localStorage.setItem(
-      key,
-      JSON.stringify(saved)
-    );
-  }
-}
 
   const [shuffledWords] = useState(() =>
   [...quizWords].sort(() => Math.random() - 0.5)
@@ -69,7 +32,10 @@ function saveMistake(word: string) {
   const [feedback, setFeedback] = useState("");
   const [finished, setFinished] = useState(false);
   const [mistakes, setMistakes] = useState<string[]>([]);
-  const [bestScore, setBestScore] = useState(0);  
+  const [bestScore, setBestScore] = useState(0);
+const [learnedWords, setLearnedWords] = useState<string[]>([]);
+const [mastered, setMastered] = useState(false);
+const [progressLoaded, setProgressLoaded] = useState(false);    
   const [practiceMode, setPracticeMode] = useState(false);
   const [practiceWords, setPracticeWords] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -78,12 +44,54 @@ function saveMistake(word: string) {
   const transitionTimerRef = useRef<number | null>(null);
 
 useEffect(() => {
-  const savedBestScore = window.localStorage.getItem(bestScoreKey);
+  let cancelled = false;
 
-  if (savedBestScore) {
-    setBestScore(Number(savedBestScore));
+  async function loadQuizProgress() {
+    const student = getCurrentStudent();
+    const course = "year7-spelling";
+
+    if (student === "guest") {
+      if (!cancelled) {
+        setProgressLoaded(true);
+      }
+
+      return;
+    }
+
+    const [rows, savedXP] = await Promise.all([
+      getSpellingProgress(student, course),
+      getStudentXP(student, course),
+    ]);
+
+    if (cancelled) {
+      return;
+    }
+
+    const weekProgress = rows.find(
+      (row) => row.week === weekNumber
+    );
+
+    if (weekProgress) {
+      setLearnedWords(
+        Array.isArray(weekProgress.learned_words)
+          ? weekProgress.learned_words
+          : []
+      );
+
+      setBestScore(weekProgress.best_score ?? 0);
+      setMastered(weekProgress.mastered ?? false);
+    }
+
+    setTotalXP(savedXP);
+    setProgressLoaded(true);
   }
-}, [bestScoreKey]);
+
+  loadQuizProgress();
+
+  return () => {
+    cancelled = true;
+  };
+}, [weekNumber]);
 
 useEffect(() => {
   setTimeLeft(60);
@@ -132,12 +140,15 @@ const finishQuiz = async (finalScore: number) => {
       : 0;
 
   const gainedXP = answerXP + perfectBonus;
-  const newTotalXP = addXP(gainedXP);
+  const student = getCurrentStudent();
+  const course = "year7-spelling";
 
   setEarnedXP(gainedXP);
-  setTotalXP(newTotalXP);
-if (!practiceMode) {
-  const student = getCurrentStudent();
+
+  if (student === "guest") {
+    setFinished(true);
+    return;
+  }
 
   const {
     data: { session },
@@ -152,29 +163,61 @@ if (!practiceMode) {
         "Anonymous sign-in failed:",
         signInError.message
       );
+
+      setFinished(true);
+      return;
     }
   }
 
-  const { error: saveError } = await supabase
+  const { error: scoreError } = await supabase
     .from("scores")
     .insert({
       student,
-      course: "year7-spelling",
+      course,
       week: weekNumber,
       score: finalScore,
       best_score: finalScore,
-      xp : gainedXP,
+      xp: gainedXP,
     });
 
-  if (saveError) {
+  if (scoreError) {
     console.error(
       "Score could not be saved:",
-      saveError.message
+      scoreError.message
     );
-  } else {
-    console.log("Score saved to Supabase.");
   }
-}
+
+  if (!practiceMode) {
+    const nextBestScore = Math.max(
+      bestScore,
+      finalScore
+    );
+
+    const nextMastered =
+      mastered ||
+      finalScore === activeWords.length;
+
+    const progressSaved = await saveSpellingProgress(
+      student,
+      course,
+      weekNumber,
+      learnedWords,
+      nextBestScore,
+      nextMastered
+    );
+
+    if (progressSaved) {
+      setBestScore(nextBestScore);
+      setMastered(nextMastered);
+    }
+  }
+
+  const updatedXP = await getStudentXP(
+    student,
+    course
+  );
+
+  setTotalXP(updatedXP);
   setFinished(true);
 };
 
@@ -237,16 +280,14 @@ useEffect(() => {
     return [...previousMistakes, currentWord];
   });
 
-  const savedReview: string[] = JSON.parse(
-    window.localStorage.getItem(getStudentStorageKey("reviewWords")) ?? "[]"
+if (currentWord) {
+  void saveStudentMistake(
+    getCurrentStudent(),
+    weekNumber,
+    currentWord,
+    "year7-spelling"
   );
-
-  if (!savedReview.includes(currentWord)) {
-    window.localStorage.setItem(
-      getStudentStorageKey("reviewWords"),
-      JSON.stringify([...savedReview, currentWord])
-    );
-  }
+}
 
   transitionTimerRef.current = window.setTimeout(() => {
     transitionTimerRef.current = null;
@@ -324,57 +365,12 @@ if (isCorrect) {
 
     return [...previousMistakes, currentWord];
   });
-const savedReviewWords: string[] = JSON.parse(
-  window.localStorage.getItem(getStudentStorageKey("reviewWords")) ?? "[]"
-);
-
-if (!savedReviewWords.includes(currentWord)) {
-  window.localStorage.setItem(
-    getStudentStorageKey("reviewWords"),
-    JSON.stringify([...savedReviewWords, currentWord])
-  );
-}
-
-const savedMistakeCounts: Record<string, number> = JSON.parse(
-  window.localStorage.getItem(getStudentStorageKey("reviewMistakeCounts")) ?? "{}"
-);
-
-const updatedMistakeCounts = {
-  ...savedMistakeCounts,
-  [currentWord]: (savedMistakeCounts[currentWord] ?? 0) + 1,
-};
-
-window.localStorage.setItem(
-  getStudentStorageKey("reviewMistakeCounts"),
-  JSON.stringify(updatedMistakeCounts)
-);
 
   setFeedback(`❌ The correct spelling is: ${currentWord}`);
 }
     setTimeout(() => {
 if (question === activeWords.length - 1) {
-  const savedBestScore = Number(
-    window.localStorage.getItem(bestScoreKey) ?? "0"
-  );
 
-if (newScore > savedBestScore) {
-  window.localStorage.setItem(
-    bestScoreKey,
-    String(newScore)
-  );
-
-  setBestScore(newScore);
-}
-
-if (
-  !practiceMode &&
-  newScore === shuffledWords.length
-) {
-  window.localStorage.setItem(
-    masteredKey,
-    "true"
-  );
-}
 
       finishQuiz(newScore);
 }

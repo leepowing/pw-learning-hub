@@ -9,6 +9,18 @@ import {
 
 import { findWord } from "@/data/spellingWeeks-backup";
 
+import { getCurrentStudent } from "@/lib/studentStorage";
+
+import {
+  getStudentMistakes,
+  saveStudentReviewResult,
+} from "@/lib/supabase";
+
+type MistakeRow = {
+  word: string;
+  wrong_count: number | null;
+};
+
 export default function ReviewPage() {
   const [reviewWords, setReviewWords] = useState<string[]>([]);
   const [sessionWords, setSessionWords] = useState<string[]>([]);
@@ -72,48 +84,62 @@ const speak = useCallback(
   []
 );
 
-  useEffect(() => {
-    try {
-      const savedReviewWords =
-        window.localStorage.getItem("reviewWords");
+useEffect(() => {
+  let cancelled = false;
 
-      if (savedReviewWords) {
-        const parsedReviewWords = JSON.parse(savedReviewWords);
+  async function loadReviewWords() {
+    const student = getCurrentStudent();
 
-        if (Array.isArray(parsedReviewWords)) {
-          const validWords = parsedReviewWords.filter(
+    if (student === "guest") {
+      if (!cancelled) {
+        setReviewWords([]);
+        setMistakeCounts({});
+        setHasLoaded(true);
+      }
+
+      return;
+    }
+
+    const rows = (await getStudentMistakes(
+      student,
+      "year7-spelling"
+    )) as MistakeRow[];
+
+    if (cancelled) {
+      return;
+    }
+
+    const words = [
+      ...new Set(
+        rows
+          .map((row) => row.word)
+          .filter(
             (word): word is string =>
               typeof word === "string" &&
               word.trim() !== ""
-          );
+          )
+      ),
+    ];
 
-          const uniqueWords = [...new Set(validWords)];
+    const counts = rows.reduce<Record<string, number>>(
+      (result, row) => {
+        result[row.word] = row.wrong_count ?? 1;
+        return result;
+      },
+      {}
+    );
 
-          setReviewWords(uniqueWords);
-const savedMistakeCounts =
-  window.localStorage.getItem("reviewMistakeCounts");
-
-if (savedMistakeCounts) {
-  const parsedMistakeCounts = JSON.parse(
-    savedMistakeCounts
-  );
-
-  if (
-    parsedMistakeCounts &&
-    typeof parsedMistakeCounts === "object"
-  ) {
-    setMistakeCounts(parsedMistakeCounts);
-  }
-}
-        }
-      }
-    } catch {
-      window.localStorage.removeItem("reviewWords");
-      setReviewWords([]);
-    }
-
+    setReviewWords(words);
+    setMistakeCounts(counts);
     setHasLoaded(true);
-  }, []);
+  }
+
+  loadReviewWords();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
   useEffect(() => {
     if (
@@ -134,25 +160,11 @@ speak(
   }, []);
 
 const startReview = () => {
-  const expandedWords = reviewWords.flatMap((word) => {
-    const numberOfMistakes = mistakeCounts[word] ?? 1;
+  const selectedWords = [...reviewWords]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 10);
 
-    const numberOfReviews = Math.min(
-      numberOfMistakes + 1,
-      4
-    );
-
-    return Array.from(
-      { length: numberOfReviews },
-      () => word
-    );
-  });
-
-  const shuffledWords = [...expandedWords].sort(
-    () => Math.random() - 0.5
-  );
-
-  setSessionWords(shuffledWords);
+  setSessionWords(selectedWords);
   setFailedWords([]);
   setQuestion(0);
   setAnswer("");
@@ -189,40 +201,68 @@ setFailedWords(updatedFailedWords);
       );
     }
 
-    window.setTimeout(() => {
+window.setTimeout(async () => {
       const isLastQuestion =
         question === sessionWords.length - 1;
 
-      if (isLastQuestion) {
-const remainingWords = reviewWords.filter(
-  (word) => updatedFailedWords.includes(word)
+if (isLastQuestion) {
+const reviewedWords = [
+  ...new Set(sessionWords),
+];
+
+const remainingSessionWords =
+  reviewedWords.filter(
+    (word) => updatedFailedWords.includes(word)
+  );
+
+  const student = getCurrentStudent();
+
+const saveResults = await Promise.all(
+  reviewedWords.map((word) =>
+    saveStudentReviewResult(
+      student,
+      word,
+      !remainingSessionWords.includes(word),
+      "year7-spelling"
+    )
+  )
 );
 
-        window.localStorage.setItem(
-          "reviewWords",
-          JSON.stringify(remainingWords)
-        );
-
-        const updatedMistakeCounts = {
-  ...mistakeCounts,
-};
-
-reviewWords.forEach((word) => {
-  if (!remainingWords.includes(word)) {
-    delete updatedMistakeCounts[word];
+  if (saveResults.some((saved) => !saved)) {
+    alert(
+      "Some review results could not be saved. Please try again."
+    );
   }
-});
 
-window.localStorage.setItem(
-  "reviewMistakeCounts",
-  JSON.stringify(updatedMistakeCounts)
-);
+  const refreshedRows = (await getStudentMistakes(
+    student,
+    "year7-spelling"
+  )) as MistakeRow[];
 
-setMistakeCounts(updatedMistakeCounts);
+  const refreshedWords = [
+    ...new Set(
+      refreshedRows
+        .map((row) => row.word)
+        .filter(
+          (word): word is string =>
+            typeof word === "string"
+        )
+    ),
+  ];
 
-        setReviewWords(remainingWords);
-        setFinished(true);
-        setStarted(false);
+  const refreshedCounts =
+    refreshedRows.reduce<Record<string, number>>(
+      (result, row) => {
+        result[row.word] = row.wrong_count ?? 1;
+        return result;
+      },
+      {}
+    );
+
+  setReviewWords(refreshedWords);
+  setMistakeCounts(refreshedCounts);
+  setFinished(true);
+  setStarted(false);
       } else {
         setQuestion(
           (previousQuestion) => previousQuestion + 1
