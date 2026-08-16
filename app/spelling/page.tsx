@@ -28,6 +28,7 @@ type SpellingProgressRow = {
   mastered: boolean | null;
 };
 
+const ENABLE_LEGACY_MIGRATION = false;
 
 export default function SpellingPage() {
   const [progress, setProgress] = useState<
@@ -440,7 +441,9 @@ async function migrateLocalProgress(
       return;
     }
 
-await migrateLocalProgress(student, course);
+if (ENABLE_LEGACY_MIGRATION) {
+  await migrateLocalProgress(student, course);
+}
 
     const [progressRows, xp, mistakes] = await Promise.all([
       getSpellingProgress(student, course),
