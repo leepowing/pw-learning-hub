@@ -8,6 +8,7 @@ import {
   getFamilySpellingOverview,
   type FamilySpellingOverviewRow,
 } from "@/lib/supabase";
+import { calculateLevel } from "@/lib/rewards";
 
 type StudentOverview = {
   student: string;
@@ -225,6 +226,8 @@ export default function SubjectsPage() {
             const isCurrentStudent =
               student.student === currentStudent;
 
+            const level = calculateLevel(student.totalXP);  
+
             return (
               <section
                 key={student.student}
@@ -311,6 +314,11 @@ export default function SubjectsPage() {
                     value={`${student.totalXP} XP`}
                     highlighted={isCurrentStudent}
                   />
+<ProgressItem
+  label={`${level.xpInCurrentLevel} / ${level.xpPerLevel} XP`}
+  value={`Level ${level.level}`}
+  highlighted={isCurrentStudent}
+/>
 
                   <ProgressItem
                     label="Words to review"
