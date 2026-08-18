@@ -1,6 +1,10 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import {
+  FormEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -11,6 +15,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] =
+  useState(true);
+
+useEffect(() => {
+  let cancelled = false;
+
+  async function checkExistingSession() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (cancelled) {
+      return;
+    }
+
+    if (user) {
+      router.replace("/family");
+      return;
+    }
+
+    setCheckingSession(false);
+  }
+
+  checkExistingSession();
+
+  return () => {
+    cancelled = true;
+  };
+}, [router]);
 
 async function handleLogin(event: FormEvent) {
   event.preventDefault();
@@ -47,10 +80,22 @@ async function handleLogin(event: FormEvent) {
 
   setLoading(false);
 
-  router.replace("/subjects");
+router.replace("/family");
 }
 
-
+if (checkingSession) {
+  return (
+    <main
+      style={{
+        maxWidth: "520px",
+        margin: "60px auto",
+        padding: "20px",
+      }}
+    >
+      <h2>Checking sign in...</h2>
+    </main>
+  );
+}
   return (
 <main
   style={{

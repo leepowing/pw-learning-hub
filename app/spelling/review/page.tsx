@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { findWord } from "@/data/spellingWeeks-backup";
+import { findWord } from "@/data/spellingWeeks";
 
 import { getCurrentStudent } from "@/lib/studentStorage";
 

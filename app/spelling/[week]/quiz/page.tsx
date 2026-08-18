@@ -150,24 +150,16 @@ const finishQuiz = async (finalScore: number) => {
     return;
   }
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+const {
+  data: { user },
+  error: userError,
+} = await supabase.auth.getUser();
 
-  if (!session) {
-    const { error: signInError } =
-      await supabase.auth.signInAnonymously();
-
-    if (signInError) {
-      console.error(
-        "Anonymous sign-in failed:",
-        signInError.message
-      );
-
-      setFinished(true);
-      return;
-    }
-  }
+if (userError || !user) {
+  alert("Your session has expired. Please sign in again.");
+  setFinished(true);
+  return;
+}
 
   const { error: scoreError } = await supabase
     .from("scores")
