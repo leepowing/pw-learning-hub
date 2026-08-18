@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+
 import {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -34,6 +36,8 @@ const [mistakeCounts, setMistakeCounts] = useState<
 const [masteryCounts, setMasteryCounts] = useState<
   Record<string, number>
 >({});
+
+const lastSessionWords = useRef<string[]>([]);
 
   const [started, setStarted] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -179,34 +183,58 @@ speak(
   }, []);
 
 const prepareReview = () => {
-  const shuffledWords = [...reviewWords];
+  const previousWords = new Set(
+    lastSessionWords.current
+  );
 
-  for (
-    let index = shuffledWords.length - 1;
-    index > 0;
-    index--
-  ) {
-    const randomIndex = Math.floor(
-      Math.random() * (index + 1)
-    );
+  const selectedWords = reviewWords
+    .map((word) => ({
+      word,
+      wasInPreviousSession:
+        previousWords.has(word) ? 1 : 0,
+      correctCount: masteryCounts[word] ?? 0,
+      wrongCount: mistakeCounts[word] ?? 0,
+      randomOrder: Math.random(),
+    }))
+    .sort((first, second) => {
+      // 優先選擇上一組沒有出現的生字
+      if (
+        first.wasInPreviousSession !==
+        second.wasInPreviousSession
+      ) {
+        return (
+          first.wasInPreviousSession -
+          second.wasInPreviousSession
+        );
+      }
 
-    [shuffledWords[index], shuffledWords[randomIndex]] = [
-      shuffledWords[randomIndex],
-      shuffledWords[index],
-    ];
-  }
+      // 正確次數較少的優先
+      if (first.correctCount !== second.correctCount) {
+        return first.correctCount - second.correctCount;
+      }
 
-  const selectedWords = shuffledWords.slice(0, 10);
+      // 錯誤次數較多的優先
+      if (first.wrongCount !== second.wrongCount) {
+        return second.wrongCount - first.wrongCount;
+      }
+
+      // 相同優先度時隨機排列
+      return first.randomOrder - second.randomOrder;
+    })
+    .slice(0, 10)
+    .map((item) => item.word);
+
+  lastSessionWords.current = selectedWords;
 
   setSessionWords(selectedWords);
-  setFailedWords([]);
   setQuestion(0);
   setAnswer("");
   setFeedback("");
-  setScore(0);
   setFinished(false);
-  setStarted(false);
+  setScore(0);
+  setFailedWords([]);
   setShowPreview(true);
+  setStarted(false);
 };
 
 const startReview = () => {
