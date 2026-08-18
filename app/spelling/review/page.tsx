@@ -31,6 +31,7 @@ const [mistakeCounts, setMistakeCounts] = useState<
 >({});
 
   const [started, setStarted] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [question, setQuestion] = useState(0);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -159,10 +160,25 @@ speak(
     };
   }, []);
 
-const startReview = () => {
-  const selectedWords = [...reviewWords]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 10);
+const prepareReview = () => {
+  const shuffledWords = [...reviewWords];
+
+  for (
+    let index = shuffledWords.length - 1;
+    index > 0;
+    index--
+  ) {
+    const randomIndex = Math.floor(
+      Math.random() * (index + 1)
+    );
+
+    [shuffledWords[index], shuffledWords[randomIndex]] = [
+      shuffledWords[randomIndex],
+      shuffledWords[index],
+    ];
+  }
+
+  const selectedWords = shuffledWords.slice(0, 10);
 
   setSessionWords(selectedWords);
   setFailedWords([]);
@@ -171,6 +187,22 @@ const startReview = () => {
   setFeedback("");
   setScore(0);
   setFinished(false);
+  setStarted(false);
+  setShowPreview(true);
+};
+
+const startReview = () => {
+  if (sessionWords.length === 0) {
+    return;
+  }
+
+  setFailedWords([]);
+  setQuestion(0);
+  setAnswer("");
+  setFeedback("");
+  setScore(0);
+  setFinished(false);
+  setShowPreview(false);
   setStarted(true);
 };
 
@@ -322,7 +354,7 @@ const saveResults = await Promise.all(
             {reviewWords.length > 0 && (
               <button
                 className="quiz-button"
-                onClick={startReview}
+                onClick={prepareReview}
               >
                 🔁 Review remaining words
               </button>
@@ -367,6 +399,93 @@ const saveResults = await Promise.all(
     );
   }
 
+if (showPreview) {
+  return (
+    <main className="home-page">
+      <Link href="/spelling">
+        ← Back to spelling
+      </Link>
+
+      <section className="student-section">
+        <p className="small-title">
+          10-WORD SMART REVIEW
+        </p>
+
+        <h1>Review these 10 words</h1>
+
+        <p>
+          Read and listen to each word before starting
+          the spelling review.
+        </p>
+
+        <div className="word-list">
+          {sessionWords.map((word, index) => {
+            const wordData = findWord(word);
+
+            return (
+              <article
+                className="word-card"
+                key={word}
+              >
+                <div className="word-number">
+                  {index + 1}
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2>{word}</h2>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        speak(
+                          word,
+                          wordData?.sentence
+                        )
+                      }
+                      className="text-xl hover:scale-110"
+                    >
+                      🔊
+                    </button>
+                  </div>
+
+                  {wordData ? (
+                    <>
+                      <p>{wordData.meaning}</p>
+
+                      <p className="chinese-meaning">
+                        中文：{wordData.chinese}
+                      </p>
+
+                      <div className="example-box">
+                        <strong>Example</strong>
+                        <p>{wordData.sentence}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <p>
+                      Word details are currently
+                      unavailable.
+                    </p>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          className="quiz-button"
+          onClick={startReview}
+        >
+          Start 10-Word Review
+        </button>
+      </section>
+    </main>
+  );
+}
+
   if (!started) {
     return (
       <main className="home-page">
@@ -398,11 +517,11 @@ const saveResults = await Promise.all(
           </div>
 
           <button
-            className="quiz-button"
-            onClick={startReview}
-          >
-            Start Review
-          </button>
+  className="quiz-button"
+  onClick={prepareReview}
+>
+  Continue — Choose 10 Words
+</button>
         </section>
       </main>
     );
