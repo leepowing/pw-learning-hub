@@ -19,6 +19,7 @@ import {
 type MistakeRow = {
   word: string;
   wrong_count: number | null;
+  correct_count: number | null;
 };
 
 export default function ReviewPage() {
@@ -27,6 +28,10 @@ export default function ReviewPage() {
 const [failedWords, setFailedWords] = useState<string[]>([]);
 
 const [mistakeCounts, setMistakeCounts] = useState<
+  Record<string, number>
+>({});
+
+const [masteryCounts, setMasteryCounts] = useState<
   Record<string, number>
 >({});
 
@@ -95,6 +100,7 @@ useEffect(() => {
       if (!cancelled) {
         setReviewWords([]);
         setMistakeCounts({});
+        setMasteryCounts({});
         setHasLoaded(true);
       }
 
@@ -130,9 +136,21 @@ useEffect(() => {
       {}
     );
 
-    setReviewWords(words);
-    setMistakeCounts(counts);
-    setHasLoaded(true);
+const masteryProgress = rows.reduce<
+  Record<string, number>
+>((result, row) => {
+  result[row.word] = Math.min(
+    row.correct_count ?? 0,
+    3
+  );
+
+  return result;
+}, {});
+
+setReviewWords(words);
+setMistakeCounts(counts);
+setMasteryCounts(masteryProgress);
+setHasLoaded(true);
   }
 
   loadReviewWords();
@@ -291,8 +309,22 @@ const saveResults = await Promise.all(
       {}
     );
 
-  setReviewWords(refreshedWords);
-  setMistakeCounts(refreshedCounts);
+const refreshedMasteryCounts =
+  refreshedRows.reduce<Record<string, number>>(
+    (result, row) => {
+      result[row.word] = Math.min(
+        row.correct_count ?? 0,
+        3
+      );
+
+      return result;
+    },
+    {}
+  );
+
+setReviewWords(refreshedWords);
+setMistakeCounts(refreshedCounts);
+setMasteryCounts(refreshedMasteryCounts);
   setFinished(true);
   setStarted(false);
       } else {
@@ -343,9 +375,28 @@ const saveResults = await Promise.all(
               <h2>Words still needing review</h2>
 
               <ul>
-                {reviewWords.map((word) => (
-                  <li key={word}>{word}</li>
-                ))}
+{reviewWords.map((word) => (
+  <li
+    key={word}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      gap: "16px",
+    }}
+  >
+    <span>{word}</span>
+
+    <span
+      style={{
+        color: "#4f46e5",
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+      }}
+    >
+      Mastery {masteryCounts[word] ?? 0} / 3
+    </span>
+  </li>
+))}
               </ul>
             </div>
           )}

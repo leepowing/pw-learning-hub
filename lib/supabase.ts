@@ -59,7 +59,7 @@ export async function saveStudentMistake(
 
   const { data: existing, error: readError } = await supabase
     .from("mistakes")
-    .select("id, wrong_count")
+    .select("id, wrong_count, correct_count")
     .eq("student", student)
     .eq("course", course)
     .eq("word", normalisedWord)
@@ -73,12 +73,13 @@ export async function saveStudentMistake(
   if (existing) {
     const { error: updateError } = await supabase
       .from("mistakes")
-      .update({
-        week,
-        wrong_count: existing.wrong_count + 1,
-        mastered: false,
-        last_wrong_at: new Date().toISOString(),
-      })
+.update({
+  week,
+  wrong_count: (existing.wrong_count ?? 0) + 1,
+  correct_count: 0,
+  mastered: false,
+  last_wrong_at: new Date().toISOString(),
+})
       .eq("id", existing.id);
 
     if (updateError) {
