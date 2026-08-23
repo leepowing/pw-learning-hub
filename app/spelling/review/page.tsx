@@ -409,106 +409,221 @@ setMasteryCounts(refreshedMasteryCounts);
     );
   }
 
-  if (finished) {
-    return (
-      <main className="home-page">
-        <Link href="/spelling">
-          ← Back to spelling
-        </Link>
+if (finished) {
+  const correctWords = sessionWords.filter(
+    (word) => !failedWords.includes(word)
+  );
 
-        <section className="quiz-card quiz-result">
-          <p className="small-title">
-            SMART REVIEW COMPLETE
-          </p>
+  const scorePercentage =
+    sessionWords.length > 0
+      ? Math.round((score / sessionWords.length) * 100)
+      : 0;
 
-          <h1>Your score</h1>
+  const resultMessage =
+    scorePercentage === 100
+      ? "Perfect work! You spelled every word correctly."
+      : scorePercentage >= 80
+        ? "Excellent work! You are very close to a perfect score."
+        : scorePercentage >= 60
+          ? "Good effort! A little more practice will help these words stick."
+          : "Keep going! Review the tricky words and try another set when you are ready.";
 
-          <div className="score-display">
-            {score} / {sessionWords.length}
+  const resultEmoji =
+    scorePercentage === 100
+      ? "🏆"
+      : scorePercentage >= 80
+        ? "🌟"
+        : scorePercentage >= 60
+          ? "👏"
+          : "💪";
+
+  return (
+    <main className="home-page">
+      <Link href="/spelling">← Back to spelling</Link>
+
+      <section className="quiz-card quiz-result">
+        <p className="small-title">SMART REVIEW COMPLETE</p>
+
+        <div
+          style={{
+            fontSize: "56px",
+            lineHeight: 1,
+            marginBottom: "12px",
+          }}
+        >
+          {resultEmoji}
+        </div>
+
+        <h1 style={{ marginBottom: "8px" }}>Well done!</h1>
+
+        <p
+          style={{
+            color: "#666",
+            fontSize: "18px",
+            margin: "0 auto 28px",
+            maxWidth: "620px",
+          }}
+        >
+          {resultMessage}
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "14px",
+            marginBottom: "28px",
+          }}
+        >
+          <div
+            style={{
+              padding: "20px",
+              borderRadius: "18px",
+              background: "#eef0ff",
+            }}
+          >
+            <strong style={{ display: "block", fontSize: "34px" }}>
+              {score} / {sessionWords.length}
+            </strong>
+            <span>Score</span>
           </div>
 
-          {reviewWords.length === 0 ? (
-            <div className="perfect-card">
-              🎉 Excellent! All review words have been
-              completed.
-            </div>
-          ) : (
-            <div className="mistakes-card">
-              <h2>Words waiting for review ({reviewWords.length})</h2>
+          <div
+            style={{
+              padding: "20px",
+              borderRadius: "18px",
+              background: "#ecfdf3",
+            }}
+          >
+            <strong
+              style={{
+                display: "block",
+                color: "#15803d",
+                fontSize: "34px",
+              }}
+            >
+              {correctWords.length}
+            </strong>
+            <span>Correct words</span>
+          </div>
 
-              <ul>
-{visibleReviewWords.map((word) => (
-  <li
-    key={word}
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      gap: "16px",
-    }}
-  >
-    <span>{word}</span>
+          <div
+            style={{
+              padding: "20px",
+              borderRadius: "18px",
+              background: failedWords.length > 0 ? "#fff7ed" : "#ecfdf3",
+            }}
+          >
+            <strong
+              style={{
+                display: "block",
+                color: failedWords.length > 0 ? "#c2410c" : "#15803d",
+                fontSize: "34px",
+              }}
+            >
+              {failedWords.length}
+            </strong>
+            <span>Words to practise</span>
+          </div>
+        </div>
 
-    <span
-      style={{
-        color: "#4f46e5",
-        fontWeight: 700,
-        whiteSpace: "nowrap",
-      }}
-    >
-      Mastery {masteryCounts[word] ?? 0} / 3
-    </span>
-  </li>
-))}
-              </ul>
-              {visibleCount < reviewWords.length && (
-  <button
-    type="button"
-    className="quiz-button"
-    onClick={() =>
-      setVisibleCount((count) =>
-        Math.min(count + 10, reviewWords.length)
-      )
-    }
-  >
-    Show 10 more
-  </button>
-)}
-              {hiddenReviewWordCount > 0 && (
-  <p
-    style={{
-      marginTop: "16px",
-      color: "#666",
-      fontWeight: 600,
-    }}
-  >
-    + {hiddenReviewWordCount} more words waiting for review.
-    The system will select 10 words for each session.
-  </p>
-)}
+        {failedWords.length > 0 ? (
+          <div
+            style={{
+              padding: "22px",
+              borderRadius: "20px",
+              background: "#fff7ed",
+              marginBottom: "20px",
+              textAlign: "left",
+            }}
+          >
+            <h2 style={{ marginTop: 0 }}>📝 Practise these again</h2>
+
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "10px",
+              }}
+            >
+              {failedWords.map((word) => (
+                <span
+                  key={word}
+                  style={{
+                    padding: "9px 14px",
+                    borderRadius: "999px",
+                    background: "white",
+                    border: "1px solid #fed7aa",
+                    fontWeight: 700,
+                  }}
+                >
+                  {word}
+                </span>
+              ))}
             </div>
+          </div>
+        ) : (
+          <div className="perfect-card">
+            🎉 All 10 words were correct in this review.
+          </div>
+        )}
+
+        {correctWords.length > 0 && (
+          <details
+            style={{
+              margin: "20px 0",
+              padding: "18px 20px",
+              borderRadius: "18px",
+              background: "#f8fafc",
+              textAlign: "left",
+            }}
+          >
+            <summary
+              style={{
+                cursor: "pointer",
+                fontWeight: 700,
+              }}
+            >
+              ✅ Correct this session ({correctWords.length})
+            </summary>
+
+            <p style={{ marginBottom: 0 }}>
+              {correctWords.join(", ")}
+            </p>
+          </details>
+        )}
+
+        <p
+          style={{
+            color: "#666",
+            fontWeight: 600,
+            margin: "22px 0",
+          }}
+        >
+          {reviewWords.length > 0
+            ? `${reviewWords.length} words remain in your Review Centre.`
+            : "You have completed every word in your Review Centre."}
+        </p>
+
+        <div className="quiz-actions">
+          {reviewWords.length > 0 && (
+            <button
+              type="button"
+              className="quiz-button"
+              onClick={prepareReview}
+            >
+              Continue — Choose another 10 words
+            </button>
           )}
 
-          <div className="quiz-actions">
-            {reviewWords.length > 0 && (
-              <button
-                className="quiz-button"
-                onClick={prepareReview}
-              >
-                🔁 Review remaining words
-              </button>
-            )}
-
-            <Link
-              href="/spelling"
-              className="secondary-link"
-            >
-              Return to spelling
-            </Link>
-          </div>
-        </section>
-      </main>
-    );
-  }
+          <Link href="/spelling" className="secondary-link">
+            Return to spelling
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
 
   if (reviewWords.length === 0) {
     return (
