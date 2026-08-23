@@ -192,9 +192,33 @@ speak(
   }, []);
 
 const prepareReview = () => {
-  const previousWords = new Set(
-    lastSessionWords.current
-  );
+  const student = getCurrentStudent();
+  const recentWordsKey = `${student}_recentReviewWords`;
+
+  let savedRecentWords: string[] = [];
+
+  try {
+    const savedValue =
+      window.sessionStorage.getItem(recentWordsKey);
+
+    const parsedValue = savedValue
+      ? JSON.parse(savedValue)
+      : [];
+
+    if (Array.isArray(parsedValue)) {
+      savedRecentWords = parsedValue.filter(
+        (word): word is string =>
+          typeof word === "string"
+      );
+    }
+  } catch {
+    savedRecentWords = [];
+  }
+
+  const previousWords = new Set([
+    ...lastSessionWords.current,
+    ...savedRecentWords,
+  ]);
 
   const selectedWords = reviewWords
     .map((word) => ({
@@ -206,7 +230,6 @@ const prepareReview = () => {
       randomOrder: Math.random(),
     }))
     .sort((first, second) => {
-      // 優先選擇上一組沒有出現的生字
       if (
         first.wasInPreviousSession !==
         second.wasInPreviousSession
@@ -217,23 +240,25 @@ const prepareReview = () => {
         );
       }
 
-      // 正確次數較少的優先
       if (first.correctCount !== second.correctCount) {
         return first.correctCount - second.correctCount;
       }
 
-      // 錯誤次數較多的優先
       if (first.wrongCount !== second.wrongCount) {
         return second.wrongCount - first.wrongCount;
       }
 
-      // 相同優先度時隨機排列
       return first.randomOrder - second.randomOrder;
     })
     .slice(0, 10)
     .map((item) => item.word);
 
   lastSessionWords.current = selectedWords;
+
+  window.sessionStorage.setItem(
+    recentWordsKey,
+    JSON.stringify(selectedWords)
+  );
 
   setSessionWords(selectedWords);
   setQuestion(0);
