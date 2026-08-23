@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { spellingWeeks } from "@/data/spellingWeeks";
+import { year8SpellingWeeks } from "@/data/year8SpellingWeeks";
+import {
+  YEAR7_SPELLING_COURSE,
+  YEAR8_SPELLING_COURSE,
+  type SpellingCourse,
+} from "@/lib/courses";
 import { calculateLevel } from "@/lib/rewards";
 import {
   getFamilySpellingOverview,
@@ -53,15 +59,23 @@ export default function FamilyPage() {
   const [currentStudent, setCurrentStudent] = useState("");
   const [loading, setLoading] = useState(true);
 
+const [selectedCourse, setSelectedCourse] =
+  useState<SpellingCourse>(YEAR7_SPELLING_COURSE);
+
+const activeSpellingWeeks =
+  selectedCourse === YEAR8_SPELLING_COURSE
+    ? year8SpellingWeeks
+    : spellingWeeks;
+
   const availableWeekNumbers =
-    Object.keys(spellingWeeks).map(Number);
+    Object.keys(activeSpellingWeeks).map(Number);
 
   const totalWeeks = availableWeekNumbers.length;
 
   const totalWords = availableWeekNumbers.reduce(
     (total, weekNumber) =>
-      total + (spellingWeeks[weekNumber]?.words.length ?? 0),
-    0
+      total + (activeSpellingWeeks[weekNumber]?.words.length ?? 0),
+      0
   );
 
   useEffect(() => {
@@ -103,7 +117,7 @@ export default function FamilyPage() {
       );
 
       const rows = await getFamilySpellingOverview(
-        "year7-spelling"
+        selectedCourse
       );
 
       if (cancelled) {
@@ -193,7 +207,7 @@ const weekWords =
     return () => {
       cancelled = true;
     };
-  }, [router]);
+}, [router, selectedCourse]);
 
 async function handleSignOut() {
   const { error } = await supabase.auth.signOut();
@@ -255,6 +269,50 @@ async function handleSignOut() {
 >
   Sign out
 </button>
+
+<div
+  style={{
+    display: "flex",
+    gap: "12px",
+    marginBottom: "24px",
+  }}
+>
+  <button
+    type="button"
+    onClick={() => setSelectedCourse(YEAR7_SPELLING_COURSE)}
+    style={{
+      padding: "10px 18px",
+      borderRadius: "12px",
+      border: "1px solid #c7d2fe",
+      cursor: "pointer",
+      fontWeight: 700,
+      background:
+        selectedCourse === YEAR7_SPELLING_COURSE ? "#4f46e5" : "white",
+      color:
+        selectedCourse === YEAR7_SPELLING_COURSE ? "white" : "#3730a3",
+    }}
+  >
+    Year 7 Spelling
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setSelectedCourse(YEAR8_SPELLING_COURSE)}
+    style={{
+      padding: "10px 18px",
+      borderRadius: "12px",
+      border: "1px solid #c7d2fe",
+      cursor: "pointer",
+      fontWeight: 700,
+      background:
+        selectedCourse === YEAR8_SPELLING_COURSE ? "#4f46e5" : "white",
+      color:
+        selectedCourse === YEAR8_SPELLING_COURSE ? "white" : "#3730a3",
+    }}
+  >
+    Year 8 Spelling
+  </button>
+</div>
 
       <p
         style={{

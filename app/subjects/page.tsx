@@ -132,7 +132,7 @@ export default function SubjectsPage() {
       {/* Year 8 */}
       <button
         type="button"
-        disabled
+        onClick={() => router.push("/year8-spelling")}
         style={{
           width: "100%",
           boxSizing: "border-box",
@@ -141,9 +141,11 @@ export default function SubjectsPage() {
           justifyContent: "space-between",
           padding: "28px 32px",
           borderRadius: "22px",
-          background: "#f5f5f5",
-          border: "1px solid #ececec",
-          opacity: 0.65,
+          background: "white",
+          border: "1px solid #e5e7eb",
+          marginBottom: "16px",
+          cursor: "pointer",
+          boxShadow: "0 6px 18px rgba(0,0,0,0.04)",
           textAlign: "left",
           color: "inherit",
         }}
@@ -160,7 +162,7 @@ export default function SubjectsPage() {
               width: "84px",
               height: "84px",
               borderRadius: "24px",
-              background: "#e8e8f4",
+              background: "#eef0ff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -189,7 +191,7 @@ export default function SubjectsPage() {
                 color: "#666",
               }}
             >
-              Coming Soon
+              40 weeks · 30 words each week
             </span>
           </span>
         </span>
@@ -198,10 +200,10 @@ export default function SubjectsPage() {
           style={{
             fontSize: "20px",
             fontWeight: 700,
-            color: "#5b5b8f",
+            color: "#3730a3",
           }}
         >
-          Soon
+          Start →
         </span>
       </button>
     </main>
