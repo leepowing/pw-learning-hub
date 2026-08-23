@@ -16,6 +16,7 @@ import { getCurrentStudent } from "@/lib/studentStorage";
 import {
   getStudentMistakes,
   saveStudentReviewResult,
+  saveStudentReviewXP,
 } from "@/lib/supabase";
 
 type MistakeRow = {
@@ -23,6 +24,8 @@ type MistakeRow = {
   wrong_count: number | null;
   correct_count: number | null;
 };
+
+const REVIEW_XP_PER_CORRECT = 3;
 
 export default function ReviewPage() {
   const [reviewWords, setReviewWords] = useState<string[]>([]);
@@ -48,7 +51,7 @@ const lastSessionWords = useRef<string[]>([]);
   const [score, setScore] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
-
+  const [earnedXP, setEarnedXP] = useState(0);
   const currentWord = sessionWords[question];
   const currentWordData = currentWord
      ? findWord(currentWord)
@@ -286,7 +289,7 @@ const startReview = () => {
   setStarted(true);
 };
 
-  const checkAnswer = () => {
+  const checkAnswer = async() => {
     if (!answer.trim() || !currentWord) {
       setFeedback("Please enter your answer.");
       return;
@@ -387,6 +390,21 @@ const refreshedMasteryCounts =
 setReviewWords(refreshedWords);
 setMistakeCounts(refreshedCounts);
 setMasteryCounts(refreshedMasteryCounts);
+
+const gainedXP = newScore * REVIEW_XP_PER_CORRECT;
+
+const xpSaved = await saveStudentReviewXP(
+  student,
+  gainedXP,
+  "year7-spelling"
+);
+
+setEarnedXP(xpSaved ? gainedXP : 0);
+
+if (!xpSaved) {
+  alert("Review result was saved, but XP could not be added.");
+}
+
   setFinished(true);
   setStarted(false);
       } else {

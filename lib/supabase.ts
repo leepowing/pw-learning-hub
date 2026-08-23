@@ -305,3 +305,33 @@ export async function getFamilySpellingOverview(
 
   return (data ?? []) as FamilySpellingOverviewRow[];
 }
+
+export async function saveStudentReviewXP(
+  student: string,
+  gainedXP: number,
+  course = "year7-spelling"
+) {
+  const safeXP = Math.max(0, Math.floor(gainedXP));
+
+  if (safeXP === 0) {
+    return true;
+  }
+
+  const { error } = await supabase
+    .from("scores")
+    .insert({
+      student,
+      course,
+      week: 1,
+      score: 0,
+      best_score: 0,
+      xp: safeXP,
+    });
+
+  if (error) {
+    console.error("Could not save review XP:", error);
+    return false;
+  }
+
+  return true;
+}
