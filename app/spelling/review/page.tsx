@@ -47,11 +47,20 @@ const lastSessionWords = useRef<string[]>([]);
   const [finished, setFinished] = useState(false);
   const [score, setScore] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const currentWord = sessionWords[question];
   const currentWordData = currentWord
      ? findWord(currentWord)
      : null;
+const visibleReviewWords = reviewWords.slice(
+  0,
+  visibleCount
+);
+const hiddenReviewWordCount = Math.max(
+  reviewWords.length - visibleReviewWords.length,
+  0
+);   
 
 const speak = useCallback(
   (word: string, sentence?: string) => {
@@ -400,10 +409,10 @@ setMasteryCounts(refreshedMasteryCounts);
             </div>
           ) : (
             <div className="mistakes-card">
-              <h2>Words still needing review</h2>
+              <h2>Words waiting for review ({reviewWords.length})</h2>
 
               <ul>
-{reviewWords.map((word) => (
+{visibleReviewWords.map((word) => (
   <li
     key={word}
     style={{
@@ -426,6 +435,31 @@ setMasteryCounts(refreshedMasteryCounts);
   </li>
 ))}
               </ul>
+              {visibleCount < reviewWords.length && (
+  <button
+    type="button"
+    className="quiz-button"
+    onClick={() =>
+      setVisibleCount((count) =>
+        Math.min(count + 10, reviewWords.length)
+      )
+    }
+  >
+    Show 10 more
+  </button>
+)}
+              {hiddenReviewWordCount > 0 && (
+  <p
+    style={{
+      marginTop: "16px",
+      color: "#666",
+      fontWeight: 600,
+    }}
+  >
+    + {hiddenReviewWordCount} more words waiting for review.
+    The system will select 10 words for each session.
+  </p>
+)}
             </div>
           )}
 
@@ -589,10 +623,37 @@ if (showPreview) {
             <h2>Words waiting for review</h2>
 
             <ul>
-              {reviewWords.map((word) => (
+              {visibleReviewWords.map((word) => (
                 <li key={word}>{word}</li>
               ))}
             </ul>
+{visibleCount < reviewWords.length && (
+  <button
+    type="button"
+    className="quiz-button"
+    onClick={() =>
+      setVisibleCount((count) =>
+        Math.min(count + 10, reviewWords.length)
+      )
+    }
+  >
+    Show 10 more
+  </button>
+)}
+
+{hiddenReviewWordCount > 0 && (
+  <p
+    style={{
+      marginTop: "16px",
+      color: "#666",
+      fontWeight: 600,
+    }}
+  >
+    + {hiddenReviewWordCount} more words waiting for
+    review.
+  </p>
+)}
+
           </div>
 
           <button

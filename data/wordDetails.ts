@@ -7205,6 +7205,149 @@ ginger: {
   sentence: "She added fresh ginger to the soup.",
 },
 
+  practising: {
+    meaning: "doing something repeatedly to improve a skill",
+    chinese: "練習；反覆訓練",
+    sentence: "She is practising the piano for the school concert.",
+  },
+
+  urban: {
+    meaning: "relating to a town or city",
+    chinese: "城市的；都市的",
+    sentence: "The new park provides green space in an urban area.",
+  },
+
+  supplies: {
+    meaning: "things that are needed for a particular purpose",
+    chinese: "用品；物資；補給品",
+    sentence: "We packed enough supplies for the camping trip.",
+  },
+
+  breathe: {
+    meaning: "to take air into and send it out of the lungs",
+    chinese: "呼吸",
+    sentence: "Take a moment to breathe slowly and calmly.",
+  },
+
+  exploring: {
+    meaning: "travelling around or examining a place to learn about it",
+    chinese: "探索；探險",
+    sentence: "We spent the afternoon exploring the ancient castle.",
+  },
+
+  tentacle: {
+    meaning: "a long, flexible limb on an animal such as an octopus",
+    chinese: "觸手",
+    sentence: "The octopus reached towards the rock with a tentacle.",
+  },
+
+  telephoned: {
+    meaning: "called someone using a telephone",
+    chinese: "打電話給；致電",
+    sentence: "Mum telephoned the school to explain the delay.",
+  },
+
+  difference: {
+    meaning: "the way in which two or more things are not the same",
+    chinese: "差異；不同之處",
+    sentence: "Can you spot the difference between the two pictures?",
+  },
+
+  bridge: {
+    meaning: "a structure built over a river, road or railway",
+    chinese: "橋；橋樑",
+    sentence: "The old stone bridge crosses the river.",
+  },
+
+  porpoise: {
+    meaning: "a small sea mammal closely related to a dolphin",
+    chinese: "鼠海豚；小型海豚類動物",
+    sentence: "A porpoise surfaced beside the boat.",
+  },
+
+  youngster: {
+    meaning: "a young person or young animal",
+    chinese: "年輕人；幼小動物",
+    sentence: "The youngster eagerly joined the football team.",
+  },
+
+  bounced: {
+    meaning: "moved quickly back up after hitting a surface",
+    chinese: "彈起；反彈",
+    sentence: "The ball bounced across the playground.",
+  },
+
+  usefully: {
+    meaning: "in a way that is helpful or practical",
+    chinese: "有用地；有效地",
+    sentence: "The information was usefully arranged in a table.",
+  },
+
+  equestrian: {
+    meaning: "relating to horse riding",
+    chinese: "馬術的；騎馬的",
+    sentence: "She took part in an equestrian competition.",
+  },
+
+  reflect: {
+    meaning: "to think carefully or to send back light or an image",
+    chinese: "反思；反射",
+    sentence: "Take some time to reflect on what you have learned.",
+  },
+
+  dragging: {
+    meaning: "pulling something along a surface",
+    chinese: "拖曳；拉着",
+    sentence: "He was dragging the heavy bag across the floor.",
+  },
+
+  damage: {
+    meaning: "physical harm that makes something less useful or valuable",
+    chinese: "損壞；傷害",
+    sentence: "The storm caused damage to several trees.",
+  },
+
+  nervous: {
+    meaning: "worried or slightly frightened about what might happen",
+    chinese: "緊張的；不安的",
+    sentence: "She felt nervous before speaking to the audience.",
+  },
+
+  stampede: {
+    meaning: "a sudden rush of frightened people or animals",
+    chinese: "蜂擁；動物群奔逃",
+    sentence: "A loud noise caused the cattle to stampede.",
+  },
+
+  abolition: {
+    meaning: "the official ending of a law, system or practice",
+    chinese: "廢除；取消",
+    sentence: "The campaign called for the abolition of the unfair rule.",
+  },
+
+  dungeon: {
+    meaning: "a dark underground prison, especially in an old castle",
+    chinese: "地牢；地下監獄",
+    sentence: "The castle tour included a visit to the ancient dungeon.",
+  },
+
+  lyrebird: {
+    meaning: "an Australian bird known for copying many different sounds",
+    chinese: "琴鳥",
+    sentence: "The lyrebird copied the sounds it heard in the forest.",
+  },
+
+  illegible: {
+    meaning: "too unclear or untidy to be read",
+    chinese: "難以辨認的；字跡不清的",
+    sentence: "His handwriting was so small that it became illegible.",
+  },
+
+  conversation: {
+    meaning: "a talk between two or more people",
+    chinese: "談話；交談；對話",
+    sentence: "We had an interesting conversation about space.",
+  },
 
 // 更多單字……
 
