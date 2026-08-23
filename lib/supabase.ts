@@ -217,9 +217,7 @@ export async function saveStudentReviewResult(
   const { data: existing, error: readError } =
     await supabase
       .from("mistakes")
-      .select(
-        "id, wrong_count, correct_count"
-      )
+      .select("id, wrong_count, correct_count")
       .eq("student", student)
       .eq("course", course)
       .eq("word", normalisedWord)
@@ -230,7 +228,6 @@ export async function saveStudentReviewResult(
       "Could not load review word:",
       readError
     );
-
     return false;
   }
 
@@ -239,23 +236,17 @@ export async function saveStudentReviewResult(
       "Review word was not found:",
       normalisedWord
     );
-
     return false;
   }
 
-  const previousCorrectCount =
-    existing.correct_count ?? 0;
-
-  const nextCorrectCount = passed
-    ? previousCorrectCount + 1
-    : 0;
+  const nextCorrectCount =
+    (existing.correct_count ?? 0) + (passed ? 1 : 0);
 
   const nextWrongCount =
-    (existing.wrong_count ?? 0) +
-    (passed ? 0 : 1);
+    (existing.wrong_count ?? 0) + (passed ? 0 : 1);
 
-  const mastered =
-    passed && nextCorrectCount >= 3;
+  // The word is mastered only after three correct reviews.
+  const mastered = nextCorrectCount >= 3;
 
   const { error: updateError } = await supabase
     .from("mistakes")
@@ -267,8 +258,7 @@ export async function saveStudentReviewResult(
       ...(passed
         ? {}
         : {
-            last_wrong_at:
-              new Date().toISOString(),
+            last_wrong_at: new Date().toISOString(),
           }),
     })
     .eq("id", existing.id);
@@ -278,7 +268,6 @@ export async function saveStudentReviewResult(
       "Could not save review result:",
       updateError
     );
-
     return false;
   }
 
