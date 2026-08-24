@@ -168,7 +168,7 @@ const unlockedAchievements = achievements.filter(
       <section className="student-section">
         <p className="small-title">SPELLING PROGRAMME</p>
 
-        <h1>40 Weeks of Year 8 Spelling</h1>
+        <h1>41 Weeks of Year 8 Spelling</h1>
 
         <p>
           Choose a week to learn, practise and complete a quiz.

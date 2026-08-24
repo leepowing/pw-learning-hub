@@ -191,7 +191,7 @@ export default function SubjectsPage() {
                 color: "#666",
               }}
             >
-              40 weeks · 30 words each week
+              41 weeks · 30 words each week
             </span>
           </span>
         </span>
