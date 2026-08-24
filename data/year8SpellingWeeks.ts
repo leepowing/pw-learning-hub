@@ -379,6 +379,7 @@ const weekWordLists: Record<number, string[]> = {
   "misinform", "consider", "famous", "ourselves", "natural",
   "centigrade", "incite", "deficient", "solicitor", "paisley",
   "insensitively", "authoritarian", "vacant", "angrier", "delicate",
+  "meticulous", "ambiguous", "coherent", "inevitable", "hypothesis",
 ],
   
   

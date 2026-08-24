@@ -6814,7 +6814,35 @@ composing: {
     chinese: "易損的；精緻的；需要小心處理的",
     sentence: "The delicate glass ornament was wrapped in soft paper.",
   },
-      
+meticulous: {
+  meaning: "very careful and paying attention to small details",
+  chinese: "一絲不苟的；非常仔細的",
+  sentence: "She kept meticulous notes during the science experiment.",
+},
+
+ambiguous: {
+  meaning: "having more than one possible meaning and therefore unclear",
+  chinese: "含糊不清的；有歧義的",
+  sentence: "The ambiguous instruction confused several students.",
+},
+
+coherent: {
+  meaning: "clear, logical, and easy to understand",
+  chinese: "連貫的；有條理的",
+  sentence: "He presented a coherent argument during the debate.",
+},
+
+inevitable: {
+  meaning: "certain to happen and impossible to avoid",
+  chinese: "不可避免的；必然的",
+  sentence: "Some delays were inevitable during the repairs.",
+},
+
+hypothesis: {
+  meaning: "an idea or explanation that can be tested",
+  chinese: "假設；假說",
+  sentence: "The class tested the hypothesis with a simple experiment.",
+},      
 
 
 };
