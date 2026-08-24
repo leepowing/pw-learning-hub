@@ -3195,6 +3195,79 @@ against: {
   chinese: "反對；靠著",
   sentence: "The bicycle was leaning against the wall.",
 },
+
+calves: {
+  meaning: "young cows, or the muscles at the back of the lower legs",
+  chinese: "小牛；小腿肚",
+  sentence: "The young calves stayed close to their mothers.",
+},
+
+exhale: {
+  meaning: "to breathe air out of your lungs",
+  chinese: "呼氣；呼出",
+  sentence: "Breathe in slowly and then exhale gently.",
+},
+
+household: {
+  meaning: "all the people who live together in one home",
+  chinese: "家庭；住戶",
+  sentence: "Every household received information about recycling.",
+},
+
+figurine: {
+  meaning: "a small model of a person or an animal",
+  chinese: "小雕像；小塑像",
+  sentence: "She placed the glass figurine carefully on the shelf.",
+},
+
+excursion: {
+  meaning: "a short journey made for enjoyment or education",
+  chinese: "短途旅行；遠足",
+  sentence: "Our class went on an excursion to the science museum.",
+},
+
+secretary: {
+  meaning: "a person who performs administrative work for an organisation",
+  chinese: "秘書；書記",
+  sentence: "The secretary arranged the meeting for Tuesday morning.",
+},
+
+weighed: {
+  meaning: "measured how heavy someone or something was",
+  chinese: "稱重；量重量",
+  sentence: "The nurse weighed the baby during the examination.",
+},
+
+bonfire: {
+  meaning: "a large outdoor fire used for celebrations or burning waste",
+  chinese: "篝火；營火",
+  sentence: "Everyone gathered safely around the bonfire.",
+},
+
+zoology: {
+  meaning: "the scientific study of animals",
+  chinese: "動物學",
+  sentence: "She studied zoology because she was interested in wildlife.",
+},
+
+grant: {
+  meaning: "to give or allow something; also, money given for a particular purpose",
+  chinese: "准予；授予；補助金",
+  sentence: "The council awarded the school a grant for new equipment.",
+},
+
+vigorous: {
+  meaning: "strong, healthy, and full of energy",
+  chinese: "精力充沛的；有力的",
+  sentence: "The players completed a vigorous training session.",
+},
+
+medically: {
+  meaning: "in a way that relates to medicine or medical treatment",
+  chinese: "在醫學上；從醫療角度",
+  sentence: "The treatment was medically necessary for the patient.",
+},
+
 ghoul: {
   meaning: "an evil spirit or frightening creature in stories",
   chinese: "食屍鬼；惡鬼",
