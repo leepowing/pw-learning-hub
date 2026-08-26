@@ -335,3 +335,109 @@ export async function saveStudentReviewXP(
 
   return true;
 }
+
+export type MathsFlashcardSupabaseRow = {
+  card_id: string;
+  attempts: number;
+  correct: number;
+  practice: number;
+  last_result: "correct" | "practice";
+  last_practised_at: string;
+};
+
+export async function getMathsFlashcardProgressFromSupabase(
+  student: string
+): Promise<MathsFlashcardSupabaseRow[]> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    console.error(
+      "Could not get logged-in user:",
+      userError
+    );
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("maths_flashcard_progress")
+    .select(
+      `
+        card_id,
+        attempts,
+        correct,
+        practice,
+        last_result,
+        last_practised_at
+      `
+    )
+    .eq("user_id", user.id)
+    .eq("student", student)
+    .order("last_practised_at", {
+      ascending: false,
+    });
+
+  if (error) {
+    console.error(
+      "Could not load maths flashcard progress:",
+      error
+    );
+    return [];
+  }
+
+  return (data ?? []) as MathsFlashcardSupabaseRow[];
+}
+
+export async function saveMathsFlashcardProgressToSupabase(
+  student: string,
+  cardId: string,
+  attempts: number,
+  correct: number,
+  practice: number,
+  lastResult: "correct" | "practice",
+  lastPractisedAt: string
+): Promise<boolean> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    console.error(
+      "Could not get logged-in user:",
+      userError
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from("maths_flashcard_progress")
+    .upsert(
+      {
+        user_id: user.id,
+        student,
+        card_id: cardId,
+        attempts,
+        correct,
+        practice,
+        last_result: lastResult,
+        last_practised_at: lastPractisedAt,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "user_id,student,card_id",
+      }
+    );
+
+  if (error) {
+    console.error(
+      "Could not save maths flashcard progress:",
+      error
+    );
+    return false;
+  }
+
+  return true;
+}

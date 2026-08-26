@@ -4,26 +4,22 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentStudent } from "@/lib/studentStorage";
 
-const subjects = [
+const spellingCourses = [
   {
-    title: "Spelling",
-    description: "Year 7 and Year 8 spelling courses",
+    title: "Spelling - Year 7",
+    description: "52 weeks of spelling practice",
     icon: "📚",
-    route: "/subjects/spelling",
-    iconBackground: "#eef0ff",
-    colour: "#3730a3",
+    route: "/spelling",
   },
   {
-    title: "Mathematics",
-    description: "Hong Kong Secondary Mathematics",
-    icon: "🧮",
-    route: "/subjects/mathematics",
-    iconBackground: "#ecfdf5",
-    colour: "#047857",
+    title: "Spelling - Year 8",
+    description: "41 weeks · 30 words each week",
+    icon: "📚",
+    route: "/year8-spelling",
   },
 ];
 
-export default function SubjectsPage() {
+export default function SpellingSubjectsPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -46,7 +42,7 @@ export default function SubjectsPage() {
     >
       <button
         type="button"
-        onClick={() => router.push("/family")}
+        onClick={() => router.push("/subjects")}
         style={{
           border: "none",
           background: "transparent",
@@ -58,7 +54,7 @@ export default function SubjectsPage() {
           cursor: "pointer",
         }}
       >
-        ← Back to family progress
+        ← Back to subjects
       </button>
 
       <h1
@@ -67,7 +63,7 @@ export default function SubjectsPage() {
           margin: "0 0 8px",
         }}
       >
-        Choose a subject
+        Choose a spelling course
       </h1>
 
       <p
@@ -77,14 +73,14 @@ export default function SubjectsPage() {
           fontSize: "20px",
         }}
       >
-        Select a subject to continue learning.
+        Select a year group to start learning.
       </p>
 
-      {subjects.map((subject) => (
+      {spellingCourses.map((course) => (
         <button
-          key={subject.route}
+          key={course.route}
           type="button"
-          onClick={() => router.push(subject.route)}
+          onClick={() => router.push(course.route)}
           style={{
             width: "100%",
             boxSizing: "border-box",
@@ -114,7 +110,7 @@ export default function SubjectsPage() {
                 width: "84px",
                 height: "84px",
                 borderRadius: "24px",
-                background: subject.iconBackground,
+                background: "#eef0ff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -122,7 +118,7 @@ export default function SubjectsPage() {
                 flexShrink: 0,
               }}
             >
-              {subject.icon}
+              {course.icon}
             </span>
 
             <span>
@@ -133,7 +129,7 @@ export default function SubjectsPage() {
                   marginBottom: "8px",
                 }}
               >
-                {subject.title}
+                {course.title}
               </strong>
 
               <span
@@ -143,7 +139,7 @@ export default function SubjectsPage() {
                   color: "#666",
                 }}
               >
-                {subject.description}
+                {course.description}
               </span>
             </span>
           </span>
@@ -152,11 +148,11 @@ export default function SubjectsPage() {
             style={{
               fontSize: "20px",
               fontWeight: 700,
-              color: subject.colour,
+              color: "#3730a3",
               whiteSpace: "nowrap",
             }}
           >
-            Choose →
+            Start →
           </span>
         </button>
       ))}
