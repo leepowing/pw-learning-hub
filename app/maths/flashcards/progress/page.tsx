@@ -148,11 +148,22 @@ export default function FlashcardProgressPage() {
   );
 
   const weakCards = [...records]
-    .filter(
-      (item) =>
-        item.practice > 0 ||
-        item.lastResult === "practice"
-    )
+.filter((item) => {
+  if (
+    item.attempts === 0 ||
+    item.practice === 0
+  ) {
+    return false;
+  }
+
+  const itemAccuracy =
+    item.correct / item.attempts;
+
+  return (
+    item.lastResult === "practice" ||
+    itemAccuracy < 0.8
+  );
+})
     .sort((first, second) => {
       const firstAccuracy =
         first.attempts === 0

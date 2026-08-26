@@ -317,22 +317,46 @@ export default function MathematicsFlashcardsPage() {
         </p>
       </header>
 
-<Link
-  href="/maths/flashcards/progress"
+<div
   style={{
-    display: "inline-block",
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
     marginBottom: "24px",
-    padding: "12px 18px",
-    borderRadius: "13px",
-    border: "1px solid #4f46e5",
-    background: "#eef2ff",
-    color: "#4338ca",
-    fontWeight: 900,
-    textDecoration: "none",
   }}
 >
-  View my progress →
-</Link>
+  <Link
+    href="/maths/flashcards/review"
+    style={{
+      display: "inline-block",
+      padding: "12px 18px",
+      borderRadius: "13px",
+      border: "1px solid #f97316",
+      background: "#fff7ed",
+      color: "#c2410c",
+      fontWeight: 900,
+      textDecoration: "none",
+    }}
+  >
+    Start Smart Review →
+  </Link>
+
+  <Link
+    href="/maths/flashcards/progress"
+    style={{
+      display: "inline-block",
+      padding: "12px 18px",
+      borderRadius: "13px",
+      border: "1px solid #4f46e5",
+      background: "#eef2ff",
+      color: "#4338ca",
+      fontWeight: 900,
+      textDecoration: "none",
+    }}
+  >
+    View my progress →
+  </Link>
+</div>
 
       <section
         style={{
