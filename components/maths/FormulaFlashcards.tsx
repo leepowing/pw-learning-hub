@@ -15,6 +15,8 @@ import {
   syncMathsFlashcardProgress,
 } from "@/lib/studentStorage";
 
+import GeometryDiagram from "@/components/maths/GeometryDiagram";
+
 type FormulaFlashcardsProps = {
   cards: MathsFlashcard[];
 };
@@ -426,6 +428,10 @@ if (!progressReady) {
             >
               ANSWER
             </p>
+
+            {currentCard.diagram && (
+              <GeometryDiagram diagram={currentCard.diagram} />
+            )}
 
             {currentCard.formula && (
               <MathFormula formula={currentCard.formula} />

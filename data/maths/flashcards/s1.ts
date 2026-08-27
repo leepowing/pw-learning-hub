@@ -20,7 +20,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     explanation:
       "Divide the part by the whole, then multiply by 100%.",
   },
-  {
+   {
     id: "s1-c5-find-percentage-of-quantity",
     level: "s1",
     chapter: 5,
@@ -503,4 +503,421 @@ export const s1Flashcards: MathsFlashcard[] = [
     explanation:
       "A negative percentage change automatically produces a multiplier below 1.",
   },
+  // Chapter 6, Section 1: Basic Concepts of Geometry
+  {
+    id: "s1-c6-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a polygon?",
+    answer:
+      "A polygon is a closed plane figure made only from straight line segments.",
+    explanation:
+      "The line segments meet end to end and form the boundary of the polygon.",
+    diagram: {
+      type: "polygon",
+      variant: "parts",
+    },
+  },
+  {
+    id: "s1-c6-polygon-side-and-vertex",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt:
+      "What are the sides and vertices of a polygon?",
+    answer:
+      "A side is a boundary line segment. A vertex is a point where two sides meet.",
+    explanation:
+      "The plural of vertex is vertices.",
+    diagram: {
+      type: "polygon",
+      variant: "parts",
+    },
+  },
+  {
+    id: "s1-c6-polygon-diagonal",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a diagonal of a polygon?",
+    answer:
+      "A diagonal joins two non-adjacent vertices of a polygon.",
+    explanation:
+      "A side joins adjacent vertices, so a side is not a diagonal.",
+    diagram: {
+      type: "polygon",
+      variant: "parts",
+    },
+  },
+  {
+    id: "s1-c6-equilateral-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is an equilateral polygon?",
+    answer:
+      "An equilateral polygon has all its sides equal in length.",
+    explanation:
+      "Equal side marks can be used to show that the sides have the same length.",
+    diagram: {
+      type: "polygon",
+      variant: "equilateral",
+    },
+  },
+  {
+    id: "s1-c6-equiangular-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is an equiangular polygon?",
+    answer:
+      "An equiangular polygon has all its interior angles equal.",
+    explanation:
+      "Equal angle marks show that the interior angles have the same size.",
+    diagram: {
+      type: "polygon",
+      variant: "equiangular",
+    },
+  },
+  {
+    id: "s1-c6-regular-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a regular polygon?",
+    answer:
+      "A regular polygon has equal sides and equal interior angles.",
+    explanation:
+      "It must be both equilateral and equiangular.",
+    diagram: {
+      type: "polygon",
+      variant: "regular",
+    },
+  },
+  {
+    id: "s1-c6-convex-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a convex polygon?",
+    answer:
+      "A convex polygon has no interior angle greater than 180°.",
+    explanation:
+      "Every diagonal of a convex polygon lies inside the polygon.",
+    diagram: {
+      type: "polygon",
+      variant: "convex",
+    },
+  },
+  {
+    id: "s1-c6-concave-polygon",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a concave polygon?",
+    answer:
+      "A concave polygon has at least one interior angle greater than 180°.",
+    explanation:
+      "It has an inward-pointing part, and some diagonals pass outside the polygon.",
+    diagram: {
+      type: "polygon",
+      variant: "concave",
+    },
+  },
+  {
+    id: "s1-c6-triangle",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a triangle?",
+    answer:
+      "A triangle is a polygon with exactly three sides and three vertices.",
+    explanation:
+      "Its three interior angles have a total of 180°.",
+    diagram: {
+      type: "triangle",
+      variant: "angle-classification",
+    },
+  },
+  {
+    id: "s1-c6-acute-angled-triangle",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is an acute-angled triangle?",
+    answer:
+      "An acute-angled triangle has three angles smaller than 90°.",
+    explanation:
+      "Every interior angle of the triangle is acute.",
+    diagram: {
+      type: "triangle",
+      variant: "acute",
+    },
+  },
+  {
+    id: "s1-c6-right-angled-triangle",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is a right-angled triangle?",
+    answer:
+      "A right-angled triangle has one angle equal to 90°.",
+    explanation:
+      "A small square is commonly used to mark the right angle.",
+    diagram: {
+      type: "triangle",
+      variant: "right",
+    },
+  },
+  {
+    id: "s1-c6-obtuse-angled-triangle",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Basic Concepts of Geometry",
+    type: "definition",
+    prompt: "What is an obtuse-angled triangle?",
+    answer:
+      "An obtuse-angled triangle has one angle greater than 90°.",
+    explanation:
+      "A triangle can have only one obtuse interior angle.",
+    diagram: {
+      type: "triangle",
+      variant: "obtuse",
+    },
+  },
+  // Chapter 6, Section 2: 3-D Figures
+  {
+    id: "s1-c6-solid",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is a solid figure?",
+    answer:
+      "A solid figure is a three-dimensional figure that occupies space.",
+    explanation:
+      "Unlike a plane figure, a solid has length, width and height.",
+    diagram: {
+      type: "solid",
+      variant: "cuboid",
+    },
+  },
+  {
+    id: "s1-c6-polyhedron",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is a polyhedron?",
+    answer:
+      "A polyhedron is a solid enclosed only by flat polygonal faces.",
+    explanation:
+      "A solid with a curved surface is not a polyhedron.",
+    diagram: {
+      type: "solid",
+      variant: "polyhedron",
+    },
+  },
+  {
+    id: "s1-c6-face",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is a face of a polyhedron?",
+    answer:
+      "A face is one of the flat polygonal surfaces of a polyhedron.",
+    explanation:
+      "For example, every face of a cuboid is a rectangle.",
+    diagram: {
+      type: "solid",
+      variant: "face-edge-vertex",
+    },
+  },
+  {
+    id: "s1-c6-edge",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is an edge of a polyhedron?",
+    answer:
+      "An edge is a line segment where two faces meet.",
+    explanation:
+      "The edges form the boundaries of the faces.",
+    diagram: {
+      type: "solid",
+      variant: "face-edge-vertex",
+    },
+  },
+  {
+    id: "s1-c6-vertex-of-solid",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is a vertex of a polyhedron?",
+    answer:
+      "A vertex is a point where edges of the polyhedron meet.",
+    explanation:
+      "The plural of vertex is vertices.",
+    diagram: {
+      type: "solid",
+      variant: "face-edge-vertex",
+    },
+  },
+  {
+    id: "s1-c6-prism",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "What is a prism?",
+    answer:
+      "A prism has two identical, parallel polygonal ends and a uniform cross-section.",
+    explanation:
+      "It is named after the shape of its identical ends, such as a triangular prism.",
+    diagram: {
+      type: "solid",
+      variant: "triangular-prism",
+    },
+  },
+  {
+    id: "s1-c6-cuboid-as-prism",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "rule",
+    prompt: "Why is a cuboid a type of prism?",
+    answer:
+      "A cuboid has identical rectangular cross-sections along its length.",
+    explanation:
+      "A cuboid is also called a rectangular prism.",
+    diagram: {
+      type: "solid",
+      variant: "cuboid",
+    },
+  },
+  {
+    id: "s1-c6-cylinder",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "3-D Figures",
+    type: "definition",
+    prompt: "Why is a cylinder not a polyhedron?",
+    answer:
+      "A cylinder is not a polyhedron because it has a curved surface.",
+    explanation:
+      "Polyhedra are enclosed only by flat polygonal faces.",
+    diagram: {
+      type: "solid",
+      variant: "cylinder",
+    },
+  },
+  {
+    id: "s1-c6-2d-representation",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "2-D Representations",
+    type: "definition",
+    prompt:
+      "What is a 2-D representation of a solid?",
+    answer:
+      "It is a flat drawing used to show the structure of a three-dimensional solid.",
+    explanation:
+      "Visible and hidden edges help the drawing communicate the solid's shape.",
+    diagram: {
+      type: "solid",
+      variant: "prism-wireframe",
+    },
+  },
+  {
+    id: "s1-c6-hidden-edges",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "2-D Representations",
+    type: "rule",
+    prompt:
+      "How are visible and hidden edges shown in a 2-D representation?",
+    answer:
+      "Visible edges use solid lines, while hidden edges use dashed lines.",
+    explanation:
+      "Dashed lines show edges that are behind the visible surfaces.",
+    diagram: {
+      type: "solid",
+      variant: "cylinder-wireframe",
+    },
+  },
+  {
+    id: "s1-c6-cross-section",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Cross-Sections",
+    type: "definition",
+    prompt: "What is a cross-section of a solid?",
+    answer:
+      "A cross-section is the flat shape exposed when a solid is cut.",
+    explanation:
+      "Its shape depends on the solid and the direction of the cut.",
+    diagram: {
+      type: "cross-section",
+      variant: "solid-cut",
+    },
+  },
+  {
+    id: "s1-c6-uniform-cross-sections",
+    level: "s1",
+    chapter: 6,
+    chapterTitle: "Basic Geometry",
+    section: "Cross-Sections",
+    type: "definition",
+    prompt: "What are uniform cross-sections?",
+    answer:
+      "Uniform cross-sections have the same shape and size throughout the solid.",
+    explanation:
+      "Prisms have uniform cross-sections when cut parallel to their identical ends.",
+    diagram: {
+      type: "cross-section",
+      variant: "uniform-prism",
+    },
+  },
+
+
+
+
 ];

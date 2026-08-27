@@ -87,7 +87,7 @@ export default function S1MathematicsPage() {
           fontWeight: 700,
         }}
       >
-        Chapter 5 is currently available
+          Chapters 5 and 6 are currently available
       </p>
       <button
         type="button"
@@ -198,18 +198,21 @@ export default function S1MathematicsPage() {
         }}
       >
         {chapters.map((chapter) => {
-          const available = chapter.number === 5;
+          const available =
+              chapter.number === 5 || chapter.number === 6;
 
           return (
             <button
               key={chapter.number}
               type="button"
               disabled={!available}
-              onClick={() => {
-                if (available) {
-                  router.push("/maths/s1/chapter-5");
-                }
-              }}
+onClick={() => {
+  if (available) {
+    router.push(
+      `/maths/s1/chapter-${chapter.number}`
+    );
+  }
+}}
               style={{
                 width: "100%",
                 boxSizing: "border-box",
