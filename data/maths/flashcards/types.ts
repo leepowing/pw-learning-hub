@@ -73,6 +73,7 @@ export type MathsFlashcard = {
   section: string;
   type: FlashcardType;
   prompt: string;
+  questionFormula?: string;
   formula?: string;
   answer?: string;
   explanation?: string;
