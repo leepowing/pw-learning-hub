@@ -9,7 +9,7 @@ const sections = [
     description:
       "Identify significant figures and round numbers to a required number of significant figures.",
     route: "/maths/s2/chapter-1/significant-figures",
-    available: false,
+    available: true,
   },
   {
     number: 2,
@@ -17,11 +17,11 @@ const sections = [
     description:
       "Find maximum absolute error, limits of actual values, relative error and percentage error.",
     route: "/maths/s2/chapter-1/errors-in-measurement",
-    available: false,
+    available: true,
   },
 ];
 
-export default function S2ChapterOneHomepage() {
+export default function S2ChapterOneHomepageComplete() {
   const router = useRouter();
 
   return (
@@ -163,8 +163,14 @@ export default function S2ChapterOneHomepage() {
           </p>
         </div>
 
-        <button type="button" className="disabledFeatureButton" disabled>
-          Coming soon
+        <button
+          type="button"
+          className="openFlashcardsButton"
+          onClick={() =>
+            router.push("/maths/flashcards?level=s2&chapter=1")
+          }
+        >
+          Open Flashcards →
         </button>
       </section>
 
@@ -175,8 +181,12 @@ export default function S2ChapterOneHomepage() {
           <p>Complete Sections 1–2 before attempting the checkpoint.</p>
         </div>
 
-        <button type="button" className="disabledCheckpointButton" disabled>
-          Coming soon
+        <button
+          type="button"
+          className="startCheckpointButton"
+          onClick={() => router.push("/maths/s2/chapter-1/checkpoint")}
+        >
+          Start Checkpoint →
         </button>
       </section>
 
@@ -494,7 +504,9 @@ export default function S2ChapterOneHomepage() {
         }
 
         .disabledFeatureButton,
-        .disabledCheckpointButton {
+        .disabledCheckpointButton,
+        .startCheckpointButton,
+        .openFlashcardsButton {
           flex-shrink: 0;
           padding: 13px 20px;
           border: none;
@@ -504,6 +516,28 @@ export default function S2ChapterOneHomepage() {
           font-size: 16px;
           font-weight: 900;
           cursor: not-allowed;
+        }
+
+        .startCheckpointButton {
+          background: #7c3aed;
+          color: #ffffff;
+          cursor: pointer;
+          box-shadow: 0 6px 16px rgba(124, 58, 237, 0.2);
+        }
+
+        .startCheckpointButton:hover {
+          background: #6d28d9;
+        }
+
+        .openFlashcardsButton {
+          background: #4f46e5;
+          color: #ffffff;
+          cursor: pointer;
+          box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2);
+        }
+
+        .openFlashcardsButton:hover {
+          background: #4338ca;
         }
 
         @media (max-width: 800px) {
@@ -530,7 +564,9 @@ export default function S2ChapterOneHomepage() {
           }
 
           .disabledFeatureButton,
-          .disabledCheckpointButton {
+          .disabledCheckpointButton,
+          .startCheckpointButton,
+          .openFlashcardsButton {
             width: 100%;
           }
         }

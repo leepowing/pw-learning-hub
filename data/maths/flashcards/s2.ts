@@ -2,6 +2,379 @@ import type { MathsFlashcard } from "./types";
 
 export const s2Flashcards: MathsFlashcard[] = [
   // =========================================================
+  // Chapter 1 · Section 1 · Significant Figures
+  // =========================================================
+
+  {
+    id: "s2-c1-significant-figures-meaning",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "definition",
+    prompt: "What are significant figures?",
+    formula: String.raw`
+      0.0\underline{8}92
+    `,
+    answer:
+      "Significant figures are the important digits of a number, beginning with its first non-zero digit.",
+    explanation:
+      "They communicate the precision of an approximate value.",
+  },
+
+  {
+    id: "s2-c1-first-significant-figure",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "rule",
+    prompt: "How do you locate the first significant figure?",
+    formula: String.raw`
+      0.00\underline{4}70
+    `,
+    answer: "Read from left to right and stop at the first non-zero digit.",
+    explanation:
+      "Leading zeros locate the decimal point and are not significant.",
+  },
+
+  {
+    id: "s2-c1-count-significant-2115",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "How many significant figures does this number have?",
+    questionFormula: String.raw`
+      2115
+    `,
+    formula: String.raw`
+      2115\quad\Rightarrow\quad4\text{ s.f.}
+    `,
+    answer: "4 significant figures.",
+    explanation:
+      "Every digit in this whole number is non-zero, so all four digits count.",
+  },
+
+  {
+    id: "s2-c1-count-significant-40017",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "How many significant figures does this number have?",
+    questionFormula: String.raw`
+      40017
+    `,
+    formula: String.raw`
+      40017\quad\Rightarrow\quad5\text{ s.f.}
+    `,
+    answer: "5 significant figures.",
+    explanation:
+      "Zeros between non-zero digits are significant.",
+  },
+
+  {
+    id: "s2-c1-count-significant-decimal",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "How many significant figures does this number have?",
+    questionFormula: String.raw`
+      0.0892
+    `,
+    formula: String.raw`
+      0.0892\quad\Rightarrow\quad3\text{ s.f.}
+    `,
+    answer: "3 significant figures.",
+    explanation:
+      "The zeros before 8 do not count; the significant digits are 8, 9 and 2.",
+  },
+
+  {
+    id: "s2-c1-zero-rules",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "rule",
+    prompt: "When are zeros significant?",
+    formula: String.raw`
+      0.0047:\ 2\text{ s.f.}
+      \qquad
+      4.007:\ 4\text{ s.f.}
+      \qquad
+      2.300:\ 4\text{ s.f.}
+    `,
+    answer:
+      "Leading zeros do not count; internal zeros and trailing decimal zeros do count.",
+    explanation:
+      "Trailing zeros in a whole number need stated accuracy or standard form to remove ambiguity.",
+  },
+
+  {
+    id: "s2-c1-rounding-method",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "rule",
+    prompt: "How do you round a number to significant figures?",
+    formula: String.raw`
+      0\text{--}4:\ \text{keep}
+      \qquad
+      5\text{--}9:\ \text{round up}
+    `,
+    answer:
+      "Count from the first non-zero digit, then use the next digit to round once.",
+    explanation:
+      "Round from the original number rather than rounding in stages.",
+  },
+
+  {
+    id: "s2-c1-round-decimal-one-sf",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "Round to 1 significant figure.",
+    questionFormula: String.raw`
+      0.02654
+    `,
+    formula: String.raw`
+      0.02654\approx0.03\quad(1\text{ s.f.})
+    `,
+    answer: "0.03.",
+    explanation:
+      "The first significant digit is 2 and the next digit is 6, so round up.",
+  },
+
+  {
+    id: "s2-c1-round-decimal-three-sf",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "Round to 3 significant figures.",
+    questionFormula: String.raw`
+      0.02654
+    `,
+    formula: String.raw`
+      0.02654\approx0.0265\quad(3\text{ s.f.})
+    `,
+    answer: "0.0265.",
+    explanation:
+      "Keep 2, 6 and 5. The next digit is 4, so the 5 stays unchanged.",
+  },
+
+  {
+    id: "s2-c1-round-whole-number",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Significant Figures",
+    type: "formula",
+    prompt: "Round to 2 significant figures.",
+    questionFormula: String.raw`
+      42680
+    `,
+    formula: String.raw`
+      42680\approx43000\quad(2\text{ s.f.})
+    `,
+    answer: "43 000.",
+    explanation:
+      "The next digit after 4 and 2 is 6, so 42 becomes 43. Zeros preserve place value.",
+  },
+
+  // =========================================================
+  // Chapter 1 · Section 2 · Errors in Measurement
+  // =========================================================
+
+  {
+    id: "s2-c1-measured-and-actual-value",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "definition",
+    prompt: "What is the difference between a measured value and an actual value?",
+    formula: String.raw`
+      \text{measured value}\approx\text{actual value}
+    `,
+    answer:
+      "A measured value is approximate; the actual value is the exact quantity before rounding.",
+    explanation:
+      "One measured value usually represents a range of possible actual values.",
+  },
+
+  {
+    id: "s2-c1-maximum-absolute-error-formula",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "What is the maximum absolute error formula?",
+    formula: String.raw`
+      \text{maximum absolute error}
+      =\frac12\times\text{scale interval}
+    `,
+    answer: "Maximum absolute error = ½ × scale interval.",
+    explanation:
+      "The scale interval is the rounding unit or the difference between consecutive markings.",
+  },
+
+  {
+    id: "s2-c1-maximum-error-nearest-five",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "Find the maximum absolute error when measuring to the nearest 5 g.",
+    formula: String.raw`
+      \frac12\times5\text{ g}=2.5\text{ g}
+    `,
+    answer: "2.5 g.",
+    explanation:
+      "Maximum absolute error is half the measuring interval.",
+  },
+
+  {
+    id: "s2-c1-lower-limit-formula",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "How do you calculate the lower limit?",
+    formula: String.raw`
+      \text{lower limit}
+      =\text{measured value}-\text{maximum absolute error}
+    `,
+    answer: "Subtract the maximum absolute error from the measured value.",
+    explanation:
+      "The lower limit is normally included in the actual-value interval.",
+  },
+
+  {
+    id: "s2-c1-upper-limit-formula",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "How do you calculate the upper limit?",
+    formula: String.raw`
+      \text{upper limit}
+      =\text{measured value}+\text{maximum absolute error}
+    `,
+    answer: "Add the maximum absolute error to the measured value.",
+    explanation:
+      "For ordinary rounding to the nearest unit, the upper limit is excluded.",
+  },
+
+  {
+    id: "s2-c1-actual-value-range",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "Write the actual-value range for 10 m measured to the nearest metre.",
+    questionFormula: String.raw`
+      \text{measured height}=10\text{ m}
+    `,
+    formula: String.raw`
+      9.5\le h<10.5
+    `,
+    answer: "9.5 ≤ h < 10.5.",
+    explanation:
+      "The maximum absolute error is 0.5 m. The lower limit is included and the upper limit excluded.",
+  },
+
+  {
+    id: "s2-c1-relative-error-formula",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "What is the relative error formula?",
+    formula: String.raw`
+      \text{relative error}
+      =\frac{\text{maximum absolute error}}{\text{measured value}}
+    `,
+    answer: "Relative error = maximum absolute error ÷ measured value.",
+    explanation:
+      "Relative error has no unit and allows the accuracy of different measurements to be compared.",
+  },
+
+  {
+    id: "s2-c1-percentage-error-formula",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "What is the percentage error formula?",
+    formula: String.raw`
+      \text{percentage error}
+      =\text{relative error}\times100\%
+    `,
+    answer: "Percentage error = relative error × 100%.",
+    explanation:
+      "Percentage error expresses the relative error as a percentage and has no measurement unit.",
+  },
+
+  {
+    id: "s2-c1-tree-measurement-errors",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "formula",
+    prompt: "Find the maximum absolute, relative and percentage errors.",
+    questionFormula: String.raw`
+      10\text{ m, correct to the nearest metre}
+    `,
+    formula: String.raw`
+      \begin{aligned}
+      \text{maximum absolute error}&=0.5\text{ m}\\
+      \text{relative error}&=\frac{0.5}{10}=0.05\\
+      \text{percentage error}&=5\%
+      \end{aligned}
+    `,
+    answer: "0.5 m, 0.05 and 5%, respectively.",
+    explanation:
+      "Use half the interval for absolute error, divide by the measured value, then multiply by 100%.",
+  },
+
+  {
+    id: "s2-c1-compare-measurement-accuracy",
+    level: "s2",
+    chapter: 1,
+    chapterTitle: "Approximation and Errors",
+    section: "Errors in Measurement",
+    type: "rule",
+    prompt: "How should the accuracy of measurements of different sizes be compared?",
+    formula: String.raw`
+      \text{smaller relative error}
+      \quad\Rightarrow\quad
+      \text{more accurate measurement}
+    `,
+    answer: "Compare their relative or percentage errors; the smaller one is more accurate.",
+    explanation:
+      "Absolute error alone does not account for the size of the measured value.",
+  },
+
+  // =========================================================
   // Chapter 2 · Section 1 · Laws of Positive Integral Indices
   // =========================================================
 
