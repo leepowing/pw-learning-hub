@@ -2,6 +2,461 @@ import type { MathsFlashcard } from "./types";
 
 export const s2Flashcards: MathsFlashcard[] = [
   // =========================================================
+  // Chapter 2 · Section 1 · Laws of Positive Integral Indices
+  // =========================================================
+
+  {
+    id: "s2-c2-index-notation",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "definition",
+    prompt: "What does index notation mean?",
+    formula: String.raw`
+      a^n=\underbrace{a\times a\times\cdots\times a}_{n\text{ factors}}
+    `,
+    answer:
+      "The base a is multiplied by itself n times; n is the index or power.",
+    explanation:
+      "For example, a⁴ means a × a × a × a. It does not mean 4a.",
+  },
+
+  {
+    id: "s2-c2-product-law-indices",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "formula",
+    prompt: "What is the multiplication law of indices?",
+    formula: String.raw`
+      a^m\times a^n=a^{m+n}
+    `,
+    answer: "Keep the same base and add the indices.",
+    explanation:
+      "The law applies only when the powers have the same base.",
+  },
+
+  {
+    id: "s2-c2-quotient-law-indices",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "formula",
+    prompt: "What is the division law of indices when m > n?",
+    formula: String.raw`
+      \frac{a^m}{a^n}=a^{m-n}
+      \qquad(a\ne0)
+    `,
+    answer: "Keep the same non-zero base and subtract the indices.",
+    explanation:
+      "For example, a⁷ ÷ a³ = a⁴ because four factors of a remain.",
+  },
+
+  {
+    id: "s2-c2-equal-indices-quotient",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "formula",
+    prompt: "Simplify a quotient with equal indices.",
+    questionFormula: String.raw`
+      \frac{x^5}{x^5}
+    `,
+    formula: String.raw`
+      \frac{x^5}{x^5}=1
+      \qquad(x\ne0)
+    `,
+    answer: "1.",
+    explanation:
+      "Any non-zero expression divided by itself equals 1.",
+  },
+
+  {
+    id: "s2-c2-power-of-power-law",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "formula",
+    prompt: "What is the power-of-a-power law?",
+    formula: String.raw`
+      (a^m)^n=a^{mn}
+    `,
+    answer: "Keep the same base and multiply the indices.",
+    explanation:
+      "For example, (a³)⁴ = a¹². Do not add the indices in this situation.",
+  },
+
+  {
+    id: "s2-c2-power-product-quotient",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Laws of Positive Integral Indices",
+    type: "formula",
+    prompt: "How does a power act on a product or quotient?",
+    formula: String.raw`
+      (ab)^n=a^nb^n
+      \qquad
+      \left(\frac ab\right)^n=\frac{a^n}{b^n}
+    `,
+    answer: "Apply the power to every factor in the brackets.",
+    explanation:
+      "In the quotient law, b must be non-zero.",
+  },
+
+  // =========================================================
+  // Chapter 2 · Section 2 · Introduction to Polynomials
+  // =========================================================
+
+  {
+    id: "s2-c2-meaning-of-monomial",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "definition",
+    prompt: "What is a monomial?",
+    formula: String.raw`
+      -3,qquad 5a^2b
+    `,
+    answer:
+      "A monomial is a number, a variable, or a product of numbers and variables with non-negative integral indices.",
+    explanation:
+      "A monomial contains one term and has no variable in a denominator.",
+  },
+
+  {
+    id: "s2-c2-meaning-of-polynomial",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "definition",
+    prompt: "What is a polynomial?",
+    formula: String.raw`
+      3x^2-4x+2
+    `,
+    answer: "A polynomial is a monomial or a sum of two or more monomials.",
+    explanation:
+      "Every variable in a polynomial has a non-negative integral index.",
+  },
+
+  {
+    id: "s2-c2-coefficient-and-constant",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "definition",
+    prompt: "Identify the coefficient of x² and the constant term.",
+    questionFormula: String.raw`
+      4x^3-5x^2+x-7
+    `,
+    formula: String.raw`
+      \text{coefficient of }x^2=-5,
+      \qquad
+      \text{constant term}=-7
+    `,
+    answer: "The coefficient of x² is −5 and the constant term is −7.",
+    explanation:
+      "A coefficient multiplies a variable term. A constant term has no variable.",
+  },
+
+  {
+    id: "s2-c2-degree-of-term",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "rule",
+    prompt: "How do you find the degree of a term?",
+    formula: String.raw`
+      \deg(4x^3y^2)=3+2=5
+    `,
+    answer: "Add the indices of all variables in the term.",
+    explanation:
+      "The numerical coefficient does not affect the degree.",
+  },
+
+  {
+    id: "s2-c2-degree-of-polynomial",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "rule",
+    prompt: "How do you find the degree of a polynomial?",
+    formula: String.raw`
+      \deg(4x^3y^2-5x+7)=5
+    `,
+    answer: "Find the highest degree among all non-zero terms.",
+    explanation:
+      "Here 4x³y² has degree 5, which is higher than the other terms.",
+  },
+
+  {
+    id: "s2-c2-arrange-and-evaluate-polynomial",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Introduction to Polynomials",
+    type: "rule",
+    prompt: "How are polynomial terms usually arranged and evaluated?",
+    formula: String.raw`
+      1+5x+3x^2
+      =3x^2+5x+1
+    `,
+    answer:
+      "Arrange terms in descending powers, then substitute the given variable value to evaluate.",
+    explanation:
+      "Writing terms in a standard order makes coefficients and degree easier to identify.",
+  },
+
+  // =========================================================
+  // Chapter 2 · Section 3 · Operations of Polynomials
+  // =========================================================
+
+  {
+    id: "s2-c2-like-terms",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "definition",
+    prompt: "What are like terms?",
+    formula: String.raw`
+      3x^2y,quad -5x^2y
+    `,
+    answer:
+      "Like terms contain exactly the same variables raised to the same indices.",
+    explanation:
+      "Only the numerical coefficients may be different.",
+  },
+
+  {
+    id: "s2-c2-add-polynomials",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "formula",
+    prompt: "Add and simplify.",
+    questionFormula: String.raw`
+      (2x^2+3x-1)+(x^2-5x+4)
+    `,
+    formula: String.raw`
+      \begin{aligned}
+      &(2x^2+3x-1)+(x^2-5x+4)\\
+      &\quad=3x^2-2x+3
+      \end{aligned}
+    `,
+    answer: "3x² − 2x + 3.",
+    explanation:
+      "Remove the brackets and combine corresponding like terms.",
+  },
+
+  {
+    id: "s2-c2-subtract-polynomials",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "formula",
+    prompt: "Subtract and simplify.",
+    questionFormula: String.raw`
+      (5x^2+x-7)-(2x^2-3x+1)
+    `,
+    formula: String.raw`
+      \begin{aligned}
+      &5x^2+x-7-2x^2+3x-1\\
+      &\quad=3x^2+4x-8
+      \end{aligned}
+    `,
+    answer: "3x² + 4x − 8.",
+    explanation:
+      "Change every sign in the subtracted bracket before combining like terms.",
+  },
+
+  {
+    id: "s2-c2-multiply-monomials",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "formula",
+    prompt: "Multiply the monomials.",
+    questionFormula: String.raw`
+      (-3x^2y)(4xy^3)
+    `,
+    formula: String.raw`
+      (-3x^2y)(4xy^3)=-12x^3y^4
+    `,
+    answer: "−12x³y⁴.",
+    explanation:
+      "Multiply the coefficients and add indices of variables with the same base.",
+  },
+
+  {
+    id: "s2-c2-distributive-law-polynomial",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "formula",
+    prompt: "What is the distributive law used to expand a bracket?",
+    formula: String.raw`
+      a(b+c)=ab+ac
+    `,
+    answer: "Multiply the term outside the bracket by every term inside it.",
+    explanation:
+      "The same rule applies when terms inside the bracket are subtracted.",
+  },
+
+  {
+    id: "s2-c2-expand-two-binomials",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Operations of Polynomials",
+    type: "formula",
+    prompt: "Expand and simplify.",
+    questionFormula: String.raw`
+      (x+3)(2x-5)
+    `,
+    formula: String.raw`
+      \begin{aligned}
+      (x+3)(2x-5)
+        &=2x^2-5x+6x-15\\
+        &=2x^2+x-15
+      \end{aligned}
+    `,
+    answer: "2x² + x − 15.",
+    explanation:
+      "Multiply every term in the first bracket by every term in the second bracket.",
+  },
+
+  // =========================================================
+  // Chapter 2 · Section 4 · Factorization of Polynomials
+  // =========================================================
+
+  {
+    id: "s2-c2-meaning-of-factorization",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "definition",
+    prompt: "What is factorization?",
+    formula: String.raw`
+      ab+ac=a(b+c)
+    `,
+    answer: "Factorization rewrites a polynomial as a product of its factors.",
+    explanation:
+      "It is the reverse process of expansion.",
+  },
+
+  {
+    id: "s2-c2-extract-common-factor",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "rule",
+    prompt: "How do you factorize by extracting a common factor?",
+    formula: String.raw`
+      12x+18=6(2x+3)
+    `,
+    answer:
+      "Find a factor common to every term, place it outside the bracket, then divide each term by it.",
+    explanation:
+      "For complete factorization, extract the greatest common factor.",
+  },
+
+  {
+    id: "s2-c2-factorize-greatest-common-factor",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "formula",
+    prompt: "Factorize completely.",
+    questionFormula: String.raw`
+      12x^3y-18x^2y^2
+    `,
+    formula: String.raw`
+      12x^3y-18x^2y^2
+      =6x^2y(2x-3y)
+    `,
+    answer: "6x²y(2x − 3y).",
+    explanation:
+      "The greatest common factor of the two terms is 6x²y.",
+  },
+
+  {
+    id: "s2-c2-extract-negative-factor",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "formula",
+    prompt: "Factorize by extracting a negative common factor.",
+    questionFormula: String.raw`
+      -8x^2+12x
+    `,
+    formula: String.raw`
+      -8x^2+12x=-4x(2x-3)
+    `,
+    answer: "−4x(2x − 3).",
+    explanation:
+      "Dividing both terms by −4x gives 2x and −3 inside the bracket.",
+  },
+
+  {
+    id: "s2-c2-factorize-by-grouping-rule",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "rule",
+    prompt: "What are the steps for factorization by grouping?",
+    formula: String.raw`
+      ab+ac+db+dc=(a+d)(b+c)
+    `,
+    answer:
+      "Group the terms, extract a factor from each group, then extract the common bracket.",
+    explanation:
+      "Arrange the terms so that both groups produce the same bracket.",
+  },
+
+  {
+    id: "s2-c2-factorize-by-grouping-example",
+    level: "s2",
+    chapter: 2,
+    chapterTitle: "Operations and Factorization of Polynomials",
+    section: "Factorization of Polynomials",
+    type: "formula",
+    prompt: "Factorize by grouping.",
+    questionFormula: String.raw`
+      x^2+3x+2xy+6y
+    `,
+    formula: String.raw`
+      \begin{aligned}
+      x^2+3x+2xy+6y
+        &=x(x+3)+2y(x+3)\\
+        &=(x+2y)(x+3)
+      \end{aligned}
+    `,
+    answer: "(x + 2y)(x + 3).",
+    explanation:
+      "Both groups contain x + 3. Expand the final answer to verify the factorization.",
+  },
+
+  // =========================================================
   // Chapter 3 · Section 1 · Meaning of Identities
   // =========================================================
 

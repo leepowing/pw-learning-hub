@@ -5,16 +5,21 @@ import type {
 } from "./types";
 
 import { s1Flashcards } from "./s1";
+import { s2Flashcards } from "./s2";
 
 export * from "./types";
-export { s1Flashcards };
+
+export {
+  s1Flashcards,
+  s2Flashcards,
+};
 
 export const mathsFlashcardsByLevel: Record<
   MathsLevel,
   MathsFlashcard[]
 > = {
   s1: s1Flashcards,
-  s2: [],
+  s2: s2Flashcards,
   s3: [],
   s4: [],
   s5: [],
@@ -37,8 +42,9 @@ export function getFlashcardsForSelections(
   selections: FlashcardSelection[]
 ): MathsFlashcard[] {
   return selections.flatMap((selection) =>
-    mathsFlashcardsByLevel[selection.level].filter((card) =>
-      selection.chapters.includes(card.chapter)
+    mathsFlashcardsByLevel[selection.level].filter(
+      (card) =>
+        selection.chapters.includes(card.chapter)
     )
   );
 }

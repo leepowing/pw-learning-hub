@@ -14,8 +14,8 @@ const mathsCourses = [
   {
     level: "S2",
     description: "Hong Kong Secondary 2 Mathematics",
-    route: "",
-    available: false,
+    route: "/maths/s2",
+    available: true,
   },
   {
     level: "S3",
@@ -43,7 +43,7 @@ const mathsCourses = [
   },
 ];
 
-export default function MathematicsSubjectsPage() {
+export default function MathematicsCoursesS1S2OpenPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -55,240 +55,326 @@ export default function MathematicsSubjectsPage() {
   }, [router]);
 
   return (
-    <main
-      style={{
-        maxWidth: "1100px",
-        width: "calc(100% - 48px)",
-        margin: "48px auto",
-        padding: 0,
-        boxSizing: "border-box",
-      }}
-    >
+    <main className="page">
       <button
         type="button"
+        className="backButton"
         onClick={() => router.push("/subjects")}
-        style={{
-          border: "none",
-          background: "transparent",
-          padding: 0,
-          marginBottom: "28px",
-          color: "#047857",
-          fontSize: "17px",
-          fontWeight: 700,
-          cursor: "pointer",
-        }}
       >
         ← Back to subjects
       </button>
 
-      <h1
-        style={{
-          fontSize: "42px",
-          margin: "0 0 8px",
-        }}
-      >
-        Choose a mathematics course
-      </h1>
+      <h1>Choose a mathematics course</h1>
 
-      <p
-        style={{
-          margin: "0 0 28px",
-          color: "#666",
-          fontSize: "20px",
-        }}
-      >
-        Hong Kong mathematics curriculum
-      </p>
+      <p className="subtitle">Hong Kong mathematics curriculum</p>
 
       <button
         type="button"
+        className="flashcardButton"
         onClick={() => router.push("/maths/flashcards")}
-        style={{
-          width: "100%",
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "20px",
-          padding: "26px 30px",
-          marginBottom: "28px",
-          borderRadius: "22px",
-          background:
-            "linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%)",
-          border: "2px solid #c7d2fe",
-          boxShadow: "0 6px 18px rgba(79,70,229,0.08)",
-          color: "inherit",
-          cursor: "pointer",
-          textAlign: "left",
-          flexWrap: "wrap",
-        }}
       >
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            minWidth: 0,
-          }}
-        >
-          <span
-            style={{
-              width: "70px",
-              height: "70px",
-              borderRadius: "20px",
-              background: "#e0e7ff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "34px",
-              flexShrink: 0,
-            }}
-          >
-            🗂️
-          </span>
+        <span className="flashcardInformation">
+          <span className="flashcardIcon">🗂️</span>
 
           <span>
-            <span
-              style={{
-                display: "block",
-                color: "#4f46e5",
-                fontSize: "14px",
-                fontWeight: 800,
-                letterSpacing: "0.08em",
-                marginBottom: "5px",
-              }}
-            >
-              FORMULA PRACTICE
-            </span>
+            <span className="flashcardLabel">FORMULA PRACTICE</span>
 
-            <strong
-              style={{
-                display: "block",
-                fontSize: "27px",
-                lineHeight: 1.25,
-                marginBottom: "5px",
-              }}
-            >
+            <strong className="flashcardTitle">
               Mathematics Formula Flashcards
             </strong>
 
-            <span
-              style={{
-                display: "block",
-                color: "#64748b",
-                fontSize: "17px",
-                lineHeight: 1.45,
-              }}
-            >
+            <span className="flashcardDescription">
               Choose chapters across S1–S6 and practise them together.
             </span>
           </span>
         </span>
 
-        <span
-          style={{
-            padding: "12px 18px",
-            borderRadius: "14px",
-            background: "#4f46e5",
-            color: "white",
-            fontSize: "16px",
-            fontWeight: 800,
-            whiteSpace: "nowrap",
-            flexShrink: 0,
-          }}
-        >
-          Choose levels and chapters →
-        </span>
+        <span className="chooseButton">Choose levels and chapters →</span>
       </button>
 
-      {mathsCourses.map((course) => (
-        <button
-          key={course.level}
-          type="button"
-          disabled={!course.available}
-          onClick={() => {
-            if (course.available) {
-              router.push(course.route);
-            }
-          }}
-          style={{
-            width: "100%",
-            boxSizing: "border-box",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "24px 32px",
-            borderRadius: "22px",
-            background: "white",
-            border: "1px solid #e5e7eb",
-            marginBottom: "16px",
-            cursor: course.available ? "pointer" : "not-allowed",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.04)",
-            textAlign: "left",
-            color: "inherit",
-            opacity: course.available ? 1 : 0.58,
-          }}
-        >
-          <span
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "24px",
+      <section className="courseList">
+        {mathsCourses.map((course) => (
+          <button
+            key={course.level}
+            type="button"
+            disabled={!course.available}
+            onClick={() => {
+              if (course.available) {
+                router.push(course.route);
+              }
             }}
+            className={
+              course.available
+                ? "courseCard availableCourse"
+                : "courseCard unavailableCourse"
+            }
           >
-            <span
-              style={{
-                width: "76px",
-                height: "76px",
-                borderRadius: "22px",
-                background: course.available ? "#ecfdf5" : "#f3f4f6",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "34px",
-                fontWeight: 800,
-                color: course.available ? "#047857" : "#6b7280",
-                flexShrink: 0,
-              }}
-            >
-              {course.level}
-            </span>
-
-            <span>
-              <strong
-                style={{
-                  display: "block",
-                  fontSize: "28px",
-                  marginBottom: "7px",
-                }}
-              >
-                Mathematics - {course.level}
-              </strong>
-
+            <span className="courseInformation">
               <span
-                style={{
-                  display: "block",
-                  fontSize: "19px",
-                  color: "#666",
-                }}
+                className={
+                  course.available
+                    ? "courseLevel availableLevel"
+                    : "courseLevel unavailableLevel"
+                }
               >
-                {course.description}
+                {course.level}
+              </span>
+
+              <span>
+                <strong className="courseTitle">
+                  Mathematics - {course.level}
+                </strong>
+
+                <span className="courseDescription">
+                  {course.description}
+                </span>
               </span>
             </span>
-          </span>
 
-          <span
-            style={{
-              fontSize: "19px",
-              fontWeight: 700,
-              color: course.available ? "#047857" : "#6b7280",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {course.available ? "Start →" : "Coming soon"}
-          </span>
-        </button>
-      ))}
+            <span
+              className={
+                course.available
+                  ? "courseStatus availableStatus"
+                  : "courseStatus"
+              }
+            >
+              {course.available ? "Start →" : "Coming soon"}
+            </span>
+          </button>
+        ))}
+      </section>
+
+      <style jsx>{`
+        .page {
+          max-width: 1100px;
+          width: calc(100% - 48px);
+          margin: 48px auto 72px;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .backButton {
+          margin-bottom: 28px;
+          padding: 0;
+          border: none;
+          background: transparent;
+          color: #047857;
+          font-size: 17px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        h1 {
+          margin: 0 0 8px;
+          font-size: clamp(36px, 5vw, 42px);
+          line-height: 1.15;
+        }
+
+        .subtitle {
+          margin: 0 0 28px;
+          color: #666666;
+          font-size: 20px;
+        }
+
+        .flashcardButton {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 26px 30px;
+          margin-bottom: 28px;
+          border: 2px solid #c7d2fe;
+          border-radius: 22px;
+          background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+          box-shadow: 0 6px 18px rgba(79, 70, 229, 0.08);
+          color: inherit;
+          cursor: pointer;
+          text-align: left;
+          box-sizing: border-box;
+        }
+
+        .flashcardInformation,
+        .courseInformation {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          min-width: 0;
+        }
+
+        .flashcardIcon {
+          width: 70px;
+          height: 70px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border-radius: 20px;
+          background: #e0e7ff;
+          font-size: 34px;
+        }
+
+        .flashcardLabel {
+          display: block;
+          margin-bottom: 5px;
+          color: #4f46e5;
+          font-size: 14px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+        }
+
+        .flashcardTitle {
+          display: block;
+          margin-bottom: 5px;
+          font-size: 27px;
+          line-height: 1.25;
+        }
+
+        .flashcardDescription {
+          display: block;
+          color: #64748b;
+          font-size: 17px;
+          line-height: 1.45;
+        }
+
+        .chooseButton {
+          flex-shrink: 0;
+          padding: 12px 18px;
+          border-radius: 14px;
+          background: #4f46e5;
+          color: #ffffff;
+          font-size: 16px;
+          font-weight: 800;
+          white-space: nowrap;
+        }
+
+        .courseList {
+          display: grid;
+          gap: 16px;
+        }
+
+        .courseCard {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 22px;
+          padding: 24px 32px;
+          border-radius: 22px;
+          background: #ffffff;
+          border: 1px solid #e5e7eb;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+          color: inherit;
+          text-align: left;
+          box-sizing: border-box;
+        }
+
+        .availableCourse {
+          cursor: pointer;
+          opacity: 1;
+        }
+
+        .availableCourse:hover {
+          border-color: #a7f3d0;
+          box-shadow: 0 8px 22px rgba(5, 150, 105, 0.1);
+          transform: translateY(-1px);
+        }
+
+        .unavailableCourse {
+          cursor: not-allowed;
+          opacity: 0.58;
+        }
+
+        .courseLevel {
+          width: 76px;
+          height: 76px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border-radius: 22px;
+          font-size: 34px;
+          font-weight: 800;
+        }
+
+        .availableLevel {
+          background: #ecfdf5;
+          color: #047857;
+        }
+
+        .unavailableLevel {
+          background: #f3f4f6;
+          color: #6b7280;
+        }
+
+        .courseTitle {
+          display: block;
+          margin-bottom: 7px;
+          font-size: 28px;
+        }
+
+        .courseDescription {
+          display: block;
+          color: #666666;
+          font-size: 19px;
+        }
+
+        .courseStatus {
+          flex-shrink: 0;
+          color: #6b7280;
+          font-size: 19px;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+
+        .availableStatus {
+          color: #047857;
+        }
+
+        @media (max-width: 680px) {
+          .page {
+            width: calc(100% - 24px);
+            margin-top: 28px;
+          }
+
+          .flashcardButton {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 22px;
+          }
+
+          .chooseButton {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+          }
+
+          .courseCard {
+            align-items: flex-start;
+            padding: 20px;
+          }
+
+          .courseLevel {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            font-size: 27px;
+          }
+
+          .courseTitle {
+            font-size: 22px;
+          }
+
+          .courseDescription {
+            font-size: 16px;
+          }
+
+          .courseStatus {
+            padding-top: 19px;
+            font-size: 15px;
+          }
+        }
+      `}</style>
     </main>
   );
 }

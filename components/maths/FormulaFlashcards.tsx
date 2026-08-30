@@ -386,16 +386,33 @@ if (!progressReady) {
               {currentCard.chapter}
             </p>
 
-            <h2
-              style={{
-                fontSize: "34px",
-                lineHeight: 1.3,
-              }}
-            >
-              {currentCard.prompt}
-            </h2>
+<h2
+  style={{
+    margin: "12px 0",
+    fontSize: "34px",
+    lineHeight: 1.3,
+  }}
+>
+  {currentCard.prompt}
+</h2>
 
-            <p style={{ color: "#6b7280" }}>
+{currentCard.questionFormula && (
+  <div
+    style={{
+      margin: "6px auto 18px",
+      maxWidth: "760px",
+      width: "100%",
+      padding: "14px 18px",
+      borderRadius: "16px",
+      background: "rgba(255, 255, 255, 0.8)",
+      border: "1px solid #c7d2fe",
+    }}
+  >
+    <MathFormula formula={currentCard.questionFormula} />
+  </div>
+)}
+
+<p style={{ color: "#6b7280" }}>
               Click the card to reveal the answer.
             </p>
           </article>
