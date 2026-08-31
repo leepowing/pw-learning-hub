@@ -87,7 +87,7 @@ export default function S1MathematicsPage() {
           fontWeight: 700,
         }}
       >
-          Chapters 1 - 6 are currently available
+          Chapters 1 - 10 are currently available
       </p>
       <button
         type="button"
@@ -198,7 +198,7 @@ export default function S1MathematicsPage() {
         }}
       >
         {chapters.map((chapter) => {
-const available = [1, 2, 3, 4, 5, 6].includes(
+const available = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(
   chapter.number
 );
           return (

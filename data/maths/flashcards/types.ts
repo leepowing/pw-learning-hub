@@ -15,6 +15,18 @@ export type FlashcardResult =
   | "correct"
   | "practice";
 
+export type FrontDiagramVariant =
+  | "straight-line"
+  | "vertically-opposite"
+  | "angles-at-point"
+  | "corresponding"
+  | "alternate"
+  | "same-side-interior"
+  | "converse-rules"
+  | "triangle-angle-sum"
+  | "triangle-exterior"
+  | "triangle-exterior-example";
+
 export type PolygonDiagramVariant =
   | "parts"
   | "equilateral"
@@ -78,6 +90,7 @@ export type MathsFlashcard = {
   answer?: string;
   explanation?: string;
   diagram?: GeometryDiagram;
+  frontDiagram?: FrontDiagramVariant;
 };
 
 export type FlashcardSelection = {

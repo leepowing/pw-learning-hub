@@ -16,9 +16,16 @@ import {
 } from "@/lib/studentStorage";
 
 import GeometryDiagram from "@/components/maths/GeometryDiagram";
+import Chapter9FlashcardDiagram, {
+  type Chapter9FlashcardDiagramKind,
+} from "@/components/maths/Chapter9FlashcardDiagram";
+
+type VisualMathsFlashcard = MathsFlashcard & {
+  frontDiagram?: Chapter9FlashcardDiagramKind;
+};
 
 type FormulaFlashcardsProps = {
-  cards: MathsFlashcard[];
+  cards: VisualMathsFlashcard[];
 };
 
 type ExitDirection = "left" | "right" | null;
@@ -44,7 +51,7 @@ function MathFormula({ formula }: { formula: string }) {
 export default function FormulaFlashcards({
   cards,
 }: FormulaFlashcardsProps) {
-  const [queue, setQueue] = useState<MathsFlashcard[]>(cards);
+  const [queue, setQueue] = useState<VisualMathsFlashcard[]>(cards);
   const [flipped, setFlipped] = useState(false);
   const [correct, setCorrect] = useState(0);
   const [practice, setPractice] = useState(0);
@@ -350,7 +357,7 @@ if (!progressReady) {
         <div
           style={{
             position: "relative",
-            minHeight: "430px",
+            minHeight: currentCard.frontDiagram ? "520px" : "430px",
             transformStyle: "preserve-3d",
             transform: flipped
               ? "rotateY(180deg)"
@@ -386,33 +393,27 @@ if (!progressReady) {
               {currentCard.chapter}
             </p>
 
-<h2
-  style={{
-    margin: "12px 0",
-    fontSize: "34px",
-    lineHeight: 1.3,
-  }}
->
-  {currentCard.prompt}
-</h2>
+            {currentCard.frontDiagram && (
+              <Chapter9FlashcardDiagram
+                kind={currentCard.frontDiagram}
+              />
+            )}
 
-{currentCard.questionFormula && (
-  <div
-    style={{
-      margin: "6px auto 18px",
-      maxWidth: "760px",
-      width: "100%",
-      padding: "14px 18px",
-      borderRadius: "16px",
-      background: "rgba(255, 255, 255, 0.8)",
-      border: "1px solid #c7d2fe",
-    }}
-  >
-    <MathFormula formula={currentCard.questionFormula} />
-  </div>
-)}
+            <h2
+              style={{
+                margin: currentCard.frontDiagram
+                  ? "4px 0 10px"
+                  : undefined,
+                fontSize: currentCard.frontDiagram
+                  ? "28px"
+                  : "34px",
+                lineHeight: 1.3,
+              }}
+            >
+              {currentCard.prompt}
+            </h2>
 
-<p style={{ color: "#6b7280" }}>
+            <p style={{ color: "#6b7280" }}>
               Click the card to reveal the answer.
             </p>
           </article>
