@@ -19,8 +19,8 @@ export {
   s1Chapter12Flashcards,
 };
 
-// Keep every S1 source in this combined array. The chapter-selection page and
-// all older chapter routes read from the same registry.
+// Every S1 source must be included here so that the selection page can show
+// Chapters 1–12 from one combined registry.
 export const s1Flashcards: MathsFlashcard[] = [
   ...s1BaseFlashcards,
   ...s1Chapter10Flashcards,
@@ -40,7 +40,17 @@ export const mathsFlashcardsByLevel: Record<
   s6: [],
 };
 
-// Compatibility helper used by individual chapter pages, including Chapter 5.
+// Used by the Smart Review page.
+export const allMathsFlashcards: MathsFlashcard[] = [
+  ...mathsFlashcardsByLevel.s1,
+  ...mathsFlashcardsByLevel.s2,
+  ...mathsFlashcardsByLevel.s3,
+  ...mathsFlashcardsByLevel.s4,
+  ...mathsFlashcardsByLevel.s5,
+  ...mathsFlashcardsByLevel.s6,
+];
+
+// Used by individual chapter routes, including the older Chapter 5 page.
 export function getFlashcardsForChapter(
   level: MathsLevel,
   chapter: number
@@ -49,7 +59,7 @@ export function getFlashcardsForChapter(
   return cards.filter((card) => card.chapter === chapter);
 }
 
-// Compatibility helper used by the main selection page.
+// Used by the main chapter-selection page.
 export function getFlashcardsForSelection(
   selection: FlashcardSelection
 ): MathsFlashcard[] {
@@ -59,7 +69,7 @@ export function getFlashcardsForSelection(
   );
 }
 
-// Compatibility helper used for future cross-level revision sessions.
+// Used for cross-level revision sessions.
 export function getFlashcardsForSelections(
   selections: FlashcardSelection[]
 ): MathsFlashcard[] {
