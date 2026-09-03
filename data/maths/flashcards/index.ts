@@ -11,6 +11,7 @@ import { s1Chapter11Flashcards } from "./chapter11";
 import { s1Chapter12Flashcards } from "./chapter12";
 
 export * from "./types";
+
 export {
   s2Flashcards,
   s1Chapter10Flashcards,
@@ -18,9 +19,8 @@ export {
   s1Chapter12Flashcards,
 };
 
-// Keep every S1 source in one exported array. The chapter-selection page and
-// the level registry must both use this combined array, otherwise Chapters 10
-// and 11 will not appear even though their data files exist.
+// Keep every S1 source in this combined array. The chapter-selection page and
+// all older chapter routes read from the same registry.
 export const s1Flashcards: MathsFlashcard[] = [
   ...s1BaseFlashcards,
   ...s1Chapter10Flashcards,
@@ -40,15 +40,54 @@ export const mathsFlashcardsByLevel: Record<
   s6: [],
 };
 
+// Compatibility helper used by individual chapter pages, including Chapter 5.
+export function getFlashcardsForChapter(
+  level: MathsLevel,
+  chapter: number
+): MathsFlashcard[] {
+  const cards = mathsFlashcardsByLevel[level] ?? [];
+  return cards.filter((card) => card.chapter === chapter);
+}
+
+// Compatibility helper used by the main selection page.
 export function getFlashcardsForSelection(
   selection: FlashcardSelection
 ): MathsFlashcard[] {
   const cards = mathsFlashcardsByLevel[selection.level] ?? [];
-  return cards.filter((card) => selection.chapters.includes(card.chapter));
+  return cards.filter((card) =>
+    selection.chapters.includes(card.chapter)
+  );
 }
 
+// Compatibility helper used for future cross-level revision sessions.
 export function getFlashcardsForSelections(
   selections: FlashcardSelection[]
 ): MathsFlashcard[] {
   return selections.flatMap(getFlashcardsForSelection);
+}
+
+// Preserve the newer helper name as an alias.
+export function getMathsFlashcards(
+  selection: FlashcardSelection
+): MathsFlashcard[] {
+  return getFlashcardsForSelection(selection);
+}
+
+export function getMathsFlashcardChapters(level: MathsLevel) {
+  const cards = mathsFlashcardsByLevel[level] ?? [];
+
+  return Array.from(new Set(cards.map((card) => card.chapter)))
+    .sort((a, b) => a - b)
+    .map((chapter) => {
+      const chapterCards = cards.filter(
+        (card) => card.chapter === chapter
+      );
+
+      return {
+        chapter,
+        title:
+          chapterCards[0]?.chapterTitle ?? `Chapter ${chapter}`,
+        count: chapterCards.length,
+      };
+    });
 }
