@@ -6,15 +6,12 @@ import Link from "next/link";
 import {
   getCurrentStudent,
   getMathsFlashcardProgress,
+  syncMathsFlashcardProgress,
 } from "@/lib/studentStorage";
 
 import type {
   MathsFlashcardProgressMap,
 } from "@/lib/studentStorage";
-
-import {
-  getMathsFlashcardProgressFromSupabase,
-} from "@/lib/supabase";
 
 function formatCardName(cardId: string) {
   return cardId
@@ -45,63 +42,42 @@ export default function FlashcardProgressPage() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-  let cancelled = false;
+    let cancelled = false;
 
-  async function loadProgress() {
-    const currentStudent = getCurrentStudent();
-    const localProgress = getMathsFlashcardProgress();
+    async function loadProgress() {
+      const currentStudent = getCurrentStudent();
+      setStudent(currentStudent);
 
-    setStudent(currentStudent);
+      try {
+        const mergedProgress =
+          await syncMathsFlashcardProgress();
 
-    if (currentStudent === "guest") {
-      setProgress(localProgress);
-      setLoaded(true);
-      return;
+        if (!cancelled) {
+          setProgress(mergedProgress);
+        }
+      } catch (error) {
+        console.error(
+          "Could not sync maths flashcard progress:",
+          error
+        );
+
+        // Keep the progress page usable when the network is unavailable.
+        if (!cancelled) {
+          setProgress(getMathsFlashcardProgress());
+        }
+      } finally {
+        if (!cancelled) {
+          setLoaded(true);
+        }
+      }
     }
 
-    const cloudRows =
-      await getMathsFlashcardProgressFromSupabase(
-        currentStudent
-      );
+    void loadProgress();
 
-    if (cancelled) {
-      return;
-    }
-
-    if (cloudRows.length === 0) {
-      setProgress(localProgress);
-      setLoaded(true);
-      return;
-    }
-
-    const cloudProgress =
-      cloudRows.reduce<MathsFlashcardProgressMap>(
-        (result, row) => {
-          result[row.card_id] = {
-            cardId: row.card_id,
-            attempts: row.attempts,
-            correct: row.correct,
-            practice: row.practice,
-            lastResult: row.last_result,
-            lastPractisedAt:
-              row.last_practised_at,
-          };
-
-          return result;
-        },
-        {}
-      );
-
-    setProgress(cloudProgress);
-    setLoaded(true);
-  }
-
-  void loadProgress();
-
-  return () => {
-    cancelled = true;
-  };
-}, []);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
 
   const records = useMemo(

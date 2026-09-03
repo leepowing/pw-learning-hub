@@ -267,7 +267,10 @@ export default function MathsSmartReviewPage() {
             </span>
           </section>
 
-          <FormulaFlashcards cards={reviewCards} />
+<FormulaFlashcards
+  cards={reviewCards}
+  reviewMode
+/>
         </>
       )}
     </main>

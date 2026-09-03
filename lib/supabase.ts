@@ -49,6 +49,7 @@ export async function getStudentXP(
     0
   );
 }
+
 export async function saveStudentMistake(
   student: string,
   week: number,
@@ -57,13 +58,14 @@ export async function saveStudentMistake(
 ) {
   const normalisedWord = word.trim().toLowerCase();
 
-  const { data: existing, error: readError } = await supabase
-    .from("mistakes")
-    .select("id, wrong_count, correct_count")
-    .eq("student", student)
-    .eq("course", course)
-    .eq("word", normalisedWord)
-    .maybeSingle();
+  const { data: existing, error: readError } =
+    await supabase
+      .from("mistakes")
+      .select("id, wrong_count, correct_count")
+      .eq("student", student)
+      .eq("course", course)
+      .eq("word", normalisedWord)
+      .maybeSingle();
 
   if (readError) {
     console.error("Could not check mistake:", readError);
@@ -73,13 +75,13 @@ export async function saveStudentMistake(
   if (existing) {
     const { error: updateError } = await supabase
       .from("mistakes")
-.update({
-  week,
-  wrong_count: (existing.wrong_count ?? 0) + 1,
-  correct_count: 0,
-  mastered: false,
-  last_wrong_at: new Date().toISOString(),
-})
+      .update({
+        week,
+        wrong_count: (existing.wrong_count ?? 0) + 1,
+        correct_count: 0,
+        mastered: false,
+        last_wrong_at: new Date().toISOString(),
+      })
       .eq("id", existing.id);
 
     if (updateError) {
@@ -142,7 +144,10 @@ export async function getSpellingProgress(
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    console.error("Could not get logged in user:", userError);
+    console.error(
+      "Could not get logged in user:",
+      userError
+    );
     return [];
   }
 
@@ -176,7 +181,10 @@ export async function saveSpellingProgress(
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    console.error("Could not get logged in user:", userError);
+    console.error(
+      "Could not get logged in user:",
+      userError
+    );
     return false;
   }
 
@@ -194,7 +202,7 @@ export async function saveSpellingProgress(
         updated_at: new Date().toISOString(),
       },
       {
-onConflict: "user_id,student,course,week",
+        onConflict: "user_id,student,course,week",
       }
     );
 
@@ -241,11 +249,8 @@ export async function saveStudentReviewResult(
 
   const nextCorrectCount =
     (existing.correct_count ?? 0) + (passed ? 1 : 0);
-
   const nextWrongCount =
     (existing.wrong_count ?? 0) + (passed ? 0 : 1);
-
-  // The word is mastered only after three correct reviews.
   const mastered = nextCorrectCount >= 3;
 
   const { error: updateError } = await supabase
@@ -254,7 +259,6 @@ export async function saveStudentReviewResult(
       correct_count: nextCorrectCount,
       wrong_count: nextWrongCount,
       mastered,
-
       ...(passed
         ? {}
         : {
@@ -273,7 +277,6 @@ export async function saveStudentReviewResult(
 
   return true;
 }
-
 
 export type FamilySpellingOverviewRow = {
   student: string;
@@ -299,7 +302,6 @@ export async function getFamilySpellingOverview(
       "Could not load family spelling overview:",
       error
     );
-
     return [];
   }
 
@@ -363,16 +365,14 @@ export async function getMathsFlashcardProgressFromSupabase(
 
   const { data, error } = await supabase
     .from("maths_flashcard_progress")
-    .select(
-      `
-        card_id,
-        attempts,
-        correct,
-        practice,
-        last_result,
-        last_practised_at
-      `
-    )
+    .select(`
+      card_id,
+      attempts,
+      correct,
+      practice,
+      last_result,
+      last_practised_at
+    `)
     .eq("user_id", user.id)
     .eq("student", student)
     .order("last_practised_at", {
@@ -390,6 +390,8 @@ export async function getMathsFlashcardProgressFromSupabase(
   return (data ?? []) as MathsFlashcardSupabaseRow[];
 }
 
+// Kept for compatibility with any older code paths. New flashcard answers use
+// recordMathsFlashcardAnswerAtomically below.
 export async function saveMathsFlashcardProgressToSupabase(
   student: string,
   cardId: string,
@@ -441,3 +443,55 @@ export async function saveMathsFlashcardProgressToSupabase(
 
   return true;
 }
+
+export type MathsFlashcardAtomicResult = {
+  card_id: string;
+  attempts: number;
+  correct: number;
+  practice: number;
+  last_result: "correct" | "practice";
+  last_practised_at: string;
+};
+
+export async function recordMathsFlashcardAnswerAtomically(
+  student: string,
+  cardId: string,
+  result: "correct" | "practice",
+  eventId: string,
+  practisedAt: string
+): Promise<MathsFlashcardAtomicResult | null> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    console.error(
+      "Could not get logged-in user:",
+      userError
+    );
+    return null;
+  }
+
+  const { data, error } = await supabase.rpc(
+    "record_maths_flashcard_answer",
+    {
+      p_event_id: eventId,
+      p_student: student,
+      p_card_id: cardId,
+      p_result: result,
+      p_practised_at: practisedAt,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Could not record maths flashcard answer:",
+      error
+    );
+    return null;
+  }
+
+  return data as MathsFlashcardAtomicResult;
+}
+

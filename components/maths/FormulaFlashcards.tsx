@@ -4,7 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import katex from "katex";
 
 import type { MathsFlashcard } from "@/data/maths/flashcards";
-import { recordMathsFlashcardAnswer, syncMathsFlashcardProgress } from "@/lib/studentStorage";
+import {
+  getMathsFlashcardProgress,
+  recordMathsFlashcardAnswer,
+  syncMathsFlashcardProgress,
+} from "@/lib/studentStorage";
 import GeometryDiagram from "@/components/maths/GeometryDiagram";
 import Chapter9FlashcardDiagram, { type Chapter9FlashcardDiagramKind } from "@/components/maths/Chapter9FlashcardDiagram";
 import Chapter10FlashcardDiagram, { type Chapter10FlashcardDiagramKind } from "@/components/maths/Chapter10FlashcardDiagram";
@@ -16,15 +20,22 @@ type VisualMathsFlashcard = MathsFlashcard & {
   chapter12Diagram?: Chapter12FlashcardDiagramKind;
 };
 
-type Props = { cards: VisualMathsFlashcard[] };
+type Props = {
+  cards: VisualMathsFlashcard[];
+  reviewMode?: boolean;
+};
 type ExitDirection = "left" | "right" | null;
+type SaveStatus = "idle" | "saving" | "saved" | "error";
 
 function MathFormula({ formula }: { formula: string }) {
   const html = katex.renderToString(formula, { throwOnError: false, displayMode: true });
   return <div style={{ overflowX: "auto", padding: 8, fontSize: 20 }} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
-export default function FormulaFlashcards({ cards }: Props) {
+export default function FormulaFlashcards({
+  cards,
+  reviewMode = false,
+}: Props) {
   const [queue, setQueue] = useState<VisualMathsFlashcard[]>(cards);
   const [flipped, setFlipped] = useState(false);
   const [correct, setCorrect] = useState(0);
@@ -32,14 +43,31 @@ export default function FormulaFlashcards({ cards }: Props) {
   const [dragOffset, setDragOffset] = useState(0);
   const [exitDirection, setExitDirection] = useState<ExitDirection>(null);
   const [progressReady, setProgressReady] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const dragStartX = useRef<number | null>(null);
   const didDrag = useRef(false);
+  const latestSaveNumber = useRef(0);
 
   useEffect(() => {
     let active = true;
-    void syncMathsFlashcardProgress().then(() => {
-      if (active) setProgressReady(true);
-    });
+
+    async function prepareProgress() {
+      try {
+        await syncMathsFlashcardProgress();
+      } catch (error) {
+        console.error(
+          "Could not sync maths flashcard progress:",
+          error
+        );
+      } finally {
+        if (active) {
+          setProgressReady(true);
+        }
+      }
+    }
+
+    void prepareProgress();
+
     return () => { active = false; };
   }, []);
 
@@ -58,12 +86,53 @@ export default function FormulaFlashcards({ cards }: Props) {
 
   function gradeCard(result: "correct" | "practice") {
     if (!currentCard || !flipped || exitDirection !== null) return;
-    recordMathsFlashcardAnswer(currentCard.id, result);
+
+    const saveNumber = latestSaveNumber.current + 1;
+    latestSaveNumber.current = saveNumber;
+    setSaveStatus("saving");
+
+    void recordMathsFlashcardAnswer(
+      currentCard.id,
+      result
+    )
+      .then((saved) => {
+        if (latestSaveNumber.current === saveNumber) {
+          setSaveStatus(saved ? "saved" : "error");
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Could not save maths flashcard answer:",
+          error
+        );
+
+        if (latestSaveNumber.current === saveNumber) {
+          setSaveStatus("error");
+        }
+      });
+
+    const updatedProgress =
+      getMathsFlashcardProgress()[currentCard.id];
+
+    const updatedAccuracy = updatedProgress?.attempts
+      ? updatedProgress.correct / updatedProgress.attempts
+      : result === "correct"
+        ? 1
+        : 0;
+
+    const shouldRepeatCard =
+      result === "practice" ||
+      (reviewMode && updatedAccuracy < 0.8);
+
     setExitDirection(result === "correct" ? "left" : "right");
+
     window.setTimeout(() => {
       setQueue((currentQueue) => {
         const remainingCards = currentQueue.slice(1);
-        return result === "practice" ? [...remainingCards, currentQueue[0]] : remainingCards;
+
+        return shouldRepeatCard
+          ? [...remainingCards, currentQueue[0]]
+          : remainingCards;
       });
       if (result === "correct") setCorrect((value) => value + 1);
       else setPractice((value) => value + 1);
@@ -126,6 +195,31 @@ export default function FormulaFlashcards({ cards }: Props) {
           </div>
         ))}
       </div>
+
+      {saveStatus !== "idle" && (
+        <div
+          role={saveStatus === "error" ? "alert" : "status"}
+          style={{
+            marginBottom: 18,
+            padding: "11px 16px",
+            borderRadius: 14,
+            textAlign: "center",
+            fontWeight: 800,
+            color:
+              saveStatus === "error" ? "#9a3412" : "#166534",
+            background:
+              saveStatus === "error" ? "#fff7ed" : "#f0fdf4",
+            border: `1px solid ${
+              saveStatus === "error" ? "#fdba74" : "#86efac"
+            }`,
+          }}
+        >
+          {saveStatus === "saving" && "Saving progress..."}
+          {saveStatus === "saved" && "Progress saved."}
+          {saveStatus === "error" &&
+            "Progress is saved on this device and will be uploaded during the next sync."}
+        </div>
+      )}
 
       <div
         onPointerDown={handlePointerDown}
