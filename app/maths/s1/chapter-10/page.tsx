@@ -97,6 +97,12 @@ export default function S1ChapterTenPage() {
               <line x1="265" y1="95" x2="277" y2="103" />
               <line x1="137" y1="83" x2="151" y2="77" />
               <line x1="345" y1="83" x2="359" y2="77" />
+              <text x="104" y="17" textAnchor="middle">A</text>
+              <text x="28" y="143" textAnchor="middle">B</text>
+              <text x="184" y="143" textAnchor="middle">C</text>
+              <text x="312" y="17" textAnchor="middle">X</text>
+              <text x="236" y="143" textAnchor="middle">Y</text>
+              <text x="392" y="143" textAnchor="middle">Z</text>
             </svg>
           </div>
 
@@ -116,9 +122,15 @@ export default function S1ChapterTenPage() {
           </div>
 
           <div className="triangleStage similarStage" aria-hidden="true">
-            <svg viewBox="0 0 420 150" role="img">
+            <svg viewBox="0 -14 420 164" role="img">
               <polygon points="35,124 93,42 151,124" />
               <polygon points="218,124 300,8 388,124" />
+              <text x="93" y="34" textAnchor="middle">A</text>
+              <text x="25" y="143" textAnchor="middle">B</text>
+              <text x="161" y="143" textAnchor="middle">C</text>
+              <text x="300" y="-1" textAnchor="middle">X</text>
+              <text x="208" y="143" textAnchor="middle">Y</text>
+              <text x="398" y="143" textAnchor="middle">Z</text>
             </svg>
           </div>
 
@@ -244,8 +256,12 @@ export default function S1ChapterTenPage() {
           </p>
         </div>
 
-        <button type="button" className="disabledFeatureButton" disabled>
-          Coming soon
+        <button
+          type="button"
+          className="flashcardButton"
+          onClick={() => router.push("/maths/flashcards?level=s1&chapter=10")}
+        >
+          Start Flashcards →
         </button>
       </section>
 
@@ -256,8 +272,12 @@ export default function S1ChapterTenPage() {
           <p>Complete Sections 1–4 before attempting the checkpoint.</p>
         </div>
 
-        <button type="button" className="disabledFeatureButton" disabled>
-          Coming soon
+        <button
+          type="button"
+          className="checkpointButton"
+          onClick={() => router.push("/maths/s1/chapter-10/checkpoint")}
+        >
+          Start Checkpoint →
         </button>
       </section>
 
@@ -441,6 +461,16 @@ export default function S1ChapterTenPage() {
           stroke: #0369a1;
           stroke-width: 4;
           stroke-linecap: round;
+        }
+
+        .triangleStage text {
+          fill: #0f766e;
+          font-size: 15px;
+          font-weight: 800;
+        }
+
+        .similarStage text {
+          fill: #7c3aed;
         }
 
         .conceptStatement {
@@ -696,6 +726,42 @@ export default function S1ChapterTenPage() {
           font-size: 16px;
           font-weight: 900;
           cursor: not-allowed;
+        }
+
+        .flashcardButton {
+          flex-shrink: 0;
+          padding: 13px 20px;
+          border: none;
+          border-radius: 14px;
+          background: #4f46e5;
+          color: white;
+          font-size: 16px;
+          font-weight: 900;
+          cursor: pointer;
+          transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .flashcardButton:hover {
+          background: #4338ca;
+          transform: translateY(-1px);
+        }
+
+        .checkpointButton {
+          flex-shrink: 0;
+          padding: 13px 20px;
+          border: none;
+          border-radius: 14px;
+          background: #7c3aed;
+          color: white;
+          font-size: 16px;
+          font-weight: 900;
+          cursor: pointer;
+          transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .checkpointButton:hover {
+          background: #6d28d9;
+          transform: translateY(-1px);
         }
 
         @media (max-width: 950px) {

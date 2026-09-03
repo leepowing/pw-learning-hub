@@ -4,15 +4,29 @@ import type {
   MathsLevel,
 } from "./types";
 
-import { s1Flashcards } from "./s1";
+import { s1Flashcards as s1BaseFlashcards } from "./s1";
 import { s2Flashcards } from "./s2";
+import { s1Chapter10Flashcards } from "./chapter10";
+import { s1Chapter11Flashcards } from "./chapter11";
+import { s1Chapter12Flashcards } from "./chapter12";
 
 export * from "./types";
-
 export {
-  s1Flashcards,
   s2Flashcards,
+  s1Chapter10Flashcards,
+  s1Chapter11Flashcards,
+  s1Chapter12Flashcards,
 };
+
+// Keep every S1 source in one exported array. The chapter-selection page and
+// the level registry must both use this combined array, otherwise Chapters 10
+// and 11 will not appear even though their data files exist.
+export const s1Flashcards: MathsFlashcard[] = [
+  ...s1BaseFlashcards,
+  ...s1Chapter10Flashcards,
+  ...s1Chapter11Flashcards,
+  ...s1Chapter12Flashcards,
+];
 
 export const mathsFlashcardsByLevel: Record<
   MathsLevel,
@@ -26,25 +40,15 @@ export const mathsFlashcardsByLevel: Record<
   s6: [],
 };
 
-export const allMathsFlashcards: MathsFlashcard[] =
-  Object.values(mathsFlashcardsByLevel).flat();
-
-export function getFlashcardsForChapter(
-  level: MathsLevel,
-  chapter: number
+export function getFlashcardsForSelection(
+  selection: FlashcardSelection
 ): MathsFlashcard[] {
-  return mathsFlashcardsByLevel[level].filter(
-    (card) => card.chapter === chapter
-  );
+  const cards = mathsFlashcardsByLevel[selection.level] ?? [];
+  return cards.filter((card) => selection.chapters.includes(card.chapter));
 }
 
 export function getFlashcardsForSelections(
   selections: FlashcardSelection[]
 ): MathsFlashcard[] {
-  return selections.flatMap((selection) =>
-    mathsFlashcardsByLevel[selection.level].filter(
-      (card) =>
-        selection.chapters.includes(card.chapter)
-    )
-  );
+  return selections.flatMap(getFlashcardsForSelection);
 }
