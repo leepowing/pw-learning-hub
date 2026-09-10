@@ -1,6 +1,10 @@
+import { s2Chapter7Flashcards } from "./s2chapter7";
+import { s2Chapter6Flashcards } from "./s2chapter6";
 import type { MathsFlashcard } from "./types";
 
 export const s2Flashcards: MathsFlashcard[] = [
+  ...s2Chapter7Flashcards,
+  ...s2Chapter6Flashcards,
   // =========================================================
   // Chapter 1 · Section 1 · Significant Figures
   // =========================================================

@@ -1,0 +1,183 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+// Destination: app/maths/s2/chapter-7/page.tsx
+// Enable a section only when its page has been installed.
+const sections = [
+  { number: 1, title: "Organization of Data", description: "Group observations into classes. Identify class limits, class boundaries, class marks and class widths.", route: "/maths/s2/chapter-7/organization-of-data", available: true, topics: ["Class intervals", "Class boundaries", "Frequency tables"] },
+  { number: 2, title: "Presentation of Data", description: "Construct and interpret histograms, frequency polygons and frequency curves using grouped data.", route: "/maths/s2/chapter-7/presentation-of-data", available: true, topics: ["Histograms", "Frequency polygons", "Frequency curves"] },
+  { number: 3, title: "Cumulative Frequency", description: "Build running totals and use cumulative frequency tables, polygons and curves to answer questions about a distribution.", route: "/maths/s2/chapter-7/cumulative-frequency", available: true, topics: ["Running totals", "Cumulative tables", "Polygons and curves"] },
+  { number: 4, title: "Uses and Misuses of Statistical Diagrams", description: "Choose a suitable diagram and judge whether its scales, symbols and supporting information give a fair picture.", route: "/maths/s2/chapter-7/uses-and-misuses-of-statistical-diagrams", available: true, topics: ["Choosing a diagram", "Scales and symbols", "Misleading comparisons"] },
+];
+
+// Original illustrative data, used consistently in the table and all three plots.
+const classes = [
+  { lower: 10, upper: 19, frequency: 4 },
+  { lower: 20, upper: 29, frequency: 9 },
+  { lower: 30, upper: 39, frequency: 12 },
+  { lower: 40, upper: 49, frequency: 5 },
+];
+const rows = classes.map((item, index) => ({
+  ...item,
+  lowerBoundary: item.lower - 0.5,
+  upperBoundary: item.upper + 0.5,
+  mark: (item.lower + item.upper) / 2,
+  cumulative: classes.slice(0, index + 1).reduce((sum, row) => sum + row.frequency, 0),
+}));
+const total = rows.reduce((sum, row) => sum + row.frequency, 0);
+type ChartMode = "histogram" | "polygon" | "cumulative";
+type DataPoint = { x: number; y: number };
+const chartModes: { id: ChartMode; label: string }[] = [
+  { id: "histogram", label: "Histogram" },
+  { id: "polygon", label: "Frequency polygon" },
+  { id: "cumulative", label: "Cumulative frequency" },
+];
+const chartDescriptions: Record<ChartMode, { title: string; summary: string; question: string; answer: string }> = {
+  histogram: { title: "Histogram", summary: "The adjacent bars represent equal-width classes. Each bar's height gives its class frequency; the horizontal edges lie at the class boundaries.", question: "Which class contains the most journeys?", answer: "30–39 minutes: its frequency is 12. We cannot tell the exact journey times within that class." },
+  polygon: { title: "Frequency polygon", summary: "Plot frequency against each class mark and join neighbouring points with straight segments. An extra class of frequency zero is included at each end.", question: "Why is the point for the class 20–29 placed at 24.5?", answer: "24.5 is the class mark: (20 + 29) ÷ 2. The point is (24.5, 9), not (29.5, 9)." },
+  cumulative: { title: "Cumulative frequency polygon", summary: "Plot running totals against the upper class boundaries. Start with zero at the first lower boundary. Join the points with straight segments.", question: "How many journeys have a time below 29.5 minutes?", answer: "13 journeys, because 4 + 9 = 13. The last cumulative frequency is 30, the total number of journeys." },
+};
+
+function DataChart({ mode }: { mode: ChartMode }) {
+  const cumulative = mode === "cumulative";
+  const left = 76, right = 574, top = 45, bottom = 270;
+  // Keep the axis origin at zero, independently of the first plotted point.
+  const minX = 0;
+  const maxX = 60;
+  const maxY = cumulative ? total : 15;
+  const px = (value: number) => left + (value - minX) / (maxX - minX) * (right - left);
+  const py = (value: number) => bottom - value / maxY * (bottom - top);
+  const yTicks = Array.from({ length: maxY / 5 + 1 }, (_, index) => index * 5);
+  const polygonStart = rows[0].mark - 10;
+  const polygonEnd = rows[rows.length - 1].mark + 10;
+  const xTicks = mode === "polygon" ? [minX, polygonStart, ...rows.map(row => row.mark), polygonEnd, maxX] : [minX, rows[0].lowerBoundary, ...rows.map(row => row.upperBoundary), maxX];
+  const points: DataPoint[] = cumulative
+    ? [{ x: rows[0].lowerBoundary, y: 0 }, ...rows.map(row => ({ x: row.upperBoundary, y: row.cumulative }))]
+    : [{ x: polygonStart, y: 0 }, ...rows.map(row => ({ x: row.mark, y: row.frequency })), { x: polygonEnd, y: 0 }];
+  const color = cumulative ? "#4f46e5" : "#7c3aed";
+  const label = cumulative ? "Cumulative frequency" : "Frequency";
+
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 630 342" role="img" aria-label={`${chartDescriptions[mode].title} of 30 journey times. The exact data are in the table beside this chart.`} data-chart-mode={mode} style={{ display: "block", width: "100%", minWidth: 490, height: "auto" }}>
+    <text x="325" y="20" textAnchor="middle" fill="#172d50" fontFamily="Arial, sans-serif" fontSize="17" fontWeight="700">Journey times of 30 students</text>
+    {yTicks.map(value => <g key={value}><line x1={left} y1={py(value)} x2={right} y2={py(value)} stroke="#dce5f1" strokeWidth="1" /><text x={left - 12} y={py(value) + 5} textAnchor="end" fill="#52657e" fontFamily="Arial, sans-serif" fontSize="14">{value}</text></g>)}
+    {xTicks.map(value => <g key={value}><line x1={px(value)} y1={top} x2={px(value)} y2={bottom} stroke="#edf1f7" strokeWidth="1" /><line x1={px(value)} y1={bottom} x2={px(value)} y2={bottom + 6} stroke="#172d50" /><text x={px(value)} y={bottom + 24} textAnchor="middle" fill={value === 0 ? "#172d50" : "#52657e"} fontFamily="Arial, sans-serif" fontSize="13" fontWeight={value === 0 ? 800 : 400}>{value}</text></g>)}
+    {mode === "histogram" ? rows.map(row => <g key={row.lower}>
+      <rect data-frequency={row.frequency} data-lower-boundary={row.lowerBoundary} data-upper-boundary={row.upperBoundary} x={px(row.lowerBoundary)} y={py(row.frequency)} width={px(row.upperBoundary) - px(row.lowerBoundary)} height={bottom - py(row.frequency)} fill="#5eead4" fillOpacity="0.55" stroke="#0f766e" strokeWidth="2" />
+      <text x={px(row.mark)} y={py(row.frequency) - 10} textAnchor="middle" fill="#0f766e" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="700">{row.frequency}</text>
+    </g>) : <>
+      <polyline points={points.map(point => `${px(point.x)},${py(point.y)}`).join(" ")} fill="none" stroke={color} strokeWidth="3" strokeLinejoin="round" />
+      {points.map(point => <g key={point.x} data-point-x={point.x} data-point-y={point.y}><circle cx={px(point.x)} cy={py(point.y)} r="4.5" fill={color} /><text x={px(point.x)} y={py(point.y) - 12} textAnchor="middle" fill={color} fontFamily="Arial, sans-serif" fontSize="16" fontWeight="700">{point.y}</text></g>)}
+    </>}
+    <path d={`M ${left} ${top - 5} V ${bottom} H ${right + 8}`} stroke="#172d50" strokeWidth="2" fill="none" />
+    <text x="325" y="327" textAnchor="middle" fill="#172d50" fontFamily="Arial, sans-serif" fontSize="15">Journey time (min)</text>
+    <text transform={`translate(21 ${(top + bottom) / 2}) rotate(-90)`} textAnchor="middle" fill="#172d50" fontFamily="Arial, sans-serif" fontSize="14">{label}</text>
+  </svg>;
+}
+
+export default function S2ChapterSevenHomepage() {
+  const [mode, setMode] = useState<ChartMode>("histogram");
+  const explanation = chartDescriptions[mode];
+
+  return <main className="page">
+    <Link className="backLink" href="/maths/s2">← Back to S2 Mathematics</Link>
+    <header><p className="eyebrow">S2 MATHEMATICS · CHAPTER 7</p><h1>Organization and Presentation of Data (II)</h1><p className="introduction">Organize a large data set, choose a clear statistical diagram and interpret what the evidence really shows.</p><div className="headerActions"><a className="primaryLink" href="#preview">Explore the chapter →</a><a className="secondaryLink" href="#learning-path">View the four sections</a></div></header>
+
+    <section className="overviewCard" aria-labelledby="overviewTitle"><div className="overviewIcon" aria-hidden="true"><svg viewBox="0 0 70 70"><path d="M 12 12 V 57 H 60" fill="none" stroke="currentColor" strokeWidth="3" /><path d="M 20 55 V 39 H 31 V 26 H 42 V 17 H 53 V 55" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2" /></svg></div><div><p className="smallLabel">CHAPTER OVERVIEW</p><h2 id="overviewTitle">From individual values to a useful picture</h2><p>Start with the frequency ideas from S1. Then work with class boundaries, connected distributions and running totals. Finally, learn to spot displays that exaggerate or hide differences.</p></div></section>
+
+    <section id="learning-path" aria-labelledby="pathTitle"><p className="eyebrow">YOUR LEARNING PATH</p><h2 id="pathTitle">Four sections, one connected story</h2><div className="sectionGrid">{sections.map(section => <article key={section.number} className="sectionCard"><div className="sectionTop"><span className="sectionNumber">{section.number}</span><span className={`status ${section.available ? "available" : ""}`}>{section.available ? "Available" : "Coming soon"}</span></div><p className="smallLabel">SECTION {section.number} · 7.{section.number}</p><h3>{section.title}</h3><p className="sectionDescription">{section.description}</p><ul className="topicList">{section.topics.map(topic => <li key={topic}>{topic}</li>)}</ul>{section.available ? <Link className="primaryLink" href={section.route}>Start Section {section.number} →</Link> : <button type="button" className="disabledButton" disabled>Coming soon</button>}</article>)}</div></section>
+
+    <section className="previewCard" id="preview" aria-labelledby="previewTitle"><p className="eyebrow">INTERACTIVE CHAPTER PREVIEW</p><h2 id="previewTitle">One data set, three ways to read it</h2><p>These example journey times are recorded to the nearest minute. Every chart below uses the same {total} observations.</p>
+      <div className="chartButtons" role="group" aria-label="Choose a statistical diagram">{chartModes.map(item => <button type="button" key={item.id} aria-pressed={mode === item.id} aria-controls="chart-preview" onClick={() => setMode(item.id)}>{item.label}</button>)}</div>
+      <div className="previewGrid"><div className="dataPanel"><div className="tableScroll"><table><caption>Journey times (recorded values)</caption><thead><tr><th scope="col">Time (min)</th><th scope="col">Frequency</th><th scope="col">Running total</th></tr></thead><tbody>{rows.map(row => <tr key={row.lower}><th scope="row">{row.lower}–{row.upper}</th><td>{row.frequency}</td><td>{row.cumulative}</td></tr>)}</tbody><tfoot><tr><th scope="row">Total</th><td>{total}</td><td aria-label="No additional running total">—</td></tr></tfoot></table></div><div className="classNote"><strong>Zoom in: the class 20–29</strong><p>Class limits: <b>20 and 29</b><br />Class boundaries: <b>19.5 and 29.5</b><br />Class mark: <b>24.5</b><br />Class width: <b>10 minutes</b></p><small>The half-minute boundaries reflect recording to the nearest minute.</small></div></div>
+        <div className="chartPanel" id="chart-preview"><div className="chartScroll" tabIndex={0} role="region" aria-label="Statistical diagram; scroll horizontally on small screens"><DataChart mode={mode} /></div><p className="axisNote">The horizontal axis starts at <strong>0 minutes</strong>. Read each value using its position on this scale.</p><div className="chartExplanation" aria-live="polite"><h3>{explanation.title}</h3><p>{explanation.summary}</p></div></div></div>
+      <details className="readChart" key={mode}><summary>{explanation.question}</summary><p>{explanation.answer}</p></details><p className="previewNote">This is a first look. The four sections will explain how to construct, interpret and evaluate these displays.</p>
+    </section>
+
+    <section className="keyIdeas" aria-labelledby="ideasTitle"><p className="eyebrow">IDEAS TO KEEP SEPARATE</p><h2 id="ideasTitle">Small distinctions make a big difference</h2><div className="ideaGrid"><article><span className="ideaNumber">1</span><h3>Limits and boundaries</h3><p>Class limits name the recorded values in a class. Class boundaries mark where neighbouring classes meet, taking the recording precision into account.</p></article><article><span className="ideaNumber">2</span><h3>Frequency and cumulative frequency</h3><p>A frequency counts one class. A cumulative frequency counts all observations below a stated upper boundary.</p></article><article><span className="ideaNumber">3</span><h3>Appearance and evidence</h3><p>Read the scale and labels before comparing bars or pictures. A larger-looking symbol can exaggerate a small numerical difference.</p></article></div></section>
+
+    <section className="preLearning" id="pre-learning" aria-labelledby="preTitle"><p className="eyebrow">7.0 · PRE-LEARNING</p><h2 id="preTitle">Recall your S1 starting points</h2><p>Think of your own answer, then open each reminder.</p><details><summary>What does a frequency of 9 mean?</summary><p>Nine observations belong to that value or class. In the example table, nine students have a recorded journey time from 20 to 29 minutes.</p></details><details><summary>How do you find the total number of observations?</summary><p>Add the frequencies: 4 + 9 + 12 + 5 = 30. Do not add the running-total column: it counts earlier observations repeatedly.</p></details><details><summary>Is journey time discrete or continuous?</summary><p>Journey time is a continuous quantity. Recording it to the nearest minute gives rounded observations; it does not make time itself discrete.</p></details></section>
+
+    <section className="featureGrid" aria-label="Chapter revision activities"><article className="featureCard flashcardCard"><p className="smallLabel">RECALL AND INTERPRET</p><h2>Chapter 7 Flashcards</h2><p>Revise vocabulary, diagram rules and common interpretation mistakes after learning the sections.</p><Link className="primaryLink" href="/maths/s2/chapter-7/flashcards">Start Flashcards →</Link></article><article className="featureCard checkpointCard"><p className="smallLabel">CHECK YOUR UNDERSTANDING</p><h2>Chapter 7 Checkpoint</h2><p>Complete grouped and cumulative tables, build SVG diagrams and judge statistical claims across 25 marks.</p><Link className="primaryLink" href="/maths/s2/chapter-7/checkpoint">Start Checkpoint →</Link></article></section>
+
+    <style jsx>{`
+      .page { max-width: 1180px; width: calc(100% - 48px); margin: 42px auto 72px; color: #172d50; font-size: 18px; line-height: 1.65; }
+      .page :global(*) { box-sizing: border-box; }
+      .page :global(.backLink) { display: inline-block; color: #047857; font-size: 17px; font-weight: 800; margin-bottom: 26px; text-decoration: none; }
+      header { margin-bottom: 30px; }
+      .eyebrow, .smallLabel { color: #6d28d9; font-size: 13px; letter-spacing: .09em; font-weight: 900; line-height: 1.55; margin: 0 0 9px; }
+      h1 { max-width: 1000px; font-size: clamp(33px, 4.8vw, 51px); line-height: 1.17; letter-spacing: -.025em; margin: 0 0 20px; }
+      h2 { font-size: clamp(25px, 3vw, 33px); line-height: 1.3; margin: 0 0 14px; }
+      h3 { font-size: 22px; line-height: 1.35; margin: 0 0 12px; }
+      p { margin: 12px 0; }
+      .introduction { color: #52657e; max-width: 940px; font-size: 21px; }
+      .headerActions { display: flex; flex-wrap: wrap; align-items: center; gap: 15px 24px; margin-top: 26px; }
+      .page :global(.primaryLink) { display: inline-block; border-radius: 13px; padding: 13px 19px; background: #6d28d9; color: white; font-size: 16px; font-weight: 850; text-decoration: none; }
+      .secondaryLink { color: #047857; font-size: 17px; font-weight: 750; text-underline-offset: 4px; }
+      .overviewCard { display: flex; align-items: center; gap: 24px; padding: 29px 32px; border-radius: 23px; border: 1px solid #99f6e4; background: #f0fdfa; margin-bottom: 38px; }
+      .overviewCard p:last-child { margin-bottom: 0; color: #435a72; }
+      .overviewCard .smallLabel { color: #0f766e; }
+      .overviewIcon { width: 88px; height: 88px; flex-shrink: 0; background: #ccfbf1; color: #0f766e; border-radius: 23px; padding: 10px; }
+      #learning-path, #preview, #pre-learning { scroll-margin-top: 24px; }
+      .sectionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 21px; margin: 22px 0 34px; }
+      .sectionCard { display: flex; flex-direction: column; border: 1px solid #d8e1ee; border-radius: 22px; background: white; padding: 28px; }
+      .sectionTop { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 21px; }
+      .sectionNumber { display: grid; place-items: center; width: 51px; height: 51px; border-radius: 16px; font-size: 25px; font-weight: 900; color: #6d28d9; background: #ede9fe; }
+      .status { border-radius: 999px; padding: 5px 11px; background: #f1f5f9; color: #64748b; font-size: 12px; font-weight: 800; }
+      .status.available { background: #dcfce7; color: #166534; }
+      .sectionDescription { flex: 1; color: #52657e; font-size: 17px; margin: 0 0 18px; }
+      .topicList { display: flex; flex-wrap: wrap; gap: 7px; padding: 0; margin: 0 0 22px; list-style: none; }
+      .topicList li { font-size: 12px; background: #f5f3ff; color: #6d28d9; border-radius: 8px; padding: 4px 8px; }
+      .sectionCard :global(.primaryLink), .disabledButton { align-self: flex-start; }
+      .disabledButton { padding: 12px 18px; border: 0; border-radius: 12px; font-size: 15px; font-weight: 800; background: #e2e8f0; color: #64748b; cursor: not-allowed; }
+      .previewCard { padding: 31px; border-radius: 24px; border: 1px solid #c4b5fd; background: #faf8ff; margin-bottom: 34px; }
+      .previewCard > p:not(.eyebrow) { color: #52657e; }
+      .chartButtons { display: flex; flex-wrap: wrap; gap: 9px; margin: 24px 0; }
+      .chartButtons button { font: inherit; font-size: 15px; font-weight: 800; border: 1px solid #c4b5fd; padding: 11px 16px; min-height: 45px; color: #5b21b6; background: white; border-radius: 12px; cursor: pointer; }
+      .chartButtons button[aria-pressed="true"] { background: #6d28d9; color: white; border-color: #6d28d9; }
+      .previewGrid { display: grid; grid-template-columns: minmax(280px, .75fr) minmax(0, 1.25fr); gap: 22px; align-items: start; }
+      .dataPanel, .chartPanel { min-width: 0; }
+      .tableScroll { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 15px; background: white; }
+      table { border-collapse: collapse; width: 100%; min-width: 270px; font-size: 14px; line-height: 1.55; }
+      caption { text-align: left; padding: 13px 15px; font-weight: 800; color: #172d50; }
+      th, td { padding: 11px 9px; text-align: center; border-top: 1px solid #e2e8f0; }
+      thead th { background: #0f766e; color: white; font-weight: 750; }
+      tbody th { font-weight: 650; }
+      tfoot th, tfoot td { background: #f0fdfa; font-weight: 850; }
+      .classNote { padding: 16px; margin-top: 16px; border: 1px solid #cbd5e1; border-radius: 14px; background: white; font-size: 15px; }
+      .classNote strong { color: #0f766e; }
+      .classNote p { line-height: 1.85; }
+      .classNote small { display: block; color: #64748b; font-size: 13px; line-height: 1.5; }
+      .chartScroll { border: 1px solid #d8e1ee; padding: 15px 9px 4px; background: white; border-radius: 16px; overflow-x: auto; }
+      .axisNote { margin: 12px 6px 0; font-size: 14px; line-height: 1.6; color: #435a72; }
+      .chartExplanation { padding: 20px 6px 0; }
+      .chartExplanation h3 { font-size: 21px; }
+      .chartExplanation p { font-size: 16px; color: #52657e; margin-bottom: 0; }
+      details { border: 1px solid #d8e1ee; border-radius: 14px; background: white; margin: 12px 0; }
+      summary { color: #172d50; padding: 16px 19px; font-weight: 750; cursor: pointer; }
+      details p { padding: 0 19px 17px; margin: 0; color: #435a72; font-size: 16px; }
+      .readChart { margin-top: 24px; border-color: #c4b5fd; }
+      .readChart summary { color: #5b21b6; }
+      .previewNote { font-size: 14px; margin: 17px 0 0; }
+      .keyIdeas { margin-bottom: 34px; }
+      .ideaGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 17px; }
+      .ideaGrid article { padding: 23px; border: 1px solid #d8e1ee; border-radius: 20px; background: white; }
+      .ideaGrid h3 { font-size: 20px; margin-top: 14px; }
+      .ideaGrid p { color: #52657e; font-size: 16px; margin-bottom: 0; }
+      .ideaNumber { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 11px; color: #0f766e; background: #ccfbf1; font-weight: 850; }
+      .preLearning { background: #f8fafc; padding: 30px; border: 1px solid #d8e1ee; border-radius: 23px; margin-bottom: 34px; }
+      .preLearning > p:not(.eyebrow) { color: #52657e; }
+      .featureGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 21px; }
+      .featureCard { display: flex; flex-direction: column; padding: 27px; border: 1px solid #d8e1ee; border-radius: 22px; }
+      .featureCard h2 { font-size: 25px; }
+      .featureCard p:not(.smallLabel) { flex: 1; color: #52657e; font-size: 17px; margin: 0 0 24px; }
+      .flashcardCard { background: #f5f3ff; border-color: #ddd6fe; }
+      .checkpointCard { background: #fffbeb; border-color: #fde68a; }
+      .checkpointCard .smallLabel { color: #92400e; }
+      .page :global(a:focus-visible), .page :global(button:focus-visible), summary:focus-visible, .chartScroll:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+      @media(max-width: 960px) { .previewGrid { grid-template-columns: 1fr; } .dataPanel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; } .classNote { margin-top: 0; } .ideaGrid { grid-template-columns: 1fr; } }
+      @media(max-width: 640px) { .page { width: calc(100% - 28px); margin-top: 28px; } .overviewCard { padding: 23px; align-items: flex-start; flex-direction: column; } .overviewIcon { width: 67px; height: 67px; border-radius: 18px; } .sectionGrid, .featureGrid, .dataPanel { grid-template-columns: 1fr; } .sectionCard, .featureCard, .preLearning { padding: 23px; } .previewCard { padding: 22px 16px; } .chartButtons button { flex: 1 1 150px; } .classNote { margin-top: 0; } .introduction { font-size: 19px; } }
+    `}</style>
+  </main>;
+}

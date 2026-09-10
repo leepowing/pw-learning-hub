@@ -1,5 +1,7 @@
 "use client";
 
+import { Straight, Crossing, Around, Parallel, Triangle, CheckpointDiagram } from "@/components/maths/Chapter9Geometry";
+
 // Chapter 9 homepage: Flashcards button enabled.
 
 import { useRouter } from "next/navigation";
@@ -71,6 +73,7 @@ export default function S1ChapterNinePage() {
           <strong>State the angle fact used at every step</strong>
         </div>
 
+        <Straight/>
         <div className="coordinateExpression">a + b = 180°</div>
 
         <div className="coordinateExample">

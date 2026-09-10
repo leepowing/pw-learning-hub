@@ -1,5 +1,13 @@
 "use client";
 
+// S2 Chapter 7 diagrams (additive integration).
+import S2Chapter7FlashcardDiagram, { type S2Chapter7DiagramKind } from "@/components/maths/S2Chapter7FlashcardDiagram";
+
+
+// S2 Chapter 6 diagrams (additive integration).
+import S2Chapter6FlashcardDiagram, { type S2Chapter6DiagramKind } from "@/components/maths/S2Chapter6FlashcardDiagram";
+
+
 import { useEffect, useRef, useState } from "react";
 import katex from "katex";
 
@@ -18,6 +26,8 @@ type VisualMathsFlashcard = MathsFlashcard & {
   frontDiagram?: Chapter9FlashcardDiagramKind;
   chapter10Diagram?: Chapter10FlashcardDiagramKind;
   chapter12Diagram?: Chapter12FlashcardDiagramKind;
+  s2Chapter6Diagram?: S2Chapter6DiagramKind;
+  s2Chapter7Diagram?: S2Chapter7DiagramKind;
 };
 
 type Props = {
@@ -182,7 +192,8 @@ export default function FormulaFlashcards({
     );
   }
 
-  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram);
+  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7);
+  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -239,17 +250,19 @@ export default function FormulaFlashcards({
           perspective: 1200,
         }}
       >
-        <div style={{ position: "relative", minHeight: hasFrontVisual ? 560 : 430, transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)", transition: "transform 500ms ease" }}>
-          <article style={cardFace("linear-gradient(135deg, #eef2ff, #ffffff)", "#c7d2fe")}>
+        <div style={{ position: "relative", display: useContentSizedFaces ? "grid" : undefined, minHeight: hasFrontVisual ? 560 : 430, transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)", transition: "transform 500ms ease" }}>
+          <article style={{ ...cardFace("linear-gradient(135deg, #eef2ff, #ffffff)", "#c7d2fe"), ...(useContentSizedFaces ? { position: "relative" as const, inset: "auto", gridArea: "1 / 1", minWidth: 0, padding: "clamp(18px, 4vw, 34px)" } : {}) }}>
             <p style={{ color: "#4f46e5", fontWeight: 800, letterSpacing: 1 }}>{currentCard.level.toUpperCase()} · CHAPTER {currentCard.chapter}</p>
             {currentCard.frontDiagram && <Chapter9FlashcardDiagram kind={currentCard.frontDiagram} />}
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
+            {currentCard.s2Chapter6Diagram && <S2Chapter6FlashcardDiagram kind={currentCard.s2Chapter6Diagram} />}
+            {currentCard.s2Chapter7Diagram && <S2Chapter7FlashcardDiagram kind={currentCard.s2Chapter7Diagram} />}
             <h2 style={{ margin: hasFrontVisual ? "4px 0 10px" : undefined, fontSize: hasFrontVisual ? 28 : 34, lineHeight: 1.3 }}>{currentCard.prompt}</h2>
             <p style={{ color: "#6b7280" }}>Click the card to reveal the answer.</p>
           </article>
 
-          <article style={{ ...cardFace("linear-gradient(135deg, #ecfdf5, #ffffff)", "#86efac"), transform: "rotateY(180deg)", overflow: "auto" }}>
+          <article style={{ ...cardFace("linear-gradient(135deg, #ecfdf5, #ffffff)", "#86efac"), transform: "rotateY(180deg)", overflow: "auto", ...(useContentSizedFaces ? { position: "relative" as const, inset: "auto", gridArea: "1 / 1", minWidth: 0, padding: "clamp(18px, 4vw, 34px)" } : {}) }}>
             <p style={{ color: "#15803d", fontWeight: 800, letterSpacing: 1 }}>ANSWER</p>
             {currentCard.diagram && <GeometryDiagram diagram={currentCard.diagram} />}
             {currentCard.formula && <MathFormula formula={currentCard.formula} />}

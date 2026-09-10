@@ -1,0 +1,559 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+const sections = [
+  {
+    number: 1,
+    title: "Introduction to Deductive Reasoning",
+    description:
+      "Understand hypotheses, conclusions and the logical structure used to prove a mathematical statement.",
+    route: "/maths/s2/chapter-6/introduction-to-deductive-reasoning",
+    available: true,
+  },
+  {
+    number: 2,
+    title: "Proofs Relating to Intersecting and Parallel Lines",
+    description:
+      "Use angle relationships and their converses to justify results involving intersecting and parallel lines.",
+    route:
+      "/maths/s2/chapter-6/proofs-relating-to-intersecting-and-parallel-lines",
+    available: true,
+  },
+  {
+    number: 3,
+    title: "Proofs Relating to Triangles",
+    description:
+      "Apply the angle sum and exterior-angle theorems of a triangle in clear deductive proofs.",
+    route: "/maths/s2/chapter-6/proofs-relating-to-triangles",
+    available: true,
+  },
+  {
+    number: 4,
+    title: "Euclid and Elements",
+    description:
+      "Explore Euclid's contribution to geometry and how definitions, axioms and theorems form a deductive system.",
+    route: "/maths/s2/chapter-6/euclid-and-elements",
+    available: true,
+  },
+];
+
+export default function S2ChapterSixHomepage() {
+  const router = useRouter();
+
+  return (
+    <main className="page">
+      <button
+        type="button"
+        className="backButton"
+        onClick={() => router.push("/maths/s2")}
+      >
+        ← Back to S2 Mathematics
+      </button>
+
+      <p className="eyebrow">S2 MATHEMATICS</p>
+
+      <h1>Chapter 6 · Angles and Parallel Lines (II)</h1>
+
+      <p className="introduction">
+        Develop deductive reasoning and learn to write clear geometric proofs
+        using established angle relationships, parallel-line theorems and
+        triangle theorems.
+      </p>
+
+      <section className="overviewCard">
+        <div className="overviewIcon" aria-hidden="true">
+          ∠
+        </div>
+
+        <div>
+          <p className="overviewLabel">CHAPTER OVERVIEW</p>
+          <h2>From angle facts to mathematical proof</h2>
+          <p>
+            This chapter turns familiar angle relationships into logical
+            arguments. Every conclusion must follow from a given fact, a
+            theorem or an earlier step in the proof.
+          </p>
+        </div>
+      </section>
+
+      <section className="keyIdeasCard">
+        <p className="keyIdeasLabel">KEY IDEAS</p>
+
+        <div className="keyIdeasGrid">
+          <article>
+            <span className="ideaNumber">1</span>
+            <div>
+              <strong>State a reason</strong>
+              <p>
+                Support every important statement with a given condition or
+                an established theorem.
+              </p>
+            </div>
+          </article>
+
+          <article>
+            <span className="ideaNumber">2</span>
+            <div>
+              <strong>Use the converse carefully</strong>
+              <p>
+                Equal corresponding or alternate angles, or supplementary
+                interior angles, can be used to prove that lines are parallel.
+              </p>
+            </div>
+          </article>
+
+          <article>
+            <span className="ideaNumber">3</span>
+            <div>
+              <strong>Build proofs step by step</strong>
+              <p>
+                Start from the given information and connect each justified
+                result until the required conclusion is reached.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="sectionGrid">
+        {sections.map((section) => (
+          <article key={section.number} className="sectionCard">
+            <div className="sectionTop">
+              <span className="sectionNumber">{section.number}</span>
+
+              <span
+                className={
+                  section.available
+                    ? "sectionStatus availableStatus"
+                    : "sectionStatus"
+                }
+              >
+                {section.available ? "Available" : "Coming soon"}
+              </span>
+            </div>
+
+            <p className="sectionLabel">SECTION {section.number}</p>
+            <h2>{section.title}</h2>
+            <p className="sectionDescription">{section.description}</p>
+
+            {section.available ? (
+              <button
+                type="button"
+                className="startSectionButton"
+                onClick={() => router.push(section.route)}
+              >
+                Start Section {section.number} →
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="disabledSectionButton"
+                disabled
+              >
+                Coming soon
+              </button>
+            )}
+          </article>
+        ))}
+      </section>
+
+      <section className="theoremPreviewCard">
+        <div>
+          <p className="theoremPreviewLabel">THEOREM PREVIEW</p>
+          <h2>Reasons used in geometric proofs</h2>
+          <p>
+            These relationships will be explained, illustrated and applied in
+            Sections 2 and 3.
+          </p>
+        </div>
+
+        <div className="theoremPreview">
+          <span>Adjacent angles on a straight line add up to 180°.</span>
+          <span>Vertically opposite angles are equal.</span>
+          <span>Angles at a point add up to 360°.</span>
+          <span>Alternate angles are equal when the lines are parallel.</span>
+          <span>Corresponding angles are equal when the lines are parallel.</span>
+          <span>
+            Interior angles on the same side of a transversal add up to 180° when the lines are parallel.
+          </span>
+          <span>The interior angles of a triangle add up to 180°.</span>
+          <span>
+            An exterior angle of a triangle equals the sum of the two opposite
+            interior angles.
+          </span>
+        </div>
+      </section>
+
+      <section className="featureCard flashcardCard">
+        <div>
+          <p className="featureLabel flashcardLabel">GEOMETRY REVIEW</p>
+          <h2>Chapter 6 Flashcards</h2>
+          <p>
+            Practise theorem statements, standard proof reasons and the
+            converses used to establish parallel lines.
+          </p>
+        </div>
+
+        <button type="button" className="disabledFeatureButton" disabled>
+          Coming soon
+        </button>
+      </section>
+
+      <section className="featureCard checkpointCard">
+        <div>
+          <p className="featureLabel checkpointLabel">FINAL ACTIVITY</p>
+          <h2>Chapter 6 Checkpoint</h2>
+          <p>Complete Sections 1–4 before attempting the checkpoint.</p>
+        </div>
+
+        <button type="button" className="startCheckpointButton" onClick={() => router.push("/maths/s2/chapter-6/checkpoint")}>
+          Start Checkpoint →
+        </button>
+      </section>
+
+      <style jsx>{`
+        .page {
+          max-width: 1120px;
+          width: calc(100% - 48px);
+          margin: 46px auto 72px;
+          box-sizing: border-box;
+        }
+
+        .backButton {
+          margin-bottom: 26px;
+          padding: 0;
+          border: none;
+          background: transparent;
+          color: #047857;
+          font-size: 17px;
+          font-weight: 800;
+          cursor: pointer;
+        }
+
+        .eyebrow,
+        .overviewLabel,
+        .keyIdeasLabel,
+        .featureLabel,
+        .theoremPreviewLabel,
+        .sectionLabel {
+          font-size: 14px;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+        }
+
+        .eyebrow {
+          margin: 0 0 7px;
+          color: #7c3aed;
+        }
+
+        h1 {
+          margin: 0 0 12px;
+          font-size: clamp(36px, 5vw, 50px);
+          line-height: 1.12;
+        }
+
+        .introduction {
+          max-width: 920px;
+          margin: 0 0 30px;
+          color: #64748b;
+          font-size: 19px;
+          line-height: 1.65;
+        }
+
+        .overviewCard {
+          display: flex;
+          align-items: center;
+          gap: 22px;
+          margin-bottom: 20px;
+          padding: 25px 27px;
+          border: 1px solid #ddd6fe;
+          border-radius: 22px;
+          background: linear-gradient(135deg, #f5f3ff, #eef2ff);
+          box-shadow: 0 6px 18px rgba(124, 58, 237, 0.06);
+        }
+
+        .overviewIcon {
+          width: 74px;
+          height: 74px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border-radius: 21px;
+          background: #ede9fe;
+          color: #6d28d9;
+          font-family: "Times New Roman", serif;
+          font-size: 42px;
+          font-weight: 900;
+        }
+
+        .overviewLabel,
+        .keyIdeasLabel,
+        .theoremPreviewLabel {
+          margin: 0 0 6px;
+          color: #6d28d9;
+        }
+
+        .overviewCard h2,
+        .featureCard h2,
+        .theoremPreviewCard h2 {
+          margin: 0 0 7px;
+          font-size: 26px;
+        }
+
+        .overviewCard p:last-child,
+        .featureCard p:last-child,
+        .theoremPreviewCard p:last-child {
+          margin: 0;
+          color: #64748b;
+          font-size: 17px;
+          line-height: 1.55;
+        }
+
+        .keyIdeasCard {
+          margin-bottom: 24px;
+          padding: 25px;
+          border: 1px solid #c4b5fd;
+          border-radius: 22px;
+          background: #ffffff;
+        }
+
+        .keyIdeasGrid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+
+        .keyIdeasGrid article {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 17px;
+          border-radius: 17px;
+          background: #faf5ff;
+        }
+
+        .ideaNumber {
+          width: 34px;
+          height: 34px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border-radius: 11px;
+          background: #7c3aed;
+          color: white;
+          font-weight: 900;
+        }
+
+        .keyIdeasGrid strong {
+          color: #312e81;
+          font-size: 17px;
+        }
+
+        .keyIdeasGrid p {
+          margin: 5px 0 0;
+          color: #64748b;
+          line-height: 1.5;
+        }
+
+        .sectionGrid {
+          display: grid;
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(min(100%, 430px), 1fr)
+          );
+          gap: 17px;
+          margin-bottom: 28px;
+        }
+
+        .sectionCard {
+          display: flex;
+          flex-direction: column;
+          min-height: 285px;
+          padding: 24px;
+          border: 1px solid #e5e7eb;
+          border-radius: 22px;
+          background: #ffffff;
+          box-shadow: 0 7px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .sectionTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          margin-bottom: 15px;
+        }
+
+        .sectionNumber {
+          width: 47px;
+          height: 47px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 15px;
+          background: #ede9fe;
+          color: #6d28d9;
+          font-size: 21px;
+          font-weight: 900;
+        }
+
+        .sectionStatus {
+          padding: 7px 11px;
+          border-radius: 999px;
+          background: #f1f5f9;
+          color: #64748b;
+          font-size: 13px;
+          font-weight: 800;
+        }
+
+        .availableStatus {
+          background: #dcfce7;
+          color: #166534;
+        }
+
+        .sectionLabel {
+          margin: 0 0 7px;
+          color: #8b5cf6;
+        }
+
+        .sectionCard h2 {
+          margin: 0 0 10px;
+          font-size: 25px;
+          line-height: 1.25;
+        }
+
+        .sectionDescription {
+          flex: 1;
+          margin: 0 0 21px;
+          color: #64748b;
+          font-size: 16px;
+          line-height: 1.58;
+        }
+
+        .startSectionButton,
+        .startCheckpointButton,
+        .disabledSectionButton,
+        .disabledFeatureButton {
+          align-self: flex-start;
+          padding: 13px 18px;
+          border: none;
+          border-radius: 13px;
+          font-size: 15px;
+          font-weight: 900;
+        }
+
+        .startSectionButton {
+          background: #7c3aed;
+          color: white;
+          cursor: pointer;
+        }
+
+        .startCheckpointButton {
+          background: #b45309;
+          color: white;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .startCheckpointButton:focus-visible {
+          outline: 3px solid #2563eb;
+          outline-offset: 4px;
+        }
+
+        .disabledSectionButton,
+        .disabledFeatureButton {
+          background: #e5e7eb;
+          color: #94a3b8;
+          cursor: not-allowed;
+        }
+
+        .theoremPreviewCard {
+          display: grid;
+          grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+          gap: 24px;
+          margin-bottom: 20px;
+          padding: 27px;
+          border: 1px solid #c4b5fd;
+          border-radius: 22px;
+          background: #f5f3ff;
+        }
+
+        .theoremPreview {
+          display: grid;
+          gap: 9px;
+        }
+
+        .theoremPreview span {
+          padding: 10px 13px;
+          border-radius: 11px;
+          background: #ffffff;
+          color: #312e81;
+          font-size: 15px;
+          font-weight: 750;
+          line-height: 1.4;
+        }
+
+        .featureCard {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+          margin-bottom: 18px;
+          padding: 27px;
+          border-radius: 22px;
+        }
+
+        .flashcardCard {
+          border: 1px solid #bfdbfe;
+          background: #eff6ff;
+        }
+
+        .checkpointCard {
+          border: 1px solid #fde68a;
+          background: #fffbeb;
+        }
+
+        .flashcardLabel {
+          margin: 0 0 6px;
+          color: #1d4ed8;
+        }
+
+        .checkpointLabel {
+          margin: 0 0 6px;
+          color: #b45309;
+        }
+
+        .disabledFeatureButton {
+          flex-shrink: 0;
+        }
+
+        @media (max-width: 800px) {
+          .keyIdeasGrid,
+          .theoremPreviewCard {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .page {
+            width: calc(100% - 28px);
+            margin-top: 28px;
+          }
+
+          .overviewCard,
+          .featureCard {
+            align-items: flex-start;
+            flex-direction: column;
+          }
+
+          .sectionCard {
+            min-height: 0;
+          }
+        }
+      `}</style>
+    </main>
+  );
+}

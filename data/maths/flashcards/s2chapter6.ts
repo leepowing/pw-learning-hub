@@ -1,0 +1,62 @@
+import type { MathsFlashcard } from "./types";
+import type { S2Chapter6DiagramKind } from "@/components/maths/S2Chapter6FlashcardDiagram";
+
+export type S2Chapter6Flashcard = MathsFlashcard & {
+  s2Chapter6Diagram?: S2Chapter6DiagramKind;
+};
+
+// Keep these IDs stable: cloud progress refers to the card ID.
+const sections = [
+  "Introduction to Deductive Reasoning",
+  "Proofs Relating to Intersecting and Parallel Lines",
+  "Proofs Relating to Triangles",
+  "Euclid and Elements",
+] as const;
+type CardContent = Pick<S2Chapter6Flashcard, "prompt" | "answer" | "explanation"> & {
+  id: string;
+  type?: MathsFlashcard["type"];
+  s2Chapter6Diagram?: S2Chapter6DiagramKind;
+};
+function card(section: 0 | 1 | 2 | 3, content: CardContent): S2Chapter6Flashcard {
+  return { level: "s2", chapter: 6, chapterTitle: "Angles and Parallel Lines (II)", section: sections[section], type: "rule", ...content, id: "s2-c6-" + content.id };
+}
+
+export const s2Chapter6Flashcards: S2Chapter6Flashcard[] = [
+  card(0, { id: "deductive-reasoning", type: "definition", prompt: "What is deductive reasoning?", answer: "Using given conditions and established facts to reach a logically justified conclusion.", explanation: "In a geometric proof, each statement needs a reason. The argument must apply to every figure satisfying the conditions." }),
+  card(0, { id: "identify-hypothesis", prompt: "If AB // CD, the corresponding angles are equal. What is the hypothesis?", answer: "AB // CD.", explanation: "The hypothesis is the condition in the if-part. It must be given or established before using the theorem." }),
+  card(0, { id: "identify-conclusion", prompt: "If two corresponding angles are equal, the two lines are parallel. What is the conclusion?", answer: "The two lines are parallel.", explanation: "The conclusion is what follows from the condition. Identify the relevant lines and transversal." }),
+  card(0, { id: "meaning-of-converse", type: "definition", prompt: "How is the converse of an if–then statement formed?", answer: "Swap the hypothesis and the conclusion.", explanation: "A converse needs its own justification. A true statement does not automatically have a true converse." }),
+  card(0, { id: "drawing-is-not-proof", prompt: "Two lines look parallel in a drawing. Is that enough for a proof?", answer: "No. Use the given facts and an appropriate converse angle theorem.", explanation: "A diagram may not be drawn to scale. Appearance and measurement alone do not establish a general result." }),
+  card(0, { id: "proof-structure", prompt: "What should a clear geometric proof contain?", answer: "Given conditions, a sequence of justified statements, and the required conclusion.", explanation: "A statement–reason table helps show why each step follows. Avoid using the desired conclusion as an assumption." }),
+
+  card(1, { id: "straight-line", s2Chapter6Diagram: "straight-line", prompt: "A, O and B are collinear. What is a + b, and why?", answer: "a + b = 180°.", explanation: "The two adjacent angles form a straight angle. Reason: adjacent angles on straight line AB." }),
+  card(1, { id: "vertically-opposite", s2Chapter6Diagram: "vertically-opposite", prompt: "Two straight lines intersect at O. How are a and b related?", answer: "a = b.", explanation: "Vertically opposite angles are equal. Each is supplementary to the same neighbouring angle." }),
+  card(1, { id: "angles-at-point", s2Chapter6Diagram: "angles-at-point", prompt: "What is a + b + c around point O?", answer: "a + b + c = 360°.", explanation: "Angles making one complete turn at a point add up to 360°. Include every angle around the point." }),
+  card(1, { id: "corresponding-given-parallel", s2Chapter6Diagram: "corresponding", prompt: "Given AB // CD, how are the marked corresponding angles related?", answer: "a = b.", explanation: "Corresponding angles are equal when a transversal cuts parallel lines. Reason: corresponding angles, AB // CD." }),
+  card(1, { id: "alternate-given-parallel", s2Chapter6Diagram: "alternate", prompt: "Given AB // CD, how are the marked alternate angles related?", answer: "a = b.", explanation: "Alternate angles are equal when a transversal cuts parallel lines. Reason: alternate angles, AB // CD." }),
+  card(1, { id: "interior-given-parallel", s2Chapter6Diagram: "interior", prompt: "Given AB // CD, what is a + b for the marked interior angles?", answer: "a + b = 180°.", explanation: "Interior angles on the same side of a transversal are supplementary when the lines are parallel." }),
+  card(1, { id: "converse-corresponding", s2Chapter6Diagram: "converse-corresponding", prompt: "Given a = b, what can be proved, and which reason is needed?", answer: "AB // CD, because corresponding angles are equal.", explanation: "This is a converse: the angle equality establishes parallelism. Parallelism is not a starting assumption." }),
+  card(1, { id: "converse-alternate", s2Chapter6Diagram: "converse-alternate", prompt: "Given a = b, what can be proved using these alternate angles?", answer: "AB // CD, because alternate angles are equal.", explanation: "The equal angles must be in alternate positions with respect to the same transversal." }),
+  card(1, { id: "converse-interior", s2Chapter6Diagram: "converse-interior", prompt: "Given a + b = 180°, what can be proved, and why?", answer: "AB // CD, because interior angles on the same side are supplementary.", explanation: "This converse requires the marked angles to be interior and on the same side of the transversal." }),
+  card(1, { id: "theorem-or-converse", prompt: "When should you use a parallel-line theorem, and when should you use its converse?", answer: "Use a theorem to deduce angle relationships from parallel lines. Use a converse to deduce parallelism from angle relationships.", explanation: "Check what is given and what must be proved before choosing the reason." }),
+  card(1, { id: "prove-perpendicular", s2Chapter6Diagram: "perpendicular", prompt: "AOD is a straight line. Find x and prove OC ⟂ AD.", answer: "12x = 180°, so x = 15°. Then ∠COD = 6x = 90°, hence OC ⟂ AD.", explanation: "First use adjacent angles on a straight line. Then use the definition of perpendicular lines." }),
+  card(1, { id: "prove-another-parallel-pair", s2Chapter6Diagram: "parallel-chain", prompt: "Given BD // FE and C, D, E collinear, prove AB // CE.", answer: "∠CDB = 106° by corresponding angles. Then ∠ABD + ∠CDB = 74° + 106° = 180°, so AB // CE.", explanation: "First use BD // FE. For the conclusion, use the converse for supplementary interior angles with BD as the transversal." }),
+  card(1, { id: "algebra-straight-line", s2Chapter6Diagram: "algebra-straight", prompt: "A, O and B are collinear. Find x.", answer: "(3x + 20°) + 2x = 180°, so 5x = 160° and x = 32°.", explanation: "Adjacent angles on a straight line sum to 180°. The angles are 116° and 64°, which check the result." }),
+  card(1, { id: "equal-angles-insufficient", prompt: "Does any pair of equal angles prove that two lines are parallel?", answer: "No. Identify a suitable pair of corresponding or alternate angles for the same transversal.", explanation: "For example, vertically opposite angles are equal even when the two intersecting lines are not parallel." }),
+
+  card(2, { id: "triangle-angle-sum", s2Chapter6Diagram: "triangle-sum", prompt: "What is a + b + c in triangle ABC?", answer: "a + b + c = 180°.", explanation: "Reason: angle sum of a triangle in Euclidean plane geometry." }),
+  card(2, { id: "find-third-angle", s2Chapter6Diagram: "triangle-example", prompt: "Find x in triangle ABC.", answer: "x = 180° − 48° − 67° = 65°.", explanation: "The three interior angles of a triangle add up to 180°. State the theorem as the reason." }),
+  card(2, { id: "triangle-exterior-angle", s2Chapter6Diagram: "triangle-exterior", prompt: "BC is extended to D. How is exterior angle e related to a and b?", answer: "e = a + b.", explanation: "An exterior angle equals the sum of the two remote interior angles. Do not include the adjacent interior angle at C." }),
+  card(2, { id: "find-exterior-angle", s2Chapter6Diagram: "exterior-example", prompt: "BC is extended to D. Find the exterior angle x.", answer: "x = 48° + 67° = 115°.", explanation: "Use the exterior-angle theorem. The adjacent interior angle is 65°, and 65° + 115° = 180°." }),
+  card(2, { id: "prove-triangle-sum", s2Chapter6Diagram: "triangle-sum-proof", prompt: "The line through A is constructed parallel to BC. How does this prove the triangle angle sum?", answer: "Alternate angles transfer b and c to the line through A. Those angles and a form a straight angle, so a + b + c = 180°.", explanation: "The parallel line is an auxiliary construction. Use established parallel-line facts, then adjacent angles on a straight line." }),
+  card(2, { id: "exterior-angle-proves-parallel", s2Chapter6Diagram: "exterior-parallel", prompt: "A, C, D are collinear. Given a + b = x, prove BC // DE.", answer: "∠BCD = a + b by the exterior-angle theorem. Thus ∠BCD = ∠ADE = x, so BC // DE by equal alternate angles.", explanation: "Establish the angle equality before claiming parallelism. No parallel arrows are given on this diagram." }),
+  card(2, { id: "isosceles-proof", s2Chapter6Diagram: "isosceles", prompt: "AB = AC and ∠ABC = 68°. Find x and y.", answer: "y = 68° and x = 44°.", explanation: "Base angles of an isosceles triangle are equal. Then x = 180° − 68° − 68° = 44°." }),
+  card(2, { id: "right-triangle-angles", s2Chapter6Diagram: "right-triangle", prompt: "Triangle ABC is right-angled at C. Find x.", answer: "x = 180° − 90° − 37° = 53°.", explanation: "The two acute angles of a right-angled triangle are complementary: their sum is 90°." }),
+
+  card(3, { id: "euclid-method", prompt: "What feature of Euclid's Elements is central to this chapter?", answer: "It develops results through a logical system of definitions, postulates, common notions and proofs.", explanation: "Geometric conclusions should follow from stated starting points and previously established results." }),
+  card(3, { id: "definition-role", type: "definition", prompt: "What is the role of a definition in geometry?", answer: "It gives a precise meaning to a term.", explanation: "For example, perpendicular lines meet at a right angle. A definition explains meaning; a theorem establishes a result." }),
+  card(3, { id: "postulate-role", type: "definition", prompt: "What is a postulate?", answer: "A statement accepted as a starting assumption within a mathematical system.", explanation: "For example, Euclid allows a straight segment to be drawn joining two points. Later results can use that starting point." }),
+  card(3, { id: "theorem-role", type: "definition", prompt: "How does a theorem differ from a postulate?", answer: "A theorem is established by proof. A postulate is accepted as a starting assumption.", explanation: "The triangle angle-sum theorem is proved from earlier facts in the Euclidean geometry studied here." }),
+  card(3, { id: "common-notion-equality", prompt: "AC = AB and BC = AB. Which common notion gives AC = BC?", answer: "Quantities equal to the same quantity are equal to each other.", explanation: "Both AC and BC equal AB. This is Euclid's first common notion, applied to lengths." }),
+  card(3, { id: "equilateral-construction", s2Chapter6Diagram: "equilateral-construction", prompt: "Both circles have radius AB and meet at C. Why is triangle ABC equilateral?", answer: "AC = AB and BC = AB because they are radii of the two circles. Therefore AB = BC = CA.", explanation: "The circle centred at A gives AC = AB; the circle centred at B gives BC = BA. Use equality to the same length, then the definition of an equilateral triangle." }),
+];
