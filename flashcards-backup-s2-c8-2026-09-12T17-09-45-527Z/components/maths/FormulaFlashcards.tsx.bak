@@ -1,9 +1,5 @@
 "use client";
 
-// S2 Chapter 8 diagrams (additive integration).
-import S2Chapter8FlashcardDiagram, { type S2Chapter8DiagramKind } from "@/components/maths/S2Chapter8FlashcardDiagram";
-
-
 // S2 Chapter 7 diagrams (additive integration).
 import S2Chapter7FlashcardDiagram, { type S2Chapter7DiagramKind } from "@/components/maths/S2Chapter7FlashcardDiagram";
 
@@ -31,7 +27,6 @@ type VisualMathsFlashcard = MathsFlashcard & {
   chapter10Diagram?: Chapter10FlashcardDiagramKind;
   chapter12Diagram?: Chapter12FlashcardDiagramKind;
   s2Chapter6Diagram?: S2Chapter6DiagramKind;
-  s2Chapter8Diagram?: S2Chapter8DiagramKind;
   s2Chapter7Diagram?: S2Chapter7DiagramKind;
 };
 
@@ -197,8 +192,8 @@ export default function FormulaFlashcards({
     );
   }
 
-  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8);
-  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram);
+  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7);
+  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -262,7 +257,6 @@ export default function FormulaFlashcards({
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
             {currentCard.s2Chapter6Diagram && <S2Chapter6FlashcardDiagram kind={currentCard.s2Chapter6Diagram} />}
-            {currentCard.s2Chapter8Diagram && <S2Chapter8FlashcardDiagram kind={currentCard.s2Chapter8Diagram} />}
             {currentCard.s2Chapter7Diagram && <S2Chapter7FlashcardDiagram kind={currentCard.s2Chapter7Diagram} />}
             <h2 style={{ margin: hasFrontVisual ? "4px 0 10px" : undefined, fontSize: hasFrontVisual ? 28 : 34, lineHeight: 1.3 }}>{currentCard.prompt}</h2>
             <p style={{ color: "#6b7280" }}>Click the card to reveal the answer.</p>
