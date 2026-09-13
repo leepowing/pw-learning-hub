@@ -1,13 +1,5 @@
 "use client";
 
-// S2 Chapter 10 diagrams (additive integration).
-import S2Chapter10FlashcardDiagram, { type S2Chapter10DiagramKind } from "@/components/maths/S2Chapter10FlashcardDiagram";
-
-
-// S2 Chapter 9 diagrams (additive integration).
-import S2Chapter9FlashcardDiagram, { type S2Chapter9DiagramKind } from "@/components/maths/S2Chapter9FlashcardDiagram";
-
-
 // S2 Chapter 8 diagrams (additive integration).
 import S2Chapter8FlashcardDiagram, { type S2Chapter8DiagramKind } from "@/components/maths/S2Chapter8FlashcardDiagram";
 
@@ -39,8 +31,6 @@ type VisualMathsFlashcard = MathsFlashcard & {
   chapter10Diagram?: Chapter10FlashcardDiagramKind;
   chapter12Diagram?: Chapter12FlashcardDiagramKind;
   s2Chapter6Diagram?: S2Chapter6DiagramKind;
-  s2Chapter10Diagram?: S2Chapter10DiagramKind;
-  s2Chapter9Diagram?: S2Chapter9DiagramKind;
   s2Chapter8Diagram?: S2Chapter8DiagramKind;
   s2Chapter7Diagram?: S2Chapter7DiagramKind;
 };
@@ -207,8 +197,8 @@ export default function FormulaFlashcards({
     );
   }
 
-  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10);
-  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram);
+  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8);
+  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -272,8 +262,6 @@ export default function FormulaFlashcards({
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
             {currentCard.s2Chapter6Diagram && <S2Chapter6FlashcardDiagram kind={currentCard.s2Chapter6Diagram} />}
-            {currentCard.s2Chapter10Diagram && <S2Chapter10FlashcardDiagram kind={currentCard.s2Chapter10Diagram} />}
-            {currentCard.s2Chapter9Diagram && <S2Chapter9FlashcardDiagram kind={currentCard.s2Chapter9Diagram} />}
             {currentCard.s2Chapter8Diagram && <S2Chapter8FlashcardDiagram kind={currentCard.s2Chapter8Diagram} />}
             {currentCard.s2Chapter7Diagram && <S2Chapter7FlashcardDiagram kind={currentCard.s2Chapter7Diagram} />}
             <h2 style={{ margin: hasFrontVisual ? "4px 0 10px" : undefined, fontSize: hasFrontVisual ? 28 : 34, lineHeight: 1.3 }}>{currentCard.prompt}</h2>

@@ -93,7 +93,7 @@ export default function S2MathematicsPage() {
       </p>
 
       <p className="availableMessage">
-Chapters 1–8 are currently available
+Chapters 1–10 are currently available
       </p>
 
       <button
@@ -131,7 +131,7 @@ Chapters 1–8 are currently available
 
       <section className="chapterGrid">
         {chapters.map((chapter) => {
-const available = [1, 2, 3, 4, 5, 6, 7, 8].includes(
+const available = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(
   chapter.number
 );
 
