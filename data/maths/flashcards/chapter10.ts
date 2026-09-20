@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 import type { Chapter10FlashcardDiagramKind } from "@/components/maths/Chapter10FlashcardDiagram";
 import type { MathsFlashcard } from "./types";
 
@@ -17,7 +19,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "What does it mean when two triangles are congruent?",
     formula: String.raw`\triangle ABC\cong\triangle XYZ`,
     answer: "They have the same shape and the same size.",
-    explanation: "Their corresponding angles and corresponding sides are equal. [Reference: congruent triangles]",
+    explanation: "Their corresponding angles and corresponding sides are equal. " + reasonRef("congruence.definition"),
     chapter10Diagram: "c10-congruent-meaning",
   },
   {
@@ -30,7 +32,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "In △ABC ≅ △XYZ, which vertices correspond?",
     formula: String.raw`A\leftrightarrow X,\quad B\leftrightarrow Y,\quad C\leftrightarrow Z`,
     answer: "A corresponds to X, B to Y, and C to Z.",
-    explanation: "Read the vertices in the same order in the congruence statement. [Reference: corr. vertices]",
+    explanation: "Read the vertices in the same order in the congruence statement. " + reasonRef("figures.correspondingVertices"),
     chapter10Diagram: "c10-correspondence",
   },
   {
@@ -43,7 +45,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "If △ABC ≅ △XYZ, what can you state about all corresponding angles?",
     formula: String.raw`\angle A=\angle X,\quad\angle B=\angle Y,\quad\angle C=\angle Z`,
     answer: "All three pairs of corresponding angles are equal.",
-    explanation: "Congruent triangles have equal corresponding angles. [Reference: corr. ∠s equal]",
+    explanation: "Congruent triangles have equal corresponding angles. " + reasonRef("congruence.correspondingAngles", {"variant":"textbook1"}),
     chapter10Diagram: "c10-equal-angles",
   },
   {
@@ -56,7 +58,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "If △ABC ≅ △XYZ, what can you state about all corresponding sides?",
     formula: String.raw`AB=XY,\quad BC=YZ,\quad AC=XZ`,
     answer: "All three pairs of corresponding sides are equal.",
-    explanation: "Congruent triangles have equal corresponding sides. [Reference: corr. sides equal]",
+    explanation: "Congruent triangles have equal corresponding sides. " + reasonRef("congruence.correspondingSides", {"variant":"textbook1"}),
     chapter10Diagram: "c10-equal-sides",
   },
 
@@ -69,8 +71,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Congruent",
     type: "rule",
     prompt: "Which condition proves congruence when all three pairs of corresponding sides are equal?",
-    formula: String.raw`\mathrm{SSS}`, answer: "SSS.",
-    explanation: "Three equal corresponding side pairs are sufficient. [Reference: SSS]",
+    formula: String.raw`\mathrm{SSS}`, answer: "SSS.", answerReason: reasonRef("congruence.sss", {"variant":"textbook1"}),
+    explanation: "Three equal corresponding side pairs are sufficient. " + reasonRef("congruence.sss"),
     chapter10Diagram: "c10-sss",
   },
   {
@@ -81,8 +83,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Congruent",
     type: "rule",
     prompt: "Which condition uses two equal corresponding sides and the equal angle between them?",
-    formula: String.raw`\mathrm{SAS}`, answer: "SAS.",
-    explanation: "The equal angle must be included between the two equal sides. [Reference: SAS]",
+    formula: String.raw`\mathrm{SAS}`, answer: "SAS.", answerReason: reasonRef("congruence.sas", {"variant":"textbook1"}),
+    explanation: "The equal angle must be included between the two equal sides. " + reasonRef("congruence.sas"),
     chapter10Diagram: "c10-sas",
   },
   {
@@ -93,8 +95,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Congruent",
     type: "rule",
     prompt: "Which condition uses two equal angles and the equal side between them?",
-    formula: String.raw`\mathrm{ASA}`, answer: "ASA.",
-    explanation: "The equal side is included between the two equal angles. [Reference: ASA]",
+    formula: String.raw`\mathrm{ASA}`, answer: "ASA.", answerReason: reasonRef("congruence.asa", {"variant":"textbook1"}),
+    explanation: "The equal side is included between the two equal angles. " + reasonRef("congruence.asa"),
     chapter10Diagram: "c10-asa",
   },
   {
@@ -105,8 +107,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Congruent",
     type: "rule",
     prompt: "Which condition uses two equal angles and a corresponding side not between them?",
-    formula: String.raw`\mathrm{AAS}`, answer: "AAS.",
-    explanation: "The known equal side is not included between the two known angles. [Reference: AAS]",
+    formula: String.raw`\mathrm{AAS}`, answer: "AAS.", answerReason: reasonRef("congruence.asaFromAas", {"variant":"textbook1"}),
+    explanation: "The known equal side is not included between the two known angles. " + reasonRef("congruence.asaFromAas"),
     chapter10Diagram: "c10-aas",
   },
   {
@@ -117,8 +119,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Congruent",
     type: "rule",
     prompt: "Which condition applies to right triangles with equal hypotenuses and one other equal side?",
-    formula: String.raw`\mathrm{RHS}`, answer: "RHS.",
-    explanation: "Both triangles must be right-angled. [Reference: RHS]",
+    formula: String.raw`\mathrm{RHS}`, answer: "RHS.", answerReason: reasonRef("congruence.rhs", {"variant":"textbook1"}),
+    explanation: "Both triangles must be right-angled. " + reasonRef("congruence.rhs"),
     chapter10Diagram: "c10-rhs",
   },
   {
@@ -130,7 +132,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     type: "rule",
     prompt: "Why does AAA not prove that two triangles are congruent?",
     formula: String.raw`\mathrm{AAA}\not\Longrightarrow\text{congruent}`, answer: "Equal angles fix the shape, but not the size.",
-    explanation: "AAA proves similarity, so the triangles may have different sizes. [Reference: AAA]",
+    explanation: "AAA proves similarity, so the triangles may have different sizes. " + reasonRef("similarity.aa"),
     chapter10Diagram: "c10-similar-meaning",
   },
 
@@ -145,7 +147,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "What does it mean when two triangles are similar?",
     formula: String.raw`\triangle ABC\sim\triangle XYZ`,
     answer: "They have the same shape, but their sizes may be different.",
-    explanation: "Corresponding angles are equal and corresponding sides are proportional. [Reference: similar triangles]",
+    explanation: "Corresponding angles are equal and corresponding sides are proportional. " + reasonRef("similarity.definition"),
     chapter10Diagram: "c10-similar-meaning",
   },
   {
@@ -158,7 +160,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "In △ABC ∼ △XYZ, which vertices correspond?",
     formula: String.raw`A\leftrightarrow X,\quad B\leftrightarrow Y,\quad C\leftrightarrow Z`,
     answer: "A corresponds to X, B to Y, and C to Z.",
-    explanation: "The order of letters identifies every corresponding part. [Reference: corr. vertices]",
+    explanation: "The order of letters identifies every corresponding part. " + reasonRef("figures.correspondingVertices"),
     chapter10Diagram: "c10-similar-correspondence",
   },
   {
@@ -171,7 +173,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "What is true about the corresponding angles of similar triangles?",
     formula: String.raw`\angle A=\angle X,\quad\angle B=\angle Y,\quad\angle C=\angle Z`,
     answer: "All corresponding angles are equal.",
-    explanation: "Equal corresponding angles give the same shape. [Reference: corr. ∠s equal]",
+    explanation: "Equal corresponding angles give the same shape. " + reasonRef("similarity.correspondingAngles", {"variant":"textbook1"}),
     chapter10Diagram: "c10-similar-angle-question",
   },
   {
@@ -184,7 +186,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "How are corresponding sides related when △ABC ∼ △XYZ?",
     formula: String.raw`\frac{AB}{XY}=\frac{BC}{YZ}=\frac{AC}{XZ}`,
     answer: "All pairs of corresponding sides are proportional.",
-    explanation: "Every ratio must compare sides in the same order. [Reference: corr. sides proportional]",
+    explanation: "Every ratio must compare sides in the same order. " + reasonRef("similarity.correspondingSides", {"variant":"textbook1"}),
     chapter10Diagram: "c10-proportional-sides",
   },
   {
@@ -196,7 +198,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     type: "formula",
     prompt: "A corresponding side changes from 3 cm to 9 cm. What is the enlargement scale factor?",
     formula: String.raw`k=\frac{9}{3}=3`, answer: "The scale factor is 3.",
-    explanation: "Scale factor = image length ÷ original length. [Reference: corr. sides proportional]",
+    explanation: "Scale factor = image length ÷ original length. " + reasonRef("similarity.correspondingSides", {"variant":"textbook1"}),
     chapter10Diagram: "c10-scale-factor",
   },
 
@@ -209,8 +211,8 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     section: "Conditions for Triangles to be Similar",
     type: "rule",
     prompt: "Which condition proves similarity when three pairs of corresponding angles are equal?",
-    formula: String.raw`\mathrm{AAA}`, answer: "AAA.",
-    explanation: "Equal corresponding angles guarantee the same shape. [Reference: AAA]",
+    formula: String.raw`\mathrm{AAA}`, answer: "AAA.", answerReason: reasonRef("similarity.aa", {"variant":"textbook1"}),
+    explanation: "Equal corresponding angles guarantee the same shape. " + reasonRef("similarity.aa"),
     chapter10Diagram: "c10-aaa",
   },
   {
@@ -223,7 +225,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "Which condition proves similarity when all three corresponding side pairs are proportional?",
     formula: String.raw`\frac{3}{6}=\frac{4}{8}=\frac{5}{10}`,
     answer: "Three corresponding sides are proportional.",
-    explanation: "All three side ratios are equal. [Reference: 3 sides proportional]",
+    explanation: "All three side ratios are equal. " + reasonRef("similarity.sss"),
     chapter10Diagram: "c10-similarity-sss",
   },
   {
@@ -236,7 +238,7 @@ export const s1Chapter10Flashcards: Chapter10VisualFlashcard[] = [
     prompt: "Which condition uses two proportional side pairs and equal included angles?",
     formula: String.raw`\frac{AB}{XY}=\frac{AC}{XZ}\quad\text{and}\quad\angle A=\angle X`,
     answer: "Two corresponding sides are proportional and the included angles are equal.",
-    explanation: "The equal angle must lie between the two compared sides. [Reference: ratio of 2 sides, inc. ∠]",
+    explanation: "The equal angle must lie between the two compared sides. " + reasonRef("similarity.sas"),
     chapter10Diagram: "c10-similarity-sas",
   },
 ];

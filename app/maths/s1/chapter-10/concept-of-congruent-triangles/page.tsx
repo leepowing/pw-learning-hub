@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -42,7 +46,7 @@ export default function ConceptOfCongruentTrianglesPage() {
               <li>Their corresponding angles are equal.</li>
               <li>Their corresponding sides are equal.</li>
             </ul>
-            <p className="reference">[Reference: congruent triangles]</p>
+            <p className="reference"><DualReason reasonId="congruence.definition" heading /></p>
           </div>
         </div>
         <div className="memoryStrip">
@@ -69,7 +73,7 @@ export default function ConceptOfCongruentTrianglesPage() {
           <strong>Order matters.</strong> In △ABC ≅ △XYZ, the first vertex matches the first,
           the second matches the second, and the third matches the third.
         </div>
-        <p className="reference centred">[Reference: corr. ∠s and corr. sides]</p>
+        <p className="reference centred"><DualReason reasonId="congruence.correspondingParts" heading /></p>
       </section>
 
       <section className="lessonCard">
@@ -102,11 +106,11 @@ export default function ConceptOfCongruentTrianglesPage() {
             <p className="panelLabel">SOLUTION</p>
             <div className="solutionStep">
               <span>1</span>
-              <div><p>A corresponds to X.</p><strong>p = 90°</strong><small>[Reference: corr. ∠s equal]</small></div>
+              <div><p>A corresponds to X.</p><strong>p = 90°</strong><small><DualReason reasonId="congruence.correspondingAngles" variant="textbook1" heading /></small></div>
             </div>
             <div className="solutionStep">
               <span>2</span>
-              <div><p>AB corresponds to XY.</p><strong>q = 4</strong><small>[Reference: corr. sides equal]</small></div>
+              <div><p>AB corresponds to XY.</p><strong>q = 4</strong><small><DualReason reasonId="congruence.correspondingSides" variant="textbook1" heading /></small></div>
             </div>
           </div>
         </div>

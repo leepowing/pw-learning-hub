@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Straight, Crossing, Around, Parallel, Triangle, CheckpointDiagram } from "@/components/maths/Chapter9Geometry";
 
@@ -170,19 +174,19 @@ export default function AnglesRelatingToParallelLinesPage() {
             <ConverseDiagram kind="corresponding" />
             <h3>Equal corresponding angles</h3>
             <div className="converseEquation">If a = b, then AB // CD.</div>
-            <div className="referenceTag">[Reference: corr. ∠s equal]</div>
+            <div className="referenceTag"><DualReason reasonId="parallel.converseCorresponding" params={{"line1":"AB","line2":"CD"}} variant="textbook1" heading /></div>
           </article>
           <article>
             <ConverseDiagram kind="alternate" />
             <h3>Equal alternate angles</h3>
             <div className="converseEquation">If a = b, then AB // CD.</div>
-            <div className="referenceTag">[Reference: alt. ∠s equal]</div>
+            <div className="referenceTag"><DualReason reasonId="parallel.converseAlternate" params={{"line1":"AB","line2":"CD"}} variant="textbook1" heading /></div>
           </article>
           <article>
             <ConverseDiagram kind="interior" />
             <h3>Interior angles on the same side</h3>
             <div className="converseEquation">If a + b = 180°, then AB // CD.</div>
-            <div className="referenceTag">[Reference: int. ∠s supp.]</div>
+            <div className="referenceTag"><DualReason reasonId="parallel.converseCoInterior" params={{"line1":"AB","line2":"CD"}} variant="textbook1" heading /></div>
           </article>
         </div>
 
@@ -500,6 +504,7 @@ export default function AnglesRelatingToParallelLinesPage() {
           line-height: 1.35;
         }
 
+        .converseGrid article { min-width: 0; overflow-x: auto; }
         .converseGrid h3 { margin: 14px 0 7px; font-size: 19px; }
         .converseGrid p,
         .methodGrid p,

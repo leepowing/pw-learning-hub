@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Straight, Crossing, Around, Parallel, Triangle, CheckpointDiagram } from "@/components/maths/Chapter9Geometry";
 
@@ -42,7 +46,7 @@ export default function AnglesRelatingToIntersectingLinesPage() {
               Adjacent angles share a common vertex and a common arm. When
               their other arms form a straight line, they are supplementary.
             </p>
-            <div className="reasonTag">[Reference: adj. ∠s on st. line]</div>
+            <div className="reasonTag"><DualReason reasonId="angles.straightLine" variant="textbook1" heading /></div>
           </div>
         </div>
 
@@ -70,7 +74,7 @@ export default function AnglesRelatingToIntersectingLinesPage() {
               Vertically opposite angles lie directly opposite each other at
               the intersection of two straight lines.
             </p>
-            <div className="reasonTag">[Reference: vert. opp. ∠s]</div>
+            <div className="reasonTag"><DualReason reasonId="angles.verticallyOpposite" variant="textbook1" heading /></div>
           </div>
         </div>
 
@@ -107,7 +111,7 @@ export default function AnglesRelatingToIntersectingLinesPage() {
               One complete turn about a point is 360°. Include every
               non-overlapping angle exactly once.
             </p>
-            <div className="reasonTag">[Reference: ∠s at a pt.]</div>
+            <div className="reasonTag"><DualReason reasonId="angles.aroundPoint" variant="textbook1" heading /></div>
           </div>
         </div>
 

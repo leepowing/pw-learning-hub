@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -196,7 +200,7 @@ export default function S1ChapterTenPage() {
           {congruenceConditions.map((condition) => (
             <span key={condition}>
               {condition}
-              <small>[Reference: {condition}]</small>
+              <small><ReasonContent heading>{({SSS:reasonRef("congruence.sss"),SAS:reasonRef("congruence.sas"),ASA:reasonRef("congruence.asa"),AAS:reasonRef("congruence.asaFromAas"),RHS:reasonRef("congruence.rhs")} as Record<string,string>)[condition]}</ReasonContent></small>
             </span>
           ))}
         </div>
@@ -218,9 +222,8 @@ export default function S1ChapterTenPage() {
           {similarityConditions.map((condition, index) => (
             <span key={condition}>
               {condition}
-              <small>
-                [Reference: {index === 0 ? "AAA" : index === 1 ? "3 sides proportional" : "ratio of 2 sides, inc. ∠"}]
-              </small>
+              <small><ReasonContent heading>
+                {index === 0 ? reasonRef("similarity.aa") : index === 1 ? reasonRef("similarity.sss") : reasonRef("similarity.sas")}</ReasonContent></small>
             </span>
           ))}
         </div>
@@ -632,6 +635,9 @@ export default function S1ChapterTenPage() {
           gap: 10px;
         }
 
+        .conceptPanel { min-width: 0; }
+        .triangleStage { max-width: 100%; overflow-x: auto; }
+
         .congruenceRulesGrid {
           grid-template-columns: repeat(5, minmax(0, 1fr));
         }
@@ -640,7 +646,7 @@ export default function S1ChapterTenPage() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
-        .rulesGrid span {
+        .rulesGrid > span {
           display: grid;
           place-items: center;
           min-height: 68px;
@@ -652,7 +658,7 @@ export default function S1ChapterTenPage() {
           text-align: center;
         }
 
-        .similarityRulesGrid span {
+        .similarityRulesGrid > span {
           color: #5b21b6;
         }
 

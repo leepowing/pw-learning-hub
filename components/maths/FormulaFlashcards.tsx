@@ -1,4 +1,6 @@
 "use client";
+import { ReasonContent } from "@/components/maths/DualReason";
+
 
 import S2Chapter11FlashcardDiagram, { type S2Chapter11DiagramKind } from "@/components/maths/S2Chapter11FlashcardDiagram";
 
@@ -210,7 +212,7 @@ export default function FormulaFlashcards({
     );
   }
 
-  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11);
+  const useContentSizedFaces = (currentCard.level === "s1" && (currentCard.chapter === 9 || currentCard.chapter === 10)) || currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11);
   const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
@@ -289,7 +291,8 @@ export default function FormulaFlashcards({
             {currentCard.diagram && <GeometryDiagram diagram={currentCard.diagram} />}
             {currentCard.formula && <MathFormula formula={currentCard.formula} />}
             {currentCard.answer && <h2>{currentCard.answer}</h2>}
-            {currentCard.explanation && <p style={{ margin: "18px auto 0", maxWidth: 680, color: "#4b5563", fontSize: 17, lineHeight: 1.6 }}>{currentCard.explanation}</p>}
+            {currentCard.answerReason && <ReasonContent>{currentCard.answerReason}</ReasonContent>}
+            {currentCard.explanation && <p style={{ margin: "18px auto 0", maxWidth: 680, color: "#4b5563", fontSize: 17, lineHeight: 1.6 }}><ReasonContent>{currentCard.explanation}</ReasonContent></p>}
           </article>
         </div>
       </div>

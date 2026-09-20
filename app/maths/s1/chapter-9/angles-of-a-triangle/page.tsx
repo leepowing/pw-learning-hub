@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Straight, Crossing, Around, Parallel, Triangle, CheckpointDiagram } from "@/components/maths/Chapter9Geometry";
 
@@ -63,7 +67,7 @@ export default function AnglesOfATrianglePage() {
               Count the three interior angles exactly once. The shape and size
               of the triangle do not change the total.
             </p>
-            <div className="referenceTag">[Reference: ∠ sum of △]</div>
+            <div className="referenceTag"><DualReason reasonId="triangle.angleSum" variant="textbook1" heading /></div>
           </div>
         </div>
       </section>
@@ -100,7 +104,7 @@ export default function AnglesOfATrianglePage() {
                 <strong>x = 75°</strong>
               </div>
             </article>
-            <div className="referenceTag">[Reference: ∠ sum of △]</div>
+            <div className="referenceTag"><DualReason reasonId="triangle.angleSum" variant="textbook1" heading /></div>
           </div>
         </div>
       </section>
@@ -122,7 +126,7 @@ export default function AnglesOfATrianglePage() {
               The two angles added are the interior angles that are not adjacent
               to the exterior angle.
             </p>
-            <div className="referenceTag">[Reference: ext. ∠ of △]</div>
+            <div className="referenceTag"><DualReason reasonId="triangle.exteriorAngle" variant="textbook1" heading /></div>
           </div>
         </div>
 
@@ -164,7 +168,7 @@ export default function AnglesOfATrianglePage() {
                 <strong>x = 72°</strong>
               </div>
             </article>
-            <div className="referenceTag">[Reference: ext. ∠ of △]</div>
+            <div className="referenceTag"><DualReason reasonId="triangle.exteriorAngle" variant="textbook1" heading /></div>
           </div>
         </div>
       </section>
@@ -181,13 +185,13 @@ export default function AnglesOfATrianglePage() {
             <span className="connectionSymbol">180°</span>
             <h3>Exterior + adjacent interior</h3>
             <p>These two angles form a straight line and add up to 180°.</p>
-            <div className="referenceTag">[Reference: adj. ∠s on st. line]</div>
+            <div className="referenceTag"><DualReason reasonId="angles.straightLine" variant="textbook1" heading /></div>
           </article>
           <article>
             <span className="connectionSymbol">+</span>
             <h3>Two opposite interior angles</h3>
             <p>Their sum equals the exterior angle of the triangle.</p>
-            <div className="referenceTag">[Reference: ext. ∠ of △]</div>
+            <div className="referenceTag"><DualReason reasonId="triangle.exteriorAngle" variant="textbook1" heading /></div>
           </article>
         </div>
       </section>

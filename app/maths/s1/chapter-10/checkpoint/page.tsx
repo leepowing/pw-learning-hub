@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -34,7 +38,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Given △ABC ≅ △XYZ, which angle corresponds to ∠B?",
     options: ["∠X", "∠Y", "∠Z", "∠A"],
     answer: 1,
-    explanation: "The second vertex corresponds to the second vertex, so B ↔ Y and ∠B = ∠Y. [Reference: corr. ∠s equal]",
+    explanation: "The second vertex corresponds to the second vertex, so B ↔ Y and ∠B = ∠Y. " + reasonRef("congruence.correspondingAngles", {"variant":"textbook1"}),
     diagram: "congruence-order",
   },
   {
@@ -42,7 +46,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Given △ABC ≅ △XYZ, which side corresponds to AC?",
     options: ["XY", "YZ", "XZ", "AB"],
     answer: 2,
-    explanation: "A ↔ X and C ↔ Z, so side AC corresponds to side XZ. [Reference: corr. sides equal]",
+    explanation: "A ↔ X and C ↔ Z, so side AC corresponds to side XZ. " + reasonRef("congruence.correspondingSides", {"variant":"textbook1"}),
     diagram: "congruence-sides",
   },
   {
@@ -50,7 +54,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Which statement is always true for congruent triangles?",
     options: ["They have the same shape and size", "They only have equal angles", "Their sizes must be different", "Their sides are only proportional"],
     answer: 0,
-    explanation: "Congruent triangles have the same shape and the same size. [Reference: congruent triangles]",
+    explanation: "Congruent triangles have the same shape and the same size. " + reasonRef("congruence.definition"),
     diagram: "congruence-order",
   },
   {
@@ -58,7 +62,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "All three pairs of corresponding sides are equal. Which condition proves congruence?",
     options: ["SSS", "SAS", "AAA", "RHS"],
     answer: 0,
-    explanation: "Three equal pairs of corresponding sides prove the triangles congruent. [Reference: SSS]",
+    explanation: "Three equal pairs of corresponding sides prove the triangles congruent. " + reasonRef("congruence.sss"),
     diagram: "sss",
   },
   {
@@ -66,7 +70,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Two corresponding sides and the angle between them are equal. Which condition applies?",
     options: ["SSS", "SAS", "AAS", "RHS"],
     answer: 1,
-    explanation: "The equal angle is included between the two equal side pairs. [Reference: SAS]",
+    explanation: "The equal angle is included between the two equal side pairs. " + reasonRef("congruence.sas"),
     diagram: "sas",
   },
   {
@@ -74,7 +78,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Both triangles are right-angled. Their hypotenuses and one other pair of sides are equal. Which condition applies?",
     options: ["ASA", "SSS", "AAA", "RHS"],
     answer: 3,
-    explanation: "Right angle, equal hypotenuse and one equal corresponding side give RHS. [Reference: RHS]",
+    explanation: "Right angle, equal hypotenuse and one equal corresponding side give RHS. " + reasonRef("congruence.rhs"),
     diagram: "rhs",
   },
   {
@@ -82,7 +86,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Given △PQR ∼ △STU, which side corresponds to QR?",
     options: ["ST", "TU", "SU", "PQ"],
     answer: 1,
-    explanation: "Q ↔ T and R ↔ U, so QR corresponds to TU. [Reference: corr. sides proportional]",
+    explanation: "Q ↔ T and R ↔ U, so QR corresponds to TU. " + reasonRef("similarity.correspondingSides", {"variant":"textbook1"}),
     diagram: "similarity-order",
   },
   {
@@ -98,7 +102,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The triangles are similar. Use 4/6 = x/9 to find x.",
     options: ["4", "6", "8", "13.5"],
     answer: 1,
-    explanation: "4/6 = x/9, so 6x = 36 and x = 6. [Reference: corr. sides proportional]",
+    explanation: "4/6 = x/9, so 6x = 36 and x = 6. " + reasonRef("similarity.correspondingSides", {"variant":"textbook1"}),
     diagram: "missing-side",
   },
   {
@@ -106,7 +110,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Three pairs of corresponding angles are equal. Which condition proves similarity?",
     options: ["AAA", "SSS", "RHS", "SAS"],
     answer: 0,
-    explanation: "Equal corresponding angles fix the shape of a triangle. [Reference: AAA]",
+    explanation: "Equal corresponding angles fix the shape of a triangle. " + reasonRef("similarity.aa"),
     diagram: "aaa",
   },
   {
@@ -114,7 +118,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The corresponding side lengths are 3, 4, 5 and 6, 8, 10. Which condition proves similarity?",
     options: ["AAA", "3 sides proportional", "RHS", "AAS"],
     answer: 1,
-    explanation: "3/6 = 4/8 = 5/10 = 1/2. [Reference: 3 sides proportional]",
+    explanation: "3/6 = 4/8 = 5/10 = 1/2. " + reasonRef("similarity.sss"),
     diagram: "three-sides-proportional",
   },
   {
@@ -122,7 +126,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Two side ratios are equal and the angles between those sides are equal. Which condition proves similarity?",
     options: ["AAA", "RHS", "Ratio of 2 sides, included angle", "SSS"],
     answer: 2,
-    explanation: "The two side pairs are proportional and the included angles are equal. [Reference: ratio of 2 sides, inc. ∠]",
+    explanation: "The two side pairs are proportional and the included angles are equal. " + reasonRef("similarity.sas"),
     diagram: "two-sides-angle",
   },
 ];
@@ -212,7 +216,7 @@ export default function ChapterTenCheckpointPage() {
             </div>
             {answered && (
               <div className={selectedIsCorrect ? "feedback correctFeedback" : "feedback incorrectFeedback"} aria-live="polite">
-                <strong>{selectedIsCorrect ? "Correct" : "Not quite"}</strong><p>{question.explanation}</p>
+                <strong>{selectedIsCorrect ? "Correct" : "Not quite"}</strong><p><ReasonContent>{question.explanation}</ReasonContent></p>
               </div>
             )}
             <button type="button" className="continueButton" onClick={continueCheckpoint} disabled={!answered}>

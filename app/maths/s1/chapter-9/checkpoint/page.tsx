@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Straight, Crossing, Around, Parallel, Triangle, CheckpointDiagram } from "@/components/maths/Chapter9Geometry";
 
@@ -34,7 +38,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The adjacent angles on the straight line are 137° and x. Find x.",
     options: ["43°", "53°", "137°", "223°"],
     answer: 0,
-    explanation: "x + 137° = 180°, so x = 43°. [Reference: adj. ∠s on st. line]",
+    explanation: "x + 137° = 180°, so x = 43°. " + reasonRef("angles.straightLine", {"variant":"textbook1"}),
     diagram: "straight-line",
   },
   {
@@ -42,7 +46,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Two straight lines intersect. The marked angles are vertically opposite. Find x.",
     options: ["54°", "126°", "180°", "234°"],
     answer: 1,
-    explanation: "Vertically opposite angles are equal, so x = 126°. [Reference: vert. opp. ∠s]",
+    explanation: "Vertically opposite angles are equal, so x = 126°. " + reasonRef("angles.verticallyOpposite", {"variant":"textbook1"}),
     diagram: "vertically-opposite",
   },
   {
@@ -50,7 +54,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Three angles around a point are 115°, 75° and x. Find x.",
     options: ["170°", "180°", "190°", "245°"],
     answer: 0,
-    explanation: "x + 115° + 75° = 360°, so x = 170°. [Reference: ∠s at a pt.]",
+    explanation: "x + 115° + 75° = 360°, so x = 170°. " + reasonRef("angles.aroundPoint", {"variant":"textbook1"}),
     diagram: "angles-at-point",
   },
   {
@@ -58,7 +62,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "Four angles at a point are 72°, 89°, 104° and x. Find x.",
     options: ["85°", "95°", "105°", "115°"],
     answer: 1,
-    explanation: "x = 360° − 72° − 89° − 104° = 95°. [Reference: ∠s at a pt.]",
+    explanation: "x = 360° − 72° − 89° − 104° = 95°. " + reasonRef("angles.aroundPoint", {"variant":"textbook1"}),
     diagram: "four-at-point",
   },
   {
@@ -66,7 +70,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "In the diagram, p // q. The marked angles are corresponding angles. Find x.",
     options: ["68°", "102°", "112°", "122°"],
     answer: 0,
-    explanation: "Corresponding angles are equal when p // q, so x = 68°. [Reference: corr. ∠s, p // q]",
+    explanation: "Corresponding angles are equal when p // q, so x = 68°. " + reasonRef("parallel.corresponding", {"params":{"line1":"p","line2":"q"},"variant":"textbook2"}),
     diagram: "corresponding",
   },
   {
@@ -74,7 +78,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "In the diagram, p // q. The marked angles are alternate angles. Find x.",
     options: ["63°", "73°", "117°", "243°"],
     answer: 2,
-    explanation: "Alternate angles are equal when p // q, so x = 117°. [Reference: alt. ∠s, p // q]",
+    explanation: "Alternate angles are equal when p // q, so x = 117°. " + reasonRef("parallel.alternate", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}),
     diagram: "alternate",
   },
   {
@@ -82,7 +86,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "In the diagram, p // q. The marked angles are interior angles on the same side. Find x.",
     options: ["68°", "102°", "112°", "122°"],
     answer: 2,
-    explanation: "x + 68° = 180°, so x = 112°. [Reference: int. ∠s, p // q]",
+    explanation: "x + 68° = 180°, so x = 112°. " + reasonRef("parallel.coInterior", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}),
     diagram: "same-side",
   },
   {
@@ -95,7 +99,7 @@ const questions: CheckpointQuestion[] = [
       "vert. opp. ∠s",
     ],
     answer: 0,
-    explanation: "Equal corresponding angles prove that the two lines are parallel. [Reference: corr. ∠s equal]",
+    explanation: "Equal corresponding angles prove that the two lines are parallel. " + reasonRef("parallel.converseCorresponding", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}),
     diagram: "converse",
   },
   {
@@ -103,7 +107,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The interior angles of a triangle are 48°, 67° and x. Find x.",
     options: ["55°", "65°", "75°", "115°"],
     answer: 1,
-    explanation: "x = 180° − 48° − 67° = 65°. [Reference: ∠ sum of △]",
+    explanation: "x = 180° − 48° − 67° = 65°. " + reasonRef("triangle.angleSum", {"variant":"textbook1"}),
     diagram: "triangle",
   },
   {
@@ -111,7 +115,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The two opposite interior angles are 46° and 31°. Find the exterior angle x.",
     options: ["15°", "46°", "77°", "103°"],
     answer: 2,
-    explanation: "x = 46° + 31° = 77°. [Reference: ext. ∠ of △]",
+    explanation: "x = 46° + 31° = 77°. " + reasonRef("triangle.exteriorAngle", {"variant":"textbook1"}),
     diagram: "exterior",
   },
   {
@@ -119,7 +123,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "An exterior angle is 124°. Find its adjacent interior angle x.",
     options: ["46°", "56°", "66°", "124°"],
     answer: 1,
-    explanation: "x + 124° = 180°, so x = 56°. [Reference: adj. ∠s on st. line]",
+    explanation: "x + 124° = 180°, so x = 56°. " + reasonRef("angles.straightLine", {"variant":"textbook1"}),
     diagram: "exterior-adjacent",
   },
   {
@@ -127,7 +131,7 @@ const questions: CheckpointQuestion[] = [
     prompt: "The three interior angles of a triangle are x, 2x and 3x. Find x.",
     options: ["20°", "30°", "45°", "60°"],
     answer: 1,
-    explanation: "x + 2x + 3x = 180°, so 6x = 180° and x = 30°. [Reference: ∠ sum of △]",
+    explanation: "x + 2x + 3x = 180°, so 6x = 180° and x = 30°. " + reasonRef("triangle.angleSum", {"variant":"textbook1"}),
     diagram: "triangle-algebra",
   },
 ];
@@ -267,7 +271,7 @@ export default function ChapterNineCheckpointPage() {
                 aria-live="polite"
               >
                 <strong>{selectedIsCorrect ? "Correct" : "Not quite"}</strong>
-                <p>{question.explanation}</p>
+                <p><ReasonContent>{question.explanation}</ReasonContent></p>
               </div>
             )}
 

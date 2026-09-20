@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
@@ -76,7 +80,7 @@ function Proof({ caption, rows }: { caption: string; rows: readonly ProofRow[] }
     <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse", textAlign: "left", background: "white", fontSize: 16, lineHeight: 1.65 }}>
       <caption style={{ textAlign: "left", padding: "14px 16px", color: "#52657e", background: "#f8fafc", fontWeight: 700 }}>{caption}</caption>
       <thead><tr>{["Statement", "Reason"].map(label => <th key={label} scope="col" style={{ padding: "13px 16px", background: teal, color: "white" }}>{label}</th>)}</tr></thead>
-      <tbody>{rows.map(([statement, reason], index) => <tr key={index} style={{ background: index === rows.length - 1 ? "#ecfdf5" : "white" }}><td style={{ padding: "13px 16px", borderTop: "1px solid #dce4f1", verticalAlign: "top", overflowWrap: "anywhere", fontWeight: 650 }}>{statement}</td><td style={{ padding: "13px 16px", borderTop: "1px solid #dce4f1", borderLeft: "1px solid #dce4f1", verticalAlign: "top", overflowWrap: "anywhere", color: "#52657e" }}>{reason}</td></tr>)}</tbody>
+      <tbody>{rows.map(([statement, reason], index) => <tr key={index} style={{ background: index === rows.length - 1 ? "#ecfdf5" : "white" }}><td style={{ padding: "13px 16px", borderTop: "1px solid #dce4f1", verticalAlign: "top", overflowWrap: "anywhere", fontWeight: 650 }}>{statement}</td><td style={{ padding: "13px 16px", borderTop: "1px solid #dce4f1", borderLeft: "1px solid #dce4f1", verticalAlign: "top", overflowWrap: "anywhere", color: "#52657e" }}><ReasonContent>{reason}</ReasonContent></td></tr>)}</tbody>
     </table>
   </div>;
 }
@@ -145,7 +149,7 @@ export default function EuclidAndElementsPage() {
       <div className="stepButtons" role="group" aria-label="Explore the equilateral triangle construction">{constructionSteps.map((item, index) => <button type="button" key={item.button} aria-pressed={stage === index} onClick={() => setStage(index)}>{item.button}</button>)}</div>
       <div className="twoColumns constructionArea"><figure><EquilateralDiagram stage={stage} /><figcaption>{stage === 0 ? "AB is the given segment." : stage === 1 ? "Both circles use the length AB as their radius." : "AC and BC join the upper intersection to the two centres."}</figcaption></figure><div className="softPanel green" role="status" aria-live="polite"><p className="smallLabel">STEP {stage + 1} OF 3</p><h3>{constructionSteps[stage].title}</h3><p>{constructionSteps[stage].text}</p>{stage >= 1 && <p className="supportText">The first circle has centre A; the second has centre B.</p>}</div></div>
       {stage === 2 && <div className="constructionProof"><Proof caption="Why the constructed triangle is equilateral" rows={[
-        ["AC = AB", "Radii of the circle with centre A."], ["BC = BA", "Radii of the circle with centre B."], ["AC = BC", "Both equal AB; use Common Notion 1."], ["AB = BC = CA", "Combine the equalities."], ["∴ △ABC is equilateral.", "Definition of an equilateral triangle."]
+        ["AC = AB", reasonRef("geometry.equalRadii")], ["BC = BA", reasonRef("geometry.equalRadii")], ["AC = BC", "Both equal AB; use Common Notion 1."], ["AB = BC = CA", "Combine the equalities."], ["∴ △ABC is equilateral.", reasonRef("triangle.equilateralSides", {"variant":"textbook1"})]
       ]} /><div className="note"><strong>Notice the roles:</strong> Postulate 3 permits the circles, Postulate 1 permits the joining segments, equal radii supply the equalities, and a definition names the resulting triangle.</div></div>}
       <p className="sourceNote">Adapted from <a href={bookOne + "propI1.html"} target="_blank" rel="noreferrer">Book I, Proposition 1</a>.</p>
     </section>
@@ -155,7 +159,7 @@ export default function EuclidAndElementsPage() {
       <p>Recall the proof that vertically opposite angles are equal. <strong>AOB and COD are straight lines</strong>. Follow how equality and subtraction connect the two angle equations.</p>
       <div className="twoColumns"><figure><OppositeAnglesDiagram /><figcaption>Angle b is adjacent to both a and c.</figcaption></figure><div className="softPanel"><p className="smallLabel">THINK ABOUT THE REASONS</p><h3>Both totals equal 180°</h3><p>Use a previously established straight-line angle fact, compare the equal totals, then subtract the shared angle b.</p><p>Every step has a mathematical reason.</p></div></div>
       <details className="solution"><summary>Reveal the proof and its foundations</summary><div className="solutionBody"><Proof caption="A chapter proof using common notions" rows={[
-        ["a + b = 180°", "Adjacent angles on straight line AOB."], ["b + c = 180°", "Adjacent angles on straight line COD."], ["a + b = b + c", "Both totals equal 180°; Common Notion 1."], ["∴ a = c", "Subtract the same b from both sides; Common Notion 3."]
+        ["a + b = 180°", reasonRef("angles.straightLine", {"variant":"textbook1"})], ["b + c = 180°", reasonRef("angles.straightLine", {"variant":"textbook1"})], ["a + b = b + c", "Both totals equal 180°; Common Notion 1."], ["∴ a = c", "Subtract the same b from both sides; Common Notion 3."]
       ]} /></div></details>
       <div className="note"><strong>Your proof-writing habit:</strong> identify the given conditions, choose an established fact, show the logical steps, and state the conclusion. A diagram guides the reasoning; measuring or inspecting it does not replace a proof.</div>
       <div className="chapterLinks"><Link href="/maths/s2/chapter-6/introduction-to-deductive-reasoning">Section 1 · Structure of a proof →</Link><Link href="/maths/s2/chapter-6/proofs-relating-to-intersecting-and-parallel-lines">Section 2 · Lines and angle reasons →</Link><Link href="/maths/s2/chapter-6/proofs-relating-to-triangles">Section 3 · Triangle proofs →</Link></div>
@@ -166,7 +170,7 @@ export default function EuclidAndElementsPage() {
       <p>Select an answer, then read the explanation. You can change your choice and try again.</p><p className="supportText">This self-check resets when you reload the page.</p>
       {questions.map((question, questionIndex) => {
         const selected = answers[question.id], isAnswered = selected !== undefined, isCorrect = selected === question.answer;
-        return <fieldset key={question.id} className="quizQuestion"><legend><span className="questionNumber">{questionIndex + 1}.</span> {question.prompt}</legend><div className="options">{question.options.map((option, optionIndex) => <label key={option} className={"option" + (selected === optionIndex ? " selectedOption" : "")}><input type="radio" name={"euclid-" + question.id} checked={selected === optionIndex} onChange={() => setAnswers(previous => ({ ...previous, [question.id]: optionIndex }))} aria-describedby={isAnswered ? "feedback-" + question.id : undefined} /><span>{option}</span></label>)}</div><div id={"feedback-" + question.id} aria-live="polite" aria-atomic="true">{isAnswered && <p className={"feedback " + (isCorrect ? "correctFeedback" : "retryFeedback")}><strong>{isCorrect ? "Correct. " : "Not quite. "}</strong>{question.explanation}</p>}</div></fieldset>;
+        return <fieldset key={question.id} className="quizQuestion"><legend><span className="questionNumber">{questionIndex + 1}.</span> {question.prompt}</legend><div className="options">{question.options.map((option, optionIndex) => <label key={option} className={"option" + (selected === optionIndex ? " selectedOption" : "")}><input type="radio" name={"euclid-" + question.id} checked={selected === optionIndex} onChange={() => setAnswers(previous => ({ ...previous, [question.id]: optionIndex }))} aria-describedby={isAnswered ? "feedback-" + question.id : undefined} /><span>{option}</span></label>)}</div><div id={"feedback-" + question.id} aria-live="polite" aria-atomic="true">{isAnswered && <p className={"feedback " + (isCorrect ? "correctFeedback" : "retryFeedback")}><strong>{isCorrect ? "Correct. " : "Not quite. "}</strong><ReasonContent>{question.explanation}</ReasonContent></p>}</div></fieldset>;
       })}
       <div className="practiceFooter"><p role="status" aria-label="Self-check score">{answered} of {questions.length} answered · {correct} correct{correct === questions.length ? " — all correct!" : ""}</p><button type="button" className="secondaryButton" onClick={() => setAnswers({})}>Reset self-check</button></div>
     </section>

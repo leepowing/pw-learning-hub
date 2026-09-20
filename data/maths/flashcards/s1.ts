@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 import type { Chapter9FlashcardDiagramKind } from "@/components/maths/Chapter9FlashcardDiagram";
 import type { MathsFlashcard } from "./types";
 
@@ -2355,7 +2357,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     type: "formula",
     prompt: "What is the area formula for a triangle?",
     formula: String.raw`A=\frac12bh`,
-    answer: "Area = ½ × base × perpendicular height.",
+    answer: "Area = ½ × base × perpendicular height.", answerReason: reasonRef("geometry.triangleArea"),
     explanation: "A triangle has half the area of a parallelogram with the same base and height.",
   },
   {
@@ -2758,7 +2760,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     type: "formula",
     prompt: "Which formula finds a triangle's area after its base and perpendicular height are read from the grid?",
     formula: String.raw`A=\frac12bh`,
-    answer: "Area = ½ × base × perpendicular height.",
+    answer: "Area = ½ × base × perpendicular height.", answerReason: reasonRef("geometry.triangleArea"),
     explanation: "Use coordinate differences to calculate b and h first.",
   },
   {
@@ -2894,7 +2896,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "What is the sum of adjacent angles on a straight line?",
     formula: String.raw`a+b=180^\circ`,
     answer: "They add up to 180°.",
-    explanation: "[Reference: adj. ∠s on st. line]",
+    explanation: reasonRef("angles.straightLine", {"variant":"textbook1"}),
     frontDiagram: "straight-line",
   },
   {
@@ -2906,8 +2908,8 @@ export const s1Flashcards: MathsFlashcard[] = [
     type: "rule",
     prompt: "What is the relationship between vertically opposite angles?",
     formula: String.raw`a=b`,
-    answer: "Vertically opposite angles are equal.",
-    explanation: "[Reference: vert. opp. ∠s]",
+    answer: "Vertically opposite angles are equal.", answerReason: reasonRef("angles.verticallyOpposite", {"variant":"textbook1"}),
+    explanation: reasonRef("angles.verticallyOpposite", {"variant":"textbook1"}),
     frontDiagram: "vertically-opposite",
   },
   {
@@ -2920,7 +2922,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "What is the sum of all angles at a point?",
     formula: String.raw`a+b+c+d=360^\circ`,
     answer: "They add up to 360°.",
-    explanation: "[Reference: ∠s at a pt.]",
+    explanation: reasonRef("angles.aroundPoint", {"variant":"textbook1"}),
     frontDiagram: "angles-at-point",
   },
 
@@ -2935,7 +2937,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "When p ∥ q, what is true about corresponding angles?",
     formula: String.raw`p\parallel q\Longrightarrow a=b`,
     answer: "Corresponding angles are equal.",
-    explanation: "[Reference: corr. ∠s, p ∥ q]",
+    explanation: reasonRef("parallel.corresponding", {"params":{"line1":"p","line2":"q"},"variant":"textbook5"}),
     frontDiagram: "corresponding",
   },
   {
@@ -2948,7 +2950,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "When p ∥ q, what is true about alternate angles?",
     formula: String.raw`p\parallel q\Longrightarrow a=b`,
     answer: "Alternate angles are equal.",
-    explanation: "[Reference: alt. ∠s, p ∥ q]",
+    explanation: reasonRef("parallel.alternate", {"params":{"line1":"p","line2":"q"},"variant":"textbook5"}),
     frontDiagram: "alternate",
   },
   {
@@ -2961,7 +2963,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "When p ∥ q, what is true about interior angles on the same side?",
     formula: String.raw`p\parallel q\Longrightarrow a+b=180^\circ`,
     answer: "They add up to 180°.",
-    explanation: "[Reference: int. ∠s, p ∥ q]",
+    explanation: reasonRef("parallel.coInterior", {"params":{"line1":"p","line2":"q"},"variant":"textbook2"}),
     frontDiagram: "same-side-interior",
   },
   {
@@ -2974,7 +2976,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "Which three angle conditions can prove that p ∥ q?",
     formula: String.raw`a=b\quad\text{or}\quad a+b=180^\circ\Longrightarrow p\parallel q`,
     answer: "Equal corresponding or alternate angles, or supplementary same-side interior angles.",
-    explanation: "[References: corr. ∠s equal; alt. ∠s equal; int. ∠s supp.]",
+    explanation: reasonRef("parallel.converseCorresponding", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}) + reasonRef("parallel.converseAlternate", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}) + reasonRef("parallel.converseCoInterior", {"params":{"line1":"p","line2":"q"},"variant":"textbook1"}),
     frontDiagram: "converse-rules",
   },
 
@@ -2989,7 +2991,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "What is the sum of the interior angles of a triangle?",
     formula: String.raw`a+b+c=180^\circ`,
     answer: "The interior angles add up to 180°.",
-    explanation: "[Reference: ∠ sum of △]",
+    explanation: reasonRef("triangle.angleSum", {"variant":"textbook1"}),
     frontDiagram: "triangle-angle-sum",
   },
   {
@@ -3002,7 +3004,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "How is an exterior angle related to the two opposite interior angles?",
     formula: String.raw`c=a+b`,
     answer: "It equals the sum of the two opposite interior angles.",
-    explanation: "[Reference: ext. ∠ of △]",
+    explanation: reasonRef("triangle.exteriorAngle", {"variant":"textbook1"}),
     frontDiagram: "triangle-exterior",
   },
   {
@@ -3015,7 +3017,7 @@ export const s1Flashcards: MathsFlashcard[] = [
     prompt: "Two opposite interior angles are 48° and 67°. Find the exterior angle.",
     formula: String.raw`48^\circ+67^\circ=115^\circ`,
     answer: "115°.",
-    explanation: "[Reference: ext. ∠ of △]",
+    explanation: reasonRef("triangle.exteriorAngle", {"variant":"textbook1"}),
     frontDiagram: "triangle-exterior-example",
   },
 

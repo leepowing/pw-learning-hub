@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -40,7 +44,7 @@ export default function ConceptOfSimilarTrianglesPage() {
               <li>Their corresponding angles are equal.</li>
               <li>Their corresponding sides are proportional.</li>
             </ul>
-            <p className="reference">[Reference: similar triangles]</p>
+            <p className="reference"><DualReason reasonId="similarity.definition" heading /></p>
           </div>
         </div>
         <div className="memoryStrip">
@@ -63,7 +67,7 @@ export default function ConceptOfSimilarTrianglesPage() {
         <div className="sidePairs">
           <span>AB ↔ XY</span><span>BC ↔ YZ</span><span>CA ↔ ZX</span>
         </div>
-        <p className="reference centred">[Reference: corr. ∠s equal]</p>
+        <p className="reference centred"><DualReason reasonId="similarity.correspondingAngles" variant="textbook1" heading /></p>
       </section>
 
       <section className="lessonCard">
@@ -98,7 +102,7 @@ export default function ConceptOfSimilarTrianglesPage() {
           <article><strong>Also correct</strong><p>large / small = large / small = large / small</p></article>
           <article className="wrong"><strong>Incorrect</strong><p>Do not reverse only one of the ratios.</p></article>
         </div>
-        <p className="reference centred">[Reference: corr. sides proportional]</p>
+        <p className="reference centred"><DualReason reasonId="similarity.correspondingSides" variant="textbook1" heading /></p>
       </section>
 
       <section className="lessonCard">
@@ -111,10 +115,10 @@ export default function ConceptOfSimilarTrianglesPage() {
           <div className="solutionPanel">
             <p className="panelLabel">SOLUTION</p>
             <div className="solutionStep">
-              <span>1</span><div><p>A corresponds to X.</p><strong>m = 40°</strong><small>[Reference: corr. ∠s equal]</small></div>
+              <span>1</span><div><p>A corresponds to X.</p><strong>m = 40°</strong><small><DualReason reasonId="similarity.correspondingAngles" variant="textbook1" heading /></small></div>
             </div>
             <div className="solutionStep">
-              <span>2</span><div><p>Use corresponding sides in the same direction.</p><div className="calculation">3/n = 6/4</div><div className="calculation">12 = 6n</div><strong>n = 2</strong><small>[Reference: corr. sides proportional]</small></div>
+              <span>2</span><div><p>Use corresponding sides in the same direction.</p><div className="calculation">3/n = 6/4</div><div className="calculation">12 = 6n</div><strong>n = 2</strong><small><DualReason reasonId="similarity.correspondingSides" variant="textbook1" heading /></small></div>
             </div>
           </div>
         </div>

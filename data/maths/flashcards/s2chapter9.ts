@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 import type { MathsFlashcard } from "./types";
 import type { S2Chapter9DiagramKind } from "@/components/maths/S2Chapter9FlashcardDiagram";
 export type S2Chapter9Flashcard = MathsFlashcard & {s2Chapter9Diagram?:S2Chapter9DiagramKind};
@@ -10,7 +12,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "Name the triangle congruence conditions.",
-    "answer": "SSS, SAS, ASA, AAS and RHS.",
+    "answer": "SSS, SAS, ASA, AAS and RHS.", answerReason: reasonRef("congruence.sss") + reasonRef("congruence.sas") + reasonRef("congruence.asa") + reasonRef("congruence.asaFromAas") + reasonRef("congruence.rhs"),
     "explanation": "SSA is not a general congruence condition."
   },
   {
@@ -21,7 +23,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "Name the triangle similarity conditions.",
-    "answer": "AAA, SSS and SAS.",
+    "answer": "AAA, SSS and SAS.", answerReason: reasonRef("similarity.aa") + reasonRef("similarity.sss") + reasonRef("similarity.sas"),
     "explanation": "For similarity, SSS and SAS use equal corresponding side ratios."
   },
   {
@@ -32,7 +34,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "What reference justifies AC = CA?",
-    "answer": "common side",
+    "answer": "common side", answerReason: reasonRef("geometry.commonSide"),
     "explanation": "Both triangles contain the same segment."
   },
   {
@@ -43,7 +45,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "Which reference gives equality of the marked angles at O?",
-    "answer": "vert. opp. ∠s",
+    "answer": "vert. opp. ∠s", answerReason: reasonRef("angles.verticallyOpposite", {"variant":"textbook1"}),
     "explanation": "AOD and BOC are straight lines.",
     "s2Chapter9Diagram": "cross"
   },
@@ -55,8 +57,8 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "OA = OD and OB = OC. Prove △AOB ≅ △DOC.",
-    "answer": "SAS.",
-    "explanation": "OA = OD and OB = OC (given); ∠AOB = ∠DOC (vert. opp. ∠s).",
+    "answer": "SAS.", answerReason: reasonRef("congruence.sas", {"variant":"textbook1"}),
+    "explanation": "OA = OD and OB = OC " + reasonRef("geometry.given") + "; ∠AOB = ∠DOC " + reasonRef("angles.verticallyOpposite", {"variant":"textbook1"}) + ".",
     "s2Chapter9Diagram": "cross"
   },
   {
@@ -67,7 +69,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "After △AOB ≅ △DOC, why is AB = DC?",
-    "answer": "corr. sides, ≅ Δs",
+    "answer": "corr. sides, ≅ Δs", answerReason: reasonRef("congruence.correspondingSides"),
     "explanation": "The vertex order pairs A with D and B with C.",
     "s2Chapter9Diagram": "cross"
   },
@@ -79,7 +81,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "DE // BC. Which reference justifies ∠ADE = ∠ABC?",
-    "answer": "corr. ∠s, DE // BC",
+    "answer": "corr. ∠s, DE // BC", answerReason: reasonRef("parallel.corresponding", {"params":{"line1":"DE","line2":"BC"},"variant":"textbook2"}),
     "explanation": "The parallel lines are cut by transversal AB.",
     "s2Chapter9Diagram": "similar"
   },
@@ -104,7 +106,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "In the diagram, find x = EC.",
     "answer": "6.",
-    "explanation": "AD/AB = AE/AC (corr. sides, ∼ Δs). 6/10 = 9/(9 + x), so x = 6.",
+    "explanation": "AD/AB = AE/AC " + reasonRef("similarity.correspondingSides") + ". 6/10 = 9/(9 + x), so x = 6.",
     "s2Chapter9Diagram": "similar"
   },
   {
@@ -116,7 +118,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "AB = AC. What can you conclude about ∠B and ∠C?",
     "answer": "∠B = ∠C.",
-    "explanation": "Reference: base ∠s, isos. Δ."
+    "explanation": reasonRef("triangle.isoscelesBaseAngles", {"variant":"textbook2"})
   },
   {
     "id": "s2-c9-converse",
@@ -127,7 +129,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "∠B = ∠C in △ABC. Which sides are equal?",
     "answer": "AB = AC.",
-    "explanation": "Reference: sides opp. eq. ∠s."
+    "explanation": reasonRef("triangle.equalAnglesOppositeSides", {"variant":"textbook2"})
   },
   {
     "id": "s2-c9-apex",
@@ -138,7 +140,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "AB = AC and ∠A = 44°. Find ∠B.",
     "answer": "68°.",
-    "explanation": "The equal base angles sum to 136°, so each is 68°."
+    "explanation": "The equal base angles sum to 136°, so each is 68°." + reasonRef("triangle.isoscelesBaseAngles", {"variant":"textbook1"}) + reasonRef("triangle.angleSum", {"variant":"textbook1"})
   },
   {
     "id": "s2-c9-base-number",
@@ -149,7 +151,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "Find x and y in the isosceles triangle.",
     "answer": "x = 68°, y = 44°.",
-    "explanation": "x = 68° (base ∠s, isos. Δ); y = 180° − 136° (∠ sum of Δ).",
+    "explanation": "x = 68° " + reasonRef("triangle.isoscelesBaseAngles", {"variant":"textbook1"}) + "; y = 180° − 136° " + reasonRef("triangle.angleSum", {"variant":"textbook2"}) + ".",
     "s2Chapter9Diagram": "base"
   },
   {
@@ -161,7 +163,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "Find a when the two marked angles are equal.",
     "answer": "a = 7.",
-    "explanation": "AC = AB (sides opp. eq. ∠s).",
+    "explanation": "AC = AB " + reasonRef("triangle.equalAnglesOppositeSides", {"variant":"textbook1"}) + ".",
     "s2Chapter9Diagram": "converse"
   },
   {
@@ -173,7 +175,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "Find x, y and z.",
     "answer": "x = y = z = 60°.",
-    "explanation": "Reference: property of equil. Δ.",
+    "explanation": reasonRef("triangle.equilateralAngles", {"variant":"textbook3"}),
     "s2Chapter9Diagram": "equilateral"
   },
   {
@@ -207,7 +209,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "Find an exterior angle of an equilateral triangle.",
     "answer": "120°.",
-    "explanation": "180° − 60° (adj. ∠s on st. line)."
+    "explanation": "180° − 60° " + reasonRef("angles.straightLine", {"variant":"textbook1"}) + "."
   },
   {
     "id": "s2-c9-meaning",
@@ -252,7 +254,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Congruent Plane Figures",
     "type": "rule",
     "prompt": "Which reference supports equal sides of congruent plane figures?",
-    "answer": "Corresponding sides are equal.",
+    "answer": "Corresponding sides are equal.", answerReason: reasonRef("figures.congruentSides"),
     "explanation": "First establish or use the given congruence."
   },
   {
@@ -263,7 +265,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Congruent Plane Figures",
     "type": "rule",
     "prompt": "Which reference supports equal angles of congruent plane figures?",
-    "answer": "Corresponding angles are equal.",
+    "answer": "Corresponding angles are equal.", answerReason: reasonRef("figures.congruentAngles"),
     "explanation": "Use the stated vertex order."
   },
   {
@@ -318,7 +320,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Similar Plane Figures",
     "type": "rule",
     "prompt": "State both properties of similar polygons.",
-    "answer": "Corresponding angles are equal; corresponding sides are proportional.",
+    "answer": "Corresponding angles are equal; corresponding sides are proportional.", answerReason: reasonRef("figures.similarAngles", {"variant":"textbook1"}) + reasonRef("figures.similarSides", {"variant":"textbook1"}),
     "explanation": "Both conditions are needed for general polygons."
   },
   {
@@ -341,7 +343,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "Find x = FG using the corresponding lengths.",
     "answer": "15.",
-    "explanation": "FG/BC = EF/AB (Corresponding sides are proportional.). x/10 = 12/8.",
+    "explanation": "FG/BC = EF/AB " + reasonRef("figures.similarSides") + ". x/10 = 12/8.",
     "s2Chapter9Diagram": "scaled"
   },
   {
@@ -353,7 +355,7 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "type": "rule",
     "prompt": "ABCD ∼ EFGH and ∠C = 108°. Find ∠G.",
     "answer": "108°.",
-    "explanation": "Corresponding angles are equal. Do not multiply angles by a scale factor."
+    "explanation": "Corresponding angles are equal. Do not multiply angles by a scale factor." + reasonRef("figures.similarAngles")
   },
   {
     "id": "s2-c9-reverse",

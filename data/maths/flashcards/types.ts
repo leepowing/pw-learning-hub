@@ -78,6 +78,7 @@ export type GeometryDiagram =
     };
 
 export type MathsFlashcard = {
+  answerReason?: string;
   id: string;
   level: MathsLevel;
   chapter: number;

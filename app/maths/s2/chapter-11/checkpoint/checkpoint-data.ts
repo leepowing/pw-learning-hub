@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 export type DiagramData = { a: number; b: number; c: number; labels: [string, string, string]; right: boolean };
 export type CheckpointQuestion = { id: string; section: string; prompt: string; options: string[]; answer: number; steps: { working: string; reference: string }[]; diagram?: DiagramData };
 export const questions: CheckpointQuestion[] = [
@@ -99,7 +101,7 @@ export const questions: CheckpointQuestion[] = [
     "steps": [
       {
         "working": "AB² = 6² + 8² = 100",
-        "reference": "Pyth. theorem"
+        "reference": reasonRef("pythagoras.theorem")
       },
       {
         "working": "AB = 10 cm",
@@ -132,7 +134,7 @@ export const questions: CheckpointQuestion[] = [
     "steps": [
       {
         "working": "AC² + 12² = 13²",
-        "reference": "Pyth. theorem"
+        "reference": reasonRef("pythagoras.theorem")
       },
       {
         "working": "AC² = 169 − 144 = 25",
@@ -169,7 +171,7 @@ export const questions: CheckpointQuestion[] = [
     "steps": [
       {
         "working": "d² = 9² + 12² = 225",
-        "reference": "Pyth. theorem"
+        "reference": reasonRef("pythagoras.theorem")
       },
       {
         "working": "d = 15 cm",
@@ -191,7 +193,7 @@ export const questions: CheckpointQuestion[] = [
     "steps": [
       {
         "working": "AB² = 4² + 7² = 65",
-        "reference": "Pyth. theorem"
+        "reference": reasonRef("pythagoras.theorem")
       },
       {
         "working": "AB = √65 cm",
@@ -228,7 +230,7 @@ export const questions: CheckpointQuestion[] = [
       },
       {
         "working": "∠C = 90°",
-        "reference": "converse of Pyth. theorem"
+        "reference": reasonRef("pythagoras.converse")
       }
     ],
     "diagram": {
@@ -261,7 +263,7 @@ export const questions: CheckpointQuestion[] = [
       },
       {
         "working": "130 ≠ 144, so the triangle is not right-angled",
-        "reference": "Pyth. theorem would be required for a right angle"
+        "reference": reasonRef("pythagoras.notRightAngled", {"variant":"textbook1"})
       }
     ]
   },
@@ -283,7 +285,7 @@ export const questions: CheckpointQuestion[] = [
       },
       {
         "working": "The triangle with sides 9, 12 and 15 is right-angled",
-        "reference": "converse of Pyth. theorem"
+        "reference": reasonRef("pythagoras.converse")
       }
     ]
   },
@@ -309,7 +311,7 @@ export const questions: CheckpointQuestion[] = [
       },
       {
         "working": "The angle opposite the side of length 3 is 90°",
-        "reference": "converse of Pyth. theorem"
+        "reference": reasonRef("pythagoras.converse")
       }
     ]
   },

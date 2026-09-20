@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -76,7 +80,7 @@ export default function SurdsLesson() {
         <div className="tableWrap">
           <table>
             <caption>Example 1 · Simplify 3√20</caption>
-            <thead><tr><th>Working</th><th>Reference</th></tr></thead>
+            <thead><tr><th>Working</th><th>Reason</th></tr></thead>
             <tbody>
               <tr><td>3√20 = 3√(4 × 5)</td><td>Extract a square factor</td></tr>
               <tr><td>= 3 × 2√5</td><td>Product rule for square roots</td></tr>
@@ -94,7 +98,7 @@ export default function SurdsLesson() {
         <div className="tableWrap">
           <table>
             <caption>Example 2 · Simplify first</caption>
-            <thead><tr><th>Working</th><th>Reference</th></tr></thead>
+            <thead><tr><th>Working</th><th>Reason</th></tr></thead>
             <tbody>
               <tr><td>√50 + √8 − √18</td><td>Given expression</td></tr>
               <tr><td>= 5√2 + 2√2 − 3√2</td><td>Extract square factors</td></tr>
@@ -141,7 +145,7 @@ export default function SurdsLesson() {
         <div className="tableWrap">
           <table>
             <caption>Example 5 · Rationalize 3/√6</caption>
-            <thead><tr><th>Working</th><th>Reference</th></tr></thead>
+            <thead><tr><th>Working</th><th>Reason</th></tr></thead>
             <tbody>
               <tr><td>3/√6 = (3 × √6)/(√6 × √6)</td><td>Multiply by √6/√6 = 1</td></tr>
               <tr><td>= 3√6/6</td><td>(√6)² = 6</td></tr>
@@ -160,7 +164,7 @@ export default function SurdsLesson() {
         <div className="tableWrap">
           <table>
             <caption>Example 6 · Rationalize, then combine</caption>
-            <thead><tr><th>Working</th><th>Reference</th></tr></thead>
+            <thead><tr><th>Working</th><th>Reason</th></tr></thead>
             <tbody>
               <tr><td>1/√2 + 3√2 = √2/2 + 3√2</td><td>Rationalize the denominator</td></tr>
               <tr><td>= √2/2 + 6√2/2</td><td>Use a common denominator</td></tr>
@@ -187,7 +191,7 @@ export default function SurdsLesson() {
               ))}
             </div>
             {answers[q.id] !== undefined && (
-              <p role="status" className={answers[q.id] === q.answer ? 'correct' : 'feedback'}><strong>{answers[q.id] === q.answer ? 'Correct. ' : 'Not quite. '}</strong>{q.why}</p>
+              <p role="status" className={answers[q.id] === q.answer ? 'correct' : 'feedback'}><strong>{answers[q.id] === q.answer ? 'Correct. ' : 'Not quite. '}</strong><ReasonContent>{q.why}</ReasonContent></p>
             )}
           </fieldset>
         ))}

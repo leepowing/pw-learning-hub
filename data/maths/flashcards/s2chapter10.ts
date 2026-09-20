@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 import type { MathsFlashcard } from "./types";
 import type { S2Chapter10DiagramKind } from "@/components/maths/S2Chapter10FlashcardDiagram";
 export type S2Chapter10Flashcard = MathsFlashcard & {s2Chapter10Diagram?:S2Chapter10DiagramKind};
@@ -34,7 +36,7 @@ export const s2Chapter10Flashcards:S2Chapter10Flashcard[] = [
     "type": "rule",
     "prompt": "Find the interior angle sum of a hexagon.",
     "answer": "720°.",
-    "explanation": "(6 − 2) × 180° = 720°."
+    "explanation": "(6 − 2) × 180° = 720°." + reasonRef("polygon.interiorAngleSum")
   },
   {
     "id": "s2-c10-regular",

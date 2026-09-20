@@ -1,3 +1,5 @@
+
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
 import type { MathsFlashcard } from "./types";
 import type { S2Chapter11DiagramKind } from "@/components/maths/S2Chapter11FlashcardDiagram";
 export type S2Chapter11Flashcard = MathsFlashcard & { s2Chapter11Diagram?: S2Chapter11DiagramKind };
@@ -129,7 +131,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "formula",
     "prompt": "State Pythagoras’ theorem, with c as the hypotenuse.",
     "answer": "The square of the hypotenuse equals the sum of the squares of the other two sides.",
-    "explanation": "Reference: Pyth. theorem. The triangle must be right-angled.",
+    "explanation": reasonRef("pythagoras.theorem", {"variant":"textbook2"}) + " The triangle must be right-angled.",
     "formula": "c^2=a^2+b^2"
   },
   {
@@ -141,7 +143,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A right-angled triangle has perpendicular sides 5 cm and 12 cm. Find the hypotenuse.",
     "answer": "13 cm.",
-    "explanation": "c² = 5² + 12² = 169 (Pyth. theorem). Take the positive root because c is a length.",
+    "explanation": "c² = 5² + 12² = 169 " + reasonRef("pythagoras.theorem") + ". Take the positive root because c is a length.",
     "formula": "c=\\sqrt{169}=13\\text{ cm}"
   },
   {
@@ -153,7 +155,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "Find x in the right-angled triangle.",
     "answer": "12 cm.",
-    "explanation": "x² = 13² − 5² = 144 (Pyth. theorem). The hypotenuse is 13 cm.",
+    "explanation": "x² = 13² − 5² = 144 " + reasonRef("pythagoras.theorem") + ". The hypotenuse is 13 cm.",
     "formula": "x=\\sqrt{144}=12\\text{ cm}",
     "s2Chapter11Diagram": "missing-leg"
   },
@@ -166,7 +168,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "Find the diagonal of a rectangle measuring 6 cm by 8 cm.",
     "answer": "10 cm.",
-    "explanation": "The diagonal forms a right-angled triangle: d² = 6² + 8² = 100 (Pyth. theorem).",
+    "explanation": "The diagonal forms a right-angled triangle: d² = 6² + 8² = 100 " + reasonRef("pythagoras.theorem") + ".",
     "formula": "d=10\\text{ cm}"
   },
   {
@@ -178,7 +180,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A 5 m ladder stands 3 m from a vertical wall on level ground. Find height h.",
     "answer": "4 m.",
-    "explanation": "The ladder is the hypotenuse. h² = 5² − 3² = 16 (Pyth. theorem).",
+    "explanation": "The ladder is the hypotenuse. h² = 5² − 3² = 16 " + reasonRef("pythagoras.theorem") + ".",
     "formula": "h=4\\text{ m}",
     "s2Chapter11Diagram": "ladder"
   },
@@ -191,7 +193,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "An isosceles triangle has equal sides 13 cm and base 10 cm. Find its height to that base.",
     "answer": "12 cm.",
-    "explanation": "The perpendicular from the apex bisects the base into 5 cm halves. h² = 13² − 5² = 144 (Pyth. theorem)."
+    "explanation": "The perpendicular from the apex bisects the base into 5 cm halves. h² = 13² − 5² = 144 " + reasonRef("pythagoras.theorem") + "."
   },
   {
     "id": "s2-c11-exact-diagonal",
@@ -202,7 +204,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A unit square has side length 1. Find its exact diagonal length.",
     "answer": "√2.",
-    "explanation": "The diagonal is the hypotenuse of a right-angled triangle with legs 1 and 1. d² = 2 (Pyth. theorem).",
+    "explanation": "The diagonal is the hypotenuse of a right-angled triangle with legs 1 and 1. d² = 2 " + reasonRef("pythagoras.theorem") + ".",
     "formula": "d=\\sqrt2",
     "s2Chapter11Diagram": "unit-square"
   },
@@ -215,7 +217,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A right-angled triangle has perpendicular sides 0.9 m and 120 cm. Find its hypotenuse in metres.",
     "answer": "1.5 m.",
-    "explanation": "Convert 120 cm to 1.2 m first. c² = 0.9² + 1.2² = 2.25 (Pyth. theorem)."
+    "explanation": "Convert 120 cm to 1.2 m first. c² = 0.9² + 1.2² = 2.25 " + reasonRef("pythagoras.theorem") + "."
   },
   {
     "id": "s2-c11-converse-rule",
@@ -226,7 +228,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "How can you test whether a triangle with sides a, b and c is right-angled?",
     "answer": "Choose c as the longest side, then check whether a² + b² = c².",
-    "explanation": "If equality holds, the angle opposite c is 90°. Reference: converse of Pyth. theorem.",
+    "explanation": "If equality holds, the angle opposite c is 90°. " + reasonRef("pythagoras.converse", {"variant":"textbook1"}),
     "formula": "a^2+b^2=c^2\\ \\Rightarrow\\ \\text{right-angled}"
   },
   {
@@ -261,7 +263,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A triangle has sides 17, 8 and 15. Is it right-angled?",
     "answer": "Yes; the right angle is opposite the side of length 17.",
-    "explanation": "Identify 17 as the longest side. 8² + 15² = 289 = 17² (converse of Pyth. theorem)."
+    "explanation": "Identify 17 as the longest side. 8² + 15² = 289 = 17² " + reasonRef("pythagoras.converse") + "."
   },
   {
     "id": "s2-c11-triangle-existence",
@@ -283,7 +285,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "Is a triangle with sides 9 cm, 12 cm and 15 cm right-angled?",
     "answer": "Yes.",
-    "explanation": "9² + 12² = 225 = 15² (converse of Pyth. theorem). These lengths are three times 3, 4 and 5."
+    "explanation": "9² + 12² = 225 = 15² " + reasonRef("pythagoras.converse") + ". These lengths are three times 3, 4 and 5."
   },
   {
     "id": "s2-c11-converse-units",
@@ -294,7 +296,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A triangle has sides 0.6 m, 80 cm and 1 m. Is it right-angled?",
     "answer": "Yes.",
-    "explanation": "Use metres: 0.6² + 0.8² = 1² (converse of Pyth. theorem)."
+    "explanation": "Use metres: 0.6² + 0.8² = 1² " + reasonRef("pythagoras.converse") + "."
   },
   {
     "id": "s2-c11-converse-surds",
@@ -305,7 +307,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "A triangle has sides √5, 2 and 3. Is it right-angled?",
     "answer": "Yes; the right angle is opposite the side of length 3.",
-    "explanation": "3 is longest. (√5)² + 2² = 5 + 4 = 9 = 3² (converse of Pyth. theorem)."
+    "explanation": "3 is longest. (√5)² + 2² = 5 + 4 = 9 = 3² " + reasonRef("pythagoras.converse") + "."
   },
   {
     "id": "s2-c11-theorem-versus-converse",
@@ -316,7 +318,7 @@ export const s2Chapter11Flashcards: S2Chapter11Flashcard[] = [
     "type": "rule",
     "prompt": "When do you use Pythagoras’ theorem, and when do you use its converse?",
     "answer": "Use the theorem to calculate sides when a right angle is known; use the converse to establish a right angle from side lengths.",
-    "explanation": "References: Pyth. theorem; converse of Pyth. theorem. Do not assume the right angle you are trying to prove."
+    "explanation": reasonRef("pythagoras.theorem") + reasonRef("pythagoras.converse", {"variant":"textbook1"}) + " Do not assume the right angle you are trying to prove."
   },
   {
     "id": "s2-c11-rational-definition",

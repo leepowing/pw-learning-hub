@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -18,21 +22,21 @@ const rules: Array<{
     shortName: "AAA",
     title: "Three corresponding angles are equal",
     description: "If all three pairs of corresponding angles are equal, the triangles are similar.",
-    reference: "AAA",
+    reference: reasonRef("similarity.aa"),
   },
   {
     code: "SSS-P",
     shortName: "3 sides",
     title: "Three corresponding sides are proportional",
     description: "If the three pairs of corresponding sides have the same ratio, the triangles are similar.",
-    reference: "3 sides proportional",
+    reference: reasonRef("similarity.sss"),
   },
   {
     code: "SAS-P",
     shortName: "2 sides + ∠",
     title: "Two sides are proportional and the included angles are equal",
     description: "The equal angle must lie between the two pairs of proportional sides.",
-    reference: "ratio of 2 sides, inc. ∠",
+    reference: reasonRef("similarity.sas"),
   },
 ];
 
@@ -79,7 +83,7 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
             <h3>Three corresponding angles are equal</h3>
             <div className="factRows"><p>∠A = ∠X</p><p>∠B = ∠Y</p><p>∠C = ∠Z</p></div>
             <strong className="conclusion">∴ △ABC ∼ △XYZ</strong>
-            <p className="reference">[Reference: AAA]</p>
+            <p className="reference"><DualReason reasonId="similarity.aa" heading /></p>
           </div>
         </div>
         <div className="tipStrip"><strong>Shortcut:</strong> if two pairs of angles are equal, the third pair must also be equal because the angles of each triangle total 180°.</div>
@@ -95,7 +99,7 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
             <div className="ratioLine"><Fraction top="AB" bottom="XY" /><b>=</b><Fraction top="BC" bottom="YZ" /><b>=</b><Fraction top="CA" bottom="ZX" /></div>
             <div className="numberCheck">3/6 = 4/8 = 5/10 = 1/2</div>
             <strong className="conclusion">∴ △ABC ∼ △XYZ</strong>
-            <p className="reference">[Reference: 3 sides proportional]</p>
+            <p className="reference"><DualReason reasonId="similarity.sss" heading /></p>
           </div>
         </div>
       </section>
@@ -110,7 +114,7 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
             <div className="ratioLine compact"><Fraction top="AB" bottom="XY" /><b>=</b><Fraction top="AC" bottom="XZ" /></div>
             <p className="andLine">and &nbsp; ∠A = ∠X</p>
             <strong className="conclusion">∴ △ABC ∼ △XYZ</strong>
-            <p className="reference">[Reference: ratio of 2 sides, inc. ∠]</p>
+            <p className="reference"><DualReason reasonId="similarity.sas" heading /></p>
           </div>
         </div>
         <div className="warningBox"><strong>Position check:</strong> ∠A and ∠X are between the two side pairs used in the ratios. A non-included equal angle is not enough for this test.</div>
@@ -140,20 +144,20 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
             <div className="proof">
               <p><Fraction top="PQ" bottom="ST" /> = 5/10 = 1/2</p>
               <p><Fraction top="PR" bottom="SU" /> = 4/8 = 1/2</p>
-              <p>∠QPR = ∠TSU <small>(given)</small></p>
+              <p>∠QPR = ∠TSU <small><DualReason reasonId="geometry.given" heading /></small></p>
               <strong>∴ △PQR ∼ △STU</strong>
-              <span>[Reference: ratio of 2 sides, inc. ∠]</span>
+              <span><DualReason reasonId="similarity.sas" heading /></span>
             </div>
           </article>
           <article className="workedCard">
             <p className="questionLabel">EXAMPLE 2 · AAA</p>
             <NestedTrianglesDiagram />
             <div className="proof">
-              <p>∠DAE = ∠BAC <small>(common angle)</small></p>
-              <p>∠ADE = ∠ABC <small>(corresponding angles, DE // BC)</small></p>
-              <p>∠AED = ∠ACB <small>(corresponding angles, DE // BC)</small></p>
+              <p>∠DAE = ∠BAC <small><DualReason reasonId="geometry.commonAngle" variant="textbook1" heading /></small></p>
+              <p>∠ADE = ∠ABC <small><DualReason reasonId="parallel.corresponding" params={{"line1":"DE","line2":"BC"}} variant="textbook1" heading /></small></p>
+              <p>∠AED = ∠ACB <small><DualReason reasonId="parallel.corresponding" params={{"line1":"DE","line2":"BC"}} variant="textbook1" heading /></small></p>
               <strong>∴ △ADE ∼ △ABC</strong>
-              <span>[Reference: AAA]</span>
+              <span><DualReason reasonId="similarity.aa" heading /></span>
             </div>
           </article>
         </div>
@@ -198,7 +202,7 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
         .memoryStrip, .tipStrip { background: #f5f3ff; border-left: 5px solid #8b5cf6; }
         .warningBox { background: #fff7ed; border-left: 5px solid #f59e0b; }
         .ruleLayout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 20px; }
-        .diagramPanel { min-height: 320px; display: grid; place-items: center; padding: 14px; border-radius: 20px; background: #f8fafc; border: 1px solid #e5edf5; }
+        .diagramPanel { min-width: 0; max-width: 100%; overflow-x: auto; min-height: 320px; display: grid; place-items: center; padding: 14px; border-radius: 20px; background: #f8fafc; border: 1px solid #e5edf5; }
         .similaritySvg, .workedSvg { display: block; width: 100%; height: auto; max-height: 310px; }
         .rulePanel { display: flex; flex-direction: column; justify-content: center; padding: 27px; border-radius: 20px; background: #f5f3ff; border: 1px solid #ddd6fe; }
         .rulePanel h3 { margin: 13px 0 10px; font-size: 24px; line-height: 1.3; }
@@ -226,10 +230,10 @@ export default function ConditionsForTrianglesToBeSimilarPage() {
         .notEnoughGrid strong { display: block; margin-top: 10px; }
         .notEnoughGrid p { margin: 6px 0 0; color: #5a7088; line-height: 1.45; }
         .workedGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .workedCard { padding: 20px; border: 1px solid #dce7f2; border-radius: 20px; background: #f8fafc; }
+        .workedCard { min-width: 0; overflow-x: auto; padding: 20px; border: 1px solid #dce7f2; border-radius: 20px; background: #f8fafc; }
         .proof { padding: 17px; border-radius: 15px; background: white; border: 1px solid #e5edf5; }
-        .proof p { display: flex; align-items: center; gap: 7px; margin: 8px 0; color: #405a76; }
-        .proof small { margin-left: auto; color: #73879d; text-align: right; }
+        .proof p { display: block; align-items: center; gap: 7px; margin: 8px 0; color: #405a76; }
+        .proof small { display: block; margin-top: 8px; margin-left: 0; color: #73879d; text-align: right; }
         .proof strong { display: block; margin-top: 13px; color: #6d28d9; font-family: Georgia, serif; font-size: 22px; }
         .proof > span { display: block; margin-top: 7px; color: #0f766e; font-size: 13px; font-weight: 800; }
         .summaryCard { padding: 32px; border-radius: 25px; background: linear-gradient(135deg, #6d28d9, #7c3aed); color: white; margin-top: 26px; }

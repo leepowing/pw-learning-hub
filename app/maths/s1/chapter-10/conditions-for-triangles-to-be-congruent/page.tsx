@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { Pair, Nested } from "@/components/maths/Chapter10Geometry";
 
@@ -85,7 +89,7 @@ export default function ConditionsForTrianglesToBeCongruentPage() {
               <li>The corresponding hypotenuses are equal.</li>
               <li>One other pair of corresponding sides is equal.</li>
             </ul>
-            <p className="reference">[Reference: RHS]</p>
+            <p className="reference"><DualReason reasonId="congruence.rhs" heading /></p>
           </div>
         </div>
         <div className="tipStrip"><strong>Remember:</strong> the hypotenuse is the side opposite the right angle.</div>
@@ -114,22 +118,22 @@ export default function ConditionsForTrianglesToBeCongruentPage() {
             <p className="questionLabel">EXAMPLE 1</p>
             <WorkedSSSDiagram />
             <div className="proof">
-              <p>AB = DE <small>(given)</small></p>
-              <p>BC = EF <small>(given)</small></p>
-              <p>AC = DF <small>(given)</small></p>
+              <p>AB = DE <small><DualReason reasonId="geometry.given" heading /></small></p>
+              <p>BC = EF <small><DualReason reasonId="geometry.given" heading /></small></p>
+              <p>AC = DF <small><DualReason reasonId="geometry.given" heading /></small></p>
               <strong>∴ △ABC ≅ △DEF</strong>
-              <span>[Reference: SSS]</span>
+              <span><DualReason reasonId="congruence.sss" heading /></span>
             </div>
           </article>
           <article className="workedCard">
             <p className="questionLabel">EXAMPLE 2</p>
             <WorkedRhsDiagram />
             <div className="proof">
-              <p>∠PQR = ∠XYZ = 90° <small>(given)</small></p>
-              <p>PR = XZ <small>(given hypotenuses)</small></p>
-              <p>PQ = XY <small>(given)</small></p>
+              <p>∠PQR = ∠XYZ = 90° <small><DualReason reasonId="geometry.given" heading /></small></p>
+              <p>PR = XZ <small><DualReason reasonId="geometry.givenHypotenuses" heading /></small></p>
+              <p>PQ = XY <small><DualReason reasonId="geometry.given" heading /></small></p>
               <strong>∴ △PQR ≅ △XYZ</strong>
-              <span>[Reference: RHS]</span>
+              <span><DualReason reasonId="congruence.rhs" heading /></span>
             </div>
           </article>
         </div>
@@ -202,7 +206,7 @@ export default function ConditionsForTrianglesToBeCongruentPage() {
         .workedCard { overflow: hidden; padding: 20px; border: 1px solid #dce7f2; border-radius: 20px; background: #f8fafc; }
         .workedSvg { display: block; width: 100%; height: auto; max-height: 245px; margin: 2px auto 12px; }
         .proof { padding: 17px; border-radius: 15px; background: white; border: 1px solid #e5edf5; }
-        .proof p { display: flex; justify-content: space-between; gap: 10px; margin: 7px 0; color: #405a76; }
+        .proof p { display: block; justify-content: space-between; gap: 10px; margin: 7px 0; color: #405a76; }
         .proof small { color: #73879d; }
         .proof strong { display: block; margin-top: 13px; color: #0f766e; font-family: Georgia, serif; font-size: 22px; }
         .proof span { display: block; margin-top: 7px; color: #0f766e; font-size: 13px; font-weight: 800; }
@@ -247,7 +251,7 @@ function RuleCard({ item }: { item: (typeof conditions)[number] }) {
       <div className="ruleTitle"><div className="codeBadge">{item.code}</div><div><h3>{item.name}</h3><p>{item.description}</p></div></div>
       <div className="ruleDiagram"><ConditionDiagram type={item.code} /></div>
       <p className="ruleNote"><strong>Position check:</strong> {item.reminder}</p>
-      <p className="reference">[Reference: {item.code}]</p>
+      <p className="reference"><ReasonContent heading>{({SSS:reasonRef("congruence.sss"),SAS:reasonRef("congruence.sas"),ASA:reasonRef("congruence.asa"),AAS:reasonRef("congruence.asaFromAas"),RHS:reasonRef("congruence.rhs")})[item.code]}</ReasonContent></p>
     </article>
   );
 }

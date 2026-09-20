@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 
 import { useState } from "react";
 import Link from "next/link";
@@ -18,7 +22,7 @@ const questions = [
     prompt: "A, O and B lie on a straight line. Ray OC lies between OA and OB, and ∠AOC = 47°. Which reason justifies 47° + ∠COB = 180°?",
     options: ["Adjacent angles on a straight line.", "Angles at a point.", "Vertically opposite angles."],
     answer: 0,
-    explanation: "OA and OB are opposite rays on a straight line. The two adjacent angles therefore sum to 180°, so ∠COB = 133°.",
+    explanation: "OA and OB are opposite rays on a straight line. The two adjacent angles therefore sum to 180°, so ∠COB = 133°." + reasonRef("angles.straightLine", {"variant":"textbook1"}),
   },
   {
     id: "deduction",
@@ -101,9 +105,9 @@ export default function DeductiveReasoningPage() {
             <caption>Proof that ∠COB = 112°</caption>
             <thead><tr><th scope="col">Statement</th><th scope="col">Reason</th></tr></thead>
             <tbody>
-              <tr><td>A, O and B lie on a straight line.</td><td>Given.</td></tr>
-              <tr><td>∠AOC + ∠COB = 180°</td><td>Adjacent angles on a straight line.</td></tr>
-              <tr><td>68° + ∠COB = 180°</td><td>Substitute ∠AOC = 68° (given).</td></tr>
+              <tr><td>A, O and B lie on a straight line.</td><td><DualReason reasonId="geometry.given" variant="textbook1" /></td></tr>
+              <tr><td>∠AOC + ∠COB = 180°</td><td><DualReason reasonId="angles.straightLine" variant="textbook1" /></td></tr>
+              <tr><td>68° + ∠COB = 180°</td><td><ReasonContent>{"Substitute ∠AOC = 68° " + reasonRef("geometry.given") + "."}</ReasonContent></td></tr>
               <tr><td>∠COB = 180° − 68°</td><td>Subtract 68° from both sides.</td></tr>
               <tr className="conclusionRow"><td>∴ ∠COB = 112°</td><td>Simplify. The required conclusion follows.</td></tr>
             </tbody>
@@ -111,7 +115,7 @@ export default function DeductiveReasoningPage() {
         </div>
         <div className="twoColumns">
           <div className="note"><strong>∴ means “therefore”.</strong><br />It introduces a conclusion supported by earlier steps.</div>
-          <div className="note"><strong>Standard reason:</strong><br />[Reference: adj. ∠s on st. line]</div>
+          <div className="note"><strong>Standard reason:</strong><br /><ReasonContent>{reasonRef("angles.straightLine", {"variant":"textbook1"})}</ReasonContent></div>
         </div>
         <p className="supportText">A numerical answer alone is not a complete proof. The reason explains why the equation is valid.</p>
       </section>
@@ -142,12 +146,12 @@ export default function DeductiveReasoningPage() {
               <caption>From equal angles to perpendicular lines</caption>
               <thead><tr><th scope="col">Statement</th><th scope="col">Reason</th></tr></thead>
               <tbody>
-                <tr><td>Let ∠AOC = ∠COB = x.</td><td>The two angles are equal (given).</td></tr>
-                <tr><td>x + x = 180°</td><td>Adjacent angles on a straight line.</td></tr>
+                <tr><td>Let ∠AOC = ∠COB = x.</td><td><ReasonContent>{"The two angles are equal " + reasonRef("geometry.given") + "."}</ReasonContent></td></tr>
+                <tr><td>x + x = 180°</td><td><DualReason reasonId="angles.straightLine" variant="textbook1" /></td></tr>
                 <tr><td>2x = 180°</td><td>Collect like terms.</td></tr>
                 <tr><td>x = 90°</td><td>Divide both sides by 2.</td></tr>
                 <tr><td>∠COB = 90°</td><td>Substitute the value of x.</td></tr>
-                <tr className="conclusionRow"><td>∴ OC ⟂ AB</td><td>Definition of perpendicular lines.</td></tr>
+                <tr className="conclusionRow"><td>∴ OC ⟂ AB</td><td><DualReason reasonId="geometry.perpendicular" /></td></tr>
               </tbody>
             </table>
           </div>
@@ -191,7 +195,7 @@ export default function DeductiveReasoningPage() {
                 ))}
               </div>
               <div id={`feedback-${question.id}`} aria-live="polite" aria-atomic="true">
-                {isAnswered && <p className={`feedback ${isCorrect ? "correctFeedback" : "retryFeedback"}`}><strong>{isCorrect ? "Correct. " : "Not quite. "}</strong>{question.explanation}</p>}
+                {isAnswered && <p className={`feedback ${isCorrect ? "correctFeedback" : "retryFeedback"}`}><strong>{isCorrect ? "Correct. " : "Not quite. "}</strong><ReasonContent>{question.explanation}</ReasonContent></p>}
               </div>
             </fieldset>
           );

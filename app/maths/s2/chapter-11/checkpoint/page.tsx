@@ -1,4 +1,8 @@
 "use client";
+import { reasonRef } from "@/data/maths/reasons/reasonBank";
+import { DualReason, ReasonContent } from "@/components/maths/DualReason";
+
+
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { questions } from './checkpoint-data';
@@ -40,7 +44,7 @@ export default function ChapterElevenCheckpoint() {
           const correct=group.filter(q=>answers[q.id]===q.answer).length;
           return <li key={lesson.section}><Link href={`/maths/s2/chapter-11/${lesson.slug}`}>{lesson.section} {lesson.title}</Link><strong> — {correct} / {group.length}</strong></li>;
         })}</ul>
-        <p className="note">“Pyth. theorem” and “converse of Pyth. theorem” follow the supplied Chapter Summary. Other Reference entries explain the working.</p>
+        <p className="note">“Pyth. theorem” and “converse of Pyth. theorem” follow the supplied Chapter Summary. Other Reason entries explain the working.</p>
         <button type="button" onClick={restart}>Start a new attempt</button>
       </section>}
       <form onSubmit={e=>{e.preventDefault();submit();}}>
@@ -57,7 +61,7 @@ export default function ChapterElevenCheckpoint() {
             ))}</div>
             {submitted && <div className="solution">
               <p className={answers[q.id]===q.answer?'correct':'incorrect'}><strong>{answers[q.id]===q.answer?'Correct.':'Not quite.'}</strong> Correct answer: {q.options[q.answer]}</p>
-              <div className="tableWrap"><table><caption>Worked solution · Question {index+1}</caption><thead><tr><th scope="col">Working</th><th scope="col">Reference</th></tr></thead><tbody>{q.steps.map((step,j)=><tr key={`${q.id}-step-${j}`}><td>{step.working}</td><td>{step.reference}</td></tr>)}</tbody></table></div>
+              <div className="tableWrap"><table><caption>Worked solution · Question {index+1}</caption><thead><tr><th scope="col">Working</th><th scope="col">Reason</th></tr></thead><tbody>{q.steps.map((step,j)=><tr key={`${q.id}-step-${j}`}><td>{step.working}</td><td><ReasonContent>{step.reference}</ReasonContent></td></tr>)}</tbody></table></div>
             </div>}
           </section>
         ))}
