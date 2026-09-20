@@ -1,9 +1,0 @@
-Section 11.5 validation
-
-PASS: Actual simplifyRoot function tested for every integer 1..10000: coefficient squared times radicand equals input, radicand has no remaining square factor.
-PASS: 16 question IDs are unique, answer indices exist. Answers and worked examples reviewed mathematically.
-PASS: Installer file workflow tested in temporary fixtures for all four combinations of the two known Section 11.4 fixes: preflight makes no changes, installation succeeds, fixes retained/applied, repeat installation makes no changes.
-PASS: Custom homepage conflict and simulated parser diagnostic stop before backup or target writes.
-IMPORTANT: Installer workflow tests used a stub compiler interface. They do NOT establish actual TypeScript parsing, type checking or build success. The delivered installer requires and runs the real TypeScript compiler parser from the user's project before writing.
-VISUAL REVIEW: diagram-review.png renders all 10 choices using the same grid mathematics and labels. Labels fit without overlap. This is an independent SVG render, not a React/browser screenshot.
-NOT VERIFIED HERE: real TSX compiler parsing, Next.js build, live browser interactions, responsive browser layout, Vercel deployment, Supabase persistence. Run --check and npm run build locally, then check the lesson in the browser.

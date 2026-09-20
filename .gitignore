@@ -41,3 +41,15 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Local Chapter 11 installers and backups
+/_pw-backups/
+/PW-S2-Chapter11-Homepage/
+/PW-S2-Chapter11-Checkpoint/
+/PW-S2-Chapter11-Checkpoint-Layout-Fix/
+/PW-S2-Chapter11-Flashcards/
+/PW-S2-Section11-1/
+/PW-S2-Section11-2/
+/PW-S2-Section11-3/
+/PW-S2-Section11-4/
+/PW-S2-Section11-5/
