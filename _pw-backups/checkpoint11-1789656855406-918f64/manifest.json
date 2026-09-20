@@ -1,0 +1,32 @@
+[
+  {
+    "path": "app\\maths\\s2\\chapter-11\\page.tsx",
+    "created": false,
+    "beforeSha256": "bc16eaacc7c7549d996a7654bb915b7024621eff2984a67caa0e7f2e19a4a6cf",
+    "installedSha256": "bcc60eae6cfc06d1f8bd3fa52de2ddaf921983ccf7a7dd08e857fff9a0075086"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\operations-of-surds\\page.tsx",
+    "created": false,
+    "beforeSha256": "ca5a19c109b9b7b638d7af8830438ff34939b17fbca00aa4577aa667440a6e4d",
+    "installedSha256": "48dddc69dbbceb61da4cf43d773fef79648fdeed6d9254956cb7f19bc553b604"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\checkpoint\\page.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "0cf33e4a61c0fa295bdfb14375381c730cfc9710547863e0a6102f5ea2bcbe2c"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\checkpoint\\checkpoint-data.ts",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "ec81ab0bb12d802cb9d1588a4739fc49c8559aec2f2bbe3402512605765694d9"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\checkpoint\\CheckpointTriangle.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "f01e0bab3c5c045255848259ea164e83818c9dedb9747c3181899ced4914de41"
+  }
+]

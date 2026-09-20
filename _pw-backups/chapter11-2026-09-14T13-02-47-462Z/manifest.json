@@ -1,0 +1,14 @@
+[
+  {
+    "path": "app\\maths\\s2\\page.tsx",
+    "created": false
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\page.tsx",
+    "created": true
+  },
+  {
+    "path": "components\\maths\\S2Chapter11Geometry.tsx",
+    "created": true
+  }
+]

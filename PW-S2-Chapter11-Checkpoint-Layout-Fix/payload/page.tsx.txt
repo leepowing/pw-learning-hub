@@ -1,0 +1,74 @@
+"use client";
+import { useRef, useState } from 'react';
+import Link from 'next/link';
+import { questions } from './checkpoint-data';
+import CheckpointTriangle from './CheckpointTriangle';
+const lessons = [
+  { section:'11.1', title:'Concept of nth Roots', slug:'concept-of-nth-roots' },
+  { section:'11.2', title:'Pythagoras’ Theorem', slug:'pythagoras-theorem-and-applications' },
+  { section:'11.3', title:'Converse of Pythagoras’ Theorem', slug:'converse-of-pythagoras-theorem' },
+  { section:'11.4', title:'Rational and Irrational Numbers', slug:'rational-and-irrational-numbers' },
+  { section:'11.5', title:'Operations of Surds', slug:'operations-of-surds' },
+];
+export default function ChapterElevenCheckpoint() {
+  const [answers,setAnswers] = useState<Record<string,number>>({});
+  const [submitted,setSubmitted] = useState(false);
+  const [notice,setNotice] = useState('');
+  const resultRef = useRef<HTMLHeadingElement>(null);
+  const attempted = questions.filter(q=>answers[q.id]!==undefined).length;
+  const score = questions.filter(q=>answers[q.id]===q.answer).length;
+  function submit() {
+    const missing=questions.find(q=>answers[q.id]===undefined);
+    if(missing){setNotice('Please answer every question before submitting.');document.getElementById(missing.id)?.focus();return;}
+    setSubmitted(true);setNotice('');
+    requestAnimationFrame(()=>resultRef.current?.focus());
+  }
+  function restart() {
+    setAnswers({});setSubmitted(false);setNotice('New attempt started. All answers have been cleared.');
+    requestAnimationFrame(()=>document.getElementById(questions[0].id)?.focus());
+  }
+  return (
+    <main className="checkpoint">
+      <Link href="/maths/s2/chapter-11">← Chapter 11 overview</Link>
+      <header><p className="eyebrow">S2 · CHAPTER 11 · CHECKPOINT</p><h1>Pythagoras’ Theorem and Irrational Numbers</h1><p>20 questions · 4 from each section · 1 mark per question</p><p>Work on paper first and choose one answer. You can change your choices before submitting. Keep exact values unless asked otherwise.</p><p className="note">This attempt stays on this page only. Reloading clears your answers.</p></header>
+      <p className="c11AnsweredCount" role="status">Answered {attempted} of {questions.length}</p>
+      {submitted && <section className="results" aria-labelledby="result-title">
+        <h2 id="result-title" tabIndex={-1} ref={resultRef}>Your result: {score} / {questions.length}</h2>
+        <p>{score===questions.length?'All correct. Review the reasoning below to consolidate your understanding.':'Review the worked solutions below, then revisit the sections you need.'}</p>
+        <ul>{lessons.map(lesson=>{
+          const group=questions.filter(q=>q.section===lesson.section);
+          const correct=group.filter(q=>answers[q.id]===q.answer).length;
+          return <li key={lesson.section}><Link href={`/maths/s2/chapter-11/${lesson.slug}`}>{lesson.section} {lesson.title}</Link><strong> — {correct} / {group.length}</strong></li>;
+        })}</ul>
+        <p className="note">“Pyth. theorem” and “converse of Pyth. theorem” follow the supplied Chapter Summary. Other Reference entries explain the working.</p>
+        <button type="button" onClick={restart}>Start a new attempt</button>
+      </section>}
+      <form onSubmit={e=>{e.preventDefault();submit();}}>
+        {questions.map((q,index)=>(
+          <section className="c11QuestionCard" role="group" aria-labelledby={`${q.id}-title`} key={q.id} id={q.id} tabIndex={-1}>
+            <h2 className="c11QuestionTitle" id={`${q.id}-title`}>{index+1}. {q.prompt}</h2>
+            <p className="sectionTag">Section {q.section}</p>
+            {q.diagram && <CheckpointTriangle data={q.diagram} />}
+            <div className="options">{q.options.map((option,j)=>(
+              <label key={`${q.id}-option-${j}`} className={answers[q.id]===j?'selected':''}>
+                <input type="radio" name={q.id} value={j} checked={answers[q.id]===j} disabled={submitted} onChange={()=>{setAnswers(previous=>({...previous,[q.id]:j}));setNotice('');}} />
+                <span><strong>{String.fromCharCode(65+j)}.</strong> {option}</span>
+              </label>
+            ))}</div>
+            {submitted && <div className="solution">
+              <p className={answers[q.id]===q.answer?'correct':'incorrect'}><strong>{answers[q.id]===q.answer?'Correct.':'Not quite.'}</strong> Correct answer: {q.options[q.answer]}</p>
+              <div className="tableWrap"><table><caption>Worked solution · Question {index+1}</caption><thead><tr><th scope="col">Working</th><th scope="col">Reference</th></tr></thead><tbody>{q.steps.map((step,j)=><tr key={`${q.id}-step-${j}`}><td>{step.working}</td><td>{step.reference}</td></tr>)}</tbody></table></div>
+            </div>}
+          </section>
+        ))}
+        <p role="status">{notice}</p>
+        {!submitted && <button className="primary" type="submit">Submit checkpoint</button>}
+        {submitted && <button type="button" onClick={restart}>Start a new attempt</button>}
+      </form>
+      <footer><Link href="/maths/s2/chapter-11/operations-of-surds">← Section 11.5</Link><Link href="/maths/s2/chapter-11">Chapter 11 overview →</Link></footer>
+      <style jsx>{`
+        .checkpoint{max-width:1080px;width:calc(100% - 32px);margin:36px auto 70px;font:18px/1.6 Arial,sans-serif;color:#24364b}.checkpoint *{box-sizing:border-box}.checkpoint :global(a){color:#0f766e;font-weight:700}header,.results{padding:30px;border:1px solid #a5f3fc;border-radius:22px;background:#ecfeff;margin-top:22px}h1{font-size:clamp(30px,5vw,48px);line-height:1.2;overflow-wrap:anywhere}h2{font-size:28px;line-height:1.3}.eyebrow,.sectionTag{font-size:13px;font-weight:700;color:#0e7490;letter-spacing:.06em}.note{font-size:15px;color:#52647a}.c11AnsweredCount{display:block;position:static;height:auto;min-height:0;max-height:none;overflow:visible;white-space:normal;font-size:18px;line-height:1.6;font-weight:700;margin:24px 0;padding:16px 20px;background:#f1f5f9;border-radius:12px}.c11QuestionCard{display:block;height:auto;min-width:0;margin:28px 0;padding:24px;border:1px solid #cbd5e1;border-radius:18px;background:white}.c11QuestionTitle{display:block;position:static;font-size:21px;line-height:1.5;font-weight:700;max-width:100%;margin:0 0 14px;padding:0;overflow-wrap:anywhere}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:flex;gap:12px;align-items:flex-start;border:1px solid #cbd5e1;border-radius:12px;padding:15px;cursor:pointer;overflow-wrap:anywhere}label.selected{border:2px solid #0f766e;background:#f0fdfa;padding:14px}input{margin-top:6px;accent-color:#0f766e;width:18px;height:18px;flex-shrink:0}.correct{color:#166534}.incorrect{color:#9a3412}.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:16px;text-align:left}caption{text-align:left;font-weight:700;margin:12px 0}td,th{border:1px solid #cbd5e1;padding:12px;vertical-align:top}th{background:#f0fdfa}button{font:inherit;font-weight:700;padding:13px 20px;border:1px solid #0f766e;border-radius:12px;background:white;color:#0f766e;cursor:pointer;min-height:48px}.primary{background:#0f766e;color:white}.checkpoint :global(a:focus-visible),button:focus-visible,input:focus-visible,.c11QuestionCard:focus-visible,h2:focus-visible{outline:3px solid #d97706;outline-offset:4px}footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-top:35px}li{margin:12px 0}@media(max-width:700px){.options{grid-template-columns:1fr}header,.results,.c11QuestionCard{padding:20px}.checkpoint{font-size:17px}td,th{padding:9px}}
+      `}</style>
+    </main>
+  );
+}

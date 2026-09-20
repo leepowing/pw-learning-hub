@@ -1,1 +1,0 @@
-{"old": "<span className=\"coming\">Lesson coming soon</span>", "new": "{n === \"9.1\" ? <Link href=\"/maths/s2/chapter-9/simple-proofs\" className=\"back\">Start Section 9.1 \u2192</Link> : <span className=\"coming\">Lesson coming soon</span>}"}

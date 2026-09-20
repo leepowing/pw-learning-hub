@@ -1,0 +1,26 @@
+[
+  {
+    "path": "app\\maths\\s2\\chapter-11\\page.tsx",
+    "created": false,
+    "beforeSha256": "354c9f4ec92122124d07dfb7c8a545eda27f95cc3d48d682c9289ef367c7debf",
+    "installedSha256": "66dec606e6702a58bc2c3a3423317423e52eff976654e743ab69510dc2c1559d"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\pythagoras-theorem-and-applications\\page.tsx",
+    "created": false,
+    "beforeSha256": "632f4fea9b780dcb4a060bb85160debb61493bcbd3e0116a592825c19f148c59",
+    "installedSha256": "3556f51fc76681906047e9ad54d461cfe8c62b17038f71f85d10250031fe3001"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\converse-of-pythagoras-theorem\\page.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "ca07f3facc8eb280f1553369d3267326e385c0557e0834792550885da0d2f397"
+  },
+  {
+    "path": "components\\maths\\S2Chapter11Converse.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "88a378528f05a1a73e107466ff78cb51599e279ccabd23db33d6f657f5f39400"
+  }
+]

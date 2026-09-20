@@ -1,0 +1,19 @@
+Passed:
+- app and src/app installation fixtures.
+- Preflight performs no writes.
+- Exact backups of both modified pages.
+- CRLF and BOM preservation.
+- Repeated installation makes no further changes.
+- Custom content conflicts in homepage, Section 11.1, Section 11.2 and new geometry component stop installation.
+- Twelve practice records and numeric checks.
+- Triangle perpendicularity and square construction invariants.
+- All 25 area-slider combinations (2 through 6 on each leg).
+- Representative diagrams independently rendered and visually reviewed; side labels moved farther from edges after review.
+
+Not completed:
+- TypeScript / Next.js compilation: required project dependencies unavailable here.
+- Actual React browser rendering, interactions, keyboard and mobile tests.
+- User's local build, Vercel deployment, authentication and Supabase persistence.
+
+diagram-review.png uses the same coordinate formulas in an independent SVG renderer.
+It is not a screenshot of the running Next.js page.

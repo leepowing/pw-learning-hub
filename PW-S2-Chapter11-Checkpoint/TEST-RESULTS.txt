@@ -1,0 +1,10 @@
+S2 Chapter 11 Checkpoint — validation
+
+PASS: Actual TypeScript parser checked every payload, plus all five installer candidate files.
+PASS: Isolated strict TypeScript check for the new page, question data and diagram component, with React types and styled-jsx types. next/link used an anchor-compatible declaration because Next.js is not installed in the test fixture. This is NOT a full Next.js build.
+PASS: 20 unique stable question IDs, 4 questions per section, 4 distinct choices each, valid answer indices. Questions and all worked solutions reviewed mathematically.
+PASS: React + jsdom interactions: initial 0/20 answered, incomplete submission blocks scoring and focuses first unanswered question, answer changes before submission, all-correct 20/20, one-error 19/20, solutions hidden before submission, answers locked after submission, restart clears all selections and solutions. next/link mocked as a normal anchor. No duplicate-key errors recorded.
+PASS: Installer temporary fixtures for both app and src/app: read-only preflight, installation with real TypeScript parser, two original-file backups and five manifest entries, repeat installation no changes, custom-content conflict stops before writes.
+VISUAL PASS: Four diagrams rendered from the actual React SVG component; diagram-review.png inspected. Labels fit without overlap. Right-angle markers appear only on the three questions giving a right angle, not on the converse question.
+
+NOT CONFIRMED: User's local project build; production Next.js routing; real-browser rendering/interactions and mobile layout; Vercel deployment; Supabase persistence. This checkpoint intentionally stores no results in Supabase.

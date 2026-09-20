@@ -1,0 +1,16 @@
+Passed:
+- Installer fixtures for app and src/app.
+- Preflight without writes, exact backups of both modified pages, CRLF/BOM preservation.
+- Repeated installation makes no further changes.
+- Custom homepage, previous lesson, new lesson and component stop installation before any write.
+- Twelve question records and positive/negative/decimal/root numerical checks.
+- Triangle coordinates reproduce all three supplied side lengths.
+- Independently rendered representative SVGs reviewed for labels, circular arcs and right-angle markers.
+
+Not completed here:
+- TypeScript / Next.js build (project dependencies unavailable).
+- Actual React page rendering, browser interaction or mobile layout tests.
+- User's local build, authentication, deployment or Supabase persistence.
+
+diagram-review.png is an independent rendering using the same geometry formulas, not a browser screenshot.
+This package does not repair the previously reported dev-server conflict or generated-route-file error.

@@ -1,0 +1,17 @@
+Validation completed for this package:
+- Node installer executed in temporary fixture projects using app and src/app.
+- --check caused no file writes.
+- Original homepage backup matched the exact source bytes.
+- CRLF and BOM homepage inputs accepted and preserved.
+- Repeated installation caused no further changes.
+- Modified homepage and lesson files caused installation to stop.
+- Ambiguous app roots caused installation to stop.
+- Twelve question records and selected numerical answers checked.
+- Square, cube and number-line coordinates independently rendered for visual review.
+
+Not completed here:
+- TypeScript / Next.js build (dependencies unavailable).
+- Rendering actual React components in a browser, interaction tests and mobile layout tests.
+- User's local build, deployment, authentication and Supabase persistence.
+
+The diagram review is an independent coordinate-based rendering, not a screenshot of the running app.

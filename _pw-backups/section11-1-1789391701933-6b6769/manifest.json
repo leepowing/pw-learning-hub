@@ -1,0 +1,20 @@
+[
+  {
+    "path": "app\\maths\\s2\\chapter-11\\page.tsx",
+    "created": false,
+    "beforeSha256": "f24f4fd4c8dc5ee9e7a4f1ca7d51428d5654f1708cd4468727c7779b45ab72a4",
+    "installedSha256": "17301e54f137d8e8f23a5a31f7a0062a3e691dc8113546b4d2b6ec179262bca5"
+  },
+  {
+    "path": "app\\maths\\s2\\chapter-11\\concept-of-nth-roots\\page.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "9b954b1731b32fe68d2195f5f512f6776104ce2c4bee0723c1d5c16ccb74794c"
+  },
+  {
+    "path": "components\\maths\\S2Chapter11Roots.tsx",
+    "created": true,
+    "beforeSha256": null,
+    "installedSha256": "66b8fe8594fd624d081215b9bca09956b108ef77b4c17a7dfb3ca69d0fc6908f"
+  }
+]

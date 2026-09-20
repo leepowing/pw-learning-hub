@@ -1,7 +1,5 @@
 "use client";
 
-import S2Chapter11FlashcardDiagram, { type S2Chapter11DiagramKind } from "@/components/maths/S2Chapter11FlashcardDiagram";
-
 // S2 Chapter 10 diagrams (additive integration).
 import S2Chapter10FlashcardDiagram, { type S2Chapter10DiagramKind } from "@/components/maths/S2Chapter10FlashcardDiagram";
 
@@ -41,7 +39,6 @@ type VisualMathsFlashcard = MathsFlashcard & {
   chapter10Diagram?: Chapter10FlashcardDiagramKind;
   chapter12Diagram?: Chapter12FlashcardDiagramKind;
   s2Chapter6Diagram?: S2Chapter6DiagramKind;
-  s2Chapter11Diagram?: S2Chapter11DiagramKind;
   s2Chapter10Diagram?: S2Chapter10DiagramKind;
   s2Chapter9Diagram?: S2Chapter9DiagramKind;
   s2Chapter8Diagram?: S2Chapter8DiagramKind;
@@ -210,8 +207,8 @@ export default function FormulaFlashcards({
     );
   }
 
-  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11);
-  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
+  const useContentSizedFaces = currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10);
+  const hasFrontVisual = Boolean(currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -275,7 +272,6 @@ export default function FormulaFlashcards({
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
             {currentCard.s2Chapter6Diagram && <S2Chapter6FlashcardDiagram kind={currentCard.s2Chapter6Diagram} />}
-            {currentCard.s2Chapter11Diagram && <S2Chapter11FlashcardDiagram kind={currentCard.s2Chapter11Diagram} />}
             {currentCard.s2Chapter10Diagram && <S2Chapter10FlashcardDiagram kind={currentCard.s2Chapter10Diagram} />}
             {currentCard.s2Chapter9Diagram && <S2Chapter9FlashcardDiagram kind={currentCard.s2Chapter9Diagram} />}
             {currentCard.s2Chapter8Diagram && <S2Chapter8FlashcardDiagram kind={currentCard.s2Chapter8Diagram} />}

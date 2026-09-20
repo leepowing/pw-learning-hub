@@ -1,0 +1,66 @@
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const fail=message=>{throw new Error(message);};
+const normal=s=>s.replace(/^\uFEFF/,'').replace(/\r\n/g,'\n');
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+function main(){
+ if(!process.argv[2])fail('Usage: node install.cjs.txt PROJECT_PATH [--check]');
+ const root=path.resolve(process.argv[2]);
+ if(!fs.existsSync(path.join(root,'package.json')))fail('Project package.json not found.');
+ const roots=['app','src/app'].filter(a=>fs.existsSync(path.join(root,a,'maths/s2/chapter-11/page.tsx')));
+ if(roots.length!==1)fail('Expected exactly one Chapter 11 homepage in app or src/app.');
+ const app=roots[0],prefix=app==='app'?'':'src/';
+ const jobs=[],targets=[];
+ const edits=[{source:'before.tsx.txt',relative:`${app}/maths/s2/chapter-11/checkpoint/page.tsx`,replacements:[]}];
+ for(const edit of edits){
+  const target=path.join(root,edit.relative);targets.push(target);
+  if(!fs.existsSync(target))fail('Install Section 11.5 first. Missing: '+edit.relative);
+  const before=fs.readFileSync(target),expected=fs.readFileSync(path.join(__dirname,'payload',edit.source),'utf8');
+  let updated=fs.readFileSync(path.join(__dirname,'payload','page.tsx.txt'),'utf8');
+  for(const [oldText,newText] of edit.replacements){if(updated.split(oldText).length!==2)fail('Invalid package update anchor.');updated=updated.replace(oldText,newText);}
+  const comparable=normal(before.toString('utf8'));
+  if(comparable!==normal(expected)&&comparable!==normal(updated))fail('Custom content or unexpected version in '+edit.relative+'. No files changed. Please provide the latest file for integration.');
+  if(normal(before.toString('utf8'))!==normal(updated)){
+   const eol=before.toString('utf8').includes('\r\n')?'\r\n':'\n',bom=before.toString('utf8').startsWith('\uFEFF')?'\uFEFF':'';
+   jobs.push({target,before,data:Buffer.from(bom+normal(updated).replace(/\n/g,eol))});
+  }
+ }
+ for(const target of [...targets,path.join(root,'_pw-backups')]){
+  let current=target;
+  while(current===root||current.startsWith(root+path.sep)){
+   if(fs.existsSync(current)&&fs.lstatSync(current).isSymbolicLink())fail('Symbolic link or junction encountered. No files changed.');
+   if(current===root)break;current=path.dirname(current);
+  }
+ }
+ // Parse all candidate TSX files before backing up or writing anything.
+ let ts;
+ try { ts=require(require.resolve('typescript',{paths:[root]})); }
+ catch { fail('Project TypeScript not found. Run npm install in the project, then retry. No files changed.'); }
+ for(const target of targets){
+  const job=jobs.find(j=>j.target===target);
+  const text=job?job.data.toString('utf8'):fs.readFileSync(target,'utf8');
+  const source=ts.createSourceFile(target,text,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+  const errors=source.parseDiagnostics.filter(d=>d.category===ts.DiagnosticCategory.Error);
+  if(errors.length){const d=errors[0],pos=source.getLineAndCharacterOfPosition(d.start||0);fail(`Syntax error in ${path.relative(root,target)}:${pos.line+1}:${pos.character+1}: ${ts.flattenDiagnosticMessageText(d.messageText,' ')}. No files changed.`);}
+ }
+ console.log('TypeScript syntax check passed (not a full type check or build).');
+ if(!jobs.length){console.log('Already installed. No changes required.');return;}
+ console.log('Planned files:\n'+jobs.map(j=>path.relative(root,j.target)).join('\n'));
+ if(process.argv.includes('--check')){console.log('Preflight passed. No files changed.');return;}
+ const backup=path.join(root,'_pw-backups','checkpoint11-layout-'+Date.now()+'-'+crypto.randomBytes(3).toString('hex'));
+ fs.mkdirSync(backup,{recursive:true});
+ for(const j of jobs)if(j.before){const dest=path.join(backup,path.relative(root,j.target)+'.txt');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,j.before,{flag:'wx'});}
+ fs.writeFileSync(path.join(backup,'manifest.json'),JSON.stringify(jobs.map(j=>({path:path.relative(root,j.target),created:j.before===null,beforeSha256:j.before?sha(j.before):null,installedSha256:sha(j.data)})),null,2),{flag:'wx'});
+ const done=[];
+ try{
+  for(const j of jobs){
+   fs.mkdirSync(path.dirname(j.target),{recursive:true});
+   if(j.before){if(!fs.readFileSync(j.target).equals(j.before))fail('File changed during installation.');done.push(j);fs.writeFileSync(j.target,j.data);}
+   else{const fd=fs.openSync(j.target,'wx');done.push(j);try{fs.writeFileSync(fd,j.data);}finally{fs.closeSync(fd);}}
+  }
+ }catch(error){
+  for(const j of done.reverse())try{if(j.before)fs.writeFileSync(j.target,j.before);else fs.unlinkSync(j.target);}catch{console.error('Rollback incomplete for '+j.target+'. Recover from '+backup);}
+  throw error;
+ }
+ console.log('Installed Checkpoint layout fix.\nBackup: '+backup+'\nNext: npm run build in your project.');
+}
+try{main();}catch(error){console.error('STOP: '+error.message);process.exitCode=1;}
