@@ -1,3 +1,4 @@
+import { s2Chapter12Flashcards } from "./s2chapter12";
 import { s2Chapter11Flashcards } from "./s2chapter11";
 import { s2Chapter10Flashcards } from "./s2chapter10";
 import { s2Chapter9Flashcards } from "./s2chapter9";
@@ -7,6 +8,7 @@ import { s2Chapter6Flashcards } from "./s2chapter6";
 import type { MathsFlashcard } from "./types";
 
 export const s2Flashcards: MathsFlashcard[] = [
+  ...s2Chapter12Flashcards,
   ...s2Chapter11Flashcards,
   ...s2Chapter10Flashcards,
   ...s2Chapter9Flashcards,
