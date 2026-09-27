@@ -21,6 +21,14 @@ const subjects = [
     iconBackground: "#ecfdf5",
     colour: "#047857",
   },
+  {
+    title: "Knowledge Organisers",
+    description: "Year 8 subjects, mind maps, flashcards and quizzes",
+    icon: "🧠",
+    route: "/knowledge-organisers",
+    iconBackground: "#fff7ed",
+    colour: "#c2410c",
+  },
 ];
 
 export default function SubjectsPage() {
