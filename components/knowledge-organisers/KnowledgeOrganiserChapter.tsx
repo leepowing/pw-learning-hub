@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { KnowledgeOrganiser, KnowledgeQuestion } from "@/data/knowledgeOrganisers/types";
+import KnowledgeOrganiserFlashcards from "@/components/knowledge-organisers/KnowledgeOrganiserFlashcards";
 import { getCurrentStudent } from "@/lib/studentStorage";
 import {
   loadKnowledgeOrganiserProgress,
@@ -38,9 +39,6 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
   const [taughtIds, setTaughtIds] = useState<string[]>([]);
   const [view, setView] = useState<View>("overview");
   const [savedMessage, setSavedMessage] = useState("");
-  const [cardIndex, setCardIndex] = useState(0);
-  const [cardFlipped, setCardFlipped] = useState(false);
-  const [knownCards, setKnownCards] = useState<string[]>([]);
   const [quizQuestions, setQuizQuestions] = useState<KnowledgeQuestion[]>([]);
   const [quizIndex, setQuizIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
@@ -77,7 +75,6 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
     [organiser.questions, taughtIds]
   );
 
-  const currentCard = availableCards[cardIndex % Math.max(availableCards.length, 1)];
   const currentQuestion = quizQuestions[quizIndex];
 
   function toggleSection(id: string) {
@@ -93,16 +90,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
   function openView(next: View) {
     if (taughtIds.length === 0 && next !== "overview") return;
     setView(next);
-    setCardIndex(0);
-    setCardFlipped(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function answerCard(known: boolean) {
-    if (!currentCard) return;
-    if (known) setKnownCards(previous => previous.includes(currentCard.id) ? previous : [...previous, currentCard.id]);
-    setCardFlipped(false);
-    setCardIndex(index => (index + 1) % availableCards.length);
   }
 
   function startQuiz() {
@@ -145,7 +133,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
 
     {view === "mindmap" && <section><p className="eyebrow">AUTO-GENERATED MIND MAP</p><h2>{organiser.title}</h2><p>This map grows automatically when more taught sections are selected.</p><div className="mindmap"><div className="root">{organiser.title}<small>{taughtSections.length} taught branches</small></div><div className="branches">{taughtSections.map(section => <article key={section.id} style={{"--accent":section.colour} as CSSProperties}><h3>{section.title}</h3><small>{section.period}</small>{section.keyFacts.map(fact => <p key={fact}>• {fact}</p>)}</article>)}</div></div></section>}
 
-    {view === "flashcards" && <section><p className="eyebrow">FLASHCARDS</p><h2>Recall the taught sections</h2><p>{knownCards.length} known · {availableCards.length} available</p>{currentCard && <><button className={`flashcard ${cardFlipped ? "flipped" : ""}`} onClick={() => setCardFlipped(value => !value)}><span>{cardFlipped ? "ANSWER" : "QUESTION"}</span><strong>{cardFlipped ? currentCard.back : currentCard.front}</strong><small>Tap to {cardFlipped ? "see the question" : "reveal the answer"}</small></button><div className="cardActions"><button onClick={() => answerCard(false)}>Review again</button><button className="primary" onClick={() => answerCard(true)}>Know it ✓</button></div></>}</section>}
+    {view === "flashcards" && <section><p className="eyebrow">FLASHCARDS</p><h2>Recall the taught sections</h2><p>Flip each card, then swipe or use the buttons to grade your recall.</p><KnowledgeOrganiserFlashcards cards={availableCards} /></section>}
 
     {view === "quiz" && <section><p className="eyebrow">QUIZ</p><h2>Test the taught sections</h2>{quizQuestions.length === 0 && !quizFinished && <><p>The current quiz contains {availableQuestions.length} questions: multiple choice, short answer and long answer questions appear only when every required section has been taught.</p><button className="primary" disabled={availableQuestions.length === 0} onClick={startQuiz}>Start quiz →</button></>}
       {currentQuestion && !quizFinished && <div className="question"><div className="questionTop"><span>Question {quizIndex+1} of {quizQuestions.length}</span><b>{currentQuestion.marks} {currentQuestion.marks === 1 ? "mark" : "marks"}</b></div><h3>{currentQuestion.prompt}</h3>
