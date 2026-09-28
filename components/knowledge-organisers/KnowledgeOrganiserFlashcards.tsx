@@ -150,7 +150,10 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
 }
 
 function Stat({ label, value }: { label: string; value: string | number }) {
-  return <div><strong>{value}</strong><span>{label}</span></div>;
+  return <div style={{ padding: 16, border: "1px solid #e5e7eb", borderRadius: 16, background: "#fff", textAlign: "center" }}>
+    <strong style={{ display: "block", fontSize: 24 }}>{value}</strong>
+    <span style={{ display: "block", color: "#6b7280" }}>{label}</span>
+  </div>;
 }
 
 const styles = `

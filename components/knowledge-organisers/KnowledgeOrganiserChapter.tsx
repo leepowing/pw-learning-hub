@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import type { KnowledgeOrganiser, KnowledgeQuestion } from "@/data/knowledgeOrganisers/types";
 import KnowledgeOrganiserFlashcards from "@/components/knowledge-organisers/KnowledgeOrganiserFlashcards";
+import KnowledgeOrganiserMindMap from "@/components/knowledge-organisers/KnowledgeOrganiserMindMap";
 import { getCurrentStudent } from "@/lib/studentStorage";
 import {
   loadKnowledgeOrganiserProgress,
@@ -131,7 +132,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
 
     {view === "learn" && <section><p className="eyebrow">LEARN</p><h2>Currently taught content</h2><div className="lessonList">{taughtSections.map(section => <article key={section.id} style={{"--accent":section.colour} as CSSProperties}><div><span className="period">{section.period}</span><h3>{section.title}</h3><p>{section.summary}</p></div><ul>{section.keyFacts.map(fact => <li key={fact}>{fact}</li>)}</ul><div className="terms">{section.keyTerms.map(term => <span key={term}>{term}</span>)}</div></article>)}</div></section>}
 
-    {view === "mindmap" && <section><p className="eyebrow">AUTO-GENERATED MIND MAP</p><h2>{organiser.title}</h2><p>This map grows automatically when more taught sections are selected.</p><div className="mindmap"><div className="root">{organiser.title}<small>{taughtSections.length} taught branches</small></div><div className="branches">{taughtSections.map(section => <article key={section.id} style={{"--accent":section.colour} as CSSProperties}><h3>{section.title}</h3><small>{section.period}</small>{section.keyFacts.map(fact => <p key={fact}>• {fact}</p>)}</article>)}</div></div></section>}
+    {view === "mindmap" && <section><p className="eyebrow">INTERACTIVE MIND MAP</p><h2>{organiser.title}</h2><p>The map grows automatically as more sections are taught. Hide the details to practise retrieval, or focus on one branch at a time.</p><KnowledgeOrganiserMindMap title={organiser.title} sections={taughtSections} /></section>}
 
     {view === "flashcards" && <section><p className="eyebrow">FLASHCARDS</p><h2>Recall the taught sections</h2><p>Flip each card, then swipe or use the buttons to grade your recall.</p><KnowledgeOrganiserFlashcards cards={availableCards} /></section>}
 
