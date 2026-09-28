@@ -13,6 +13,26 @@ import {
 
 type View = "overview" | "learn" | "mindmap" | "flashcards" | "quiz";
 
+function shuffleOptions(options: string[]) {
+  const shuffled = [...options];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function randomiseMultipleChoiceOptions(question: KnowledgeQuestion): KnowledgeQuestion {
+  if (question.type !== "multiple-choice") return question;
+
+  return {
+    ...question,
+    options: shuffleOptions(question.options),
+  };
+}
+
 export default function KnowledgeOrganiserChapter({ organiser }: { organiser: KnowledgeOrganiser }) {
   const [student, setStudent] = useState("guest");
   const [taughtIds, setTaughtIds] = useState<string[]>([]);
@@ -86,7 +106,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
   }
 
   function startQuiz() {
-    setQuizQuestions(availableQuestions);
+    setQuizQuestions(availableQuestions.map(randomiseMultipleChoiceOptions));
     setQuizIndex(0); setSelectedOption(""); setWrittenAnswer(""); setFeedback(false); setScore(0); setQuizFinished(false);
   }
 
