@@ -6,6 +6,8 @@ import Link from "next/link";
 import type { KnowledgeOrganiser, KnowledgeQuestion } from "@/data/knowledgeOrganisers/types";
 import KnowledgeOrganiserFlashcards from "@/components/knowledge-organisers/KnowledgeOrganiserFlashcards";
 import KnowledgeOrganiserMindMap from "@/components/knowledge-organisers/KnowledgeOrganiserMindMap";
+import type { AiMarkingResponse, AiMarkingResult } from "@/lib/knowledgeOrganiserAi";
+import { supabase } from "@/lib/supabase";
 import { getCurrentStudent } from "@/lib/studentStorage";
 import {
   loadKnowledgeOrganiserProgress,
@@ -28,6 +30,12 @@ const quizTypeLabels: Record<KnowledgeQuestion["type"], string> = {
   "multiple-choice": "Multiple Choice",
   "short-answer": "Short Questions",
   "long-answer": "Long Questions",
+};
+
+const criterionStatusLabels: Record<AiMarkingResult["criteria"][number]["status"], string> = {
+  met: "Met",
+  partly_met: "Partly met",
+  not_met: "Not met",
 };
 
 function shuffleOptions(options: string[]) {
@@ -96,6 +104,9 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
   const [selectedOption, setSelectedOption] = useState("");
   const [writtenAnswer, setWrittenAnswer] = useState("");
   const [feedback, setFeedback] = useState(false);
+  const [aiMarking, setAiMarking] = useState<AiMarkingResult | null>(null);
+  const [aiMarkingError, setAiMarkingError] = useState("");
+  const [aiMarkingLoading, setAiMarkingLoading] = useState(false);
   const [score, setScore] = useState(0);
   const [scoresByType, setScoresByType] = useState<Record<KnowledgeQuestion["type"], number>>({
     "multiple-choice": 0,
@@ -175,6 +186,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
       .map(randomiseMultipleChoiceOptions);
     setQuizQuestions(selectedQuestions);
     setQuizIndex(0); setSelectedOption(""); setWrittenAnswer(""); setFeedback(false); setScore(0); setQuizFinished(false);
+    setAiMarking(null); setAiMarkingError(""); setAiMarkingLoading(false);
     setScoresByType({ "multiple-choice": 0, "short-answer": 0, "long-answer": 0 });
   }
 
@@ -186,6 +198,9 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
     setSelectedOption("");
     setWrittenAnswer("");
     setFeedback(false);
+    setAiMarking(null);
+    setAiMarkingError("");
+    setAiMarkingLoading(false);
     setScore(0);
     setQuizFinished(false);
     setScoresByType({ "multiple-choice": 0, "short-answer": 0, "long-answer": 0 });
@@ -198,6 +213,50 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
 
   function selfMark(mark: number) {
     nextQuestion(mark);
+  }
+
+  async function markWrittenAnswer() {
+    const question = currentQuestion;
+    if (!question || question.type === "multiple-choice" || writtenAnswer.trim().length < 3) return;
+
+    setAiMarkingLoading(true);
+    setAiMarkingError("");
+    setAiMarking(null);
+
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session?.access_token) {
+        setAiMarkingError("Please sign in again before requesting AI marking.");
+        return;
+      }
+
+      const response = await fetch("/api/knowledge-organisers/mark", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          organiserId: organiser.id,
+          questionId: question.id,
+          answer: writtenAnswer,
+          student,
+        }),
+      });
+      const payload = await response.json() as AiMarkingResponse;
+
+      if (!response.ok || !payload.ok) {
+        setAiMarkingError(payload.ok ? "AI marking is temporarily unavailable." : payload.error);
+        return;
+      }
+
+      setAiMarking(payload.result);
+      setFeedback(true);
+    } catch {
+      setAiMarkingError("AI marking is temporarily unavailable. Please check the connection and try again.");
+    } finally {
+      setAiMarkingLoading(false);
+    }
   }
 
   function nextQuestion(awardedMark = 0) {
@@ -215,6 +274,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
       return;
     }
     setQuizIndex(index => index + 1); setSelectedOption(""); setWrittenAnswer(""); setFeedback(false);
+    setAiMarking(null); setAiMarkingError(""); setAiMarkingLoading(false);
   }
 
   const maxScore = quizQuestions.reduce((sum, question) => sum + question.marks, 0);
@@ -242,15 +302,17 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
       {quizQuestions.length === 0 && !quizFinished && quizMode !== null && <div className="quizSetup"><button className="backButton" onClick={returnToQuizTypes}>← Back to quiz types</button><p className="eyebrow">{quizModeDetails.find(item => item.mode === quizMode)?.title}</p><h3>How many questions?</h3><p>{questionsForSelectedMode.length} questions are currently available from the taught sections.</p><div className="sizeOptions">{getQuizSizeOptions(questionsForSelectedMode.length).map(size => <button key={size} className={quizSize === size ? "selected" : ""} onClick={() => setQuizSize(size)}>{size === "all" ? `All ${questionsForSelectedMode.length}` : size} {size === 1 ? "question" : "questions"}</button>)}</div><button className="primary startQuiz" disabled={questionsForSelectedMode.length === 0} onClick={startQuiz}>Start quiz →</button></div>}
       {currentQuestion && !quizFinished && <div className="question"><div className="questionTop"><span>Question {quizIndex+1} of {quizQuestions.length}</span><b>{currentQuestion.marks} {currentQuestion.marks === 1 ? "mark" : "marks"}</b></div><h3>{currentQuestion.prompt}</h3>
         {currentQuestion.type === "multiple-choice" ? <div className="options">{currentQuestion.options.map(option => <button key={option} aria-pressed={selectedOption===option} disabled={feedback} onClick={() => setSelectedOption(option)}>{option}</button>)}</div> : <textarea value={writtenAnswer} onChange={event => setWrittenAnswer(event.target.value)} placeholder="Write your answer here..." rows={currentQuestion.type === "long-answer" ? 10 : 5} disabled={feedback} />}
-        {!feedback && <button className="primary" disabled={currentQuestion.type === "multiple-choice" ? !selectedOption : writtenAnswer.trim().length < 3} onClick={() => currentQuestion.type === "multiple-choice" ? checkMcq() : setFeedback(true)}>Check answer</button>}
+        {!feedback && <button className="primary" disabled={aiMarkingLoading || (currentQuestion.type === "multiple-choice" ? !selectedOption : writtenAnswer.trim().length < 3)} onClick={() => currentQuestion.type === "multiple-choice" ? checkMcq() : void markWrittenAnswer()}>{aiMarkingLoading ? "Marking answer…" : "Check answer"}</button>}
+        {!feedback && aiMarkingError && <div className="aiError" role="alert"><strong>AI marking could not finish</strong><p>{aiMarkingError}</p><div className="aiActions"><button onClick={() => void markWrittenAnswer()}>Try again</button><button onClick={() => setFeedback(true)}>Use self-marking instead</button></div></div>}
         {feedback && currentQuestion.type === "multiple-choice" && <div className={selectedOption===currentQuestion.answer ? "feedback correct" : "feedback incorrect"}><strong>{selectedOption===currentQuestion.answer ? "Correct" : `Correct answer: ${currentQuestion.answer}`}</strong><p>{currentQuestion.explanation}</p><button className="primary" onClick={() => nextQuestion(selectedOption===currentQuestion.answer ? currentQuestion.marks : 0)}>Next question →</button></div>}
-        {feedback && currentQuestion.type !== "multiple-choice" && <div className="feedback written"><strong>Check your answer against the marking points</strong><ul>{currentQuestion.markingPoints.map(point => <li key={point}>{point}</li>)}</ul><p><b>Improvement guidance:</b> {currentQuestion.guidance}</p><p>How many marking points did your answer include?</p><div className="markButtons">{Array.from({length:currentQuestion.marks+1},(_,mark) => <button key={mark} onClick={() => selfMark(mark)}>{mark}</button>)}</div><small>AI marking will replace this self-mark step after the server-side API key is configured.</small></div>}
+        {feedback && currentQuestion.type !== "multiple-choice" && aiMarking && <div className="feedback written aiFeedback"><div className="aiScore"><span>AI MARK</span><strong>{aiMarking.awardedMarks}/{aiMarking.maxMarks}</strong></div><p className="aiSummary">{aiMarking.summary}</p><h4>Marking points</h4><ul className="criteriaList">{aiMarking.criteria.map((criterion, index) => <li key={`${criterion.markingPoint}-${index}`}><span className={`criterionStatus ${criterion.status}`}>{criterionStatusLabels[criterion.status]}</span><div><strong>{criterion.markingPoint}</strong><p>{criterion.comment}</p></div></li>)}</ul><div className="feedbackColumns">{aiMarking.strengths.length > 0 && <div className="feedbackBlock"><h4>What went well</h4><ul>{aiMarking.strengths.map(item => <li key={item}>{item}</li>)}</ul></div>}{aiMarking.improvements.length > 0 && <div className="feedbackBlock"><h4>How to improve</h4><ul>{aiMarking.improvements.map(item => <li key={item}>{item}</li>)}</ul></div>}{aiMarking.missedPoints.length > 0 && <div className="feedbackBlock"><h4>Points to add</h4><ul>{aiMarking.missedPoints.map(item => <li key={item}>{item}</li>)}</ul></div>}{aiMarking.inaccuracies.length > 0 && <div className="feedbackBlock warning"><h4>Check these details</h4><ul>{aiMarking.inaccuracies.map(item => <li key={item}>{item}</li>)}</ul></div>}</div><div className="modelAnswer"><h4>Example improved answer</h4><p>{aiMarking.modelAnswer}</p></div><small>{aiMarking.disclaimer}</small><div className="aiActions"><button className="primary" onClick={() => nextQuestion(aiMarking.awardedMarks)}>Next question →</button></div></div>}
+        {feedback && currentQuestion.type !== "multiple-choice" && !aiMarking && <div className="feedback written"><strong>Check your answer against the marking points</strong><ul>{currentQuestion.markingPoints.map(point => <li key={point}>{point}</li>)}</ul><p><b>Improvement guidance:</b> {currentQuestion.guidance}</p><p>How many marking points did your answer include?</p><div className="markButtons">{Array.from({length:currentQuestion.marks+1},(_,mark) => <button key={mark} onClick={() => selfMark(mark)}>{mark}</button>)}</div><small>This self-marking option is used only when AI marking is unavailable.</small></div>}
       </div>}
       {quizFinished && <div className="result"><span>QUIZ COMPLETE</span><strong>{score}/{maxScore}</strong><p>{maxScore ? Math.round(score/maxScore*100) : 0}% on this quiz</p><div className="resultBreakdown">{(["multiple-choice", "short-answer", "long-answer"] as KnowledgeQuestion["type"][]).filter(type => maxScoresByType[type] > 0).map(type => <div key={type}><span>{quizTypeLabels[type]}</span><b>{scoresByType[type]}/{maxScoresByType[type]}</b></div>)}</div><div className="resultActions"><button onClick={startQuiz}>Try again</button><button onClick={returnToQuizTypes}>Choose another quiz</button></div></div>}
     </section>}
 
     <style jsx>{`
-      .ko{max-width:1080px;width:calc(100% - 36px);margin:36px auto 80px;color:#26354a;font-family:Arial,sans-serif;line-height:1.6}.ko *{box-sizing:border-box}.ko :global(a){color:#9a3412;font-weight:800}header{margin-top:24px;padding:34px;border:1px solid #fdba74;border-radius:26px;background:linear-gradient(135deg,#fff7ed,#fff)}.eyebrow{margin:0 0 8px;color:#c2410c;font-size:13px;font-weight:900;letter-spacing:.11em}h1{margin:0;font-size:clamp(36px,6vw,56px);line-height:1.1}header>p:not(.eyebrow){font-size:19px;color:#596579;max-width:760px}.status{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.status span{padding:7px 11px;border-radius:999px;background:#ffedd5;color:#9a3412;font-size:13px;font-weight:800}nav{display:flex;gap:9px;overflow-x:auto;padding:18px 2px}button{font:inherit;cursor:pointer}nav button,.actions button,.cardActions button,.markButtons button{border:1px solid #d5dce6;border-radius:11px;background:white;padding:11px 15px;color:#344054;font-weight:800;white-space:nowrap}button:disabled{cursor:not-allowed;opacity:.45}nav .active,.primary{background:#c2410c!important;border-color:#c2410c!important;color:white!important}section{padding:28px;border:1px solid #e2e8f0;border-radius:22px;background:white;box-shadow:0 8px 25px rgba(15,23,42,.04)}h2{font-size:29px;margin:0 0 8px}h3{line-height:1.35}.sectionPicker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0}.sectionPicker label{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid #dce3ec;border-left:6px solid var(--accent);border-radius:13px;cursor:pointer}.sectionPicker input{width:22px;height:22px;accent-color:#c2410c}.sectionPicker span,.sectionPicker strong,.sectionPicker small{display:block}.sectionPicker small{color:#667085}.actions,.cardActions,.markButtons{display:flex;gap:10px;flex-wrap:wrap}.success{padding:12px 15px;background:#ecfdf3;color:#067647;border-radius:10px}.note{color:#667085;font-size:14px}.lessonList{display:grid;gap:18px;margin-top:22px}.lessonList article{padding:22px;border-left:7px solid var(--accent);border-radius:14px;background:#f8fafc}.lessonList h3{font-size:24px;margin:5px 0}.period{color:var(--accent);font-weight:900}.lessonList li{margin-bottom:6px}.terms{display:flex;gap:8px;flex-wrap:wrap}.terms span{padding:5px 9px;border-radius:999px;background:white;border:1px solid #dce3ec;font-size:13px;font-weight:800}.mindmap{margin-top:28px}.root{width:min(360px,100%);margin:0 auto 22px;padding:22px;text-align:center;border-radius:18px;background:#c2410c;color:white;font-size:25px;font-weight:900}.root small{display:block;font-size:13px;margin-top:5px}.branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.branches article{position:relative;padding:18px;border-top:7px solid var(--accent);border-radius:14px;background:#f8fafc}.branches h3{margin:0}.branches small{color:#667085}.branches p{font-size:14px}.flashcard{display:flex;width:min(760px,100%);min-height:330px;margin:25px auto 18px;padding:36px;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid #fdba74;border-radius:25px;background:linear-gradient(145deg,#fff7ed,#fff);color:#26354a}.flashcard.flipped{background:linear-gradient(145deg,#ecfdf3,#fff);border-color:#6ee7b7}.flashcard span{font-size:12px;font-weight:900;letter-spacing:.15em;color:#c2410c}.flashcard strong{font-size:clamp(23px,4vw,34px);line-height:1.35;margin:25px 0}.flashcard small{color:#667085}.cardActions{justify-content:center}.quizModes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}.quizModes button{min-height:150px;padding:20px;text-align:left;border:1px solid #d5dce6;border-radius:16px;background:linear-gradient(145deg,#fff,#f8fafc);color:#26354a}.quizModes button:not(:disabled):hover{border-color:#c2410c;transform:translateY(-2px);box-shadow:0 8px 20px rgba(194,65,12,.1)}.quizModes strong,.quizModes span,.quizModes small{display:block}.quizModes strong{font-size:21px}.quizModes span{margin:8px 0;color:#c2410c;font-weight:900}.quizModes small{color:#667085;white-space:normal}.quizSetup{margin-top:22px;padding:24px;border-radius:17px;background:#f8fafc}.backButton{margin-bottom:22px;border:0;background:transparent;color:#9a3412;font-weight:900}.sizeOptions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.sizeOptions button{padding:11px 15px;border:1px solid #cbd5e1;border-radius:11px;background:white;color:#344054;font-weight:800}.sizeOptions .selected{border-color:#c2410c;background:#fff7ed;color:#9a3412}.startQuiz{margin-top:8px}.question{margin-top:22px;padding:24px;border-radius:17px;background:#f8fafc}.questionTop{display:flex;justify-content:space-between;color:#667085}.options{display:grid;gap:10px;margin:18px 0}.options button{padding:14px;text-align:left;border:1px solid #cbd5e1;border-radius:11px;background:white}.options button[aria-pressed=true]{border-color:#c2410c;background:#fff7ed;color:#9a3412}textarea{width:100%;margin:15px 0;padding:15px;border:1px solid #cbd5e1;border-radius:12px;font:inherit;resize:vertical}.feedback{margin-top:18px;padding:18px;border-radius:12px}.correct{background:#ecfdf3;color:#065f46}.incorrect{background:#fff1f2;color:#9f1239}.written{background:#eff6ff;color:#1e3a5f}.written small{display:block;margin-top:14px}.markButtons button{min-width:46px}.result{text-align:center;padding:36px;border-radius:18px;background:#fff7ed}.result>span{display:block;color:#c2410c;font-weight:900;letter-spacing:.12em}.result>strong{display:block;font-size:60px}.resultBreakdown{width:min(520px,100%);margin:22px auto;display:grid;gap:9px}.resultBreakdown div{display:flex;justify-content:space-between;padding:11px 14px;border-radius:10px;background:white}.resultBreakdown span{color:#344054;font-weight:800}.resultBreakdown b{color:#9a3412}.resultActions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.result button{border:1px solid #c2410c;border-radius:11px;padding:12px 18px;background:white;color:#9a3412;font-weight:800}.result button:first-child{background:#c2410c;color:white}@media(max-width:700px){header,section{padding:20px}.sectionPicker,.branches,.quizModes{grid-template-columns:1fr}h2{font-size:25px}.question{padding:17px}}
+      .ko{max-width:1080px;width:calc(100% - 36px);margin:36px auto 80px;color:#26354a;font-family:Arial,sans-serif;line-height:1.6}.ko *{box-sizing:border-box}.ko :global(a){color:#9a3412;font-weight:800}header{margin-top:24px;padding:34px;border:1px solid #fdba74;border-radius:26px;background:linear-gradient(135deg,#fff7ed,#fff)}.eyebrow{margin:0 0 8px;color:#c2410c;font-size:13px;font-weight:900;letter-spacing:.11em}h1{margin:0;font-size:clamp(36px,6vw,56px);line-height:1.1}header>p:not(.eyebrow){font-size:19px;color:#596579;max-width:760px}.status{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.status span{padding:7px 11px;border-radius:999px;background:#ffedd5;color:#9a3412;font-size:13px;font-weight:800}nav{display:flex;gap:9px;overflow-x:auto;padding:18px 2px}button{font:inherit;cursor:pointer}nav button,.actions button,.cardActions button,.markButtons button{border:1px solid #d5dce6;border-radius:11px;background:white;padding:11px 15px;color:#344054;font-weight:800;white-space:nowrap}button:disabled{cursor:not-allowed;opacity:.45}nav .active,.primary{background:#c2410c!important;border-color:#c2410c!important;color:white!important}section{padding:28px;border:1px solid #e2e8f0;border-radius:22px;background:white;box-shadow:0 8px 25px rgba(15,23,42,.04)}h2{font-size:29px;margin:0 0 8px}h3{line-height:1.35}.sectionPicker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:24px 0}.sectionPicker label{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid #dce3ec;border-left:6px solid var(--accent);border-radius:13px;cursor:pointer}.sectionPicker input{width:22px;height:22px;accent-color:#c2410c}.sectionPicker span,.sectionPicker strong,.sectionPicker small{display:block}.sectionPicker small{color:#667085}.actions,.cardActions,.markButtons{display:flex;gap:10px;flex-wrap:wrap}.success{padding:12px 15px;background:#ecfdf3;color:#067647;border-radius:10px}.note{color:#667085;font-size:14px}.lessonList{display:grid;gap:18px;margin-top:22px}.lessonList article{padding:22px;border-left:7px solid var(--accent);border-radius:14px;background:#f8fafc}.lessonList h3{font-size:24px;margin:5px 0}.period{color:var(--accent);font-weight:900}.lessonList li{margin-bottom:6px}.terms{display:flex;gap:8px;flex-wrap:wrap}.terms span{padding:5px 9px;border-radius:999px;background:white;border:1px solid #dce3ec;font-size:13px;font-weight:800}.mindmap{margin-top:28px}.root{width:min(360px,100%);margin:0 auto 22px;padding:22px;text-align:center;border-radius:18px;background:#c2410c;color:white;font-size:25px;font-weight:900}.root small{display:block;font-size:13px;margin-top:5px}.branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.branches article{position:relative;padding:18px;border-top:7px solid var(--accent);border-radius:14px;background:#f8fafc}.branches h3{margin:0}.branches small{color:#667085}.branches p{font-size:14px}.flashcard{display:flex;width:min(760px,100%);min-height:330px;margin:25px auto 18px;padding:36px;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid #fdba74;border-radius:25px;background:linear-gradient(145deg,#fff7ed,#fff);color:#26354a}.flashcard.flipped{background:linear-gradient(145deg,#ecfdf3,#fff);border-color:#6ee7b7}.flashcard span{font-size:12px;font-weight:900;letter-spacing:.15em;color:#c2410c}.flashcard strong{font-size:clamp(23px,4vw,34px);line-height:1.35;margin:25px 0}.flashcard small{color:#667085}.cardActions{justify-content:center}.quizModes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}.quizModes button{min-height:150px;padding:20px;text-align:left;border:1px solid #d5dce6;border-radius:16px;background:linear-gradient(145deg,#fff,#f8fafc);color:#26354a}.quizModes button:not(:disabled):hover{border-color:#c2410c;transform:translateY(-2px);box-shadow:0 8px 20px rgba(194,65,12,.1)}.quizModes strong,.quizModes span,.quizModes small{display:block}.quizModes strong{font-size:21px}.quizModes span{margin:8px 0;color:#c2410c;font-weight:900}.quizModes small{color:#667085;white-space:normal}.quizSetup{margin-top:22px;padding:24px;border-radius:17px;background:#f8fafc}.backButton{margin-bottom:22px;border:0;background:transparent;color:#9a3412;font-weight:900}.sizeOptions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.sizeOptions button{padding:11px 15px;border:1px solid #cbd5e1;border-radius:11px;background:white;color:#344054;font-weight:800}.sizeOptions .selected{border-color:#c2410c;background:#fff7ed;color:#9a3412}.startQuiz{margin-top:8px}.question{margin-top:22px;padding:24px;border-radius:17px;background:#f8fafc}.questionTop{display:flex;justify-content:space-between;color:#667085}.options{display:grid;gap:10px;margin:18px 0}.options button{padding:14px;text-align:left;border:1px solid #cbd5e1;border-radius:11px;background:white}.options button[aria-pressed=true]{border-color:#c2410c;background:#fff7ed;color:#9a3412}textarea{width:100%;margin:15px 0;padding:15px;border:1px solid #cbd5e1;border-radius:12px;font:inherit;resize:vertical}.feedback{margin-top:18px;padding:18px;border-radius:12px}.correct{background:#ecfdf3;color:#065f46}.incorrect{background:#fff1f2;color:#9f1239}.written{background:#eff6ff;color:#1e3a5f}.written small{display:block;margin-top:14px}.markButtons button{min-width:46px}.aiError{margin-top:16px;padding:16px;border:1px solid #fecdd3;border-radius:12px;background:#fff1f2;color:#9f1239}.aiError p{margin:5px 0 12px}.aiActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.aiActions button{padding:10px 14px;border:1px solid #c2410c;border-radius:10px;background:white;color:#9a3412;font-weight:800}.aiFeedback{color:#1e3a5f}.aiScore{display:flex;align-items:center;justify-content:space-between;padding:14px 17px;border-radius:12px;background:#dbeafe}.aiScore span{font-size:12px;font-weight:900;letter-spacing:.13em}.aiScore strong{font-size:34px;color:#1d4ed8}.aiSummary{font-size:17px;font-weight:700}.criteriaList{display:grid;gap:10px;padding:0;list-style:none}.criteriaList li{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:13px;border-radius:11px;background:white}.criteriaList p{margin:3px 0 0}.criterionStatus{align-self:start;padding:4px 8px;border-radius:999px;text-align:center;font-size:12px;font-weight:900}.criterionStatus.met{background:#dcfce7;color:#166534}.criterionStatus.partly_met{background:#fef3c7;color:#92400e}.criterionStatus.not_met{background:#fee2e2;color:#991b1b}.feedbackColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}.feedbackBlock,.modelAnswer{padding:14px;border-radius:11px;background:white}.feedbackBlock h4,.modelAnswer h4{margin:0 0 7px}.feedbackBlock ul{margin:0;padding-left:20px}.feedbackBlock.warning{border:1px solid #fecaca}.modelAnswer{margin-top:12px;border-left:5px solid #3b82f6}.modelAnswer p{margin:0}.result{text-align:center;padding:36px;border-radius:18px;background:#fff7ed}.result>span{display:block;color:#c2410c;font-weight:900;letter-spacing:.12em}.result>strong{display:block;font-size:60px}.resultBreakdown{width:min(520px,100%);margin:22px auto;display:grid;gap:9px}.resultBreakdown div{display:flex;justify-content:space-between;padding:11px 14px;border-radius:10px;background:white}.resultBreakdown span{color:#344054;font-weight:800}.resultBreakdown b{color:#9a3412}.resultActions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.result button{border:1px solid #c2410c;border-radius:11px;padding:12px 18px;background:white;color:#9a3412;font-weight:800}.result button:first-child{background:#c2410c;color:white}@media(max-width:700px){header,section{padding:20px}.sectionPicker,.branches,.quizModes,.feedbackColumns{grid-template-columns:1fr}.criteriaList li{grid-template-columns:1fr}.criterionStatus{justify-self:start}h2{font-size:25px}.question{padding:17px}}
     `}</style>
   </main>;
 }
