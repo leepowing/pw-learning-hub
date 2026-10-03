@@ -10,3 +10,9 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
 export function getKnowledgeOrganiserById(id: string) {
   return knowledgeOrganisers.find(organiser => organiser.id === id);
 }
+
+export function getKnowledgeOrganisers(year: number, subject: string) {
+  return knowledgeOrganisers
+    .filter(organiser => organiser.year === year && organiser.subject.toLowerCase() === subject.toLowerCase())
+    .sort((first, second) => first.chapter - second.chapter);
+}

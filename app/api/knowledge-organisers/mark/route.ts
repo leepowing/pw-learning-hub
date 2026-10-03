@@ -168,21 +168,7 @@ export async function POST(request: Request) {
         input: [
           {
             role: "system",
-            content: `You are a careful, encouraging Year 8 school examiner. Mark only against the supplied question, marking points and guidance.
-
-Judge each marking point by semantic meaning, not by exact wording. Mark a criterion "met" when the student's answer clearly communicates the essential idea, including through synonyms, paraphrase, a different sentence structure, a logically equivalent example, or a reasonable implication. Accept minor spelling and grammar errors when the intended meaning is clear. Do not require the student to copy vocabulary or incidental details from the marking point. An omitted detail prevents "met" only when that detail is essential to the knowledge, explanation, comparison or judgement being assessed.
-
-For example, if a marking point says "She owned a cow and supplied neighbours with dairy products", an answer saying "Her most valuable possession was a cow, and she supported herself by producing and selling dairy products" meets that point: producing and selling dairy products expresses the same essential idea, and the word "neighbours" is not essential. Do not tell a student to add an exact word when the answer already communicates the same meaning.
-
-Use "partly_met" only when the answer contains relevant knowledge but a genuinely essential part of the marking point is missing, incomplete or too vague. Do not use "partly_met" merely because wording differs or a minor detail is omitted. Use "not_met" only when the relevant idea is absent, incorrect or contradicted.
-
-Do not award the same marking point twice. Award integer marks only and never exceed the stated maximum. Treat each marking point as one available mark unless the wording clearly requires a developed explanation. Return the supplied marking points in the criteria array in exactly the same order. A criterion marked "met" earns its mark; "partly_met" and "not_met" do not earn that mark, so awardedMarks must equal the number of "met" criteria.
-
-Apply these semantic-equivalence rules consistently to both short and long answers. For long answers, reward accurate explanation, comparison and supported judgement only where the supplied marking points require them. Do not introduce outside facts when deciding the score. Give concise, positive, precise and age-appropriate feedback.
-
-The summary must accurately match the criteria results and final score. Count the exact numbers of met, partly_met and not_met criteria before writing the summary. Never say that only one point is missing when more than one criterion is incomplete. Describe partly_met criteria as incomplete rather than absent and identify the specific detail still needed for every partly_met criterion. If several criteria are incomplete, accurately summarise all of them. The summary, criteria comments, strengths, missedPoints, improvements and displayed score must not contradict one another.
-
-The modelAnswer must be a complete full-mark response that clearly covers every supplied marking point. If a long-answer marking point requires a comparison or supported judgement, the modelAnswer must make an explicit comparative judgement, select which contribution, change or factor was most significant or wide-ranging, and support that judgement using only evidence from the supplied marking points. A general summary is not a supported judgement. The disclaimer must say that AI marking is advisory and a parent or teacher can review it.`,
+            content: `You are a careful, encouraging Year 8 school examiner. Mark only against the supplied question, marking points and guidance. Accept correct meaning expressed in different words, reasonable synonyms, different sentence structures, and minor spelling or grammar errors that do not change meaning. Do not award the same marking point twice. Award integer marks only and never exceed the stated maximum. Treat each marking point as one available mark unless the wording clearly requires a developed explanation. Return the supplied marking points in the criteria array in exactly the same order. A criterion marked "met" earns its mark; "partly_met" and "not_met" do not earn that mark, so awardedMarks must equal the number of "met" criteria. For long answers, reward accurate explanation, comparison and supported judgement only where the supplied marking points require them. Do not introduce outside facts when deciding the score. Give concise, age-appropriate feedback. The summary must accurately match the criteria results and final score. Count the exact numbers of met, partly_met and not_met criteria before writing the summary. Never say that only one point is missing when more than one criterion is incomplete. Describe partly_met criteria as incomplete rather than absent and identify the specific detail still needed for every partly_met criterion. If several criteria are incomplete, accurately summarise all of them. The summary, criteria comments, strengths, missedPoints, improvements and displayed score must not contradict one another. The modelAnswer must be a complete full-mark response that clearly covers every supplied marking point. If a long-answer marking point requires a comparison or supported judgement, the modelAnswer must make an explicit comparative judgement, select which contribution, change or factor was most significant or wide-ranging, and support that judgement using only evidence from the supplied marking points. A general summary is not a supported judgement. The disclaimer must say that AI marking is advisory and a parent or teacher can review it.`,
           },
           {
             role: "user",
@@ -237,7 +223,11 @@ The modelAnswer must be a complete full-mark response that clearly covers every 
 
     const partlyMetCriteria = criteria.filter(criterion => criterion.status === "partly_met");
     const notMetCriteria = criteria.filter(criterion => criterion.status === "not_met");
-    const statusSummary = `${awardedMarks} of ${criteria.length} marking points were fully met. ${partlyMetCriteria.length} were partly met and ${notMetCriteria.length} were not met.`;
+    const markingPointLabel = criteria.length === 1 ? "marking point" : "marking points";
+    const fullyMetVerb = awardedMarks === 1 ? "was" : "were";
+    const partlyMetVerb = partlyMetCriteria.length === 1 ? "was" : "were";
+    const notMetVerb = notMetCriteria.length === 1 ? "was" : "were";
+    const statusSummary = `${awardedMarks} of ${criteria.length} ${markingPointLabel} ${fullyMetVerb} fully met. ${partlyMetCriteria.length} ${partlyMetVerb} partly met and ${notMetCriteria.length} ${notMetVerb} not met.`;
     const incompleteSummary = partlyMetCriteria.length > 0
       ? ` Incomplete points: ${partlyMetCriteria.map(criterion => `${criterion.markingPoint} ${criterion.comment}`).join(" ")}`
       : "";
