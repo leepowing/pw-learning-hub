@@ -8,6 +8,7 @@ export default function YearEightHistoryPage() {
     <button className="back" onClick={() => router.push("/knowledge-organisers/year8")}>← Back to Year 8 subjects</button>
     <p className="eyebrow">YEAR 8 · HISTORY</p><h1>History Knowledge Organisers</h1>
     <div className="terms"><section><span>Autumn Term</span><h2>Migration and Britain</h2><p>Explore migration to Britain from early settlers to the Windrush generation.</p><button onClick={() => router.push("/knowledge-organisers/year8/history/autumn/migration-and-britain")}>Open Chapter 1 →</button></section>
+      <section><span>Autumn Term</span><h2>The Industrial Revolution</h2><p>Explore how industrialisation transformed Britain&apos;s population, factories, production and transport.</p><button onClick={() => router.push("/knowledge-organisers/year8/history/autumn/industrial-revolution")}>Open Chapter 2 →</button></section>
       <section className="soon"><span>Spring Term</span><h2>Coming soon</h2><p>The chapter will be added when the organiser is available.</p></section>
       <section className="soon"><span>Summer Term</span><h2>Coming soon</h2><p>The chapter will be added when the organiser is available.</p></section></div>
     <style jsx>{`

@@ -180,6 +180,8 @@ Do not award the same marking point twice. Award integer marks only and never ex
 
 Apply these semantic-equivalence rules consistently to both short and long answers. For long answers, reward accurate explanation, comparison and supported judgement only where the supplied marking points require them. Do not introduce outside facts when deciding the score. Give concise, positive, precise and age-appropriate feedback.
 
+The summary must accurately match the criteria results and final score. Count the exact numbers of met, partly_met and not_met criteria before writing the summary. Never say that only one point is missing when more than one criterion is incomplete. Describe partly_met criteria as incomplete rather than absent and identify the specific detail still needed for every partly_met criterion. If several criteria are incomplete, accurately summarise all of them. The summary, criteria comments, strengths, missedPoints, improvements and displayed score must not contradict one another.
+
 The modelAnswer must be a complete full-mark response that clearly covers every supplied marking point. If a long-answer marking point requires a comparison or supported judgement, the modelAnswer must make an explicit comparative judgement, select which contribution, change or factor was most significant or wide-ranging, and support that judgement using only evidence from the supplied marking points. A general summary is not a supported judgement. The disclaimer must say that AI marking is advisory and a parent or teacher can review it.`,
           },
           {
@@ -233,9 +235,20 @@ The modelAnswer must be a complete full-mark response that clearly covers every 
       return errorResponse("AI marking returned an invalid score. Please try again.", 502);
     }
 
+    const partlyMetCriteria = criteria.filter(criterion => criterion.status === "partly_met");
+    const notMetCriteria = criteria.filter(criterion => criterion.status === "not_met");
+    const statusSummary = `${awardedMarks} of ${criteria.length} marking points were fully met. ${partlyMetCriteria.length} were partly met and ${notMetCriteria.length} were not met.`;
+    const incompleteSummary = partlyMetCriteria.length > 0
+      ? ` Incomplete points: ${partlyMetCriteria.map(criterion => `${criterion.markingPoint} ${criterion.comment}`).join(" ")}`
+      : "";
+    const missingSummary = notMetCriteria.length > 0
+      ? ` Not-yet-met points: ${notMetCriteria.map(criterion => criterion.markingPoint).join(" ")}`
+      : "";
+    const summary = `${statusSummary}${incompleteSummary}${missingSummary}`;
+
     return NextResponse.json({
       ok: true,
-      result: { ...result, awardedMarks, maxMarks: question.marks, criteria },
+      result: { ...result, awardedMarks, maxMarks: question.marks, summary, criteria },
     });
   } catch (error) {
     console.error("AI marking error", error);

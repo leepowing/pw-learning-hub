@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 const subjects = [
-  { name: "History", icon: "🏛️", description: "Migration and Britain", route: "/knowledge-organisers/year8/history", available: true },
+  { name: "History", icon: "🏛️", description: "Migration and Britain · The Industrial Revolution", route: "/knowledge-organisers/year8/history", available: true },
   { name: "Science", icon: "🔬", description: "Waiting for the Year 8 organisers", route: "", available: false },
   { name: "Geography", icon: "🌍", description: "Coming soon", route: "", available: false },
   { name: "Other subjects", icon: "📘", description: "Added when organisers arrive", route: "", available: false },
