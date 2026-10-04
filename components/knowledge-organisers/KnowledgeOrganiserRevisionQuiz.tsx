@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { AiMarkingResponse, AiMarkingResult } from "@/lib/knowledgeOrganiserAi";
 import type { KnowledgeOrganiser, KnowledgeQuestion } from "@/data/knowledgeOrganisers/types";
+import KnowledgeOrganiserInteractiveQuestion from "@/components/knowledge-organisers/KnowledgeOrganiserInteractiveQuestion";
 import { loadKnowledgeOrganiserProgress, saveKnowledgeQuizBest } from "@/lib/knowledgeOrganiserStorage";
 import { getCurrentStudent } from "@/lib/studentStorage";
 import { supabase } from "@/lib/supabase";
 
-type QuizMode = KnowledgeQuestion["type"] | "mixed";
+type QuizMode = KnowledgeQuestion["type"] | "matching" | "fill-blanks" | "diagram-labels" | "ordering" | "classification" | "mixed";
 type QuizSize = number | "all";
 type SourceQuestion = {
   key: string;
@@ -22,6 +23,11 @@ const modes: Array<{ mode: QuizMode; title: string; description: string }> = [
   { mode: "multiple-choice", title: "Multiple Choice", description: "Choose an answer and receive instant marking." },
   { mode: "short-answer", title: "Short Questions", description: "Write concise answers using evidence from the taught sections." },
   { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations, comparisons and judgements." },
+  { mode: "matching", title: "Matching", description: "Match every scientific term or step to the correct answer." },
+  { mode: "fill-blanks", title: "Fill in the Blanks", description: "Complete equations, sentences and tables using the correct terms." },
+  { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct scientific labels to each numbered position." },
+  { mode: "ordering", title: "Ordering", description: "Put practical methods and scientific processes into the correct order." },
+  { mode: "classification", title: "Classification", description: "Sort each statement or item into the correct scientific category." },
   { mode: "mixed", title: "Mixed Questions", description: "Combine all available question types and chapters." },
 ];
 
@@ -51,6 +57,22 @@ function randomiseOptions(source: SourceQuestion): SourceQuestion {
   return { ...source, question: { ...source.question, options: shuffle(source.question.options) } };
 }
 
+function questionMatchesMode(question: KnowledgeQuestion, mode: QuizMode) {
+  if (mode === "mixed") return true;
+  if (mode === "multiple-choice" || mode === "long-answer") return question.type === mode;
+  if (mode === "short-answer") return question.type === mode && (!question.interaction || question.interaction.kind === "table");
+  return question.interaction?.kind === mode;
+}
+
+function questionMode(question: KnowledgeQuestion): Exclude<QuizMode, "mixed"> {
+  if (question.interaction && question.interaction.kind !== "table") return question.interaction.kind;
+  return question.type;
+}
+
+function questionModeLabel(question: KnowledgeQuestion) {
+  return modes.find(item => item.mode === questionMode(question))?.title ?? typeLabels[question.type];
+}
+
 function sizeOptions(count: number): QuizSize[] {
   if (count === 0) return [];
   if (count < 5) return [...Array.from({ length: Math.max(0, count - 1) }, (_, index) => index + 1), "all"];
@@ -66,10 +88,10 @@ function selectQuestions(pool: SourceQuestion[], size: QuizSize, mode: QuizMode)
     if (item && !selected.some(existing => existing.key === item.key) && selected.length < size) selected.push(item);
   };
 
-  // A mixed quiz should include each available type where the chosen size allows it.
+  // A mixed quiz should include each available format where the chosen size allows it.
   if (mode === "mixed") {
-    (["multiple-choice", "short-answer", "long-answer"] as KnowledgeQuestion["type"][])
-      .forEach(type => add(randomised.find(item => item.question.type === type)));
+    ([...new Set(randomised.map(item => questionMode(item.question)))])
+      .forEach(questionType => add(randomised.find(item => questionMode(item.question) === questionType)));
   }
 
   // Give every taught chapter a place where the chosen size allows it.
@@ -81,6 +103,10 @@ function selectQuestions(pool: SourceQuestion[], size: QuizSize, mode: QuizMode)
 }
 
 export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organisers: KnowledgeOrganiser[] }) {
+  const subject = organisers[0]?.subject ?? "Knowledge Organisers";
+  const year = organisers[0]?.year ?? 8;
+  const subjectSlug = subject.toLowerCase();
+  const subjectRoute = `/knowledge-organisers/year${year}/${subjectSlug}`;
   const [student, setStudent] = useState("guest");
   const [taughtByOrganiser, setTaughtByOrganiser] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
@@ -131,18 +157,20 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
       question,
     }))), [chapterCoverage]);
 
-  const filtered = useMemo(() => mode === null || mode === "mixed"
+  const filtered = useMemo(() => mode === null
     ? available
-    : available.filter(item => item.question.type === mode), [available, mode]);
+    : available.filter(item => questionMatchesMode(item.question, mode)), [available, mode]);
 
-  const counts = useMemo(() => ({
-    "multiple-choice": available.filter(item => item.question.type === "multiple-choice").length,
-    "short-answer": available.filter(item => item.question.type === "short-answer").length,
-    "long-answer": available.filter(item => item.question.type === "long-answer").length,
-    mixed: available.length,
-  }), [available]);
+  const counts = useMemo(() => Object.fromEntries(
+    modes.map(item => [item.mode, available.filter(source => questionMatchesMode(source.question, item.mode)).length])
+  ) as Record<QuizMode, number>, [available]);
+
+  const visibleModes = useMemo(() => modes.filter(item =>
+    item.mode === "mixed" || item.mode === "multiple-choice" || item.mode === "short-answer" || item.mode === "long-answer" || counts[item.mode] > 0
+  ), [counts]);
 
   const current = quiz[index];
+  const isInteractive = Boolean(current?.question.interaction && current.question.interaction.kind !== "table");
   const correctOption = current?.question.type === "multiple-choice" ? current.question.answer : "";
   const mcqExplanation = current?.question.type === "multiple-choice" ? current.question.explanation : "";
   const maxScore = quiz.reduce((total, item) => total + item.question.marks, 0);
@@ -201,7 +229,7 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
 
     if (index + 1 >= quiz.length) {
       setFinished(true);
-      void saveKnowledgeQuizBest(student, "year8-history-revision-quiz", nextScore, maxScore);
+      void saveKnowledgeQuizBest(student, `year${year}-${subjectSlug}-revision-quiz`, nextScore, maxScore);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -242,21 +270,21 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
   if (loading) return <main className="revisionPage"><p>Loading taught sections…</p></main>;
 
   return <main className="revisionPage">
-    <Link href="/knowledge-organisers/year8/history">← Year 8 History</Link>
-    <header><p className="eyebrow">YEAR 8 · HISTORY · EXAM REVISION</p><h1>Cross-Chapter Quiz</h1><p>Questions are drawn automatically from the sections already marked as taught for {student === "guest" ? "this student" : student}. You do not need to select the sections again.</p></header>
+    <Link href={subjectRoute}>← Year {year} {subject}</Link>
+    <header><p className="eyebrow">YEAR {year} · {subject.toUpperCase()} · EXAM REVISION</p><h1>Cross-Chapter Quiz</h1><p>Questions are drawn automatically from the sections already marked as taught for {student === "guest" ? "this student" : student}. You do not need to select the sections again.</p></header>
 
     {quiz.length === 0 && !finished && <>
       <section><p className="eyebrow">CURRENT COVERAGE</p><h2>Taught sections included</h2><div className="coverageGrid">{chapterCoverage.map(({ organiser, taughtIds, questions }) => <article key={organiser.id}><span>CHAPTER {organiser.chapter}</span><h3>{organiser.title}</h3><p><b>{taughtIds.length}/{organiser.sections.length}</b> sections taught</p><p><b>{questions.length}</b> questions available</p>{taughtIds.length === 0 && <small>No taught sections yet. Open this chapter to update its teaching progress.</small>}</article>)}</div></section>
 
-      <section><p className="eyebrow">BUILD YOUR QUIZ</p><h2>Choose a question type</h2>{available.length === 0 ? <div className="empty"><p>No quiz questions are available yet. Mark at least one section as taught inside a chapter first.</p><Link href="/knowledge-organisers/year8/history">Return to History chapters →</Link></div> : <div className="quizModes">{modes.map(item => <button key={item.mode} disabled={counts[item.mode] === 0} className={mode === item.mode ? "selected" : ""} onClick={() => chooseMode(item.mode)}><strong>{item.title}</strong><span>{counts[item.mode]} available</span><small>{counts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div>}
+      <section><p className="eyebrow">BUILD YOUR QUIZ</p><h2>Choose a question type</h2>{available.length === 0 ? <div className="empty"><p>No quiz questions are available yet. Mark at least one section as taught inside a chapter first.</p><Link href={subjectRoute}>Return to {subject} chapters →</Link></div> : <div className="quizModes">{visibleModes.map(item => <button key={item.mode} disabled={counts[item.mode] === 0} className={mode === item.mode ? "selected" : ""} onClick={() => chooseMode(item.mode)}><strong>{item.title}</strong><span>{counts[item.mode]} available</span><small>{counts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div>}
         {mode !== null && <div className="quizSetup"><p className="eyebrow">{modes.find(item => item.mode === mode)?.title}</p><h3>How many questions?</h3><p>{filtered.length} questions are available from the taught sections across {new Set(filtered.map(item => item.organiserId)).size} {new Set(filtered.map(item => item.organiserId)).size === 1 ? "chapter" : "chapters"}.</p><div className="sizes">{sizeOptions(filtered.length).map(option => <button key={option} className={size === option ? "selected" : ""} onClick={() => setSize(option)}>{option === "all" ? `All ${filtered.length}` : option} {option === 1 ? "question" : "questions"}</button>)}</div><button className="primary" onClick={startQuiz}>Start cross-chapter quiz →</button></div>}
       </section>
     </>}
 
-    {current && !finished && <section className="question"><div className="questionTop"><div><span>Question {index + 1} of {quiz.length}</span><small>Chapter {current.chapter}: {current.chapterTitle} · {typeLabels[current.question.type]}</small></div><b>{current.question.marks} {current.question.marks === 1 ? "mark" : "marks"}</b></div><h2>{current.question.prompt}</h2>
-      {current.question.type === "multiple-choice" ? <div className="options">{current.question.options.map(option => <button key={option} aria-pressed={selectedOption === option} disabled={feedback} onClick={() => setSelectedOption(option)}>{option}</button>)}</div> : <textarea value={writtenAnswer} onChange={event => setWrittenAnswer(event.target.value)} rows={current.question.type === "long-answer" ? 11 : 6} placeholder="Write your answer here…" disabled={feedback} />}
-      {!feedback && <button className="primary" disabled={aiLoading || (current.question.type === "multiple-choice" ? !selectedOption : writtenAnswer.trim().length < 3)} onClick={() => current.question.type === "multiple-choice" ? setFeedback(true) : void markWrittenAnswer()}>{aiLoading ? "Marking answer…" : "Check answer"}</button>}
-      {!feedback && aiError && <div className="aiError"><strong>AI marking could not finish</strong><p>{aiError}</p><div className="actions"><button onClick={() => void markWrittenAnswer()}>Try again</button><button onClick={() => setFeedback(true)}>Use self-marking instead</button></div></div>}
+    {current && !finished && <section className="question"><div className="questionTop"><div><span>Question {index + 1} of {quiz.length}</span><small>Chapter {current.chapter}: {current.chapterTitle} · {questionModeLabel(current.question)}</small></div><b>{current.question.marks} {current.question.marks === 1 ? "mark" : "marks"}</b></div><h2>{current.question.prompt}</h2>
+      {isInteractive ? <KnowledgeOrganiserInteractiveQuestion key={current.key} question={current.question} onComplete={nextQuestion} /> : current.question.type === "multiple-choice" ? <div className="options">{current.question.options.map(option => <button key={option} aria-pressed={selectedOption === option} disabled={feedback} onClick={() => setSelectedOption(option)}>{option}</button>)}</div> : <textarea value={writtenAnswer} onChange={event => setWrittenAnswer(event.target.value)} rows={current.question.type === "long-answer" ? 11 : 6} placeholder="Write your answer here…" disabled={feedback} />}
+      {!isInteractive && !feedback && <button className="primary" disabled={aiLoading || (current.question.type === "multiple-choice" ? !selectedOption : writtenAnswer.trim().length < 3)} onClick={() => current.question.type === "multiple-choice" ? setFeedback(true) : void markWrittenAnswer()}>{aiLoading ? "Marking answer…" : "Check answer"}</button>}
+      {!isInteractive && !feedback && aiError && <div className="aiError"><strong>AI marking could not finish</strong><p>{aiError}</p><div className="actions"><button onClick={() => void markWrittenAnswer()}>Try again</button><button onClick={() => setFeedback(true)}>Use self-marking instead</button></div></div>}
       {feedback && current.question.type === "multiple-choice" && <div className={selectedOption === correctOption ? "feedback correct" : "feedback incorrect"}><strong>{selectedOption === correctOption ? "Correct" : `Correct answer: ${correctOption}`}</strong><p>{mcqExplanation}</p><button className="primary" onClick={() => nextQuestion(selectedOption === correctOption ? current.question.marks : 0)}>Next question →</button></div>}
       {feedback && current.question.type !== "multiple-choice" && aiMarking && <div className="feedback written"><div className="aiScore"><span>AI MARK</span><strong>{aiMarking.awardedMarks}/{aiMarking.maxMarks}</strong></div><p className="summary">{aiMarking.summary}</p><h3>Marking points</h3><ul className="criteria">{aiMarking.criteria.map((criterion, criterionIndex) => <li key={`${criterion.markingPoint}-${criterionIndex}`}><span className={criterion.status}>{criterionLabels[criterion.status]}</span><div><strong>{criterion.markingPoint}</strong><p>{criterion.comment}</p></div></li>)}</ul><div className="feedbackGrid">{aiMarking.strengths.length > 0 && <div><h3>What went well</h3><ul>{aiMarking.strengths.map(item => <li key={item}>{item}</li>)}</ul></div>}{aiMarking.improvements.length > 0 && <div><h3>How to improve</h3><ul>{aiMarking.improvements.map(item => <li key={item}>{item}</li>)}</ul></div>}{aiMarking.missedPoints.length > 0 && <div><h3>Points to add</h3><ul>{aiMarking.missedPoints.map(item => <li key={item}>{item}</li>)}</ul></div>}</div><div className="model"><h3>Example improved answer</h3><p>{aiMarking.modelAnswer}</p></div><small>{aiMarking.disclaimer}</small><div className="actions"><button className="primary" onClick={() => nextQuestion(aiMarking.awardedMarks)}>Next question →</button></div></div>}
       {feedback && current.question.type !== "multiple-choice" && !aiMarking && <div className="feedback written"><strong>Check your answer against the marking points</strong><ul>{current.question.markingPoints.map(point => <li key={point}>{point}</li>)}</ul><p><b>Improvement guidance:</b> {current.question.guidance}</p><p>How many marking points did your answer include?</p><div className="markButtons">{Array.from({ length: current.question.marks + 1 }, (_, mark) => <button key={mark} onClick={() => nextQuestion(mark)}>{mark}</button>)}</div><small>This self-marking option is used only when AI marking is unavailable.</small></div>}
