@@ -3,6 +3,7 @@ import { year8HistoryIndustrialRevolution } from "./year8HistoryIndustrialRevolu
 import { year8HistoryJackTheRipper } from "./year8HistoryJackTheRipper";
 import { year8HistoryEnslavement } from "./year8HistoryEnslavement";
 import { year8HistoryMigration } from "./year8HistoryMigration";
+import { year8ScienceHealthAndLifestyle } from "./year8ScienceHealthAndLifestyle";
 import { year8ScienceEcosystemProcesses } from "./year8ScienceEcosystemProcesses";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
@@ -10,6 +11,7 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8HistoryIndustrialRevolution,
   year8HistoryJackTheRipper,
   year8HistoryEnslavement,
+  year8ScienceHealthAndLifestyle,
   year8ScienceEcosystemProcesses,
 ];
 

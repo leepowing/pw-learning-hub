@@ -1,0 +1,470 @@
+import type {
+  KnowledgeFlashcard,
+  KnowledgeOrganiser,
+  KnowledgeQuestion,
+  KnowledgeSection,
+  MultipleChoiceQuestion,
+  WrittenQuestion,
+} from "./types";
+
+const KO_SOURCE = "Chapter 1 Health and Lifestyle Knowledge Organiser (user-supplied image)";
+
+const sections: KnowledgeSection[] = [
+  {
+    id: "y8sci-health-digestive-system",
+    title: "The Digestive System",
+    context: "Organs, digestion, absorption and egestion",
+    summary: "The digestive system breaks food down, absorbs useful substances and removes faeces from the body.",
+    colour: "#15803d",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: The digestive system`,
+    keyFacts: [
+      "Food is chewed in the mouth.",
+      "Salivary glands add enzymes to food in the mouth.",
+      "The oesophagus (gullet) carries food to the stomach.",
+      "The stomach churns food, which is physical digestion.",
+      "The stomach begins the chemical digestion of proteins.",
+      "The pancreas makes digestive enzymes.",
+      "The liver makes bile.",
+      "The gall bladder stores bile.",
+      "The bile duct carries bile to the small intestine.",
+      "Digested food is absorbed into the blood in the small intestine.",
+      "Water and minerals are absorbed into the blood in the large intestine.",
+      "The rectum stores faeces.",
+      "The anus expels faeces.",
+      "Bacteria in the large intestine live on fibre in the diet.",
+      "Gut bacteria make important vitamins, including vitamin K.",
+    ],
+    keyTerms: ["digestion", "digestive system", "oesophagus", "stomach", "small intestine", "large intestine", "rectum", "anus"],
+  },
+  {
+    id: "y8sci-health-nutrients",
+    title: "Nutrients and Their Roles",
+    context: "Why the body needs carbohydrates, lipids, proteins, vitamins, minerals, water and fibre",
+    summary: "Different nutrients have different roles, so a healthy diet must provide the body with the right range of substances.",
+    colour: "#16a34a",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Nutrients`,
+    keyFacts: [
+      "Carbohydrates are the body's main source of energy.",
+      "Lipids are fats and oils that provide energy.",
+      "Proteins are needed for the growth and repair of cells and tissues.",
+      "Vitamins and minerals are essential in small amounts to keep the body healthy.",
+      "Water is needed in all cells and body fluids.",
+      "Fibre provides bulk to keep food moving through the gut, but it is not actually a nutrient.",
+    ],
+    keyTerms: ["nutrient", "carbohydrate", "lipid", "protein", "vitamin", "mineral", "fibre"],
+  },
+  {
+    id: "y8sci-health-enzymes",
+    title: "Enzymes and Digestion",
+    context: "Biological catalysts and the products of digestion",
+    summary: "Digestive enzymes are biological catalysts that break large nutrient molecules into smaller molecules.",
+    colour: "#166534",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Enzymes`,
+    keyFacts: [
+      "Enzymes are special proteins.",
+      "Digestive enzymes break large nutrient molecules down into small molecules.",
+      "Enzymes are biological catalysts.",
+      "Enzymes speed up digestion without being used up.",
+      "The three main types of digestive enzyme are carbohydrase, protease and lipase.",
+      "Carbohydrase digests carbohydrates, such as starch, into sugars.",
+      "Protease digests protein into amino acids.",
+      "Lipase digests lipids into fatty acids and glycerol.",
+    ],
+    keyTerms: ["enzyme", "catalyst", "carbohydrase", "protease", "lipase"],
+  },
+  {
+    id: "y8sci-health-food-tests",
+    title: "Food Tests",
+    context: "Testing foods for starch, lipids, sugar and protein",
+    summary: "Food tests use particular reagents and colour changes to show which nutrients a food contains.",
+    colour: "#22c55e",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Food tests`,
+    keyFacts: [
+      "Food tests identify substances in food by using characteristic results.",
+      "To test for starch, add a few drops of iodine solution to the food solution.",
+      "A blue-black result shows that starch is present.",
+      "To test for lipids, add ethanol, shake for one minute and pour the ethanol into water.",
+      "A cloudy result shows that lipids are present.",
+      "To test for sugar, add Benedict's solution and heat the solution in a water bath.",
+      "An orange-red result shows that sugar is present.",
+      "To test for protein, add a few drops of copper sulfate solution.",
+      "Sodium hydroxide solution is also added during the protein test.",
+      "A purple result shows that protein is present.",
+      "A food-test conclusion must be based on the observed colour or appearance change.",
+    ],
+    keyTerms: ["food test"],
+  },
+  {
+    id: "y8sci-health-unhealthy-diet",
+    title: "Effects of an Unhealthy Diet",
+    context: "Balanced diets, underweight, overweight and deficiency",
+    summary: "An unbalanced diet can cause underweight, overweight or vitamin and mineral deficiency, increasing the risk of disease.",
+    colour: "#15803d",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Effects of an unhealthy diet`,
+    keyFacts: [
+      "A balanced diet contains the right proportions of the food groups to keep the body healthy.",
+      "An unbalanced diet can cause a person to become underweight.",
+      "Being underweight increases the risk of a poor immune system.",
+      "Being underweight can cause a lack of energy.",
+      "Being underweight can be linked to a lack of vitamins and minerals.",
+      "An unbalanced diet can cause a person to become overweight.",
+      "Being overweight increases the risk of heart disease and stroke.",
+      "Being overweight increases the risk of diabetes and some cancers.",
+      "An unbalanced diet can cause vitamin and mineral deficiencies.",
+      "Vitamin A deficiency can lead to night blindness.",
+      "Vitamin D deficiency can lead to rickets.",
+    ],
+    keyTerms: ["balanced diet", "deficiency"],
+  },
+  {
+    id: "y8sci-health-drugs",
+    title: "Medicinal and Recreational Drugs",
+    context: "Uses, benefits, harms and examples of drugs",
+    summary: "Drugs affect the brain or body; medicinal drugs are used to treat illness, while recreational drugs are taken for enjoyment, relaxation or alertness.",
+    colour: "#16a34a",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Drugs (the printed typo 'heroine' is corrected to 'heroin' with user approval)`,
+    keyFacts: [
+      "Drugs are chemicals that affect the way the brain and body work.",
+      "Medicinal drugs are used in medicine.",
+      "Medicinal drugs can benefit health when used correctly.",
+      "Medicinal drugs can be used to treat symptoms.",
+      "Medicinal drugs can be used to cure illness.",
+      "Some medicinal drugs have side effects.",
+      "Painkillers are an example of medicinal drugs.",
+      "Antibiotics are an example of medicinal drugs.",
+      "Cough mixture is an example of a medicinal drug.",
+      "Recreational drugs may be taken for enjoyment.",
+      "Recreational drugs may be taken to relax.",
+      "Recreational drugs may be taken to stay awake.",
+      "Recreational drugs normally have no health benefits.",
+      "Many recreational drugs can be harmful.",
+      "Many recreational drugs are illegal.",
+      "Alcohol and caffeine are examples of recreational drugs.",
+      "Heroin, cocaine and tobacco are examples of recreational drugs.",
+    ],
+    keyTerms: ["drug"],
+  },
+  {
+    id: "y8sci-health-alcohol",
+    title: "Alcohol and Health",
+    context: "Long-term effects and risks during pregnancy",
+    summary: "Alcohol slows body reactions and long-term heavy use can damage organs, fertility and an unborn baby.",
+    colour: "#166534",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Alcohol`,
+    keyFacts: [
+      "Alcohol is a depressant.",
+      "Alcohol slows down the body's reactions.",
+      "Drinking large amounts of alcohol over a long time can cause stomach ulcers.",
+      "Long-term heavy drinking can cause heart disease.",
+      "Long-term heavy drinking can reduce fertility.",
+      "Long-term heavy drinking can cause brain damage.",
+      "Long-term heavy drinking can cause liver damage called cirrhosis.",
+      "Drinking alcohol during pregnancy increases the risk of miscarriage.",
+      "Drinking alcohol during pregnancy increases the risk of stillbirth.",
+      "Drinking alcohol during pregnancy increases the risk of premature birth.",
+      "Drinking alcohol during pregnancy increases the risk of low-birth-weight babies.",
+      "Drinking alcohol during pregnancy increases the risk of Fetal Alcohol Syndrome (FAS).",
+    ],
+    keyTerms: [],
+  },
+  {
+    id: "y8sci-health-smoking",
+    title: "Smoking and Health",
+    context: "Harmful chemicals, disease and pregnancy",
+    summary: "Cigarette smoke contains harmful chemicals that damage lungs, reduce oxygen transport and increase the risk of serious disease.",
+    colour: "#22c55e",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Smoking`,
+    keyFacts: [
+      "Cigarette smoke contains many harmful chemicals.",
+      "Tar damages the lining of the lungs and alveoli.",
+      "Tar contains cancer-causing chemicals.",
+      "Nicotine is a stimulant.",
+      "Nicotine is addictive.",
+      "Carbon monoxide stops the blood from carrying oxygen effectively.",
+      "Smoking increases the risk of heart disease.",
+      "Smoking can cause emphysema.",
+      "Smoking can cause respiratory infections.",
+      "Smoking increases the risk of strokes.",
+      "Smoking can cause lung cancer.",
+      "Smoking during pregnancy increases the risk of miscarriage and low-birth-weight babies.",
+      "Smoking during pregnancy can affect the fetus's development.",
+    ],
+    keyTerms: ["carbon monoxide", "nicotine", "stimulant", "tar"],
+  },
+  {
+    id: "y8sci-health-addiction",
+    title: "Addiction and Withdrawal",
+    context: "Dependence on drugs and withdrawal symptoms",
+    summary: "Addiction develops when the body becomes used to drug-induced changes; stopping the drug can then cause withdrawal symptoms.",
+    colour: "#15803d",
+    sourceType: "knowledgeOrganiser",
+    sourceRef: `${KO_SOURCE}: Addiction`,
+    keyFacts: [
+      "Addiction occurs when the body becomes used to chemical changes caused by a drug.",
+      "A person who is addicted may need the drug to feel normal.",
+      "Stopping an addictive drug can cause withdrawal symptoms.",
+      "Sickness and nausea can be withdrawal symptoms.",
+      "Stomach cramps can be a withdrawal symptom.",
+      "Headaches can be a withdrawal symptom.",
+      "Anxiety can be a withdrawal symptom.",
+      "Sweating can be a withdrawal symptom.",
+    ],
+    keyTerms: ["addiction", "withdrawal symptom"],
+  },
+];
+
+const vocabularyDefinitions: Record<string, string> = {
+  addiction: "A condition in which the body becomes used to drug-induced chemical changes and the person may need the drug to feel normal.",
+  anus: "The opening through which faeces leave the digestive system.",
+  "balanced diet": "A diet containing the right proportions of the food groups to keep the body healthy.",
+  carbohydrase: "A digestive enzyme that breaks carbohydrates, such as starch, into sugars.",
+  carbohydrate: "A nutrient that is the body's main source of energy.",
+  "carbon monoxide": "A poisonous gas in cigarette smoke that stops blood carrying oxygen effectively.",
+  catalyst: "A substance that speeds up a reaction without being used up.",
+  deficiency: "A shortage of a nutrient, vitamin or mineral needed by the body.",
+  digestion: "The breakdown of large food molecules into smaller molecules that can be absorbed.",
+  "digestive system": "The group of organs that digests food, absorbs useful substances and removes faeces.",
+  drug: "A chemical that affects the way the brain or body works.",
+  enzyme: "A biological catalyst; digestive enzymes are proteins that speed up the breakdown of food.",
+  fibre: "Material that adds bulk and keeps food moving through the gut; it is not actually a nutrient.",
+  "food test": "A chemical test using a characteristic result to identify a substance in food.",
+  "large intestine": "The organ where water and minerals are absorbed into the blood.",
+  lipid: "A fat or oil that provides energy.",
+  lipase: "A digestive enzyme that breaks lipids into fatty acids and glycerol.",
+  mineral: "A substance needed in small amounts to keep the body healthy.",
+  nicotine: "An addictive stimulant found in tobacco smoke.",
+  nutrient: "A substance in food needed by the body for energy, growth, repair or health.",
+  oesophagus: "The gullet; a tube that carries food from the mouth to the stomach.",
+  protease: "A digestive enzyme that breaks protein into amino acids.",
+  protein: "A nutrient needed for the growth and repair of cells and tissues.",
+  rectum: "The part of the digestive system that stores faeces before egestion.",
+  "small intestine": "The organ where digested food is absorbed into the blood.",
+  stimulant: "A substance that increases activity in the brain or body.",
+  stomach: "A digestive organ that churns food and begins the chemical digestion of proteins.",
+  tar: "A mixture in cigarette smoke that damages lungs and contains cancer-causing chemicals.",
+  vitamin: "An organic substance needed in small amounts to keep the body healthy.",
+  "withdrawal symptom": "An unpleasant physical or mental effect caused when an addicted person stops taking a drug.",
+};
+
+const flashcards: KnowledgeFlashcard[] = sections.flatMap(section => [
+  ...section.keyFacts.map((fact, index) => ({
+    id: `${section.id}-fact-${index + 1}`,
+    sectionId: section.id,
+    front: `Recall point ${index + 1}: ${section.title}`,
+    back: fact,
+  })),
+  ...section.keyTerms.map((term, index) => ({
+    id: `${section.id}-term-${index + 1}`,
+    sectionId: section.id,
+    front: `Define ${term}.`,
+    back: vocabularyDefinitions[term],
+  })),
+]);
+
+function generatedRef(section: string) {
+  return `Generated supplement from ${KO_SOURCE}: ${section}`;
+}
+
+function mcq(
+  id: string,
+  sectionId: string,
+  prompt: string,
+  options: string[],
+  answer: string,
+  explanation: string,
+  sourceSection: string,
+): MultipleChoiceQuestion {
+  return { id, sectionIds: [sectionId], type: "multiple-choice", prompt, marks: 1, options, answer, explanation, sourceType: "generatedSupplement", sourceRef: generatedRef(sourceSection) };
+}
+
+function written(
+  id: string,
+  sectionIds: string[],
+  type: "short-answer" | "long-answer",
+  prompt: string,
+  markingPoints: string[],
+  guidance: string,
+  sourceSection: string,
+): WrittenQuestion {
+  return { id, sectionIds, type, prompt, marks: markingPoints.length, markingPoints, guidance, sourceType: "generatedSupplement", sourceRef: generatedRef(sourceSection) };
+}
+
+const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
+  mcq("health-q01", "y8sci-health-digestive-system", "Which organ carries food from the mouth to the stomach?", ["Oesophagus", "Small intestine", "Pancreas"], "Oesophagus", "The oesophagus, or gullet, carries food to the stomach.", "The digestive system"),
+  mcq("health-q02", "y8sci-health-digestive-system", "Where is digested food absorbed into the blood?", ["Small intestine", "Large intestine", "Rectum"], "Small intestine", "Digested food is absorbed into the blood in the small intestine.", "The digestive system"),
+  mcq("health-q03", "y8sci-health-digestive-system", "Which statement about bile is correct?", ["The liver makes it and the gall bladder stores it", "The pancreas makes it and the rectum stores it", "The stomach makes it and the anus stores it"], "The liver makes it and the gall bladder stores it", "Bile is made by the liver, stored in the gall bladder and carried by the bile duct.", "The digestive system"),
+
+  mcq("health-q04", "y8sci-health-nutrients", "Which nutrient is the body's main source of energy?", ["Carbohydrate", "Protein", "Vitamin"], "Carbohydrate", "Carbohydrates are the body's main source of energy.", "Nutrients"),
+  mcq("health-q05", "y8sci-health-nutrients", "Which nutrient is needed for growth and repair of cells and tissues?", ["Protein", "Lipid", "Water"], "Protein", "Proteins are needed for growth and repair.", "Nutrients"),
+  mcq("health-q06", "y8sci-health-nutrients", "Why is fibre important?", ["It provides bulk to keep food moving through the gut", "It is the body's main energy source", "It builds and repairs cells"], "It provides bulk to keep food moving through the gut", "Fibre helps food move through the gut, although it is not actually a nutrient.", "Nutrients"),
+
+  mcq("health-q07", "y8sci-health-enzymes", "What type of substance is an enzyme?", ["A protein", "A lipid", "A mineral"], "A protein", "Enzymes are special proteins.", "Enzymes"),
+  mcq("health-q08", "y8sci-health-enzymes", "Which enzyme digests protein?", ["Protease", "Lipase", "Carbohydrase"], "Protease", "Protease digests protein into amino acids.", "Enzymes"),
+  mcq("health-q09", "y8sci-health-enzymes", "What are the products of lipid digestion?", ["Fatty acids and glycerol", "Amino acids", "Sugars"], "Fatty acids and glycerol", "Lipase breaks lipids into fatty acids and glycerol.", "Enzymes"),
+
+  mcq("health-q10", "y8sci-health-food-tests", "Which result is positive for starch?", ["Blue-black", "Cloudy", "Purple"], "Blue-black", "Iodine solution turns blue-black when starch is present.", "Food tests"),
+  mcq("health-q11", "y8sci-health-food-tests", "Which food test uses Benedict's solution and a water bath?", ["Sugar test", "Lipid test", "Protein test"], "Sugar test", "Benedict's solution is heated in a water bath to test for sugar.", "Food tests"),
+  mcq("health-q12", "y8sci-health-food-tests", "A food sample turns purple after copper sulfate and sodium hydroxide are added. What is present?", ["Protein", "Starch", "Lipid"], "Protein", "Purple is the positive result for protein.", "Food tests"),
+
+  mcq("health-q13", "y8sci-health-unhealthy-diet", "What is a balanced diet?", ["The right proportions of the food groups", "Equal amounts of every food", "A diet containing no lipids"], "The right proportions of the food groups", "A balanced diet provides the right proportions needed for health.", "Effects of an unhealthy diet"),
+  mcq("health-q14", "y8sci-health-unhealthy-diet", "Which condition can result from vitamin D deficiency?", ["Rickets", "Night blindness", "Emphysema"], "Rickets", "Vitamin D deficiency can lead to rickets.", "Effects of an unhealthy diet"),
+  mcq("health-q15", "y8sci-health-unhealthy-diet", "Which pair is linked to being overweight?", ["Heart disease and diabetes", "Night blindness and rickets", "Stomach cramps and sweating"], "Heart disease and diabetes", "Being overweight increases the risk of heart disease, stroke, diabetes and some cancers.", "Effects of an unhealthy diet"),
+
+  mcq("health-q16", "y8sci-health-drugs", "Which statement defines a drug?", ["A chemical that affects how the brain or body works", "Any nutrient that provides energy", "Only an illegal substance"], "A chemical that affects how the brain or body works", "Drugs are chemicals that affect the brain or body.", "Drugs"),
+  mcq("health-q17", "y8sci-health-drugs", "Which is an example of a medicinal drug?", ["Antibiotic", "Tobacco", "Cocaine"], "Antibiotic", "Painkillers, antibiotics and cough mixture are medicinal drugs.", "Drugs"),
+  mcq("health-q18", "y8sci-health-drugs", "Which pair contains only recreational drugs named on the Knowledge Organiser?", ["Heroin and cocaine", "Painkillers and antibiotics", "Cough mixture and antibiotics"], "Heroin and cocaine", "Heroin and cocaine are listed as recreational drugs.", "Drugs"),
+
+  mcq("health-q19", "y8sci-health-alcohol", "Why is alcohol described as a depressant?", ["It slows the body's reactions", "It always causes sadness", "It increases oxygen transport"], "It slows the body's reactions", "A depressant slows body reactions.", "Alcohol"),
+  mcq("health-q20", "y8sci-health-alcohol", "What is cirrhosis?", ["Liver damage", "A respiratory infection", "A vitamin deficiency"], "Liver damage", "Long-term heavy drinking can cause liver damage called cirrhosis.", "Alcohol"),
+  mcq("health-q21", "y8sci-health-alcohol", "Which condition is linked to drinking alcohol during pregnancy?", ["Fetal Alcohol Syndrome", "Emphysema", "Rickets"], "Fetal Alcohol Syndrome", "Alcohol during pregnancy increases the risk of Fetal Alcohol Syndrome.", "Alcohol"),
+
+  mcq("health-q22", "y8sci-health-smoking", "Which substance in cigarette smoke is an addictive stimulant?", ["Nicotine", "Tar", "Carbon monoxide"], "Nicotine", "Nicotine is an addictive stimulant.", "Smoking"),
+  mcq("health-q23", "y8sci-health-smoking", "How does carbon monoxide cause harm?", ["It stops blood carrying oxygen effectively", "It digests protein", "It causes vitamin D deficiency"], "It stops blood carrying oxygen effectively", "Carbon monoxide reduces the blood's oxygen-carrying ability.", "Smoking"),
+  mcq("health-q24", "y8sci-health-smoking", "Which part of the respiratory system is damaged by tar?", ["The lining of the lungs and alveoli", "The oesophagus only", "The small intestine"], "The lining of the lungs and alveoli", "Tar damages lung tissue and contains cancer-causing chemicals.", "Smoking"),
+
+  mcq("health-q25", "y8sci-health-addiction", "What can happen when an addicted person stops taking a drug?", ["Withdrawal symptoms", "Immediate vitamin production", "Faster digestion"], "Withdrawal symptoms", "Stopping an addictive drug can cause withdrawal symptoms.", "Addiction"),
+  mcq("health-q26", "y8sci-health-addiction", "Why may an addicted person feel that they need a drug?", ["Their body has become used to the chemical changes", "The drug is a nutrient", "The drug prevents digestion"], "Their body has become used to the chemical changes", "The body becomes used to the drug's chemical effects, so the person may need it to feel normal.", "Addiction"),
+  mcq("health-q27", "y8sci-health-addiction", "Which is a withdrawal symptom listed on the Knowledge Organiser?", ["Anxiety", "Night blindness", "Rickets"], "Anxiety", "Sickness, nausea, stomach cramps, headaches, anxiety and sweating are listed withdrawal symptoms.", "Addiction"),
+];
+
+const shortAnswerQuestions: WrittenQuestion[] = [
+  written("health-q28", ["y8sci-health-digestive-system"], "short-answer", "Describe what happens to food in the mouth, oesophagus and stomach.", ["Food is chewed in the mouth.", "Salivary glands add enzymes.", "The oesophagus carries food to the stomach.", "The stomach churns food and begins chemical digestion of proteins."], "Follow the food in order and distinguish physical from chemical digestion.", "The digestive system"),
+  written("health-q29", ["y8sci-health-digestive-system"], "short-answer", "State the roles of the pancreas, liver, gall bladder and bile duct.", ["The pancreas makes digestive enzymes.", "The liver makes bile.", "The gall bladder stores bile.", "The bile duct carries bile to the small intestine."], "Give one role for each named structure.", "The digestive system"),
+  written("health-q30", ["y8sci-health-digestive-system"], "short-answer", "Explain what happens in the small intestine, large intestine, rectum and anus, and give one role of gut bacteria.", ["Digested food is absorbed into the blood in the small intestine.", "Water and minerals are absorbed in the large intestine.", "The rectum stores faeces.", "The anus expels faeces.", "Bacteria live on fibre and make important vitamins such as vitamin K."], "Cover absorption, storage, egestion and bacteria.", "The digestive system"),
+
+  written("health-q31", ["y8sci-health-nutrients"], "short-answer", "State the roles of carbohydrates, lipids and proteins in the body.", ["Carbohydrates are the main energy source.", "Lipids are fats and oils that provide energy.", "Proteins are needed for growth and repair."], "Give a separate role for each nutrient.", "Nutrients"),
+  written("health-q32", ["y8sci-health-nutrients"], "short-answer", "Why does the body need vitamins, minerals and water?", ["Vitamins are essential in small amounts for health.", "Minerals are essential in small amounts for health.", "Water is needed in all cells and body fluids."], "Include all three substances.", "Nutrients"),
+  written("health-q33", ["y8sci-health-nutrients"], "short-answer", "What is the role of fibre, and why is it unusual in the nutrient table?", ["Fibre provides bulk to keep food moving through the gut.", "Fibre is not actually a nutrient."], "State both its function and its classification.", "Nutrients"),
+
+  written("health-q34", ["y8sci-health-enzymes"], "short-answer", "Explain why enzymes are described as biological catalysts.", ["Enzymes are special proteins.", "They speed up digestion/reactions.", "They are not used up."], "Link the term catalyst to reaction rate and reuse.", "Enzymes"),
+  written("health-q35", ["y8sci-health-enzymes"], "short-answer", "What does carbohydrase digest, and what does it produce?", ["It digests carbohydrates such as starch.", "It produces sugars."], "Name both the substrate and product.", "Enzymes"),
+  written("health-q36", ["y8sci-health-enzymes"], "short-answer", "Compare the actions of protease and lipase.", ["Protease digests protein into amino acids.", "Lipase digests lipids into fatty acids and glycerol."], "Give the substrate and products for each enzyme.", "Enzymes"),
+
+  written("health-q37", ["y8sci-health-food-tests"], "short-answer", "Describe the test for starch and its positive result.", ["Add iodine solution to the food solution.", "A blue-black result shows starch is present."], "Name the reagent and result.", "Food tests"),
+  written("health-q38", ["y8sci-health-food-tests"], "short-answer", "Describe the test for lipids and its positive result.", ["Add ethanol to the sample.", "Shake for one minute and pour the ethanol into water.", "A cloudy result shows lipids are present."], "Give the method in order and the result.", "Food tests"),
+  written("health-q39", ["y8sci-health-food-tests"], "short-answer", "Compare the tests for sugar and protein, including the reagents and positive results.", ["For sugar, add Benedict's solution and heat in a water bath.", "An orange-red result shows sugar is present.", "For protein, add copper sulfate and sodium hydroxide.", "A purple result shows protein is present."], "Keep the two tests separate.", "Food tests"),
+
+  written("health-q40", ["y8sci-health-unhealthy-diet"], "short-answer", "Define a balanced diet.", ["It contains the right proportions of the food groups.", "These proportions keep the body healthy."], "Use the idea of correct proportions.", "Effects of an unhealthy diet"),
+  written("health-q41", ["y8sci-health-unhealthy-diet"], "short-answer", "Give three health risks linked to being underweight.", ["Poor immune system.", "Lack of energy.", "Lack of vitamins and minerals."], "Give all three risks from the organiser.", "Effects of an unhealthy diet"),
+  written("health-q42", ["y8sci-health-unhealthy-diet"], "short-answer", "Give two risks of being overweight and explain the effects of vitamin A and vitamin D deficiency.", ["Two valid overweight risks: heart disease, stroke, diabetes or some cancers.", "Vitamin A deficiency can cause night blindness.", "Vitamin D deficiency can cause rickets."], "Include overweight and both named deficiencies.", "Effects of an unhealthy diet"),
+
+  written("health-q43", ["y8sci-health-drugs"], "short-answer", "What is a drug, and how can medicinal drugs benefit health?", ["A drug is a chemical that affects how the brain or body works.", "Medicinal drugs can benefit health when used correctly.", "They can treat symptoms or cure illness."], "Define drug and give medicinal uses.", "Drugs"),
+  written("health-q44", ["y8sci-health-drugs"], "short-answer", "Give three examples of medicinal drugs and one possible disadvantage.", ["Painkillers.", "Antibiotics.", "Cough mixture.", "Some medicinal drugs have side effects."], "Use all three examples from the organiser.", "Drugs"),
+  written("health-q45", ["y8sci-health-drugs"], "short-answer", "Why are recreational drugs taken, and why can they be dangerous? Give examples.", ["They may be taken for enjoyment, relaxation or to stay awake.", "They normally have no health benefits and many are harmful.", "Many are illegal.", "Valid examples include alcohol, caffeine, heroin, cocaine and tobacco."], "Include purposes, risks and examples.", "Drugs"),
+
+  written("health-q46", ["y8sci-health-alcohol"], "short-answer", "Why is alcohol a depressant?", ["It slows down the body's reactions."], "State its effect on reactions.", "Alcohol"),
+  written("health-q47", ["y8sci-health-alcohol"], "short-answer", "Give five health problems caused by drinking large amounts of alcohol over a long time.", ["Stomach ulcers.", "Heart disease.", "Reduced fertility.", "Brain damage.", "Liver damage/cirrhosis."], "Use the long-term effects on the organiser.", "Alcohol"),
+  written("health-q48", ["y8sci-health-alcohol"], "short-answer", "Give five risks linked to drinking alcohol during pregnancy.", ["Miscarriage.", "Stillbirth.", "Premature birth.", "Low-birth-weight babies.", "Fetal Alcohol Syndrome (FAS)."], "List all five pregnancy risks.", "Alcohol"),
+
+  written("health-q49", ["y8sci-health-smoking"], "short-answer", "Explain how tar, nicotine and carbon monoxide harm the body.", ["Tar damages the lung lining and alveoli and contains cancer-causing chemicals.", "Nicotine is an addictive stimulant.", "Carbon monoxide stops blood carrying oxygen effectively."], "Give the effect of each chemical.", "Smoking"),
+  written("health-q50", ["y8sci-health-smoking"], "short-answer", "Name five diseases or conditions caused by smoking.", ["Heart disease.", "Emphysema.", "Respiratory infections.", "Strokes.", "Lung cancer."], "Use the five conditions from the organiser.", "Smoking"),
+  written("health-q51", ["y8sci-health-smoking"], "short-answer", "Explain two risks of smoking during pregnancy.", ["It increases the risk of miscarriage and low-birth-weight babies.", "It can affect the fetus's development."], "Give both pregnancy effects.", "Smoking"),
+
+  written("health-q52", ["y8sci-health-addiction"], "short-answer", "What is addiction?", ["The body becomes used to chemical changes caused by a drug.", "The person may need the drug to feel normal."], "Describe both adaptation and dependence.", "Addiction"),
+  written("health-q53", ["y8sci-health-addiction"], "short-answer", "What is a withdrawal symptom, and when may it occur?", ["It is an unpleasant effect caused by stopping an addictive drug.", "It may occur when an addicted person tries to stop taking the drug."], "Link the symptom to stopping the drug.", "Addiction"),
+  written("health-q54", ["y8sci-health-addiction"], "short-answer", "List six withdrawal symptoms shown on the Knowledge Organiser.", ["Sickness/nausea.", "Stomach cramps.", "Headaches.", "Anxiety.", "Sweating.", "Identifies these as withdrawal symptoms rather than unrelated illnesses."], "Use the symptoms listed in the source.", "Addiction"),
+
+  written("health-q55", ["y8sci-health-drugs"], "short-answer", "Compare medicinal and recreational drugs.", ["Both are chemicals that affect the brain or body.", "Medicinal drugs are used to benefit health, treat symptoms or cure illness when used correctly.", "Recreational drugs are taken for enjoyment, relaxation or alertness and normally have no health benefits.", "Both can have harmful effects; many recreational drugs are illegal."], "Give at least one similarity and two differences.", "Drugs"),
+  written("health-q56", ["y8sci-health-nutrients", "y8sci-health-unhealthy-diet"], "short-answer", "Explain how a balanced diet helps prevent underweight, overweight and deficiency problems.", ["It provides the right proportions of food groups.", "It supplies enough energy without a harmful excess.", "It supplies proteins, vitamins and minerals needed for health.", "This reduces the risks linked to underweight, overweight and deficiencies."], "Link nutrient balance to the three groups of health effects.", "Nutrients and effects of an unhealthy diet"),
+  written("health-q57", ["y8sci-health-digestive-system", "y8sci-health-enzymes"], "short-answer", "Explain how digestive organs and enzymes work together to make nutrients absorbable.", ["Organs move and physically break up food.", "Enzymes chemically break large nutrient molecules into smaller molecules.", "Carbohydrase, protease and lipase act on different nutrients.", "Small molecules from digested food are absorbed into the blood in the small intestine."], "Connect physical digestion, chemical digestion and absorption.", "The digestive system and enzymes"),
+];
+
+const interactiveQuestions: WrittenQuestion[] = [
+  {
+    ...written("health-q58", ["y8sci-health-digestive-system"], "short-answer", "Label the digestive system diagram.", ["1. Mouth", "2. Oesophagus", "3. Liver", "4. Gall bladder", "5. Large intestine", "6. Stomach", "7. Pancreas", "8. Small intestine", "9. Rectum", "10. Anus"], "Use the numbered positions on the diagram.", "The digestive system"),
+    format: "label-the-diagram",
+    interaction: { kind: "diagram-labels", diagram: "digestive-system", labels: ["1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10."], answers: [["mouth"], ["oesophagus", "esophagus", "gullet"], ["liver"], ["gall bladder", "gallbladder"], ["large intestine"], ["stomach"], ["pancreas"], ["small intestine"], ["rectum"], ["anus"]] },
+  },
+  {
+    ...written("health-q59", ["y8sci-health-digestive-system"], "short-answer", "Put the main route taken by food through the digestive system into the correct order.", ["Mouth", "Oesophagus", "Stomach", "Small intestine", "Large intestine", "Rectum", "Anus"], "Start where food enters and finish where faeces leave.", "The digestive system"),
+    format: "ordering",
+    interaction: { kind: "ordering", items: ["Large intestine", "Mouth", "Rectum", "Stomach", "Anus", "Small intestine", "Oesophagus"], answer: ["Mouth", "Oesophagus", "Stomach", "Small intestine", "Large intestine", "Rectum", "Anus"] },
+  },
+  {
+    ...written("health-q60", ["y8sci-health-digestive-system"], "short-answer", "Complete the digestive-system facts.", ["enzymes", "bile", "blood", "vitamin K", "faeces"], "Use the word bank.", "The digestive system"),
+    format: "fill-in-the-blank",
+    interaction: { kind: "fill-blanks", wordBank: ["enzymes", "bile", "blood", "vitamin K", "faeces"], sentences: ["Salivary glands and the pancreas add or make ______.", "The liver makes ______.", "Digested food is absorbed into the ______.", "Gut bacteria can make ______.", "The rectum stores ______."], answers: [["enzymes", "enzyme"], ["bile"], ["blood"], ["vitamin K", "vitamin k"], ["faeces", "feces"]] },
+  },
+  {
+    ...written("health-q61", ["y8sci-health-nutrients"], "short-answer", "Match each nutrient or substance to its role.", ["Carbohydrate–main energy source", "Lipid–fats and oils that provide energy", "Protein–growth and repair", "Vitamins and minerals–needed in small amounts", "Water–needed in cells and body fluids", "Fibre–adds bulk and moves food through the gut"], "Use each role once.", "Nutrients"),
+    format: "matching",
+    interaction: { kind: "matching", left: ["Carbohydrate", "Lipid", "Protein", "Vitamins and minerals", "Water", "Fibre"], right: ["Needed in all cells and body fluids", "Growth and repair of cells and tissues", "Main source of energy", "Adds bulk to keep food moving through the gut", "Essential in small amounts for health", "Fats and oils that provide energy"], answers: [2, 5, 1, 4, 0, 3] },
+  },
+  {
+    ...written("health-q62", ["y8sci-health-nutrients"], "short-answer", "Classify each item by its main role.", ["Carbohydrate–Energy", "Lipid–Energy", "Protein–Growth and repair", "Vitamin–Keeping healthy", "Mineral–Keeping healthy", "Water–Cells and body fluids", "Fibre–Moving food through the gut"], "Choose the main role shown on the organiser.", "Nutrients"),
+    format: "classification",
+    interaction: { kind: "classification", rows: ["Carbohydrate", "Lipid", "Protein", "Vitamin", "Mineral", "Water", "Fibre"], categories: ["Energy", "Growth and repair", "Keeping healthy", "Cells and body fluids", "Moving food through the gut"], answers: ["Energy", "Energy", "Growth and repair", "Keeping healthy", "Keeping healthy", "Cells and body fluids", "Moving food through the gut"] },
+  },
+  {
+    ...written("health-q63", ["y8sci-health-enzymes"], "short-answer", "Match each digestive enzyme to what it digests and produces.", ["Carbohydrase–carbohydrates to sugars", "Protease–protein to amino acids", "Lipase–lipids to fatty acids and glycerol"], "Match all three enzymes.", "Enzymes"),
+    format: "matching",
+    interaction: { kind: "matching", left: ["Carbohydrase", "Protease", "Lipase"], right: ["Protein → amino acids", "Lipids → fatty acids and glycerol", "Carbohydrates such as starch → sugars"], answers: [2, 0, 1] },
+  },
+  {
+    ...written("health-q64", ["y8sci-health-food-tests"], "short-answer", "Complete the positive results for the four food tests.", ["blue-black", "cloudy", "orange-red", "purple"], "Use each result once.", "Food tests"),
+    format: "fill-in-the-blank",
+    interaction: { kind: "fill-blanks", wordBank: ["blue-black", "cloudy", "orange-red", "purple"], sentences: ["Iodine + starch → ______", "Ethanol emulsion + lipid → ______", "Heated Benedict's + sugar → ______", "Copper sulfate and sodium hydroxide + protein → ______"], answers: [["blue-black", "blue black"], ["cloudy", "milky"], ["orange-red", "orange red"], ["purple", "lilac"]] },
+  },
+  {
+    ...written("health-q65", ["y8sci-health-food-tests"], "short-answer", "Put the lipid-test stages into the correct order.", ["Add ethanol", "Shake for one minute", "Pour the ethanol into water", "Look for a cloudy result"], "Use the method on the organiser.", "Food tests"),
+    format: "ordering",
+    interaction: { kind: "ordering", items: ["Look for a cloudy result", "Shake for one minute", "Add ethanol", "Pour the ethanol into water"], answer: ["Add ethanol", "Shake for one minute", "Pour the ethanol into water", "Look for a cloudy result"] },
+  },
+  {
+    ...written("health-q66", ["y8sci-health-unhealthy-diet"], "short-answer", "Classify each effect of an unhealthy diet.", ["Poor immune system–Underweight", "Lack of energy–Underweight", "Heart disease–Overweight", "Diabetes–Overweight", "Night blindness–Vitamin/mineral deficiency", "Rickets–Vitamin/mineral deficiency"], "Use each health category.", "Effects of an unhealthy diet"),
+    format: "classification",
+    interaction: { kind: "classification", rows: ["Poor immune system", "Lack of energy", "Heart disease", "Diabetes", "Night blindness", "Rickets"], categories: ["Underweight", "Overweight", "Vitamin/mineral deficiency"], answers: ["Underweight", "Underweight", "Overweight", "Overweight", "Vitamin/mineral deficiency", "Vitamin/mineral deficiency"] },
+  },
+  {
+    ...written("health-q67", ["y8sci-health-drugs"], "short-answer", "Match each example or description to the correct drug group.", ["Painkillers–medicinal", "Antibiotics–medicinal", "Cough mixture–medicinal", "Caffeine–recreational", "Heroin–recreational", "Tobacco–recreational"], "Match every item once.", "Drugs"),
+    format: "matching",
+    interaction: { kind: "matching", left: ["Painkillers", "Antibiotics", "Cough mixture", "Caffeine", "Heroin", "Tobacco"], right: ["Recreational drug example", "Medicinal drug example"], answers: [1, 1, 1, 0, 0, 0] },
+  },
+  {
+    ...written("health-q68", ["y8sci-health-drugs"], "short-answer", "Classify each statement as describing medicinal or recreational drugs.", ["Used in medicine–Medicinal", "Can treat symptoms–Medicinal", "Can cure illness–Medicinal", "Taken for enjoyment–Recreational", "Taken to relax–Recreational", "Many are illegal–Recreational"], "Classify all six statements.", "Drugs"),
+    format: "classification",
+    interaction: { kind: "classification", rows: ["Used in medicine", "Can treat symptoms", "Can cure illness", "Taken for enjoyment", "Taken to relax", "Many are illegal"], categories: ["Medicinal drugs", "Recreational drugs"], answers: ["Medicinal drugs", "Medicinal drugs", "Medicinal drugs", "Recreational drugs", "Recreational drugs", "Recreational drugs"] },
+  },
+  {
+    ...written("health-q69", ["y8sci-health-addiction"], "short-answer", "Complete the statements about addiction and withdrawal.", ["chemical changes", "normal", "withdrawal symptoms", "anxiety", "sweating"], "Use the word bank.", "Addiction"),
+    format: "fill-in-the-blank",
+    interaction: { kind: "fill-blanks", wordBank: ["chemical changes", "normal", "withdrawal symptoms", "anxiety", "sweating"], sentences: ["The body becomes used to the drug's ______.", "An addicted person may need the drug to feel ______.", "Stopping the drug can cause ______.", "One mental withdrawal symptom is ______.", "One physical withdrawal symptom is ______."], answers: [["chemical changes"], ["normal"], ["withdrawal symptoms", "withdrawal"], ["anxiety"], ["sweating"]] },
+  },
+];
+
+const longAnswerQuestions: WrittenQuestion[] = [
+  written("health-q70", ["y8sci-health-digestive-system", "y8sci-health-enzymes"], "long-answer", "Explain the journey of food through the digestive system, including physical digestion, chemical digestion, absorption and egestion.", ["Food is chewed and mixed with salivary enzymes in the mouth.", "The oesophagus carries food to the stomach.", "The stomach churns food and begins protein digestion.", "The pancreas supplies enzymes; the liver makes bile, which is stored in the gall bladder and carried by the bile duct.", "Digested food is absorbed in the small intestine and water/minerals in the large intestine.", "Faeces are stored in the rectum and expelled through the anus."], "Use a connected, correctly ordered explanation.", "The digestive system and enzymes"),
+  written("health-q71", ["y8sci-health-food-tests"], "long-answer", "Plan how to test four food samples for starch, lipids, sugar and protein. Include the reagents, method and positive result for each test.", ["Starch: add iodine; blue-black is positive.", "Lipids: add ethanol, shake, pour into water; cloudy is positive.", "Sugar: add Benedict's and heat in a water bath; orange-red is positive.", "Protein: add copper sulfate and sodium hydroxide; purple is positive."], "Organise your answer as four separate tests.", "Food tests"),
+  written("health-q72", ["y8sci-health-nutrients", "y8sci-health-unhealthy-diet"], "long-answer", "Explain why a balanced diet is important and how an unbalanced diet can cause underweight, overweight and deficiency diseases.", ["Defines a balanced diet as the right proportions of food groups.", "Links underweight to poor immunity, low energy and shortages of vitamins/minerals.", "Links overweight to heart disease, stroke, diabetes or some cancers.", "Links vitamin A deficiency to night blindness and vitamin D deficiency to rickets.", "Uses nutrient roles to explain why the body needs a range of foods."], "Use cause-and-effect links and named examples.", "Nutrients and effects of an unhealthy diet"),
+  written("health-q73", ["y8sci-health-drugs", "y8sci-health-alcohol", "y8sci-health-smoking"], "long-answer", "Evaluate how medicinal drugs, recreational drugs, alcohol and smoking can affect health.", ["Explains how medicinal drugs can treat symptoms or cure illness but may have side effects.", "Explains why recreational drugs may be harmful or illegal and gives examples.", "Describes at least two long-term harms of alcohol.", "Explains the effects of tar, nicotine and carbon monoxide.", "Names diseases linked to smoking.", "Reaches a supported conclusion about correct medicinal use and recreational risk."], "Compare benefits and harms using evidence from the organiser.", "Drugs, alcohol and smoking"),
+  written("health-q74", ["y8sci-health-alcohol", "y8sci-health-smoking"], "long-answer", "Compare the risks of drinking alcohol and smoking during pregnancy.", ["Alcohol increases the risk of miscarriage, stillbirth and premature birth.", "Alcohol can cause low birth weight and Fetal Alcohol Syndrome.", "Smoking increases the risk of miscarriage and low birth weight.", "Smoking can affect the fetus's development.", "Identifies shared risks, such as miscarriage and low birth weight."], "State separate effects and at least one similarity.", "Alcohol and smoking"),
+  written("health-q75", ["y8sci-health-drugs", "y8sci-health-addiction"], "long-answer", "Explain how drug use can lead to addiction and what may happen when an addicted person tries to stop.", ["Drugs cause chemical changes in the body or brain.", "The body can become used to these changes.", "The person may need the drug to feel normal.", "Stopping can cause withdrawal symptoms.", "Valid symptoms include sickness, nausea, stomach cramps, headaches, anxiety and sweating."], "Use the terms addiction and withdrawal symptoms accurately.", "Drugs and addiction"),
+];
+
+const questions: KnowledgeQuestion[] = [
+  ...multipleChoiceQuestions,
+  ...shortAnswerQuestions,
+  ...interactiveQuestions,
+  ...longAnswerQuestions,
+];
+
+export const year8ScienceHealthAndLifestyle: KnowledgeOrganiser = {
+  id: "year8-science-health-and-lifestyle",
+  year: 8,
+  subject: "Science",
+  term: "Autumn",
+  chapter: 1,
+  title: "Health and Lifestyle",
+  introduction: "Explore digestion and nutrients, food tests, healthy diets, drugs, alcohol, smoking, addiction and withdrawal. This chapter is based on the supplied Knowledge Organiser; no teacher-question PDFs were provided.",
+  sections,
+  flashcards,
+  questions,
+};

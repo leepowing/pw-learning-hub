@@ -32,7 +32,7 @@ type BaseQuestion = {
     | { kind: "ordering"; items: string[]; answer: string[] }
     | { kind: "classification"; rows: string[]; categories: string[]; answers: string[] }
     | { kind: "table"; columns: string[]; rows: string[][] }
-    | { kind: "diagram-labels"; diagram: "photosynthesis" | "leaf"; labels: string[]; answers: string[][] };
+    | { kind: "diagram-labels"; diagram: "photosynthesis" | "leaf" | "digestive-system"; labels: string[]; answers: string[][] };
 };
 
 export type MultipleChoiceQuestion = BaseQuestion & {
