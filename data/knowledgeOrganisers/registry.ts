@@ -7,6 +7,8 @@ import { year8ScienceHealthAndLifestyle } from "./year8ScienceHealthAndLifestyle
 import { year8ScienceEcosystemProcesses } from "./year8ScienceEcosystemProcesses";
 import { year8SciencePeriodicTable } from "./year8SciencePeriodicTable";
 import { year8ScienceSeparationTechniques } from "./year8ScienceSeparationTechniques";
+import { year8ScienceElectricityAndMagnetism } from "./year8ScienceElectricityAndMagnetism";
+import { year8ScienceEnergy } from "./year8ScienceEnergy";
 import { year8EnglishCrime } from "./year8EnglishCrime";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
@@ -18,6 +20,8 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8ScienceEcosystemProcesses,
   year8SciencePeriodicTable,
   year8ScienceSeparationTechniques,
+  year8ScienceElectricityAndMagnetism,
+  year8ScienceEnergy,
   year8EnglishCrime,
 ];
 
