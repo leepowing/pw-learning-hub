@@ -1,5 +1,7 @@
 # Year 8 Science Chapter 1 — Coverage Audit Summary
 
+All 131 flashcard fronts have been quality checked: the 101 fact cards use specific active-recall questions, the 30 vocabulary cards use definition prompts, and no generic `Recall point` front remains. Card IDs, answers and 131/131 source coverage are preserved.
+
 The machine-readable point-by-point matrix is `year8ScienceHealthAndLifestyleCoverage.csv`.
 
 ## Knowledge coverage

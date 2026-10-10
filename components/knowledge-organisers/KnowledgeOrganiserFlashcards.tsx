@@ -12,6 +12,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
   const [remembered, setRemembered] = useState(0);
   const [practice, setPractice] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [exitDirection, setExitDirection] = useState<ExitDirection>(null);
   const dragStartX = useRef<number | null>(null);
   const didDrag = useRef(false);
@@ -26,6 +27,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
     setRemembered(0);
     setPractice(0);
     setDragOffset(0);
+    setIsDragging(false);
     setExitDirection(null);
   }
 
@@ -53,6 +55,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
     if (!flipped || exitDirection !== null) return;
     dragStartX.current = event.clientX;
     didDrag.current = false;
+    setIsDragging(true);
   }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
@@ -65,6 +68,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
   function handlePointerUp() {
     if (dragStartX.current === null) return;
     dragStartX.current = null;
+    setIsDragging(false);
     if (dragOffset <= -90) return gradeCard("remembered");
     if (dragOffset >= 90) return gradeCard("practice");
     setDragOffset(0);
@@ -122,7 +126,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
       style={{
         transform: `translateX(${cardOffset}px) rotate(${cardOffset / 40}deg)`,
         opacity: exitDirection === null ? 1 : 0,
-        transition: dragStartX.current === null ? "transform 350ms ease, opacity 350ms ease" : "none",
+        transition: isDragging ? "none" : "transform 350ms ease, opacity 350ms ease",
       }}
     >
       <div className={`card ${flipped ? "flipped" : ""}`}>
@@ -157,5 +161,5 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 }
 
 const styles = `
-  .deck{margin-top:24px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}.stats div{padding:16px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;text-align:center}.stats strong,.stats span{display:block}.stats strong{font-size:24px}.stats span{color:#6b7280}.cardMotion{cursor:pointer;touch-action:pan-y;perspective:1200;outline:none}.cardMotion:focus-visible{border-radius:28px;box-shadow:0 0 0 4px #fed7aa}.card{position:relative;min-height:430px;transform-style:preserve-3d;transition:transform 500ms ease}.card.flipped{transform:rotateY(180deg)}.face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:34px;border:2px solid;border-radius:28px;box-shadow:0 18px 45px rgba(0,0,0,.08);backface-visibility:hidden;text-align:center}.front{border-color:#fdba74;background:linear-gradient(135deg,#fff7ed,#fff)}.back{transform:rotateY(180deg);border-color:#86efac;background:linear-gradient(135deg,#ecfdf5,#fff)}.face p{margin:0 0 18px;color:#c2410c;font-size:13px;font-weight:900;letter-spacing:.14em}.back p{color:#15803d}.face h3{margin:0 auto 22px;max-width:760px;font-size:clamp(25px,4vw,34px);line-height:1.35}.face small{color:#6b7280}.gradeButtons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}.gradeButtons button,.restart{border:0;border-radius:18px;padding:18px;color:#fff;font:inherit;font-size:18px;font-weight:800;cursor:pointer}.gradeButtons button:first-child,.restart{background:#16a34a}.gradeButtons button:last-child{background:#f97316}.gradeButtons button:disabled{cursor:not-allowed;background:#d1d5db}.hint{text-align:center;color:#6b7280}.message{padding:36px;border-radius:24px;background:#fff;text-align:center}.complete{border:1px solid #86efac;background:#ecfdf5}.completeLabel{margin:0 0 8px;color:#166534;font-weight:900;letter-spacing:.12em}.complete h3{margin:0 0 12px;font-size:38px}.complete>p:not(.completeLabel){margin-bottom:28px;color:#4b5563;font-size:18px}.restart{padding:16px 32px}@media(max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.card{min-height:360px}.face{padding:22px}.gradeButtons{grid-template-columns:1fr}.complete h3{font-size:30px}}@media(prefers-reduced-motion:reduce){.card,.cardMotion{transition:none!important}}
+  .deck{margin-top:24px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}.stats div{padding:16px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;text-align:center}.stats strong,.stats span{display:block}.stats strong{font-size:24px}.stats span{color:#6b7280}.cardMotion{cursor:pointer;touch-action:pan-y;perspective:1200;outline:none}.cardMotion:focus-visible{border-radius:28px;box-shadow:0 0 0 4px var(--ko-primary-ring)}.card{position:relative;min-height:430px;transform-style:preserve-3d;transition:transform 500ms ease}.card.flipped{transform:rotateY(180deg)}.face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:34px;border:2px solid;border-radius:28px;box-shadow:0 18px 45px rgba(0,0,0,.08);backface-visibility:hidden;text-align:center}.front{border-color:var(--ko-primary-border);background:linear-gradient(135deg,var(--ko-primary-soft),#fff)}.back{transform:rotateY(180deg);border-color:#86efac;background:linear-gradient(135deg,#ecfdf5,#fff)}.face p{margin:0 0 18px;color:var(--ko-primary);font-size:13px;font-weight:900;letter-spacing:.14em}.back p{color:#15803d}.face h3{margin:0 auto 22px;max-width:760px;font-size:clamp(25px,4vw,34px);line-height:1.35}.face small{color:#6b7280}.gradeButtons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}.gradeButtons button,.restart{border:0;border-radius:18px;padding:18px;color:#fff;font:inherit;font-size:18px;font-weight:800;cursor:pointer}.gradeButtons button:first-child,.restart{background:#16a34a}.gradeButtons button:last-child{background:var(--ko-primary-dark)}.gradeButtons button:disabled{cursor:not-allowed;background:#d1d5db}.hint{text-align:center;color:#6b7280}.message{padding:36px;border-radius:24px;background:#fff;text-align:center}.complete{border:1px solid #86efac;background:#ecfdf5}.completeLabel{margin:0 0 8px;color:#166534;font-weight:900;letter-spacing:.12em}.complete h3{margin:0 0 12px;font-size:38px}.complete>p:not(.completeLabel){margin-bottom:28px;color:#4b5563;font-size:18px}.restart{padding:16px 32px}@media(max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.card{min-height:360px}.face{padding:22px}.gradeButtons{grid-template-columns:1fr}.complete h3{font-size:30px}}@media(prefers-reduced-motion:reduce){.card,.cardMotion{transition:none!important}}
 `;

@@ -26,7 +26,7 @@ const sections: KnowledgeSection[] = [
     title: "Testing a Leaf for Starch",
     context: "Required practical: evidence that photosynthesis has happened",
     summary: "The iodine test detects stored starch in a leaf after the leaf is boiled, decolourised and rinsed safely.",
-    colour: "#65a30d",
+    colour: "#16a34a",
     sourceType: "teacherSupplement",
     sourceRef: "WHA_B2.2.2P_Testing_for_Starch.pdf; WHA_B2.2.2WC_Testing_for_Starch_Practical_Booklet.pdf; Teacher Guide",
     keyFacts: [
@@ -48,7 +48,7 @@ const sections: KnowledgeSection[] = [
     title: "Leaf Structure and Transport",
     context: "Leaf adaptations, gas exchange and movement of water",
     summary: "Leaf tissues work together to absorb light, exchange gases and transport water while limiting water loss.",
-    colour: "#0f766e",
+    colour: "#166534",
     sourceType: "teacherSupplement",
     sourceRef: "WHA_B2.2.3P_Leaves.pdf; WHA_B2.2.3WC_Leaves.pdf; WHA_B2.2.3_Answers.pdf",
     keyFacts: [
@@ -70,7 +70,7 @@ const sections: KnowledgeSection[] = [
     title: "Plant Minerals and Fertilisers",
     context: "Mineral ions, deficiency symptoms and fertiliser investigations",
     summary: "Plants need mineral ions as well as water and carbon dioxide; fertilisers replace ions removed from soil.",
-    colour: "#a16207",
+    colour: "#22c55e",
     sourceType: "teacherSupplement",
     sourceRef: "Science KO; WHA_B2.2.4P_Plant_Minerals.pdf; WHA_B2.2.4WC_Plant_Minerals.pdf; Answers",
     keyFacts: [
@@ -90,7 +90,7 @@ const sections: KnowledgeSection[] = [
     title: "Aerobic Respiration",
     context: "Cellular respiration with oxygen",
     summary: "Aerobic respiration releases energy from glucose inside mitochondria and needs a continuous oxygen supply.",
-    colour: "#2563eb",
+    colour: "#14532d",
     sourceType: "teacherSupplement",
     sourceRef: "Science KO; WHA_B2.2.5P_Aerobic_Respiration.pdf; WHA_B2.2.5WC_Aerobic_Respiration.pdf; Answers",
     keyFacts: [
@@ -111,7 +111,7 @@ const sections: KnowledgeSection[] = [
     title: "Anaerobic Respiration and Fermentation",
     context: "Energy release without oxygen in animals, plants and yeast",
     summary: "When oxygen is limited, cells release less energy anaerobically; animals form lactic acid while yeast forms ethanol and carbon dioxide.",
-    colour: "#7c3aed",
+    colour: "#4d7c0f",
     sourceType: "teacherSupplement",
     sourceRef: "Science KO; WHA_B2.2.6P_Anaerobic_Respiration.pdf; WHA_B2.2.6WC_Anaerobic_Respiration.pdf; Answers",
     keyFacts: [
@@ -131,7 +131,7 @@ const sections: KnowledgeSection[] = [
     title: "Food Chains and Food Webs",
     context: "Transfer of energy through ecosystems",
     summary: "Food chains show one route of energy transfer; food webs show how several feeding relationships connect.",
-    colour: "#dc2626",
+    colour: "#047857",
     sourceType: "knowledgeOrganiser",
     sourceRef: "Science KO: Food chains and webs",
     keyFacts: [
@@ -150,7 +150,7 @@ const sections: KnowledgeSection[] = [
     title: "Populations, Ecosystems and Chemosynthesis",
     context: "Organisation, interactions and alternative producers",
     summary: "Ecosystems contain interacting communities and their environment; some producers use chemical energy instead of light.",
-    colour: "#0891b2",
+    colour: "#65a30d",
     sourceType: "knowledgeOrganiser",
     sourceRef: "Science KO: Populations and ecosystems; Chemosynthesis",
     keyFacts: [
@@ -183,16 +183,112 @@ const vocabularyDefinitions: Record<string, string> = {
   niche: "An organism's role or place in an ecosystem.", chemosynthesis: "Making glucose using energy from chemical reactions rather than light.",
 };
 
+const factPrompts: Record<string, string[]> = {
+  "y8sci-eco-photosynthesis": [
+    "What is photosynthesis, and which organisms carry it out?",
+    "What is the word equation for photosynthesis?",
+    "Where in a plant does photosynthesis mainly happen?",
+    "What is chlorophyll, and what does it absorb?",
+    "How do carbon dioxide and water reach a leaf for photosynthesis?",
+    "How does a plant use the glucose and oxygen made by photosynthesis?",
+    "How are leaves adapted to absorb light for photosynthesis?",
+    "Why are plants called producers at the start of food chains?",
+  ],
+  "y8sci-eco-starch-test": [
+    "Why do plants store excess glucose as starch?",
+    "How is a leaf first heated during a starch test?",
+    "Why is the leaf boiled in water during a starch test?",
+    "Why must the Bunsen burner be turned off before ethanol is used?",
+    "How should ethanol be heated to remove chlorophyll safely?",
+    "Why is chlorophyll removed before iodine is added?",
+    "What should be done to the leaf after it has been heated in ethanol?",
+    "What iodine colours show that starch is present or absent?",
+    "Why is a plant destarched before a photosynthesis investigation?",
+    "Which safety precautions are needed during the starch test?",
+  ],
+  "y8sci-eco-leaf-structure": [
+    "How does the waxy cuticle reduce water loss without blocking light?",
+    "Why is the upper epidermis thin and transparent?",
+    "How are palisade cells adapted for photosynthesis?",
+    "How does the spongy mesophyll help gases move through a leaf?",
+    "Where are most stomata found, and how are they controlled?",
+    "Which substances move through open stomata?",
+    "How does water travel from the soil to a leaf?",
+    "What is transpiration, and how does it help water move through xylem?",
+    "How can a nail-varnish impression be used to investigate stomata?",
+    "Why are most stomata on the lower surface of a leaf?",
+  ],
+  "y8sci-eco-plant-minerals": [
+    "Why do plants need nitrate ions, and what are the deficiency symptoms?",
+    "Why do plants need magnesium ions, and what are the deficiency symptoms?",
+    "What are phosphate and potassium ions needed for in plants?",
+    "Why do farmers add fertilisers after repeated crop growth?",
+    "What is the mean height of the valid fertiliser results?",
+    "What is the mean height of the valid no-fertiliser results?",
+    "Why should a seedling recorded as X be excluded from the mean?",
+    "How can using too much fertiliser cause economic and environmental harm?",
+  ],
+  "y8sci-eco-aerobic-respiration": [
+    "What is the word equation for aerobic respiration?",
+    "Where does aerobic respiration occur, and what does it release?",
+    "How do respiration and photosynthesis differ in when they occur and what they do?",
+    "What is the difference between breathing and respiration?",
+    "How does oxygen travel from the lungs to muscle cells?",
+    "How are red blood cells adapted to carry oxygen?",
+    "Where can a leaf cell obtain oxygen for respiration?",
+    "How can carbon dioxide from respiration be used during daylight?",
+    "How does exercise affect respiration and the demand for reactants?",
+  ],
+  "y8sci-eco-anaerobic": [
+    "What does anaerobic mean, and how does its energy release compare with aerobic respiration?",
+    "What is the word equation for anaerobic respiration in animals?",
+    "How can lactic acid build-up affect muscles?",
+    "What is oxygen debt?",
+    "Why does heavy breathing continue after intense exercise?",
+    "What is the word equation for fermentation in plants and yeast?",
+    "How are the products of yeast fermentation used in bread and alcoholic drinks?",
+    "How does temperature affect yeast fermentation?",
+  ],
+  "y8sci-eco-food-webs": [
+    "What do food-chain arrows represent, and which way do they point?",
+    "What is the difference between a producer and a consumer?",
+    "What is the relationship between a predator and its prey?",
+    "What does a food web show?",
+    "Why can a change in one population affect several other populations?",
+    "How does bioaccumulation occur along a food chain?",
+    "What do herbivores, carnivores and omnivores eat?",
+  ],
+  "y8sci-eco-ecosystems": [
+    "What is a population?",
+    "What is a community?",
+    "What does an ecosystem include?",
+    "What is the difference between a habitat and a niche?",
+    "What does interdependence mean in an ecosystem?",
+    "When does competition occur between organisms?",
+    "How does chemosynthesis provide energy for making glucose?",
+    "Which organisms are examples of chemosynthetic producers?",
+  ],
+};
+
 const flashcards: KnowledgeFlashcard[] = sections.flatMap(section => {
   const factCards = section.keyFacts.map((fact, index) => ({
     id: `${section.id}-fact-${index + 1}`,
     sectionId: section.id,
-    front: `Recall point ${index + 1}: ${section.title}`,
+    front: factPrompts[section.id][index],
     back: fact,
   }));
   const termCards = section.keyTerms
     .filter(term => vocabularyDefinitions[term])
-    .map((term, index) => ({ id: `${section.id}-term-${index + 1}`, sectionId: section.id, front: `Define ${term}.`, back: vocabularyDefinitions[term] }));
+    .map((term, index) => ({
+      id: `${section.id}-term-${index + 1}`,
+      sectionId: section.id,
+      front: term === "glucose" && section.id === "y8sci-eco-aerobic-respiration"
+        ? "Define glucose in aerobic respiration."
+        : term === "producer" && section.id === "y8sci-eco-food-webs"
+          ? "Define producer in a food chain."
+          : `Define ${term}.`,
+      back: vocabularyDefinitions[term],
+    }));
   return [...factCards, ...termCards];
 });
 

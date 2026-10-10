@@ -24,6 +24,11 @@ type BaseQuestion = {
   prompt: string;
   marks: number;
   format?: "standard" | "matching" | "fill-in-the-blank" | "label-the-diagram" | "ordering" | "classification" | "equation-completion" | "table-and-data" | "practical";
+  referenceImage?: {
+    src: string;
+    alt: string;
+    caption?: string;
+  };
   sourceType?: "knowledgeOrganiser" | "teacherSupplement" | "teacherQuestion" | "generatedSupplement";
   sourceRef?: string;
   interaction?:
@@ -32,7 +37,19 @@ type BaseQuestion = {
     | { kind: "ordering"; items: string[]; answer: string[] }
     | { kind: "classification"; rows: string[]; categories: string[]; answers: string[] }
     | { kind: "table"; columns: string[]; rows: string[][] }
-    | { kind: "diagram-labels"; diagram: "photosynthesis" | "leaf" | "digestive-system"; labels: string[]; answers: string[][] };
+    | {
+        kind: "diagram-labels";
+        diagram:
+          | "photosynthesis"
+          | "leaf"
+          | "digestive-system"
+          | "separation-filtration"
+          | "separation-distillation"
+          | "separation-chromatography"
+          | "separation-evaporation";
+        labels: string[];
+        answers: string[][];
+      };
 };
 
 export type MultipleChoiceQuestion = BaseQuestion & {
