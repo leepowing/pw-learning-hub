@@ -26,6 +26,21 @@ const scienceTheme: KnowledgeOrganiserTheme = {
   "--ko-primary-shadow": "rgba(21,128,61,.14)",
 };
 
+const englishTheme: KnowledgeOrganiserTheme = {
+  "--ko-primary": "#9f1239",
+  "--ko-primary-dark": "#881337",
+  "--ko-primary-deep": "#4c0519",
+  "--ko-primary-border": "#fda4af",
+  "--ko-primary-border-strong": "#f43f5e",
+  "--ko-primary-soft": "#fff1f2",
+  "--ko-primary-muted": "#ffe4e6",
+  "--ko-primary-ring": "#fecdd3",
+  "--ko-primary-shadow": "rgba(159,18,57,.14)",
+};
+
 export function getKnowledgeOrganiserTheme(subject: string): KnowledgeOrganiserTheme {
-  return subject.trim().toLowerCase() === "science" ? scienceTheme : historyTheme;
+  const normalisedSubject = subject.trim().toLowerCase();
+  if (normalisedSubject === "science") return scienceTheme;
+  if (normalisedSubject === "english") return englishTheme;
+  return historyTheme;
 }

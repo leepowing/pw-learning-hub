@@ -16,6 +16,8 @@ export type KnowledgeFlashcard = {
   sectionId: string;
   front: string;
   back: string;
+  sourceType?: "knowledgeOrganiser" | "teacherSupplement" | "teacherQuestion" | "generatedSupplement";
+  sourceRef?: string;
 };
 
 type BaseQuestion = {

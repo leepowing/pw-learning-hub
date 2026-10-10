@@ -152,9 +152,12 @@ export async function POST(request: Request) {
       required: ["awardedMarks", "maxMarks", "summary", "criteria", "strengths", "missedPoints", "inaccuracies", "improvements", "modelAnswer", "disclaimer"],
     };
 
-    const subjectSpecificMarking = organiser.subject.toLowerCase() === "science"
+    const normalisedSubject = organiser.subject.toLowerCase();
+    const subjectSpecificMarking = normalisedSubject === "science"
       ? `For Science answers, prioritise scientific accuracy, the stated process or equation, correct cause-and-effect links, practical method order, variables, safety, units and interpretation of results where the supplied marking points require them. Accept scientifically equivalent terminology and unambiguous word equations. Do not require historical evidence, an essay-style judgement or comparison unless the question and marking points explicitly request one. For fill-in-the-blank, matching, ordering, labelling, classification, equation, data and practical formats, award each supplied marking point independently and never infer a missing label, step, value or unit from another point.`
-      : `For History long answers, reward accurate explanation, comparison and supported judgement only where the supplied marking points require them. If a marking point requires a comparison or supported judgement, the model answer must make that judgement explicitly and support it using only the supplied evidence.`;
+      : normalisedSubject === "english"
+        ? `For English answers, distinguish factual knowledge from literary interpretation. Accept alternative interpretations when they are relevant, plausible and supported by the supplied Knowledge Organiser or by the student's explanation. Do not require an exact model-answer phrase, a quotation or a personal judgement unless the question or marking points explicitly require it. Do not award an isolated literary term when the marking point requires its meaning, application or effect to be explained.`
+        : `For History long answers, reward accurate explanation, comparison and supported judgement only where the supplied marking points require them. If a marking point requires a comparison or supported judgement, the model answer must make that judgement explicitly and support it using only the supplied evidence.`;
 
     const safetyIdentifier = createHash("sha256").update(user.id).digest("hex").slice(0, 32);
     const response = await fetch("https://api.openai.com/v1/responses", {

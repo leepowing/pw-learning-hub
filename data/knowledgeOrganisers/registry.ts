@@ -7,6 +7,7 @@ import { year8ScienceHealthAndLifestyle } from "./year8ScienceHealthAndLifestyle
 import { year8ScienceEcosystemProcesses } from "./year8ScienceEcosystemProcesses";
 import { year8SciencePeriodicTable } from "./year8SciencePeriodicTable";
 import { year8ScienceSeparationTechniques } from "./year8ScienceSeparationTechniques";
+import { year8EnglishCrime } from "./year8EnglishCrime";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8HistoryMigration,
@@ -17,6 +18,7 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8ScienceEcosystemProcesses,
   year8SciencePeriodicTable,
   year8ScienceSeparationTechniques,
+  year8EnglishCrime,
 ];
 
 export function getKnowledgeOrganiserById(id: string) {

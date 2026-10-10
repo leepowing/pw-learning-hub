@@ -25,7 +25,7 @@ type QuizSize = number | "all";
 const quizModeDetails: Array<{ mode: QuizMode; title: string; description: string }> = [
   { mode: "multiple-choice", title: "Multiple Choice", description: "Choose an answer and receive instant marking." },
   { mode: "short-answer", title: "Short Questions", description: "Write concise answers and check the marking points." },
-  { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations and supported judgements." },
+  { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations, comparisons and analysis." },
   { mode: "matching", title: "Matching", description: "Match every scientific term or step to the correct answer." },
   { mode: "fill-blanks", title: "Fill in the Blanks", description: "Complete equations, sentences and tables using the correct terms." },
   { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct scientific labels to each numbered position." },
@@ -33,6 +33,11 @@ const quizModeDetails: Array<{ mode: QuizMode; title: string; description: strin
   { mode: "classification", title: "Classification", description: "Sort each statement or item into the correct scientific category." },
   { mode: "mixed", title: "Mixed Quiz", description: "Combine every available question type." },
 ];
+
+function quizModesForSubject(subject: string) {
+  if (subject.trim().toLowerCase() !== "english") return quizModeDetails;
+  return quizModeDetails.filter(({ mode }) => ["multiple-choice", "short-answer", "long-answer", "mixed"].includes(mode));
+}
 
 const quizTypeLabels: Record<KnowledgeQuestion["type"], string> = {
   "multiple-choice": "Multiple Choice",
@@ -159,6 +164,7 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
     () => organiser.questions.filter(question => question.sectionIds.every(id => taughtIds.includes(id))),
     [organiser.questions, taughtIds]
   );
+  const visibleQuizModeDetails = useMemo(() => quizModesForSubject(organiser.subject), [organiser.subject]);
 
   const currentQuestion = quizQuestions[quizIndex];
   const isInteractive = Boolean(currentQuestion?.interaction && currentQuestion.interaction.kind !== "table");
@@ -311,8 +317,8 @@ export default function KnowledgeOrganiserChapter({ organiser }: { organiser: Kn
     {view === "flashcards" && <section><p className="eyebrow">FLASHCARDS</p><h2>Recall the taught sections</h2><p>Flip each card, then swipe or use the buttons to grade your recall.</p><KnowledgeOrganiserFlashcards cards={availableCards} /></section>}
 
     {view === "quiz" && <section><p className="eyebrow">QUIZ</p><h2>Test the taught sections</h2>
-      {quizQuestions.length === 0 && !quizFinished && quizMode === null && <><p>Choose a question type. Only questions from taught sections are available; a combined long question appears only when all of its required sections have been taught.</p><div className="quizModes">{quizModeDetails.map(item => <button key={item.mode} disabled={availableCounts[item.mode] === 0} onClick={() => chooseQuizMode(item.mode)}><strong>{item.title}</strong><span>{availableCounts[item.mode]} {availableCounts[item.mode] === 1 ? "question" : "questions"} available</span><small>{availableCounts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div></>}
-      {quizQuestions.length === 0 && !quizFinished && quizMode !== null && <div className="quizSetup"><button className="backButton" onClick={returnToQuizTypes}>← Back to quiz types</button><p className="eyebrow">{quizModeDetails.find(item => item.mode === quizMode)?.title}</p><h3>How many questions?</h3><p>{questionsForSelectedMode.length} questions are currently available from the taught sections.</p><div className="sizeOptions">{getQuizSizeOptions(questionsForSelectedMode.length).map(size => <button key={size} className={quizSize === size ? "selected" : ""} onClick={() => setQuizSize(size)}>{size === "all" ? `All ${questionsForSelectedMode.length}` : size} {size === 1 ? "question" : "questions"}</button>)}</div><button className="primary startQuiz" disabled={questionsForSelectedMode.length === 0} onClick={startQuiz}>Start quiz →</button></div>}
+      {quizQuestions.length === 0 && !quizFinished && quizMode === null && <><p>Choose a question type. Only questions from taught sections are available; a combined long question appears only when all of its required sections have been taught.</p><div className="quizModes">{visibleQuizModeDetails.map(item => <button key={item.mode} disabled={availableCounts[item.mode] === 0} onClick={() => chooseQuizMode(item.mode)}><strong>{item.title}</strong><span>{availableCounts[item.mode]} {availableCounts[item.mode] === 1 ? "question" : "questions"} available</span><small>{availableCounts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div></>}
+      {quizQuestions.length === 0 && !quizFinished && quizMode !== null && <div className="quizSetup"><button className="backButton" onClick={returnToQuizTypes}>← Back to quiz types</button><p className="eyebrow">{visibleQuizModeDetails.find(item => item.mode === quizMode)?.title}</p><h3>How many questions?</h3><p>{questionsForSelectedMode.length} questions are currently available from the taught sections.</p><div className="sizeOptions">{getQuizSizeOptions(questionsForSelectedMode.length).map(size => <button key={size} className={quizSize === size ? "selected" : ""} onClick={() => setQuizSize(size)}>{size === "all" ? `All ${questionsForSelectedMode.length}` : size} {size === 1 ? "question" : "questions"}</button>)}</div><button className="primary startQuiz" disabled={questionsForSelectedMode.length === 0} onClick={startQuiz}>Start quiz →</button></div>}
       {currentQuestion && !quizFinished && <div className="question"><div className="questionTop"><span>Question {quizIndex+1} of {quizQuestions.length}</span><b>{currentQuestion.marks} {currentQuestion.marks === 1 ? "mark" : "marks"}</b></div>{currentQuestion.format && currentQuestion.format !== "standard" && <span className="formatBadge">{currentQuestion.format.replaceAll("-", " ")}</span>}<h3>{currentQuestion.prompt}</h3>
         {currentQuestion.referenceImage && <figure className="questionReference" style={{margin:"18px 0",padding:12,border:"1px solid #d5dce6",borderRadius:14,background:"#fff"}}><Image src={currentQuestion.referenceImage.src} alt={currentQuestion.referenceImage.alt} width={1745} height={1243} sizes="(max-width: 700px) 100vw, 920px" style={{display:"block",width:"100%",height:"auto",maxHeight:560,objectFit:"contain"}} />{currentQuestion.referenceImage.caption && <figcaption style={{marginTop:9,color:"#596579",fontSize:14,fontWeight:700}}>{currentQuestion.referenceImage.caption}</figcaption>}</figure>}
         {isInteractive ? <KnowledgeOrganiserInteractiveQuestion key={currentQuestion.id} question={currentQuestion} onComplete={nextQuestion} /> : currentQuestion.type === "multiple-choice" ? <div className="options">{currentQuestion.options.map(option => <button key={option} aria-pressed={selectedOption===option} disabled={feedback} onClick={() => setSelectedOption(option)}>{option}</button>)}</div> : <textarea value={writtenAnswer} onChange={event => setWrittenAnswer(event.target.value)} placeholder="Write your answer here..." rows={currentQuestion.type === "long-answer" ? 10 : 5} disabled={feedback} />}

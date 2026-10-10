@@ -24,7 +24,7 @@ type SourceQuestion = {
 const modes: Array<{ mode: QuizMode; title: string; description: string }> = [
   { mode: "multiple-choice", title: "Multiple Choice", description: "Choose an answer and receive instant marking." },
   { mode: "short-answer", title: "Short Questions", description: "Write concise answers using evidence from the taught sections." },
-  { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations, comparisons and judgements." },
+  { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations, comparisons and analysis." },
   { mode: "matching", title: "Matching", description: "Match each item to the correct answer." },
   { mode: "fill-blanks", title: "Fill in the Blanks", description: "Complete sentences, equations or tables using the correct terms." },
   { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct labels to each numbered position." },
@@ -109,6 +109,9 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
   const year = organisers[0]?.year ?? 8;
   const subjectSlug = subject.toLowerCase();
   const subjectRoute = `/knowledge-organisers/year${year}/${subjectSlug}`;
+  const visibleModes = useMemo(() => subjectSlug === "english"
+    ? modes.filter(({ mode }) => ["multiple-choice", "short-answer", "long-answer", "mixed"].includes(mode))
+    : modes, [subjectSlug]);
   const [student, setStudent] = useState("guest");
   const [taughtByOrganiser, setTaughtByOrganiser] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
@@ -274,8 +277,8 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
     {quiz.length === 0 && !finished && <>
       <section><p className="eyebrow">CURRENT COVERAGE</p><h2>Taught sections included</h2><div className="coverageGrid">{chapterCoverage.map(({ organiser, taughtIds, questions }) => <article key={organiser.id}><span>CHAPTER {organiser.chapter}</span><h3>{organiser.title}</h3><p><b>{taughtIds.length}/{organiser.sections.length}</b> sections taught</p><p><b>{questions.length}</b> questions available</p>{taughtIds.length === 0 && <small>No taught sections yet. Open this chapter to update its teaching progress.</small>}</article>)}</div></section>
 
-      <section><p className="eyebrow">BUILD YOUR QUIZ</p><h2>Choose a question type</h2>{available.length === 0 ? <div className="empty"><p>No quiz questions are available yet. Mark at least one section as taught inside a chapter first.</p><Link href={subjectRoute}>Return to {subject} chapters →</Link></div> : <div className="quizModes">{modes.map(item => <button key={item.mode} disabled={counts[item.mode] === 0} className={mode === item.mode ? "selected" : ""} onClick={() => chooseMode(item.mode)}><strong>{item.title}</strong><span>{counts[item.mode]} available</span><small>{counts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div>}
-        {mode !== null && <div className="quizSetup"><p className="eyebrow">{modes.find(item => item.mode === mode)?.title}</p><h3>How many questions?</h3><p>{filtered.length} questions are available from the taught sections across {new Set(filtered.map(item => item.organiserId)).size} {new Set(filtered.map(item => item.organiserId)).size === 1 ? "chapter" : "chapters"}.</p><div className="sizes">{sizeOptions(filtered.length).map(option => <button key={option} className={size === option ? "selected" : ""} onClick={() => setSize(option)}>{option === "all" ? `All ${filtered.length}` : option} {option === 1 ? "question" : "questions"}</button>)}</div><button className="primary" onClick={startQuiz}>Start cross-chapter quiz →</button></div>}
+      <section><p className="eyebrow">BUILD YOUR QUIZ</p><h2>Choose a question type</h2>{available.length === 0 ? <div className="empty"><p>No quiz questions are available yet. Mark at least one section as taught inside a chapter first.</p><Link href={subjectRoute}>Return to {subject} chapters →</Link></div> : <div className="quizModes">{visibleModes.map(item => <button key={item.mode} disabled={counts[item.mode] === 0} className={mode === item.mode ? "selected" : ""} onClick={() => chooseMode(item.mode)}><strong>{item.title}</strong><span>{counts[item.mode]} available</span><small>{counts[item.mode] === 0 ? "No questions available yet" : item.description}</small></button>)}</div>}
+        {mode !== null && <div className="quizSetup"><p className="eyebrow">{visibleModes.find(item => item.mode === mode)?.title}</p><h3>How many questions?</h3><p>{filtered.length} questions are available from the taught sections across {new Set(filtered.map(item => item.organiserId)).size} {new Set(filtered.map(item => item.organiserId)).size === 1 ? "chapter" : "chapters"}.</p><div className="sizes">{sizeOptions(filtered.length).map(option => <button key={option} className={size === option ? "selected" : ""} onClick={() => setSize(option)}>{option === "all" ? `All ${filtered.length}` : option} {option === 1 ? "question" : "questions"}</button>)}</div><button className="primary" onClick={startQuiz}>Start cross-chapter quiz →</button></div>}
       </section>
     </>}
 
