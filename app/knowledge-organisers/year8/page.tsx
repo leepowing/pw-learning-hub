@@ -6,7 +6,7 @@ const subjects = [
   { name: "History", icon: "🏛️", description: "Migration and Britain · The Industrial Revolution", route: "/knowledge-organisers/year8/history", available: true },
   { name: "Science", icon: "🔬", description: "Ecosystem Processes · interactive revision", route: "/knowledge-organisers/year8/science", available: true },
   { name: "English", icon: "📖", description: "Crime · genre, methods and big ideas", route: "/knowledge-organisers/year8/english", available: true },
-  { name: "Geography", icon: "🌍", description: "Coming soon", route: "", available: false },
+  { name: "Geography", icon: "🌍", description: "Brazil · places, people and environments", route: "/knowledge-organisers/year8/geography", available: true },
   { name: "Other subjects", icon: "📘", description: "Added when organisers arrive", route: "", available: false },
 ];
 

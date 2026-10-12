@@ -312,12 +312,12 @@ export const reasonBank = {
     }
   },
   "similarity.sss": {
-    "gcse": "Three pairs of corresponding sides are proportional, so the triangles are similar (SSS).",
+    "gcse": "Three pairs of corresponding sides are proportional, so the triangles are similar.",
     "hkdse": "3 sides proportional",
     "variants": {}
   },
   "similarity.sas": {
-    "gcse": "Two pairs of corresponding sides are proportional and their included angles are equal, so the triangles are similar (SAS).",
+    "gcse": "Two pairs of corresponding sides are proportional and their included angles are equal, so the triangles are similar.",
     "hkdse": "ratio of 2 sides, inc. ∠",
     "variants": {}
   },

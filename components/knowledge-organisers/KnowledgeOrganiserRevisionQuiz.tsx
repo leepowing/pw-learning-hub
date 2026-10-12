@@ -11,7 +11,7 @@ import { loadKnowledgeOrganiserProgress, saveKnowledgeQuizBest } from "@/lib/kno
 import { getCurrentStudent } from "@/lib/studentStorage";
 import { supabase } from "@/lib/supabase";
 
-type QuizMode = KnowledgeQuestion["type"] | "matching" | "fill-blanks" | "diagram-labels" | "ordering" | "classification" | "mixed";
+type QuizMode = KnowledgeQuestion["type"] | "matching" | "fill-blanks" | "diagram-labels" | "ordering" | "classification" | "interactive" | "mixed";
 type QuizSize = number | "all";
 type SourceQuestion = {
   key: string;
@@ -30,6 +30,7 @@ const modes: Array<{ mode: QuizMode; title: string; description: string }> = [
   { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct labels to each numbered position." },
   { mode: "ordering", title: "Ordering", description: "Put events, methods or processes into the correct order." },
   { mode: "classification", title: "Classification", description: "Sort each statement or item into the correct category." },
+  { mode: "interactive", title: "Interactive Questions", description: "Interpret maps, data and diagrams or complete a structured task." },
   { mode: "mixed", title: "Mixed Questions", description: "Combine all available question types and chapters." },
 ];
 
@@ -61,6 +62,7 @@ function randomiseOptions(source: SourceQuestion): SourceQuestion {
 
 function questionMatchesMode(question: KnowledgeQuestion, mode: QuizMode) {
   if (mode === "mixed") return true;
+  if (mode === "interactive") return Boolean(question.interaction && question.interaction.kind !== "table");
   if (mode === "multiple-choice" || mode === "long-answer") return question.type === mode;
   if (mode === "short-answer") return question.type === mode && (!question.interaction || question.interaction.kind === "table");
   return question.interaction?.kind === mode;
@@ -109,9 +111,15 @@ export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organis
   const year = organisers[0]?.year ?? 8;
   const subjectSlug = subject.toLowerCase();
   const subjectRoute = `/knowledge-organisers/year${year}/${subjectSlug}`;
-  const visibleModes = useMemo(() => subjectSlug === "english"
-    ? modes.filter(({ mode }) => ["multiple-choice", "short-answer", "long-answer", "mixed"].includes(mode))
-    : modes, [subjectSlug]);
+  const visibleModes = useMemo(() => {
+    if (subjectSlug === "english") {
+      return modes.filter(({ mode }) => ["multiple-choice", "short-answer", "long-answer", "mixed"].includes(mode));
+    }
+    if (subjectSlug === "geography") {
+      return modes.filter(({ mode }) => ["multiple-choice", "short-answer", "long-answer", "interactive", "mixed"].includes(mode));
+    }
+    return modes.filter(({ mode }) => mode !== "interactive");
+  }, [subjectSlug]);
   const [student, setStudent] = useState("guest");
   const [taughtByOrganiser, setTaughtByOrganiser] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);

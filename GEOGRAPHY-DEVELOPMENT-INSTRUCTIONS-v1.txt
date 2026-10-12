@@ -1,0 +1,880 @@
+PW Learning Hub Geography Knowledge Organiser 最終完整開發指令 v1
+（Geography 專用；根據 Science v7 架構改寫；加入 Geography spatial thinking、map／graph／data skills、case-study evidence、Flashcard Active Recall、自動驗收、獨立 teal 視覺主題、老師原題零遺漏、AI 評分、共用檔案保護及 Cross-Chapter Exam Revision Quiz）
+
+目前章節資料：
+
+Year：8
+Subject：Geography
+Term：Autumn
+Chapter number：1
+Chapter／Topic：Brazil
+原始 Knowledge Organiser：Year 8 Geography KO.pdf
+老師補充教材／工作紙／Fieldwork Booklet／Teacher Guide／Answers：［如有請附上；沒有可留空］
+預期收到的來源檔案總數：1（如日後加入老師文件，必須更新）
+
+請沿用目前已完成及測試正常的 PW Learning Hub Knowledge Organiser 共用系統、介面和功能。History 和 Science 已完成的 Chapters 只可作共用 UI、資料結構與功能參考；Geography 的內容、題型、地圖／圖表處理、case-study evidence 及評分規則必須依本指令處理，不可盲目複製 History essay rubric 或 Science 專項規則。
+
+溝通語言使用繁體中文；所有給學生閱讀的 Learn、Mind Map、Flashcards、Quiz 題目、答案及 feedback 均使用英文。
+
+本指令可沿用於日後其他 Year 8 Geography Chapters；使用時先更新 Year、Term、Chapter number、Topic、來源檔案及預期檔案數目。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+零、開始前的現有系統核對——必須先完成
+
+1. 開始編寫程式前，必須檢查使用者目前本機專案的最新版本及所有未提交修改，不可只依賴舊 ZIP、舊對話或範本。
+2. 必須先查看：
+   - git status --short
+   - 本次會修改的現有檔案
+   - 相關 shared components、registry、types、storage helpers 及 AI marking route
+   - 相關檔案相對目前 Git HEAD 的差異
+3. 把檔案分為：
+   - Chapter 專用新檔案
+   - 共用檔案
+   - 與本次工作無關但已有修改的檔案
+4. 共用檔案包括但不限於：
+   - app/api/knowledge-organisers/mark/route.ts
+   - data/knowledgeOrganisers/registry.ts
+   - Year／Subject navigation pages
+   - 共用 Quiz、Mind Map、Flashcard、Interactive Question components
+   - 共用 types、theme tokens 及 storage helpers
+5. 修改 shared file 時，必須以使用者目前本機最新版本為基礎作最小合併；不可用舊版本或另一 Chapter 的版本整份覆蓋。
+6. 保留 shared file 內全部現有功能、修正、AI prompt、安全檢查、History／Science／English 邏輯及與本 Chapter 無關的程式碼。
+7. 如無法取得將被修改的 shared file 最新內容，先要求使用者上載，不可猜測或產生整份替代檔。
+8. working tree 如有與本次工作重疊的修改，先指出重疊位置及安全合併方法，不可靜默覆蓋。
+9. 開始前列出預計新增和修改的檔案，並清楚標示 shared files。
+10. 未完成以上核對前，不可聲稱 ZIP 可以安全直接覆蓋整個專案。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+一、來源資料、內容準確性及地理學科完整性
+
+1. 以使用者提供的 Geography Knowledge Organiser 為主要和權威資料來源。
+2. 不可刪減、遺漏、改變或自行猜測原文的重要資料。
+3. 必須保留所有：
+   - Chapter title 及 section headings
+   - Key Facts 及 Key Vocabulary
+   - Place names、locations、regions、countries、cities 及 physical features
+   - Geographic definitions、processes 及 relationships
+   - Dates、statistics、percentages、rankings、distances、units 及 development indicators
+   - Spatial patterns、distribution、density、scale 及 direction
+   - Causes、effects、impacts、opportunities、challenges、responses 及 management strategies
+   - Human、physical、environmental、social、economic 及 political factors
+   - Case-study examples、stakeholders 及 place-specific evidence
+   - Maps、keys、legends、symbols、labels、compass directions、scale bars及 annotations
+   - Graphs、population pyramids、tables、datasets、photographs及 diagrams
+   - 原文清單內每一個獨立項目
+4. 可以改善文法或重組成適合 Year 8 閱讀的英文，但不可改變數據、地點、因果、空間關係或原意。
+5. 不可自行加入來源沒有提及的知識，除非使用者明確要求，或為了解釋而加入極少量背景。
+6. 所有非來源補充內容須標明 Additional context，並在 source metadata 標記 generatedSupplement。
+7. 圖像、掃描、地圖、圖例、文字或數據不清楚時，列出 filename、page、位置及不確定內容並詢問使用者，不可猜測。
+8. 如發現 KO 可能有過時數據、事實錯誤、拼寫問題、矛盾或不合理數值，先報告並取得決定，不可靜默改正。
+9. Geography 的地點證據具有時間性；不得以網上較新數據自動取代學校 KO 的指定數據。
+10. 不可把 general knowledge 當成 case-study evidence。題目要求 Brazil／Rio de Janeiro／Amazon 等指定地方時，答案及 rubric 必須使用該地方的可信來源內容。
+
+一 A、老師補充文件整合及來源優先次序
+
+1. 完整核對 KO 後，逐份核對老師工作紙、課堂題目、revision material、fieldwork booklet、atlas extracts、maps、graphs、teacher guide、answers 及 mark schemes。
+2. 建立 Source Inventory，逐份列出：
+   - filename
+   - document type
+   - page count
+   - 對應 Chapter／section
+   - 新增 knowledge／skill
+   - 老師原題和答案位置
+   - maps／photos／graphs／tables／datasets／fieldwork methods
+3. 老師文件含 KO 沒有的 required content 時，加入最合適 section，並同步進入 Learn、Mind Map、Flashcards、Quiz 及 Coverage Matrix。
+4. 老師正式補充內容在 metadata 標記 teacherSupplement，視為 required taught content，不標作普通 Additional context。
+5. 每個來源點及老師原題保存：
+   sourceType: knowledgeOrganiser | teacherSupplement | teacherQuestion | generatedSupplement
+   sourceRef: filename + page + printed question number
+6. 不可把本機絕對路徑、私人資料或敏感檔名傳到 client。
+7. KO 與老師文件如有地點、數據、年份、答案或解釋衝突，列出差異並詢問使用者。
+8. question paper 與 answer／mark scheme 必須按版本、題號、sub-part 及分值逐一配對。
+9. 不可只抽取問題而遺漏其 map、photo、graph、table、dataset、legend、scale、source text、case-study context 或 model answer。
+10. Knowledge Coverage 及 Teacher Question Coverage 均須達 100%，missing 為 0。
+
+一 B、PDF 逐頁題目清單及「老師原題零遺漏」硬性閘門
+
+1. 實收檔案數必須與預期檔案數對數。每份檔案分類為：
+   - questionBearing
+   - answerOnly
+   - teachingOnly
+   - duplicateVersion
+   - unreadableOrBlocked
+2. 所有檔案都須進入 Source Inventory；所有頁面須有 checked／blocked 記錄。
+3. 編寫 Quiz 前建立獨立 PDF-QUESTION-MANIFEST；每個 task 及每個可獨立作答 sub-part 各有一行。
+4. 每行至少包括：
+   - stable teacher source question ID
+   - filename、page、printed number、sub-part
+   - exact original wording 及 command word
+   - marks
+   - question type
+   - required map／photo／graph／table／dataset／passage／legend／scale
+   - answer source
+   - target section ID
+   - implementation question ID
+   - status 及 notes
+5. 一個 manifest 記錄必須一對一映射到一個可追溯 Quiz 作答單位。
+6. 題幹、指示、options、word bank、statements、map key、data labels、axis labels、units、marks、所有 sub-parts 及 answer lines 暗示的作答數目均屬原題，不可遺漏。
+7. 題目重複不構成略過理由；只有使用者明確批准後可標記 ExcludedWithUserApproval。
+8. 不可用自製題、相同知識點另一題、Flashcard 或 Learn 內容代替老師原題。
+9. renderer 不支援時，先擴充 schema／renderer；未能可靠實作則標記 Blocked，且不可聲稱完成。
+10. OCR 只可作初稿；每頁必須與 PDF 視覺核對，特別留意小字圖例、scale、direction、axes、percentages、colour bands、annotations及跨頁題目。
+11. 編程前向使用者報告 expected／received／readable files、question-bearing files、answer-only／teaching-only files、pages、tasks、independently answerable sub-parts、各題型數量及 blocked items。
+12. 預期檔案缺失、頁面未檢查或內容無法辨認時，不可開始大規模題庫編寫。
+13. 分開維持：
+   - Knowledge Coverage
+   - Teacher Question Coverage
+14. 最終只接受：files accounted 100%、pages checked 100%、teacher tasks implemented 100%、missing／blocked／unapproved exclusions／wording mismatches／missing context assets 全部為 0。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+二、Chapter 與 Section 結構
+
+1. 優先沿用 KO 的原有分段及標題。
+2. 每個 section 使用固定且穩定的 section ID；發布後不可因重新排序而改變。
+3. 每個 section 可按來源需要包括：
+   - Section title
+   - Geographic context／location／scale
+   - Summary／Big Idea
+   - Key Facts
+   - Key Vocabulary
+   - Places and locations
+   - Physical and human processes
+   - Spatial patterns and relationships
+   - Causes、effects、impacts、opportunities、challenges及responses
+   - Case-study evidence、statistics、dates及units
+   - Maps、graphs、photos、tables及examples
+4. Brazil KO 的合理候選 sections 包括：
+   - Brazil: Location, Climate and Background
+   - Population and Development
+   - Urbanisation and Rural-Urban Migration
+   - Challenges in Rio de Janeiro and Favelas
+   - Population Distribution and Structure
+   - Brazil's Ecosystems and Biodiversity
+   - The Amazon Rainforest: Value and Processes
+   - Deforestation: Causes, Consequences and Management
+5. 上述只屬初步建議；正式 sections 必須在逐頁 coverage audit 後由使用者確認。
+
+二 A、Geography context 欄位及向後相容
+
+1. 共用資料型別保留：
+   period?: string
+   context?: string
+2. Geography 新 Chapter 優先使用 context，內容可包括 place、location、spatial scale、human／physical setting 或 case-study context。
+3. 如現有 type 適合且確有需要，可最小擴充：
+   location?: string
+   scale?: string
+4. 共用 component fallback：
+   section.context ?? section.period ?? ""
+5. 不可移除 History period、批量遷移既有 Chapters 或更改既有 section IDs。
+6. 固定 UI 標籤 Period 應安全改成中立 Context，或按 subject 顯示 Geographic context／Scientific context／Historical period。
+7. 修改 types／components 前核對全部引用，並測試 History、Science、English 及 Geography regression。
+
+二 B、Geography 獨立 teal／map 視覺主題
+
+1. Geography 必須使用獨立 subject theme，避免與 History 橙紅色及 Science 綠色混淆。
+2. 建議 palette：
+   - Primary teal: #0f766e
+   - Dark teal: #115e59
+   - Deep teal: #134e4a
+   - Strong border: #2dd4bf
+   - Border: #5eead4
+   - Soft background: #f0fdfa
+   - Muted background／text: #ccfbf1
+   - Focus ring: #99f6e4
+3. 所有 Geography 畫面一致套用：
+   - Year／Subject landing page
+   - Chapter header及tabs
+   - Taught Sections、Learn、Mind Map、Flashcards、Quiz
+   - Cross-Chapter Quiz
+   - primary buttons、selected／active states、badges、counts、focus rings及results actions
+4. 地圖、graph及source asset 本身可保留原有顏色；subject branding 仍須使用 Geography tokens。
+5. 功能性紅／琥珀／藍只用於 error、warning、information 或 marking status。
+6. 共用元件按 subject 套用 --ko-primary 等 semantic theme variables，不可 hard-code History 或 Science 色。
+7. 測試 desktop、laptop、iPad、mobile 及 hover／focus／disabled／loading／selected／results states。
+8. Theme regression 必須證明：
+   - Geography 沒有 History／Science brand-colour leakage
+   - History、Science 及其他 subject 原有主題不受影響
+   - contrast 及 accessibility 合格
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+三、Taught Sections
+
+1. 學生可剔選老師已教授 sections。
+2. 只有已剔選 sections 可出現在 Learn、Mind Map、Flashcards及Quiz。
+3. 未教授內容、地圖答案、case-study facts 及題目不可提前顯示。
+4. Greta、Mathis及test account 分開儲存 taught selection。
+5. 取消 section 只隱藏內容，不刪除歷史測驗紀錄。
+6. 提供 Select all、Clear all、Save taught sections 及成功訊息。
+7. 沿用現有 Supabase／localStorage 邏輯及穩定 storage key，不破壞現有資料。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+四、Learn
+
+每個已教授 section 顯示：
+
+1. Section title及Geographic context。
+2. Summary／Big Idea。
+3. 所有 required facts及vocabulary。
+4. Places、locations、physical／human features及processes。
+5. Spatial distribution、density、pattern、scale及relationships。
+6. Causes、effects、impacts、opportunities、challenges、responses及management。
+7. Case-study evidence，包括來源指定的statistics、dates、units及examples。
+8. 清晰可讀的 maps、graphs、photos、tables、population pyramids 或 diagrams。
+9. 每幅 asset 附上必要 title、legend、axis label、unit、alt text、caption及source reference。
+10. 英文清楚、準確、精簡而適合 Year 8，但不得以精簡為理由遺漏 required content。
+11. Learn 內容必須成為 Mind Map、Flashcards及Quiz的可信基礎。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+五、Interactive Mind Map
+
+1. 不可只是 Learn 列表的重複版本。
+2. 中央顯示 Chapter title；已教授 sections 成為獨立 branches。
+3. Branch 可按內容組成：
+   - Place／Location
+   - Big Idea
+   - Key Facts
+   - Vocabulary
+   - Causes／Processes
+   - Effects／Impacts
+   - Opportunities／Challenges
+   - Responses／Management
+   - Case-study evidence
+4. 支援獨立展開、收起、Focus、Reveal all及Hide details。
+5. 收起時顯示 retrieval prompt，例如 What can you remember about this branch?
+6. 可顯示 facts、vocabulary及case-study evidence數量。
+7. 老師文件新增的 maps、data、fieldwork、examples及required knowledge 必須加入相關 branch。
+8. 只顯示 taught sections；新增 taught section 後自動增加 branch。
+9. desktop、iPad及mobile 不可重疊、截斷或出現無法操作的節點。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+六、Flashcards——Geography Active Recall
+
+1. 每個 required knowledge point、skill及Key Vocabulary都有source-mapped flashcard。
+2. 每張卡使用固定、全域唯一card ID及有效section ID；發布後不可重新編號。
+3. Fact card Front 必須是清楚、具體、可獨立理解的active-recall question。
+4. 禁止：
+   - Recall point 1: [Section]
+   - What can you remember about this point?
+   - Review this fact.
+   - 只有section title、Fact number或topic heading
+5. 合適的 Geography Front 可包括：
+   - Where is ... located?
+   - What is meant by ...?
+   - What spatial pattern is shown by ...?
+   - Why does ... occur?
+   - How does ... lead to ...?
+   - What are the push／pull factors for ...?
+   - What evidence shows ...?
+   - How does X compare with Y?
+   - What does the map／graph／population pyramid show?
+   - What are the causes／effects／responses?
+6. Vocabulary Front 使用 Define [term].；重複term須加入最少而足夠的topic context。
+7. 普通fact card原則上只測一個主要target；完整process、comparison、case-study evidence set或cause-effect chain才可測相連多點。
+8. Back 必須完整、準確、可獨立理解，保留：
+   - place name及location
+   - spatial direction／distribution／scale
+   - dates、statistics、percentages、units及rankings
+   - named examples及stakeholders
+   - cause-effect link
+   - map／graph evidence
+9. 不可只用泛化描述取代place-specific evidence。
+10. Map／graph／photo內容如只靠文字不能有效回想，使用清晰可信asset或明確描述學生要讀取的部分。
+11. 可使用以下card types：
+   - Fact
+   - Vocabulary
+   - Place／Location
+   - Map／Diagram
+   - Data／Statistic
+   - Process
+   - Cause／Effect
+   - Comparison
+   - Case Study
+   - Fieldwork
+12. 每個Front在Chapter內唯一；整個Geography flashcard bank亦不可有無法分辨context的相同Front。
+13. Back非空並逐字對應已審核source point，或記錄為approved faithful version。
+14. 卡數由required facts、vocabulary、places、statistics、maps、graphs、processes及case-study evidence推導，不可主觀設定。
+15. 點擊翻卡；答案後可選I remembered／I need more practice，並有左右飛走動畫。
+16. 顯示Remaining、Remembered、Need practice、Accuracy。
+17. 只使用taught sections，開始或重新開始時shuffle；card ID及progress mapping不變。
+18. 每section報告各card type及總數。
+19. 人工抽查每section第一張、中間一張及最後一張Front／Back。
+20. desktop、laptop、iPad、mobile檢查長地名、長答案、statistics、lists、maps及buttons。
+21. 優化既有Chapter時，未經批准只可改Front；ID、section assignment、Back、總數及coverage denominator保持不變並建立before／after audit。
+
+六 A、Flashcard 自動驗收硬性閘門
+
+以下全部須為PASS：
+
+1. total cards等於資料實數、section加總及頁面顯示。
+2. duplicate card IDs = 0。
+3. invalid section IDs = 0。
+4. empty Fronts／Backs = 0。
+5. generic Fronts = 0。
+6. normalised duplicate Fronts = 0。
+7. fact Front為具體完整問句，通常以問號結尾且至少四個有效英文詞。
+8. vocabulary Front符合Define格式。
+9. missing source mappings = 0。
+10. Front／Back／source alignment通過；statistics、place及units無錯配。
+11. required knowledge及vocabulary flashcard coverage = 100%。
+12. 既有Chapter優化時，IDs、order traceability、section assignment、Back、card count及denominator完全對數。
+13. 輸出Chapter及section級count、quality、source alignment及coverage報告。
+14. 自動驗收不能取代人工翻卡及responsive測試。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+七、Quiz 題型
+
+題庫可包括：
+
+1. Multiple Choice
+2. Short Questions
+3. Long Questions
+4. 內容或老師原題需要時加入Interactive／Structured Questions：
+   - Matching
+   - Fill in the blank／cloze
+   - Label a map／diagram／photo
+   - Ordering／sequence
+   - Classification／sorting
+   - True／false並改正錯誤敘述
+   - Map／choropleth interpretation
+   - Graph／population-pyramid／table／data interpretation
+   - Photo／source interpretation
+   - Fieldwork method／sampling／risk／data question
+5. Quiz首頁動態顯示Multiple Choice、Short Questions、Long Questions、Interactive Questions（有題才顯示）及Mixed Quiz。
+6. 每類顯示taught sections下實際可用題數；0題則停用並顯示No questions available yet。
+
+八、Quiz題數選擇
+
+1. 選題型後再選5、10、20或All available；不可顯示超過實際可用數目的選項。
+2. 題數很少時動態顯示1、2、All N。
+3. All使用該類所有已解鎖題目。
+4. 開始前顯示quiz type、available questions、session size及included sections。
+5. 提供Back to quiz types。
+
+九、Quiz與Taught Sections
+
+1. 只使用已教授sections。
+2. 多section題只有全部required section IDs taught後解鎖。
+3. 改變selection後，各題型、subtype及Mixed counts立即重新計算。
+4. 不得洩露未教授section的題目、context、map answer、marking points或feedback。
+
+十、Randomisation
+
+1. 每次開始及Try again重新randomise題目。
+2. MCQ options每次randomise，正確答案判斷保持不變。
+3. Matching只可randomise顯示順序，不可改變配對。
+4. Ordering題可randomise起始順序，不可改變可信答案。
+5. Map labels／graph data不可被randomisation改寫。
+
+十一、Mixed Quiz
+
+1. 混合所有可用主要題型。
+2. 題數足夠且各類有題時，每種主要題型至少一題。
+3. All包含所有已解鎖題目，不可遺漏Interactive題。
+4. 只有某類完全沒有題目時才可不包含。
+
+十一 A、Cross-Chapter Exam Revision Quiz
+
+1. 在Year／Subject Geography首頁加入Exam Revision／Cross-Chapter Quiz入口。
+2. 使用穩定route，例如：
+   /knowledge-organisers/year8/geography/revision-quiz
+3. 從registry聚合同Year且subject === "Geography"的Chapters，不可混入History、Science或English。
+4. 只聚合該學生taught sections的可信題目。
+5. 每題保留question ID、Chapter、section IDs、type、marks、trusted answer及rubric。
+6. 新Chapter註冊後應自動納入，不建立重複題庫。
+7. 設定頁按Chapter列出taught sections及available questions，再顯示動態題型和session size。
+8. Random set應在可能時涵蓋多個Chapters；All包含全部。
+9. MCQ deterministic marking；Short／Long使用server-side AI；固定Interactive答案優先deterministic。
+10. client只提交可信question ID及學生答案，不可信任client傳入rubric、marks、map答案或dataset。
+11. 結果頁顯示overall、by Chapter及by question type，所有分拆必須完全對數。
+12. 提供Try another random set、Change quiz settings及Return to Knowledge Organisers。
+13. 最佳成績按百分比並以student、year、subject穩定key分隔，例如：
+    knowledge-organiser-revision-year8-geography
+14. 測試0／1／多Chapter、partial taught sections、multi-section unlock、counts、randomisation、AI lookup、duplicate IDs、score reconciliation及student isolation。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十二、Multiple Choice
+
+1. 每題包括question、四個合理options（適用時）、correct answer、explanation及mark value。
+2. Distractors須合理並針對常見Geography misconceptions。
+3. 不可含糊或有多個合理正確答案。
+4. 學生選答案後才能Check answer。
+5. 顯示Correct／Incorrect、correct answer及source-faithful explanation。
+6. 答案位置randomise。
+
+十二 A、Geography題目設計及command words
+
+1. 題庫按來源適當包含：
+   - Define／Name／State
+   - Locate／Identify
+   - Describe
+   - Explain
+   - Compare
+   - Suggest
+   - Analyse
+   - Assess／Evaluate
+   - Interpret a map／graph／photo／table／population pyramid
+   - Use data／evidence
+   - Calculate（如population density、change或percentage）
+2. State／Name：短而準確，不暗中要求原因。
+3. Locate：要求正確place、relative location、direction或map reference，按題目所給資訊評分。
+4. Describe：指出pattern、feature、trend或發生內容，不暗中要求原因。
+5. Explain：要求how／why及完整cause-effect link。
+6. Compare：直接提及兩個對象，提供similarity及／或difference，不能只分開描述。
+7. Suggest：接受多個合理答案，但只按可信context及rubric評分。
+8. Analyse：必須使用提供的data、map pattern、trend、anomaly、numerical comparison或source evidence。
+9. Assess／Evaluate：按題目要求考慮evidence、不同因素／stakeholders、limitations及supported conclusion。
+10. Calculate：提供所有需要數據，處理working、answer、rounding及unit。
+11. 不可把普通describe／explain題改成需要judgement的essay。
+12. 學生未獲source map／graph／dataset時，不可要求讀取它。
+
+十二 B、老師原題優先
+
+1. 完整實作所有questionBearing PDF內每個task／sub-part後，才用generatedSupplement補coverage。
+2. 原題保留spelling、punctuation、command word、order、sub-parts、options、maps、photos、graphs、tables、data、marks、units及instructions。
+3. 只允許換行、HTML escaping、無語意空白正規化及紙本answer line轉成input；其他改字列入wording-diff並取得批准。
+4. 老師answers／mark scheme優先作trusted answer、accepted answers、marking points及model answer。
+5. 每題保存全域唯一question ID、teacherQuestionId、sourceType及sourceRef。
+6. schema不支援時先擴充renderer，不可改成另一條普通short question。
+7. 原題依賴asset時必須使用可信原asset；沒有map、graph、photo、legend、data或source passage即屬未實作。
+8. 答案缺失或有多個合理答案時標記needsReview並詢問使用者。
+9. 排除題目前必須列出完整資料並取得明確批准。
+
+十二 C、Interactive／Structured Questions
+
+1. 只在內容或老師原題適合時加入。
+2. Schema可使用：
+   matching、fillBlank、labelDiagram、labelMap、ordering、trueFalse、classification、mapInterpretation、dataInterpretation、photoInterpretation、fieldworkStructured。
+3. Label map／diagram：
+   - 使用可信清晰asset
+   - 固定label targets及座標
+   - 不可額外畫指示線遮蓋原圖
+   - 若原圖已有箭嘴，只在箭嘴附近加號碼或可存取target
+   - 提供keyboard-accessible fallback
+4. Map interpretation保留title、key、scale、direction、data class及source year。
+5. Graph／population pyramid保留axes、labels、units、legend、year及完整data。
+6. Matching配對必須唯一；右側可randomise但關係不變。
+7. Fill blank保存accepted answers，處理大小寫、空格、英式拼法及真正同義詞，不可用過寬substring。
+8. Classification保存明確categories，例如human／physical、push／pull、cause／effect、social／economic／environmental。
+9. Ordering只使用唯一或明確接受的sequence。
+10. Fieldwork題分開處理question、method、sampling、equipment、risk、data presentation、reliability及conclusion。
+11. 固定答案優先deterministic marking；需要語意判斷的解釋部分才交AI。
+12. 每種新題型具備renderer、answer state、Check answer、feedback、score、retry、results、filtering、randomisation及accessibility測試。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十三、Short Questions
+
+1. 每題包括question、total marks、獨立marking points及improvement guidance。
+2. 每一分對應一個可獨立取得的marking point；不可把多個事實塞入一點。
+3. 題目說明需要多少項；完整清單使用Name all／Give all。
+4. 使用server-side AI按可信題庫評分。
+5. 接受意思相同的寫法、合理同義詞及不影響意思的輕微拼字／文法錯誤。
+6. 不可只靠keyword；place、direction、data、unit及因果錯誤不得因出現關鍵詞而得分。
+7. 含糊或欠重要detail只可Partly met。
+
+十四、Long Questions
+
+1. 包括question、total marks、criteria、suggested structure、improvement guidance及AI rubric。
+2. 按來源及題目合理使用4、6或9 marks，不固定套用History essay分數。
+3. 可測試：
+   - physical／human process
+   - cause-effect chains
+   - opportunities and challenges
+   - comparison of places／groups／strategies
+   - map／graph／data analysis
+   - case-study application
+   - management／sustainability evaluation
+4. Case-study題要求準確named place及可信place-specific evidence。
+5. Explain要求完整mechanism或causal chain；Compare要求直接比較；Analyse使用source evidence；Evaluate才要求平衡證據及supported conclusion。
+6. 未明確要求assess／evaluate／judgement時，不可強迫學生加入結論。
+
+十四 A、AI評分通用規則
+
+1. AI逐項評核trusted marking points，狀態只可為：
+   - Met：完整符合，1分
+   - Partly met：方向正確但不完整，0分
+   - Not met：缺失、錯誤或無關，0分
+2. AI不可新增、刪除、合併、改寫或重新排序criteria。
+3. Server驗證criterion數量、ID、次序及schema。
+4. 最終分數由server按Met數量重算，不直接相信AI total。
+5. 分數介乎0至maxMarks。
+6. 顯示文字採用server可信criteria，不使用AI改寫版本。
+7. Server重建或嚴格驗證summary，準確顯示Met／Partly met／Not met數量。
+8. Summary列出所有Partly met尚欠資料及所有Not met，不可只提第一項。
+9. strengths、missedPoints、improvements及improved answer不可與criteria status矛盾。
+10. 顯示AI MARK、score、summary、逐項status及explanation、What went well、How to improve、Points to add、Example improved answer。
+11. Example improved answer必須涵蓋全部trusted criteria，並符合題目command word。
+12. 保留提示：AI marking is advisory, and a parent or teacher can review it.
+
+十四 A-G、Geography AI評分專項規則
+
+1. 地理準確性優先；正確關鍵詞配上錯誤地點、方向、scale、statistics、unit、process或因果不可判Met。
+2. Case-study criterion如要求place-specific evidence，泛化全球描述不可取得該點。
+3. 接受：
+   - 合理Geography同義詞
+   - 正確縮寫及全寫（來源及年級適用時）
+   - 數值的等值格式
+   - 不改變意思的英式拼寫變化
+4. 不接受：
+   - population distribution與population density混淆
+   - urbanisation與rural-urban migration混淆
+   - push factor與pull factor倒轉
+   - cause、effect及response互相混淆
+   - human與physical factor錯分
+   - map direction、location、scale或pattern錯誤
+   - graph trend或population-pyramid年齡／性別解讀倒轉
+   - 有正確詞語但causal link錯誤
+5. Describe pattern criterion要求可信pattern，例如concentrated／sparse、coastal／inland、increase／decrease及必要exceptions；只寫high／low通常不完整。
+6. Explain criterion要求criterion列出的因果連結；零散正確事實不可當完整explanation。
+7. Compare criterion必須直接連接兩個對象；只描述其中一方或兩段不相連資料最多Partly met。
+8. Data題檢查trend、comparison、anomaly、numerical evidence、date及unit；不能只因寫increase／decrease給完整分。
+9. Map題只按可信map data及legend評分，不以外部常識代替。
+10. Numerical題按需要拆成formula、substitution、calculation、rounding及unit；固定數值優先deterministic checker。
+11. Photo／source題只可根據畫面可見evidence及題目context評分，不可要求學生知道圖片外資訊。
+12. Fieldwork題準確區分sampling、accuracy、reliability、representativeness、bias、risk及method improvement。
+13. Make it better／more accurate／more reliable等籠統回答，沒有具體方法及理由時只可Partly met或Not met。
+14. Evaluate management／sustainability時，只在trusted criteria要求下評核trade-offs、stakeholders、short／long term、scale及supported conclusion。
+15. Contradiction rule：答案後段明確否定前段正確陳述時，不可忽略矛盾並給完整分。
+16. Outside knowledge不額外加分，亦不可加入來源沒有教授的額外滿分要求；只在與trusted criterion矛盾時影響判斷。
+17. Model answer使用準確place names、data、dates、units及Geography vocabulary，只涵蓋可信題庫要求。
+18. 修改shared AI route後，同時執行Geography專項測試及History、Science、English regression。
+
+十四 B、API安全與錯誤處理
+
+1. OPENAI_API_KEY只放server-side environment variable。
+2. 不可放client、browser、localStorage、public env、Git、console或error message。
+3. Browser不可直接呼叫OpenAI；使用現有server route。
+4. Server根據可信question ID取得question、marks、criteria及context asset references。
+5. 驗證request body、ID、answer length、response schema及score range。
+6. Loading期間停用重複提交。
+7. API失敗／逾時保留學生答案和session，顯示安全重試訊息，不洩露prompt、stack trace或secret。
+
+十四 C、AI評分測試
+
+Short Questions至少測試：
+1. 0分、部分分、滿分。
+2. 同義表達及輕微拼寫錯誤。
+3. 只答中criterion一部分。
+4. 正確詞語但地點／方向／因果錯誤。
+5. 部分正確但自相矛盾。
+6. 清單題的空白、部分及完整答案。
+
+Long Questions至少測試：
+1. 低、中、滿分。
+2. 欠place-specific evidence。
+3. 欠direct comparison。
+4. 欠data evidence。
+5. Evaluate題欠supported conclusion。
+6. 接近滿分但欠一criterion。
+
+每次核對：
+1. score等於Met數量。
+2. Partly／Not met不得分。
+3. criteria文字及順序與trusted data一致。
+4. feedback、Points to add及improved answer一致。
+5. 重複評分結果合理穩定。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十五、Quiz結果
+
+1. 顯示total、maximum、percentage。
+2. Mixed Quiz按type分拆；Cross-Chapter另按Chapter分拆。
+3. 分拆得分與overall完全一致，不顯示0／0類別。
+4. 提供Try again、Choose another quiz及Return to quiz types。
+5. Try again保留type和session size，但重新randomise題目及MCQ options。
+6. Best score按percentage比較。
+
+十六、完整Quiz Coverage
+
+KO及老師補充文件全部required content必須在完整題庫至少明確出現一次，包括：
+
+1. Key Facts、Vocabulary及definitions。
+2. Every named place、location及relative location。
+3. Dates、statistics、percentages、units、rankings及development indicators。
+4. Human／physical features及processes。
+5. Spatial patterns、distribution、density、scale及relationships。
+6. Causes、effects、impacts、opportunities、challenges及responses。
+7. Case-study evidence、stakeholders及named examples。
+8. Maps、legends、labels、symbols、directions及scale information。
+9. Graph／table／population-pyramid patterns、trends、comparisons、anomalies及data。
+10. Environmental、social、economic及political dimensions。
+11. Fieldwork methods、sampling、risks、presentation、reliability及conclusions（如適用）。
+12. 原文清單內每個獨立項目。
+
+嚴格規則：
+
+1. 原文列五項，不能以Name two視為五項全部covered。
+2. Long Question提及某section不代表section所有細節covered。
+3. 每個重要point至少有明確MCQ、Short或合適Interactive mapping。
+4. Long Questions主要測connections、explanations、comparisons、analysis及evaluation。
+5. 不以大量近似題虛增coverage。
+6. Knowledge Coverage = 100%、Partially covered = 0、Missing = 0。
+
+十七、Coverage Audit／Matrix
+
+每個required point逐行記錄：
+
+1. Section。
+2. Knowledge point／skill。
+3. Point type，例如：
+   Fact、Vocabulary、Place、Location、Scale、Statistic、Date、Unit、Spatial pattern、Distribution、Density、Physical process、Human process、Cause、Effect、Impact、Opportunity、Challenge、Response、Stakeholder、Map skill、Graph skill、Data interpretation、Population pyramid、Case-study evidence、Fieldwork、Example。
+4. Learn mapping。
+5. Mind Map branch。
+6. Flashcard ID、type、Front、Back／answer source。
+7. Front quality及source alignment。
+8. Quiz question ID及type。
+9. sourceType、sourceRef及teacherQuestionId。
+10. Coverage status及notes。
+
+Coverage status只可：
+Covered／Partially covered／Missing。
+
+以下不得算Covered：
+
+1. Generic／duplicate／ambiguous／empty Flashcard Front。
+2. Empty或source-mismatched Back。
+3. Invalid／unstable ID。
+4. 題目缺少所需map、graph、photo、legend、data、units或case-study context。
+5. 一張過度寬泛卡／題聲稱覆蓋多個互不相干points。
+
+另建PDF-QUESTION-COVERAGE.csv，逐一列出manifest task／sub-part，包括：
+
+1. teacher source ID及source location。
+2. original wording reference。
+3. required context／asset／data。
+4. implementation ID／type／renderer。
+5. Chapter及Cross-Chapter reachability。
+6. answer source。
+7. wording及context fidelity。
+8. automated及manual validation。
+9. final status。
+
+最終報告列Total、Covered、Partially、Missing及percentage；只接受100%、0、0。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十八、資料及程式要求
+
+1. 沿用Next.js、React、TypeScript、Supabase及PW Learning Hub style。
+2. 優先使用existing reusable components，不為每Chapter重建Quiz／Mind Map／Flashcards。
+3. 新Chapter主要加入Chapter data、route、assets、coverage／test files及必要registry／navigation最小修改。
+4. 不破壞Mathematics、Spelling、Authentication、Family overview及其他KO。
+5. 不刪除Supabase tables／records或改變其他學生資料。
+6. SQL／migration必須先說明、提供獨立檔、標記destructive risk，未批准不可執行。
+7. React lists有正確key，TypeScript types清楚，secret不進client。
+
+十八 A、Shared-file保護及合併
+
+1. 只提交本Chapter相關檔案。
+2. shared file以最新本機版本最小合併，不把舊版整份放入ZIP覆蓋。
+3. 每個shared file提供change summary：保留功能、新增內容、未改內容。
+4. 修改前後diff確認沒有刪除現有prompt、validation、安全檢查或其他subject功能。
+5. ZIP內shared file醒目標示是否可Replace；不確定時要求停止並上載目前版本。
+6. 安裝前建立安全backup並執行git diff。
+7. 不把無關修改加入ZIP、staging或commit。
+8. 完成後檢查git diff -- <shared file>、git diff --cached --name-only及git status --short。
+
+十九、Responsive與Accessibility
+
+1. 支援desktop、laptop、iPad、mobile。
+2. 不得水平截斷、重疊、button超界或card高度不足。
+3. Maps／graphs可縮放或以可讀responsive容器顯示；不得縮到labels無法辨認。
+4. 對視覺asset提供alt text、caption及必要文字data fallback，但fallback不可改變原題。
+5. buttons及forms有disabled state、labels、aria attributes及keyboard operation。
+6. 不只以顏色表達正誤；map key及graph legend須可辨認。
+7. colour contrast足夠。
+
+二十、最終功能檢查
+
+1. 所有sections有Learn、Mind Map branch、Flashcards及Quiz coverage。
+2. KO及老師補充required content已同步到四個學習模式。
+3. Knowledge Coverage及Teacher Question Coverage均100%，missing／partial為0。
+4. Quiz動態分類、counts、session size、randomisation及taught filtering正確。
+5. MCQ、Short、Long及所有使用的Interactive renderer均可作答、批改、retry及計分。
+6. Mixed及Cross-Chapter結果完全對數。
+7. AI score等於server重算Met數，summary一致。
+8. Maps、photos、graphs、population pyramids、tables、legends、axes、units及data均完整清晰。
+9. Geography teal theme一致，History／Science／English theme regression通過。
+10. Flashcard generic／duplicate／empty／invalid／missing-source counts全部為0。
+11. 每section抽卡及responsive測試通過。
+12. Greta、Mathis及test account資料互不影響。
+13. API failure可安全retry且保留答案。
+14. 沒有secret洩露或無關功能回歸。
+
+二十一、技術驗證
+
+交付前執行並報告：
+
+1. TypeScript check。
+2. 新增／修改檔案ESLint。
+3. Production build。
+4. Section、Flashcard及Question count reconciliation。
+5. Coverage validation。
+6. Duplicate／missing／invalid card及question ID validation。
+7. MCQ answer validation。
+8. Multi-section unlock validation。
+9. AI schema、criterion order、score recalculation及summary consistency。
+10. 0／partial／full mark tests。
+11. API error／retry及secret scan。
+12. Shared-file regression及prompt preservation。
+13. Cross-Chapter aggregation、year／subject isolation、question-ID uniqueness、filtering、counts、randomisation、chapter spread、score reconciliation及trusted lookup。
+14. context ?? period backward compatibility。
+15. Geography place／location／direction accuracy validation。
+16. Statistics、date、percentage、rounding及unit validation。
+17. Population distribution versus density misconception tests。
+18. Urbanisation versus migration及push／pull classification tests。
+19. Cause-effect-response chain validation。
+20. Case-study evidence requirement tests。
+21. Map asset、legend、scale、label target及direction validation。
+22. Graph／table／population-pyramid axes、data、trend及anomaly validation。
+23. Photo／source context validation。
+24. Fieldwork method、sampling、risk、reliability及evidence validation（適用時）。
+25. Contradictory Geography answer validation。
+26. Teacher source inventory、page accounting、manifest bijection、wording diff、context fidelity、answer pairing及exclusion approval。
+27. Chapter及Cross-Chapter UI reachability。
+28. Interactive type preservation及deterministic marking。
+29. Geography theme tokens、colour leak、responsive states及contrast。
+30. History、Science、English及既有Geography regression。
+31. Flashcard ID stability、section validity、Front format、normalised duplicates、source alignment、coverage及progress-key regression。
+
+必須報告：
+
+1. Build、TypeScript及ESLint結果。
+2. sections、各類flashcards及各題型數量。
+3. Coverage percentage及missing items。
+4. AI tests及server-side scoring結果。
+5. Shared-file changes及保留功能。
+6. Cross-Chapter counts、unique IDs、randomisation、score breakdown及student isolation。
+7. Map／graph／data／case-study／fieldwork專項結果。
+8. Expected／received／readable files、pages checked、tasks及sub-parts對數。
+9. Manifest implemented／blocked／approved exclusions／missing。
+10. wording mismatches及missing context／asset／data。
+11. Geography theme及其他subject regression。
+12. Flashcard quality、source mapping、人工抽查及responsive結果。
+
+如build因缺少Supabase environment variables停止：
+
+1. 清楚說明。
+2. 可使用不含真實密鑰的command-scoped測試值驗證build。
+3. 不可輸出或洩露真實Supabase key。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+二十二、交付方式
+
+提供可下載ZIP，包含：
+
+1. 所有新增／修改程式檔案及Chapter data。
+2. 必要maps／graphs／photos／diagrams assets。
+3. Source Inventory。
+4. Coverage Audit／Matrix。
+5. UPDATE-INSTRUCTIONS.md。
+6. LOCAL-TESTING-CHECKLIST.md。
+7. AI及deterministic marking tests。
+8. SHARED-FILES-CHANGELOG.md（有shared修改時）。
+9. CROSS-CHAPTER-QUIZ-TESTS.md。
+10. PDF-QUESTION-MANIFEST。
+11. PDF-QUESTION-COVERAGE.csv。
+12. TEACHER-QUESTION-WORDING-DIFF.md（0 differences亦要記錄）。
+13. PDF-PAGE-CHECKLIST.md。
+14. EXCLUSIONS-AND-BLOCKERS.md（沒有則寫None）。
+15. GEOGRAPHY-THEME-REGRESSION.md。
+16. 如需要，獨立SQL migration。
+
+安裝說明列出：
+
+1. 複製哪些folders到E:\Projects\pw-learning-hub。
+2. Windows詢問Replace時如何選擇。
+3. 是否需要npm install、SQL或Supabase migration。
+4. npm run dev及Ctrl+F5步驟。
+5. 必測routes及功能。
+6. Chapter files與shared files分類。
+7. 每個shared file是否可Replace及merge方法。
+8. 覆蓋前git diff及backup。
+
+二十三、Git及部署限制
+
+1. 先完成程式、驗證及ZIP，再由使用者localhost測試。
+2. 未經使用者明確確認，不可git add、commit、push或部署Vercel。
+3. 不可使用git add .或git add -A；只加入明確路徑。
+4. 使用者確認全部正常後才提供Git指令。
+5. 先顯示git status --short，再git add指定檔案。
+6. Commit前執行git diff --cached --name-only。
+7. Push後檢查Vercel deployment。
+8. 不可覆蓋或刪除無關修改。
+
+二十四、最終完成標準
+
+只有全部符合才可說Chapter完成：
+
+1. KO及老師補充全部required content準確輸入。
+2. Learn、Mind Map、Flashcards及Quiz完整。
+3. Taught filtering、classification、session size、randomisation、Mixed及Cross-Chapter正常。
+4. Knowledge Coverage及Teacher Question Coverage均100%，missing／partial／blocked／unapproved exclusions為0。
+5. 所有maps、graphs、photos、tables、population pyramids及context assets完整可讀。
+6. TypeScript、targeted ESLint及production build通過。
+7. AI 0／partial／full及Long low／middle／full tests通過。
+8. Server使用trusted criteria重算score及summary。
+9. API key不在client或Git。
+10. Shared files以最新版本最小合併，其他subjects regression通過。
+11. Cross-Chapter只聚合相同year／Geography及該學生taught sections。
+12. Question IDs全域唯一，results breakdown完全對數。
+13. Geography place、direction、scale、spatial pattern、statistics、units、case-study evidence及cause-effect評分正確。
+14. 普通describe／explain題不被錯誤要求judgement。
+15. 老師原題字眼、sub-parts、marks及assets逐題核對。
+16. 每條老師原題在Chapter及Cross-Chapter UI可實際作答。
+17. 未以自製題代替老師Interactive／Structured題。
+18. Geography teal主題一致，沒有History／Science colour leakage。
+19. Flashcard Coverage 100%，generic／duplicate／empty／invalid／missing-source全部為0。
+20. Flashcard人工抽查、responsive及progress mapping通過。
+21. 使用者已在localhost測試並確認正常。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+開始編程前必須先提交給使用者確認的規劃
+
+請先分析Knowledge Organiser及所有老師補充文件，列出：
+
+1. 建議Chapter structure及sections。
+2. Source Inventory：全部預期檔案、實收／可讀狀態及全部pages。
+3. 相對KO新增的老師內容、maps、graphs、photos、fieldwork及原題。
+4. 每section的knowledge point數量，分開KO與teacher sources。
+5. 預計Flashcards數量，按section及Fact／Vocabulary／Place／Map／Data／Process／Case Study／Fieldwork等types分拆。
+6. 最少三組代表性Flashcard Front／Back例子，說明如何避免generic／duplicate Front。
+7. 如優化既有Chapter，列出ID、section assignment、Back、總數及coverage denominator的保留及before／after audit計劃。
+8. 預計Multiple Choice、Short、Long數量。
+9. 預計Interactive／Structured數量，按matching、fill blank、label map、data interpretation等subtype分拆。
+10. 完整PDF-QUESTION-MANIFEST：逐題及逐sub-part列出原題字眼、marks、context／asset、answer source及target section。
+11. 初步Knowledge Coverage Plan及Teacher Question Coverage Plan，分開列分母及預計結果。
+12. 不清楚、衝突、過時數據、答案缺漏或需要確認項目。
+13. Cross-Chapter預計題數變化、registry／route／shared component修改及測試計劃。
+14. Expected／received／readable files、question-bearing files、pages、tasks及independently answerable sub-parts對數。
+15. 新增／修改檔案清單，清楚標示shared files及安全合併方法。
+
+必須先讓使用者確認以上規劃及PDF-QUESTION-MANIFEST，然後才開始寫程式。未獲確認，不可跳過manifest直接建立題庫。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+目前 Brazil KO 的學科專項提醒
+
+1. 頁1及頁2屬封面／title pages，也要記入PDF-PAGE-CHECKLIST。
+2. Brazil內容至少涉及background facts、urbanisation、rural-urban migration、push／pull factors、infrastructure、Rio／favelas challenges、population distribution／density、population pyramid、ecosystems、biodiversity、Amazon value、deforestation causes及consequences。
+3. 人口分布圖、population pyramid、Brazil ecosystems map及rainforest layers diagram都屬required assets／skills，不可只抽取旁邊文字而忽略視覺資料。
+4. 原文statistics、dates、percentages、distances、development indicators及units必須逐項核對；如懷疑過時或有印刷錯誤，只能報告並等待批准。
+5. 第一輪規劃時要分清：
+   - knowledge facts
+   - map／graph reading skills
+   - case-study evidence
+   - vocabulary
+   - cause-effect chains
+6. 如果目前沒有老師工作紙／問題PDF，Teacher Question Coverage分母為0並標記N／A；不可虛構老師原題。

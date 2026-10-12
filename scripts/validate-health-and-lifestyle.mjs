@@ -14,9 +14,9 @@ function loadTypescriptData(relativePath, exportName) {
   const javascript = ts.transpileModule(read(relativePath), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
-  const module = { exports: {} };
-  vm.runInNewContext(`(function(exports,module){${javascript}\n})(module.exports,module)`, { module, console });
-  return module.exports[exportName];
+  const loadedModule = { exports: {} };
+  vm.runInNewContext(`(function(exports,module){${javascript}\n})(loadedModule.exports,loadedModule)`, { loadedModule, console });
+  return loadedModule.exports[exportName];
 }
 
 const organiser = loadTypescriptData(
@@ -65,6 +65,9 @@ check(organiser.questions.every(question => question.sourceType === "generatedSu
 check(organiser.sections.every(section => section.sourceType === "knowledgeOrganiser"), "Every section must identify the Knowledge Organiser as its source.");
 check(organiser.flashcards.every(card => typeof card.back === "string" && card.back.length > 0), "A flashcard has no answer.");
 check(new Set(organiser.flashcards.map(card => card.id)).size === organiser.flashcards.length, "Flashcard IDs are not unique.");
+check(new Set(organiser.flashcards.map(card => card.front)).size === organiser.flashcards.length, "Flashcard fronts are not unique.");
+check(!organiser.flashcards.some(card => /^Recall point/i.test(card.front)), "A generic Recall point flashcard remains.");
+check(organiser.flashcards.filter(card => card.id.includes("-fact-")).every(card => card.front.endsWith("?")), "Every fact card must use a question front.");
 check(organiser.flashcards.every(card => sectionIds.has(card.sectionId)), "A flashcard references an unknown section.");
 
 const allScienceQuestions = [...organiser.questions, ...ecosystem.questions];

@@ -23,8 +23,8 @@ export const s2Chapter9Flashcards:S2Chapter9Flashcard[] = [
     "section": "Simple Proofs",
     "type": "rule",
     "prompt": "Name the triangle similarity conditions.",
-    "answer": "AAA, SSS and SAS.", answerReason: reasonRef("similarity.aa") + reasonRef("similarity.sss") + reasonRef("similarity.sas"),
-    "explanation": "For similarity, SSS and SAS use equal corresponding side ratios."
+    "answer": "AAA; three pairs of proportional corresponding sides; or two pairs of proportional corresponding sides with equal included angles.", answerReason: reasonRef("similarity.aa") + reasonRef("similarity.sss") + reasonRef("similarity.sas"),
+    "explanation": "For similarity, corresponding side ratios must be equal. When using two pairs of sides, their included angles must also be equal."
   },
   {
     "id": "s2-c9-common",

@@ -38,9 +38,22 @@ const englishTheme: KnowledgeOrganiserTheme = {
   "--ko-primary-shadow": "rgba(159,18,57,.14)",
 };
 
+const geographyTheme: KnowledgeOrganiserTheme = {
+  "--ko-primary": "#0f766e",
+  "--ko-primary-dark": "#115e59",
+  "--ko-primary-deep": "#134e4a",
+  "--ko-primary-border": "#5eead4",
+  "--ko-primary-border-strong": "#2dd4bf",
+  "--ko-primary-soft": "#f0fdfa",
+  "--ko-primary-muted": "#ccfbf1",
+  "--ko-primary-ring": "#99f6e4",
+  "--ko-primary-shadow": "rgba(15,118,110,.14)",
+};
+
 export function getKnowledgeOrganiserTheme(subject: string): KnowledgeOrganiserTheme {
   const normalisedSubject = subject.trim().toLowerCase();
   if (normalisedSubject === "science") return scienceTheme;
   if (normalisedSubject === "english") return englishTheme;
+  if (normalisedSubject === "geography") return geographyTheme;
   return historyTheme;
 }

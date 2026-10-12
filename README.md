@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Year 8 Science Chapters 3–4 fixes
 
-## Getting Started
+This update contains the four requested corrections:
 
-First, run the development server:
+1. Chapter 3 Periodic Table flashcards now use explicit question prompts. Generic `Recall point` fronts are blocked by validation.
+2. Chapter 3 quiz questions that require a Periodic Table use the supplied clean Periodic Table image rather than the full Knowledge Organiser image.
+3. Chapter 4 diagram questions use the original arrows in the four supplied diagrams. Only numbered markers are added; no extra green leader lines or target dots are drawn.
+4. All 70 Chapter 4 Separation Techniques flashcards now use specific retrieval questions. Generic `Recall point` fronts are blocked by validation.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The corrected diagram renderer is provided as `KnowledgeOrganiserInteractiveQuestionV2.tsx`, and both the chapter quiz and Cross-Chapter Quiz import that file explicitly. This prevents an older synced copy of the original shared component from restoring the previous green-line overlay.
+
+## Apply
+
+Copy the contents of this package into the root of `pw-learning-hub`, preserving the folder structure and replacing the matching files.
+
+## Validate
+
+```powershell
+node scripts/validate-periodic-table.mjs
+node scripts/validate-separation-techniques.mjs
+npx tsc --noEmit
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The production build requires the same environment variables used by the main project.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verified results
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Chapter 3: 98 explicit-question flashcards and 72 quiz questions.
+- Chapter 4: 70 explicit-question flashcards and 62 quiz questions.
+- Cross-chapter pool: 333 questions.
+- TypeScript, ESLint, both chapter validators and the production build pass.

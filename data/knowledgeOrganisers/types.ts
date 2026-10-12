@@ -7,6 +7,11 @@ export type KnowledgeSection = {
   keyFacts: string[];
   keyTerms: string[];
   colour: string;
+  referenceImages?: Array<{
+    src: string;
+    alt: string;
+    caption?: string;
+  }>;
   sourceType?: "knowledgeOrganiser" | "teacherSupplement" | "teacherQuestion" | "generatedSupplement";
   sourceRef?: string;
 };
