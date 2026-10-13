@@ -7,6 +7,7 @@ const subjects = [
   { name: "Science", icon: "🔬", description: "Ecosystem Processes · interactive revision", route: "/knowledge-organisers/year8/science", available: true },
   { name: "English", icon: "📖", description: "Crime · genre, methods and big ideas", route: "/knowledge-organisers/year8/english", available: true },
   { name: "Geography", icon: "🌍", description: "Brazil · places, people and environments", route: "/knowledge-organisers/year8/geography", available: true },
+  { name: "Design Technology", icon: "💡", description: "Lighting Solutions · design, materials and circuits", route: "/knowledge-organisers/year8/design-technology", available: true },
   { name: "Other subjects", icon: "📘", description: "Added when organisers arrive", route: "", available: false },
 ];
 
