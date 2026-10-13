@@ -109,7 +109,7 @@ function selectQuestions(pool: SourceQuestion[], size: QuizSize, mode: QuizMode)
 export default function KnowledgeOrganiserRevisionQuiz({ organisers }: { organisers: KnowledgeOrganiser[] }) {
   const subject = organisers[0]?.subject ?? "Knowledge Organisers";
   const year = organisers[0]?.year ?? 8;
-  const subjectSlug = subject.toLowerCase();
+  const subjectSlug = subject.trim().toLowerCase().replace(/\s+/g, "-");
   const subjectRoute = `/knowledge-organisers/year${year}/${subjectSlug}`;
   const visibleModes = useMemo(() => {
     if (subjectSlug === "english") {

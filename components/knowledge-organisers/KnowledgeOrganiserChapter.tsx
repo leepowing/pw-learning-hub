@@ -26,11 +26,11 @@ const quizModeDetails: Array<{ mode: QuizMode; title: string; description: strin
   { mode: "multiple-choice", title: "Multiple Choice", description: "Choose an answer and receive instant marking." },
   { mode: "short-answer", title: "Short Questions", description: "Write concise answers and check the marking points." },
   { mode: "long-answer", title: "Long Questions", description: "Practise extended explanations, comparisons and analysis." },
-  { mode: "matching", title: "Matching", description: "Match every scientific term or step to the correct answer." },
-  { mode: "fill-blanks", title: "Fill in the Blanks", description: "Complete equations, sentences and tables using the correct terms." },
-  { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct scientific labels to each numbered position." },
-  { mode: "ordering", title: "Ordering", description: "Put practical methods and scientific processes into the correct order." },
-  { mode: "classification", title: "Classification", description: "Sort each statement or item into the correct scientific category." },
+  { mode: "matching", title: "Matching", description: "Match every term, feature or step to the correct answer." },
+  { mode: "fill-blanks", title: "Fill in the Blanks", description: "Complete sentences, sequences and tables using the correct terms." },
+  { mode: "diagram-labels", title: "Label the Diagram", description: "Add the correct labels to each numbered position." },
+  { mode: "ordering", title: "Ordering", description: "Put methods and processes into the correct order." },
+  { mode: "classification", title: "Classification", description: "Sort each statement or item into the correct category." },
   { mode: "interactive", title: "Interactive Questions", description: "Interpret maps, data and diagrams or complete a structured task." },
   { mode: "mixed", title: "Mixed Quiz", description: "Combine every available question type." },
 ];
@@ -126,7 +126,8 @@ function randomiseMultipleChoiceOptions(question: KnowledgeQuestion): KnowledgeQ
 }
 
 export default function KnowledgeOrganiserChapter({ organiser }: { organiser: KnowledgeOrganiser }) {
-  const subjectRoute = `/knowledge-organisers/year${organiser.year}/${organiser.subject.toLowerCase()}`;
+  const subjectSlug = organiser.subject.trim().toLowerCase().replace(/\s+/g, "-");
+  const subjectRoute = `/knowledge-organisers/year${organiser.year}/${subjectSlug}`;
   const [student, setStudent] = useState("guest");
   const [taughtIds, setTaughtIds] = useState<string[]>([]);
   const [view, setView] = useState<View>("overview");

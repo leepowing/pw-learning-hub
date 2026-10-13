@@ -50,10 +50,23 @@ const geographyTheme: KnowledgeOrganiserTheme = {
   "--ko-primary-shadow": "rgba(15,118,110,.14)",
 };
 
+const designTechnologyTheme: KnowledgeOrganiserTheme = {
+  "--ko-primary": "#65a30d",
+  "--ko-primary-dark": "#3f6212",
+  "--ko-primary-deep": "#365314",
+  "--ko-primary-border": "#bef264",
+  "--ko-primary-border-strong": "#84cc16",
+  "--ko-primary-soft": "#f7fee7",
+  "--ko-primary-muted": "#ecfccb",
+  "--ko-primary-ring": "#d9f99d",
+  "--ko-primary-shadow": "rgba(101,163,13,.14)",
+};
+
 export function getKnowledgeOrganiserTheme(subject: string): KnowledgeOrganiserTheme {
   const normalisedSubject = subject.trim().toLowerCase();
   if (normalisedSubject === "science") return scienceTheme;
   if (normalisedSubject === "english") return englishTheme;
   if (normalisedSubject === "geography") return geographyTheme;
+  if (normalisedSubject === "design technology") return designTechnologyTheme;
   return historyTheme;
 }
