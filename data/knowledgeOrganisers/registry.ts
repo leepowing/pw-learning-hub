@@ -13,6 +13,8 @@ import { year8EnglishCrime } from "./year8EnglishCrime";
 import { year8GeographyBrazil } from "./year8GeographyBrazil";
 import { year8DesignTechnologyLightingSolutions } from "./year8DesignTechnologyLightingSolutions";
 import { year8DesignTechnologyGlobalGoalsMarbleRun } from "./year8DesignTechnologyGlobalGoalsMarbleRun";
+import { year8RpeWhatHappenedToMoses } from "./year8RpeWhatHappenedToMoses";
+import { year8RpeHowDoJewishPeopleLive } from "./year8RpeHowDoJewishPeopleLive";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8HistoryMigration,
@@ -29,6 +31,8 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8GeographyBrazil,
   year8DesignTechnologyLightingSolutions,
   year8DesignTechnologyGlobalGoalsMarbleRun,
+  year8RpeWhatHappenedToMoses,
+  year8RpeHowDoJewishPeopleLive,
 ];
 
 export function getKnowledgeOrganiserById(id: string) {
