@@ -11,6 +11,8 @@ import { year8ScienceElectricityAndMagnetism } from "./year8ScienceElectricityAn
 import { year8ScienceEnergy } from "./year8ScienceEnergy";
 import { year8EnglishCrime } from "./year8EnglishCrime";
 import { year8GeographyBrazil } from "./year8GeographyBrazil";
+import { year8DesignTechnologyLightingSolutions } from "./year8DesignTechnologyLightingSolutions";
+import { year8DesignTechnologyGlobalGoalsMarbleRun } from "./year8DesignTechnologyGlobalGoalsMarbleRun";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8HistoryMigration,
@@ -25,6 +27,8 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8ScienceEnergy,
   year8EnglishCrime,
   year8GeographyBrazil,
+  year8DesignTechnologyLightingSolutions,
+  year8DesignTechnologyGlobalGoalsMarbleRun,
 ];
 
 export function getKnowledgeOrganiserById(id: string) {
