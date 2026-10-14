@@ -9,6 +9,7 @@ const subjects = [
   { name: "Geography", icon: "🌍", description: "Brazil · places, people and environments", route: "/knowledge-organisers/year8/geography", available: true },
   { name: "Design Technology", icon: "💡", description: "Lighting Solutions · design, materials and circuits", route: "/knowledge-organisers/year8/design-technology", available: true },
   { name: "RPE", icon: "🕊️", description: "Moses · Jewish beliefs, practices and community life", route: "/knowledge-organisers/year8/rpe", available: true },
+  { name: "Spanish", icon: "💬", description: "Food, meals, opinions and Spanish universals", route: "/knowledge-organisers/year8/spanish", available: true },
   { name: "Other subjects", icon: "📘", description: "Added when organisers arrive", route: "", available: false },
 ];
 

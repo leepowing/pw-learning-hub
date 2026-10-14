@@ -23,6 +23,16 @@ export type KnowledgeFlashcard = {
   back: string;
   sourceType?: "knowledgeOrganiser" | "teacherSupplement" | "teacherQuestion" | "generatedSupplement";
   sourceRef?: string;
+  audioText?: string;
+};
+
+export type KnowledgePronunciationItem = {
+  id: string;
+  sectionId: string;
+  text: string;
+  english: string;
+  locale: "es-ES";
+  sourceRef: string;
 };
 
 type BaseQuestion = {
@@ -85,4 +95,5 @@ export type KnowledgeOrganiser = {
   sections: KnowledgeSection[];
   flashcards: KnowledgeFlashcard[];
   questions: KnowledgeQuestion[];
+  pronunciationItems?: KnowledgePronunciationItem[];
 };
