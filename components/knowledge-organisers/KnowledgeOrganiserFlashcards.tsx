@@ -6,7 +6,7 @@ import type { KnowledgeFlashcard } from "@/data/knowledgeOrganisers/types";
 
 type ExitDirection = "left" | "right" | null;
 
-export default function KnowledgeOrganiserFlashcards({ cards }: { cards: KnowledgeFlashcard[] }) {
+export default function KnowledgeOrganiserFlashcards({ cards, audioLocale = "es-ES", audioLanguage = "Spanish" }: { cards: KnowledgeFlashcard[]; audioLocale?: string; audioLanguage?: string }) {
   const [queue, setQueue] = useState<KnowledgeFlashcard[]>(cards);
   const [flipped, setFlipped] = useState(false);
   const [remembered, setRemembered] = useState(0);
@@ -93,7 +93,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
     if (!currentCard?.audioText || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(currentCard.audioText);
-    utterance.lang = "es-ES";
+    utterance.lang = audioLocale;
     utterance.rate = 0.82;
     window.speechSynthesis.speak(utterance);
   }
@@ -148,7 +148,7 @@ export default function KnowledgeOrganiserFlashcards({ cards }: { cards: Knowled
         <article className="face back">
           <p>ANSWER</p>
           <h3>{currentCard.back}</h3>
-          {currentCard.audioText && <button type="button" className="audio" aria-label={`Listen to ${currentCard.audioText} in Spanish`} onClick={playAudio}>🔊 Listen</button>}
+          {currentCard.audioText && <button type="button" className="audio" aria-label={`Listen to ${currentCard.audioText} in ${audioLanguage}`} onClick={playAudio}>🔊 Listen</button>}
           <small>Swipe left if remembered, or right to practise again.</small>
         </article>
       </div>

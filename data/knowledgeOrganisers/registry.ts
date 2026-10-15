@@ -16,6 +16,7 @@ import { year8DesignTechnologyGlobalGoalsMarbleRun } from "./year8DesignTechnolo
 import { year8RpeWhatHappenedToMoses } from "./year8RpeWhatHappenedToMoses";
 import { year8RpeHowDoJewishPeopleLive } from "./year8RpeHowDoJewishPeopleLive";
 import { year8SpanishFoodAndUniversals } from "./year8SpanishFoodAndUniversals";
+import { year8FrenchHolidaysAndUniversals } from "./year8FrenchHolidaysAndUniversals";
 
 const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8HistoryMigration,
@@ -35,6 +36,7 @@ const knowledgeOrganisers: KnowledgeOrganiser[] = [
   year8RpeWhatHappenedToMoses,
   year8RpeHowDoJewishPeopleLive,
   year8SpanishFoodAndUniversals,
+  year8FrenchHolidaysAndUniversals,
 ];
 
 export function getKnowledgeOrganiserById(id: string) {

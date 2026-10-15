@@ -62,6 +62,7 @@ const designTechnologyTheme: KnowledgeOrganiserTheme = {
   "--ko-primary-shadow": "rgba(101,163,13,.14)",
 };
 const spanishTheme: KnowledgeOrganiserTheme = {"--ko-primary":"#7c3aed","--ko-primary-dark":"#6d28d9","--ko-primary-deep":"#4c1d95","--ko-primary-border":"#c4b5fd","--ko-primary-border-strong":"#8b5cf6","--ko-primary-soft":"#faf5ff","--ko-primary-muted":"#ede9fe","--ko-primary-ring":"#ddd6fe","--ko-primary-shadow":"rgba(124,58,237,.14)"};
+const frenchTheme: KnowledgeOrganiserTheme = {"--ko-primary":"#2563eb","--ko-primary-dark":"#1d4ed8","--ko-primary-deep":"#1e3a8a","--ko-primary-border":"#93c5fd","--ko-primary-border-strong":"#3b82f6","--ko-primary-soft":"#eff6ff","--ko-primary-muted":"#dbeafe","--ko-primary-ring":"#bfdbfe","--ko-primary-shadow":"rgba(37,99,235,.14)"};
 
 export function getKnowledgeOrganiserTheme(subject: string): KnowledgeOrganiserTheme {
   const normalisedSubject = subject.trim().toLowerCase();
@@ -70,5 +71,6 @@ export function getKnowledgeOrganiserTheme(subject: string): KnowledgeOrganiserT
   if (normalisedSubject === "geography") return geographyTheme;
   if (normalisedSubject === "design technology") return designTechnologyTheme;
   if (normalisedSubject === "spanish") return spanishTheme;
+  if (normalisedSubject === "french") return frenchTheme;
   return historyTheme;
 }

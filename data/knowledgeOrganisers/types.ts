@@ -31,7 +31,7 @@ export type KnowledgePronunciationItem = {
   sectionId: string;
   text: string;
   english: string;
-  locale: "es-ES";
+  locale: "es-ES" | "fr-FR";
   sourceRef: string;
 };
 

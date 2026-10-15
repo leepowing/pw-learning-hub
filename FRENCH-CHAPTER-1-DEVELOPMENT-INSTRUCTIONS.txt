@@ -1,0 +1,429 @@
+PW Learning Hub French Knowledge Organiser 最終完整開發指示 v1
+（French／Modern Foreign Languages 專用；沿用現有 History、Science、English、Geography、Design Technology、RPE、Spanish KO 架構，加入雙向語言學習、法語發音示範、Azure Speech 讀音練習評核、重音符號、文法形態、時態、翻譯、閱讀、寫作、AI 評分、100% Coverage、自動驗收、共用檔案保護及 Cross-Chapter Revision Quiz）
+
+目前章節資料
+
+Year：8
+Subject：French
+Term：Autumn 2026
+Chapter number：暫定 Chapter 1；正式開發前按學校章節次序確認
+Chapter／Topic：Holidays, Holiday Activities, Past Descriptions and French Universals
+原始 Knowledge Organiser：Year French KO.pdf
+老師補充教材／工作紙／題目／答案／Listening audio：沒有提供
+預期收到的來源檔案總數：1
+Pronunciation Assessment：建議沿用 Spanish 已建立的 Azure Speech 功能；初期只作形成性練習，不計入正式 Quiz 分數
+
+請沿用目前已完成及測試正常的 PW Learning Hub Knowledge Organiser 共用系統、資料結構、taught-section 控制、Flashcards、Mind Map、Quiz、AI marking、Pronunciation Practice 及 Cross-Chapter Quiz。Spanish 可作 Modern Foreign Languages 功能基準；French 的詞彙、詞形、時態、翻譯、連音／省音、發音、題型和評分規則必須按本指示處理，不可只把 Spanish 字串機械替換成 French，亦不可直接套用其他科目的 rubric。
+
+與使用者溝通使用繁體中文。學生頁面的 French source language 必須保留法語；解釋、題目指示、English meaning 及 feedback 使用清晰的 Year 8 English。不可用中文取代學生應學的 English meaning。
+
+本指示可沿用於日後其他 Year 8 French Chapters；使用時先更新 Year、Term、Chapter number、Topic、來源檔案、預期檔案數目、語法重點、發音 locale 和 source inventory。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+零、開始前的現有系統核對——必須先完成
+
+1. 開始修改前必須檢查使用者本機專案 `E:\Projects\pw-learning-hub` 的最新版本及全部未提交修改，不可依賴舊 ZIP、舊對話或另一科目的 shared files。
+2. 必須先查看：
+   - `git status --short`
+   - 本次將修改的檔案
+   - `data/knowledgeOrganisers/types.ts`
+   - `data/knowledgeOrganisers/registry.ts`
+   - KnowledgeOrganiserChapter、Flashcards、MindMap、InteractiveQuestion、RevisionQuiz 及 SpanishPronunciationPractice components
+   - taught-section storage helpers
+   - `app/api/knowledge-organisers/mark/route.ts`
+   - 現有 Azure Speech token／assessment server route
+   - Year 8 及 subject navigation pages
+   - `package.json`、lockfile、Next.js 文件及現有 build 設定
+3. 把檔案分為：
+   - French Chapter 專用新檔案
+   - 共用檔案
+   - 與本次工作無關但已被修改的檔案
+4. 修改 shared file 時，只能在使用者目前最新版本上作最小合併。
+5. 必須保留全部既有 subjects、Maths、Spelling、Spanish audio／Azure Speech 邏輯及其他現有修正。
+6. 不可用舊版 registry、types、AI route、shared component、package files 或 navigation page 整份覆蓋最新檔案。
+7. 如 shared file 的最新內容無法取得，先要求使用者上載，不可猜測替代版本。
+8. 如 working tree 有重疊修改，先列出重疊位置和安全合併方法，不可靜默覆蓋。
+9. 開始前列出預計新增和修改的檔案，並清楚標示 shared files。
+10. 未完成以上核對前，不可聲稱更新包可以安全覆蓋整個專案。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+一、來源資料、逐頁核對及內容準確性
+
+1. 以使用者提供的 French KO 為主要和權威來源。
+2. 目前 PDF 是 3 頁掃描圖片，沒有可靠文字層：
+   - Page 1：French Autumn Term 2026 cover
+   - Page 2：Year 8 Autumn holidays content，編號 1–48；包括居住地、假期長度、節日、假期地點、活動、交通、過去式活動及假期評價
+   - Page 3：French Universals；包括 Top 10 opinions、connectives、time phrases、être／avoir forms、perfect tense forms、adjectives、Top 3 future tense 及 Top 3 past tense
+3. 初步 Source Inventory 為 114 個結構化語言項目：Page 2 = 48；Page 3 = 66。正式開發前仍須逐格視覺核對，建立 stable source IDs，並把 headings、question prompts、translations、變化形式、重複出現的項目及頁內 comments 一併記錄。
+4. 不可刪減、遺漏、合併或自行改變任何：
+   - French word、phrase 或 sentence stem
+   - English meaning
+   - accent、cedilla、ligature、apostrophe、hyphen、capitalisation 或 punctuation
+   - article、gender、number、person、tense、agreement 或 verb ending
+   - slash／bracket／dot 所代表的 alternative forms
+   - headings、prompt questions、numbering 或 grouping
+   - repeated source occurrences
+5. Coverage Matrix 必須保留每個 source occurrence；同一法語形式在不同語境出現時不可因重複而刪除。Flashcard front 必須加入 tense、person、gender 或 context，避免重複題面。
+6. OCR 只可用作初稿。每個字母、accent、apostrophe、slash、bracket 和 English meaning 必須與掃描頁視覺核對。
+7. 不可把網上或教科書的較新／不同版本自動取代學校 KO。
+8. 可以把內容重新組織成更適合 Year 8 的 sections，但不可改變原意或遺漏 source item。
+9. 非來源補充內容只能加入極少量必要 grammar／pronunciation explanation，必須標明 `Additional context`，並使用 `sourceType: generatedSupplement`。
+10. 如掃描不清楚、字形有歧義或 KO 可能有錯誤，列出 filename、page、group、item number、printed form、printed meaning、可能問題和建議處理，先取得使用者決定。
+
+一 A、目前已發現的來源疑點——正式開發前必須核對
+
+以下只屬疑點，不可未經批准直接改寫：
+
+1. Page 2 有可見的編輯 comments／review balloons，例如對分類、`était comment?` word order 及希望增加 phrases 的備註。這些 comments 預設只進入 audit，不可當成學生要學的 source content；正式開發前須確認是否排除。
+2. Page 2 item 29 `j’ai retrouvé mes amis` 的 English 印作 `I met my friends`。較精確可能是 `I met up with／saw my friends again`；須決定保留 printed meaning，還是採用 approved teaching meaning 並保留 diff。
+3. Page 2 question `était comment?` 有原稿 comment 指 word order 可能需要改善。不可靜默改成 `Comment c’était ?`；須由使用者批准。
+4. Page 3 Top 10 opinions item 8 印作 `c’est` = `I would like`；通常 `I would like` 對應 `j’aimerais`。
+5. Page 3 Top 10 opinions item 9 印作 `c’était` = `I think that`；通常 `I think that` 對應 `je pense que`。
+6. Page 3 Top 10 opinions item 10 印作 `ce sera` = `In my opinion`；通常 `In my opinion` 對應 `à mon avis`。
+7. Page 3 Top 10 connectives item 9 印作 `où` = `then`；`où` 通常解作 `where`，`then` 通常可用 `puis／ensuite／alors`，須核對原意。
+8. Page 3 Top 10 être／avoir item 10 印作 `je serai` = `I will have`；`je serai` 通常是 `I will be`，`I will have` 通常是 `j’aurai`。
+9. Page 3 Top 10 time phrases item 10 `quand je serai grand.e` 的 English 印作 `when I’m bigger(f)`；較自然意思通常是 `when I am older／grown up`，且 `grand／grande` 的標示須核對。
+10. Page 3 perfect tense item 6 `j’ai bu` 的 English 印作 `I(’ve) drank (drunk)`，混合 simple past 與 past participle；學生顯示形式須由使用者批准。
+11. Page 3 的 shorthand，例如 `intéressant.e`、`ennuyeux(-euse)／barbant.e`、`amusant.e.s／drôle.s`、`marrant.e.s／rigolo.te.s`、`nouveau.x／nouvelle.s`、`vieux／vieille.s`，不可當作學生應輸入的完整 literal string。Learn 必須展開實際 forms，audit 保留原印刷表示法。
+12. 所有疑點必須寫入 Wording／Correction Diff。可選處理只有：
+   - 完全照印刷原文；或
+   - 學生頁使用已批准的正確形式／meaning，同時保留 printed form、approved correction、批准日期和原因。
+
+一 B、來源 metadata、PDF manifest 及 Coverage 硬性閘門
+
+1. 每個來源點保存：
+   - `sourceType: knowledgeOrganiser | teacherSupplement | teacherQuestion | generatedSupplement`
+   - `sourceRef: filename + page + printed group + item number`
+   - stable source ID
+   - exact printed French
+   - exact printed English meaning
+   - normalised teaching form（如獲批准）
+   - grammar／pronunciation note
+   - section ID
+   - Learn ID、Flashcard IDs、Quiz question IDs
+   - status、notes
+2. 建立：Source Inventory、PDF Page Checklist、Knowledge Coverage CSV／Markdown、Teacher Question Manifest、Teacher Question Coverage、Wording／Correction Diff、Exclusions and Blockers。
+3. 所有 3 頁都要有 checked／blocked 記錄。
+4. 目前文件屬 teachingOnly，不是正式 question paper；Teacher Question Coverage 預期為 0/0（N/A）。頁面上的 French prompt questions 仍屬 required taught content，必須進入 Learn、Flashcards 或 Quiz。
+5. 日後如加入老師題目、reading passage、listening script、audio、worksheet 或 mark scheme，必須逐題和 sub-part 建立一對一 manifest，不可用自製題代替原題。
+6. 最終只接受：files accounted 100%；pages checked 100%；Knowledge Coverage 100%；Teacher Question Coverage 100% 或 0/0 N/A；missing、partial、blocked、unapproved exclusions、unapproved corrections 全部為 0。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+二、建議 Chapter 和 Section 結構
+
+正式 sections 須在 coverage audit 後確定。建議使用固定而穩定的 section IDs：
+
+1. Starting Points, Home and Holidays
+   - `j’habite en Angleterre`、`on habite à Wymondham`
+   - holiday duration、Christmas／Easter、basic holiday questions
+2. Holiday Destinations and Accommodation
+   - `au bord de la mer`、`à la montagne`、`à la campagne`、`en colo`、`chez mes grands-parents`、`dans le Norfolk`
+3. Holiday Activities
+   - camping、tennis、ice creams、friends、music、swimming、theme park、video clips、café
+4. Travel and Past Holiday Actions
+   - plane、car、train and perfect tense activity phrases
+5. Holiday Opinions, Weather and Evaluation
+   - `c’est nul／sympa／marrant／ennuyeux／triste`、`ça me plaît`、weather and `c’était...`
+6. Connectives and Time Phrases
+   - Top 10 connectives、past／future time markers and frequency expressions
+7. French Universals: Core Verbs and Tenses
+   - être／avoir、perfect tense、near future／future and past forms
+8. French Universals: Opinions and Adjectives
+   - Top 10 opinions、adjective gender／number forms and agreement
+
+要求：
+
+1. 每個 source item 必須只屬於一個主要 section，但可由多個 practice items 引用。
+2. 不可因重組而改變 source order audit。
+3. section IDs 發布後不可因改名或排序而改變。
+4. French 建議沿用 `context?: string`，內容可為 communicative situation、grammar focus 或 language function。
+5. 共用 component fallback：`section.context ?? section.period ?? ""`。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+三、French 獨立視覺主題及頁面結構
+
+1. French 必須使用獨立 subject theme，不可與 Spanish 或其他 subjects 混淆。
+2. 建議使用 blue／cyan 主題，呼應 KO 但保持可讀性：Primary `#2563eb`；Dark `#1d4ed8`；Deep `#1e3a8a`；Border `#93c5fd`；Strong `#3b82f6`；Soft `#eff6ff`；Muted `#dbeafe`；Ring `#bfdbfe`；Audio accent `#f59e0b`。
+3. 須沿用現有 responsive layout、focus states、keyboard access、progress cards 和 taught-section control。
+4. 不可把法國國旗、大量國旗或裝飾圖當成內容；視覺設計以閱讀和語言記憶為主。
+5. Student-facing routes 建議：
+   - `/knowledge-organisers/year8/french`
+   - `/knowledge-organisers/year8/french/autumn/holidays-and-french-universals`
+   - `/knowledge-organisers/year8/french/revision-quiz`
+6. French subject page 顯示 Autumn Chapter 1；Spring Term 及 Summer Term 先顯示 `Coming soon`，除非其 KO 已提供。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+四、Learn 頁面——雙語、文法及發音呈現
+
+1. Learn 必須完整呈現所有 source items，並清楚區分 French、English meaning、grammar／usage note、example／communicative context 和 audit metadata。
+2. French 字串必須保留正確 Unicode，包括 `à â æ ç é è ê ë î ï ô œ ù û ü ÿ`、大寫形式、apostrophe 及 non-breaking punctuation spacing（如適用）。
+3. 必須正確處理省音和 apostrophe，例如 `j’ai`、`j’habite`、`l’année`、`c’était`；不可拆成錯誤 tokens。
+4. adjective 必須解釋 gender／number agreement；來源 shorthand 要展開成學生可理解的 masculine／feminine／singular／plural forms。
+5. verb 必須標示 subject、tense 及 auxiliary，例如：
+   - `j’ai regardé` — I watched／I have watched — perfect tense, first-person singular, `avoir`
+   - `je suis allé.e` — I went — perfect tense, first-person singular, `être`, agreement required
+   - `je vais aller` — I am going to go — near future
+6. `on` 可按來源譯作 `we`，但 grammar note 應說明動詞使用 third-person singular。
+7. 對同形異義或不同 context 的項目要分開顯示和解釋。
+8. 掃描圖只可作 source reference，不可代替 responsive、accessible 的文字內容。
+9. 每個 French word／phrase 應有播放按鈕；使用瀏覽器 SpeechSynthesis，優先 `fr-FR` voice，播放前先 `speechSynthesis.cancel()`，建議 rate 0.8–0.85。
+10. 如裝置沒有 French voice，顯示清晰 fallback，不可播放 English 或 Spanish voice 冒充法語。
+11. Learn 的 examples 不得引入尚未教的複雜文法，除非標記 `Additional context`。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+五、Mind Map
+
+1. Mind Map 必須是互動式語言關係圖，不可只是 Learn 長清單。
+2. 建議層級：Topic → communicative function → French phrase → tense／grammar cue → English meaning。
+3. 可按功能分支：home、holiday duration、destinations、activities、transport、past actions、weather、opinions、connectives、time、future。
+4. 支援 expand／collapse、keyboard、mobile touch、section colour 和 taught-section filtering。
+5. French accents、apostrophes 和 words 不可被截斷；audio button 不可遮住文字。
+6. Mind Map 只顯示已標記 taught 的 sections。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+六、Flashcards——必須真正測試 Active Recall
+
+1. 所有 required source items 至少有一張 Flashcard；核心 vocabulary／phrases 建議雙向測試：English → French 及 French → English。
+2. 不能只把 group heading 或 `Recall point` 放在正面。
+3. 每張 front 必須具體、完整且可獨立作答，例如：
+   - How do you say “I went on holiday” in French?
+   - What does `nous avons voyagé en train` mean in English?
+   - Which perfect-tense form means “I drank”?
+   - Give the masculine and feminine forms represented by `affreux／affreuse`.
+4. front 不可洩露答案；back 提供 exact French、English meaning，以及必要 tense／subject／auxiliary／agreement note。
+5. 相同 English cue 有多個答案時，front 必須提供足夠 context。
+6. 每張卡有唯一 stable ID、section ID、sourceType 和 sourceRef。
+7. 所有 front 正規化後必須唯一；不允許 empty、generic、duplicate front 或錯誤 section ID。
+8. 保留 flip、swipe、I remembered、I need more practice、progress、accuracy 和 randomisation。
+9. 卡片背面提供 `🔊 Listen` French audio；英文不使用 French voice 播放。
+10. Coverage denominator 是 source items，不是 Flashcard 數量；雙向卡可令 Flashcard 數量高於 114。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+七、Quiz 題型、學生介面及出題規則
+
+French Chapter Quiz 和 Cross-Chapter Quiz 顯示五個主類別：Multiple Choice、Short Questions、Long Questions、Interactive Questions、Mixed Questions。Matching、fill blanks、ordering、classification、translation 和 listening 集中於 Interactive Questions。
+
+七 A、Multiple Choice
+
+1. 測試 meaning、correct form、tense、auxiliary、agreement、connective、time phrase 和 phrase selection。
+2. 每題四個 unique options，只有一個最佳答案。
+3. distractors 使用合理錯誤，例如 subject、tense、auxiliary、article、gender、number、agreement、accent 或近義詞；不可使用荒謬選項。
+4. 每次 session 使用 Fisher-Yates randomise questions 和 options。
+5. answer／explanation 以 trusted source data 及 approved corrections 為準。
+
+七 B、Short Questions
+
+可包括 English → French、French → English、correct verb form、complete a sentence、explain connective／time phrase、change person／gender／number／tense、identify auxiliary。每個 required source item 至少由一條可追溯 Quiz question 明確覆蓋；不得只靠 Flashcard 代表 Quiz coverage。
+
+七 C、Long Questions
+
+1. 可要求寫一段簡短 French paragraph，例如：holiday location and transport；holiday activities；past holiday with opinions and weather；future holiday plans。
+2. 題目只要求 KO 已教授或明確提供的語言。
+3. rubric 可按 task content、required details、range、tense control、opinions／reasons／connectives、accuracy 分配。
+4. 不可把篇幅本身當成主要分數；每分對應 trusted marking point。
+5. 如要求多個 time frames，prompt 和 rubric 必須明確列出。
+
+七 D、Interactive Questions
+
+1. Matching：French ↔ English；phrase ↔ function；verb form ↔ subject／tense／auxiliary。
+2. Fill in the Blanks：article、pronoun、auxiliary、past participle、agreement、connective、time phrase。
+3. Ordering：把 words／chunks 排成正確 French sentence，保留 accents、apostrophes 和 punctuation。
+4. Classification：past／present／future；opinion／connective／time phrase；`avoir`／`être`；positive／negative。
+5. Translation builder：用 supplied chunks 組成完整 translation，保留正確 word order 及省音。
+6. Listening：使用已核對的 French source phrase配合 `fr-FR` SpeechSynthesis；不可把自製語音當成老師原題。
+7. Pronunciation Practice：trusted French target → Listen → Start recording → Stop and assess → feedback → Try again。
+8. Pronunciation Practice 初期只作形成性練習，不計入任何 Quiz、accuracy、正式成績或排名。
+9. 不需要 Label the Diagram，除非日後來源文件確實包含需標示的圖片。
+
+七 E、Mixed Questions
+
+1. 從已 taught sections 抽取合理比例的 MCQ、short、long 和 interactive。
+2. 避免同一 source item 在同一 session 不必要重複。
+3. 顯示總分、題型分布、section 表現和需要重溫的語言項目。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+八、French AI 評分規則
+
+1. Short／Long answers 由 server 根據 trusted question ID 重新取得 marking points；不可接受 client 傳入的 marks、answer 或 rubric 作權威資料。
+2. API key 只留在 server environment；沿用 authentication、rate limit、input-length limit、timeout、error handling 和 fallback。
+3. AI 按 vocabulary meaning、translation accuracy、omission／addition／opposite meaning、subject、tense、auxiliary、past participle、gender／number agreement、article、negation、word order、accent／cedilla／apostrophe、required detail 評分。
+4. 一般 meaning question：小型拼字錯誤而 meaning 完全清楚時可接受，不可過度懲罰。
+5. 明確 spelling／form／conjugation question：target form、ending、auxiliary、agreement、accent 和 apostrophe 屬 marking requirement。
+6. accents／cedilla／ligature 不可一律忽略；是否扣分由 trusted rubric 和題目目的決定，feedback 必須指出問題。
+7. 多個自然 translations 或 word orders 可按 meaning 接受，不要求與 model answer 逐字相同。
+8. 不得要求 KO 未教授的外部 vocabulary 才能得滿分。
+9. 每個 marking point 回傳 `Met`、`Partly Met` 或 `Not Met`；沿用現有計分時只有 `Met` 得 1 分，但 feedback 必須解釋改善方法。
+10. wrong tense、wrong subject、wrong auxiliary、missing negation、contradiction 或 opposite meaning 不得因包含 keywords 而給分。
+11. Long feedback 分為 What was done well、Corrections、How to improve、Improved model response。
+12. Model response 只使用題目允許的 source language；新增語言標記 extension，不可當作 required answer。
+13. AI summary、awarded marks、navigation 和 final results 必須一致；client 不可改寫 server score。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+九、French 輸入、發音與可用性
+
+1. Short／Long textbox 提供可選 French character buttons：`à â æ ç é è ê ë î ï ô œ ù û ü ÿ`，需要時另提供大寫形式。
+2. 按鈕在 cursor 位置插入，不可清除答案；實體鍵盤、mobile keyboard、copy／paste 和 screen reader 均須可用。
+3. Audio controls 有 accessible label，例如 `Play French pronunciation`。
+4. SpeechSynthesis 優先 `fr-FR`；可配置其他 French locale 只作明確標示的 fallback。
+5. 播放新內容前 cancel 舊 utterance；不可 autoplay。
+6. 所有互動支援 keyboard、focus ring、correct／incorrect feedback 和 reduced-motion。
+
+九 A、Azure Speech Pronunciation Assessment
+
+1. 沿用已安裝的 Azure Speech SDK 及安全 server route；French recognition locale 預設 `fr-FR`，不可沿用 Spanish 的 `es-ES`。
+2. 使用 scripted assessment：server 根據 trusted item／question ID 取得 `referenceText`；client 不可提供 reference text、expected answer、score 或 rubric 作權威資料。
+3. `referenceText` 與頁面 target 及 model audio 一致；accents、apostrophes、approved display／source form 差異須有 audit。
+4. 只顯示 Azure 對所用 French locale 實際回傳且官方支援的指標；不得把其他 locale 專用功能硬套到 French。上線前重新核對當時 Azure 官方文件及實測 response schema。
+5. 流程：Listen → Start recording → Stop and assess → feedback → Try again。
+6. Feedback 使用鼓勵語言，指出一至三個可改善 words／sounds；不可把合理口音差異描述成能力不足，也不可要求模仿單一 native accent。
+7. `Good`、`Nearly there`、`Practise again` 門檻可配置，須以 Year 8 樣本校準，不可宣稱為官方等級。
+8. 只在學生主動錄音時要求 microphone permission；拒絕／不支援時仍可 Listen and practise yourself。
+9. 單字／短語錄音上限建議 15 秒，較長短句 30 秒；client／server 限制 duration、file size、MIME type、timeout、retry。
+10. raw audio 預設只作即時評核，不永久儲存，不寫入 analytics、console、error log、database 或 object storage。
+11. 可按 student 保存必要 metadata，例如 trusted item ID、attempt time、形成性分數及需練習項目；不可保存 raw audio 或跨學生顯示。
+12. Azure credentials 只存 `AZURE_SPEECH_KEY`、`AZURE_SPEECH_REGION` 等 server environment variables；不得用 `NEXT_PUBLIC_`、送到 browser、提交 Git 或放入 ZIP。
+13. assessment route 必須有 authentication、per-user rate limit、daily／monthly cap、payload validation、timeout、safe error 和 abuse protection。
+14. 價格、免費額度、region availability 和 locale features 不可硬編碼；正式啟用前查核 Azure 官方最新資料。
+15. app-side usage counter 達 warning threshold 時通知管理員，達 hard cap 時停止新 assessment；不能假設 budget alert 會自動停用服務。
+16. Azure unavailable、timeout、quota exhausted 或 config missing 時安全降級，不可令 Learn、Flashcards 或 Quiz 失效。
+17. 兒童使用前提供家長／監護人通知或同意流程，說明錄音用途、資料傳送、保存和刪除安排。
+18. Pronunciation results 初期不影響 taught status、Flashcard accuracy、Quiz marks、Cross-Chapter totals 或排名。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十、Taught-section 控制、學生資料及 progress
+
+1. 沿用現有 section release control；學生只複習已由教師／家長標記 taught 的 sections。
+2. Learn 可顯示完整 chapter navigation，但 Mind Map、Flashcards、Quiz 和 Cross-Chapter Quiz 只用 taught sections。
+3. taught state、Flashcard progress、Quiz result、pronunciation metadata 和 review data 按 student 分隔，不可混合 Greta、Mathis 或測試帳戶。
+4. route、chapter ID、section IDs、question IDs 和 storage keys 必須唯一，不可與 Spanish 或其他 subjects 衝突。
+5. 只最小擴充現有 storage helper，不建立平行而不相容的 French storage 系統。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十一、Cross-Chapter Revision Quiz
+
+1. French subject page 必須有 Cross-Chapter Revision Quiz。
+2. 自動從 French 已 taught sections 聚合題目，不要求再次選 section。
+3. 顯示 MCQ、Short、Long、Interactive、Mixed 五類。
+4. 不可把其他科目的 subject-specific cards 強行顯示在 French。
+5. question IDs 跨 Chapter 唯一；aggregation 不可重複同一 question。
+6. randomisation、AI server lookup、marks、per-chapter／section／type results 沿用安全邏輯。
+7. 即使目前只有 Chapter 1，仍建立可擴充 route；新增 Spring／Summer 時不重寫共用系統。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十二、資料結構及向後相容
+
+1. 優先沿用現有 `KnowledgeOrganiser`、`KnowledgeSection`、`Flashcard`、`Question` 和 interaction types。
+2. Spanish 專用欄位不可直接硬編碼為 French；應把共通 MFL 欄位抽象為 optional language-neutral fields，或最小加入：
+   - `french?: string`
+   - `english?: string`
+   - `grammarNote?: string`
+   - `tense?: string`
+   - `person?: string`
+   - `auxiliary?: "avoir" | "être"`
+   - `acceptedAnswers?: string[]`
+   - `audioText?: string`
+   - `pronunciationEnabled?: boolean`
+   - `pronunciationText?: string`
+   - `pronunciationLocale?: "fr-FR"`
+3. 新欄位全部 optional，不可破壞既有 subjects。
+4. 不可在 shared renderer 寫死 shorthand normalisation；chapter data 明確提供 source form、display form、expanded forms。
+5. client data 不可包含本機絕對路徑、API key、私人資料或 hidden marking prompt。
+6. 如共用 pronunciation component 名稱仍是 `SpanishPronunciationPractice`，應安全重構為 language-neutral component（例如 `LanguagePronunciationPractice`），以 props 傳入 locale、language label 和 items；必須做 Spanish regression，不能複製兩套失去同步的元件。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十三、自動 Coverage 及驗收 scripts
+
+必須建立 chapter 專用 generate／validate scripts，至少檢查：
+
+1. Source files、pages、groups 和 item counts 對數。
+2. 初步預期：Page 2 = 48；Page 3 = 66；合共 114 structured items。若正式 inventory 因 headings／prompts／comments 分拆而改變 denominator，須在報告解釋。
+3. 每個 source item 有 Learn mapping、至少一張 Flashcard、至少一條 Quiz mapping。
+4. Knowledge Coverage = 100%；Teacher Question Coverage = 0/0 N/A，除非日後收到老師題目。
+5. Flashcards：unique IDs、valid section IDs、no empty／generic／duplicate fronts、complete source metadata。
+6. Quiz：unique IDs、valid sections、marks match marking points、MCQ exactly four unique options、answer exists、interactive answer shape valid、accepted French variants explicit。
+7. French Unicode：accents、cedilla、ligatures、apostrophes 不被移除；no mojibake；source／display differences documented。
+8. Audio：所有 `audioText` 是 French，audio buttons 有 labels，locale 為 `fr-FR`。
+9. Pronunciation：trusted source mapping、server-side referenceText、supported scores only、no raw-audio persistence、limits／caps／fallback、secrets absent from client／logs／Git／ZIP。
+10. No unapproved corrections、exclusions、blocked items or missing assets。
+
+最少執行：
+
+`node scripts/generate-french-holidays-coverage.mjs`
+`node scripts/validate-french-holidays.mjs`
+`npx tsc --noEmit`
+`npx eslint [全部本次變更檔案]`
+`npm run build`
+
+使用 destination project 的真實 `.env.local` 作最終本機驗證。不得把環境缺少 Supabase／Azure 值造成的錯誤誤報為 French code failure，但亦不可因此略過 valid-env production build。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十四、手動測試清單
+
+1. Year 8 page 顯示 French subject card 並可進入；French page 顯示 Chapter 1、Spring Coming soon、Summer Coming soon。
+2. French theme 不影響 Spanish 或其他 subjects。
+3. 全部 sections、accents、apostrophes、English meanings、grammar notes 正確。
+4. `🔊 Listen` 使用 French voice、沒有重疊或 autoplay。
+5. taught control 在 Learn／Mind Map／Flashcards／Quiz／Cross-Chapter 一致。
+6. Flashcard fronts 具體；generic／duplicate／answer-leaking = 0。
+7. Flip、swipe、buttons、progress、accuracy、refresh persistence 正常。
+8. MCQ questions／options 每次 randomised。
+9. French character buttons 在 desktop／mobile 正常。
+10. Matching、fill blanks、ordering、classification、translation builder、listening 正確 render／mark。
+11. AI 接受合理 translations，識別 wrong tense／subject／auxiliary／agreement／negation／opposite meaning。
+12. Cross-Chapter 只含 taught sections並顯示五類。
+13. Spanish pronunciation、History、Science、English、Geography、Design Technology、RPE regression 正常。
+14. Console 無新錯誤；mobile 無 clipped text、overflow 或缺 accents。
+15. Microphone permission 只在主動錄音時要求；allow／deny／dismiss／unavailable 均有提示。
+16. Pronunciation 在 Windows／Chrome、iPad／Safari 及至少一個 mobile browser 測試。
+17. Azure response 只顯示 French locale 支援及實際回傳的 scores／word feedback。
+18. raw audio 不永久保存或進入 logs；progress／usage counters 不跨帳戶。
+19. timeout、invalid audio、permission denied、Azure unavailable、quota warning、hard cap 均能降級。
+20. 用 Year 8 實際樣本校準 feedback bands，確認合理 French accents 不被不公平標示。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十五、更新包、shared-file 保護及交付
+
+1. 交付只包含本章新檔案及必要 shared-file changes 的安全 ZIP；不得包含 `node_modules`、`.next`、`.git`、`.env`、secrets 或私人檔案。
+2. ZIP 保留 project-relative folder structure。
+3. 包內必須有 UPDATE-INSTRUCTIONS、LOCAL-TESTING-CHECKLIST、FINAL-VALIDATION、PACKAGE-MANIFEST、SHARED-FILES-CHANGELOG、CROSS-CHAPTER-QUIZ-TESTS、THEME-REGRESSION、Source Inventory、Coverage、Page Checklist、Correction Diff、Exclusions and Blockers、AI marking tests、PRONUNCIATION-ASSESSMENT-TESTS、AZURE-SPEECH-SETUP-INSTRUCTIONS、PRIVACY-AND-AUDIO-DATA-CHECKLIST、SPEECH-USAGE-AND-COST-CONTROLS。
+4. UPDATE-INSTRUCTIONS 說明：先在 `E:\Projects\pw-learning-hub` 執行 `git status --short`；解壓到臨時資料夾；chapter-only files 可按相對路徑複製；shared files 有本機修改時必須 merge；執行 generate、validate、TypeScript、ESLint、build 和 browser checklist。
+5. package／lockfile 如因 Azure Speech SDK 已在 Spanish 安裝而無需改動，不要重寫；如 destination project 缺 dependency，使用專案實際 package manager 安裝並提交 package + lockfile。
+6. ZIP 完成後執行 archive integrity test、列出 file count 和 SHA-256。
+7. 不可自動 Git commit 或 push，除非使用者另外明確要求。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+十六、完成定義——全部條件同時達成才可聲稱完成
+
+1. 使用最新本機 baseline，沒有覆蓋無關修改。
+2. 1/1 source file accounted；3/3 pages visually checked。
+3. 全部 structured source items 已逐項核對；初步 114 項全部有 stable source mapping。
+4. Knowledge Coverage 100%；Teacher Question Coverage 0/0 N/A 或 100%。
+5. Learn、Mind Map、Flashcards、Chapter Quiz 和 Cross-Chapter Quiz 全部完成。
+6. 所有 Flashcard fronts 是具體 active-recall questions；generic／duplicate／empty = 0。
+7. French accents、cedilla、ligatures、apostrophes、articles、agreement、person、tense、auxiliary 和 English meanings 沒有未批准更改。
+8. `c’est = I would like`、`où = then`、`je serai = I will have`、`était comment?` 等疑點已有使用者決定及 audit。
+9. MCQ、Short、Long、Interactive、Mixed 五類在 Chapter／Cross-Chapter 一致。
+10. French-specific AI marking、accepted variants、character input、model audio、`fr-FR` Azure Pronunciation Assessment 已驗證。
+11. TypeScript、targeted ESLint、validator、routes 和 production build 通過。
+12. Spanish pronunciation及其他 subjects regression 通過。
+13. ZIP 不含 secrets／cache／dependency folders，附完整安裝及 merge 指示。
+14. Pronunciation 只作形成性練習；microphone consent、raw-audio non-retention、usage caps、cost warning、service fallback 及 per-student separation 全部通過。
+
+只有以上全部通過後，才可向使用者報告 French KO Chapter 已完成。
