@@ -29,6 +29,14 @@ const subjects = [
     iconBackground: "#fff7ed",
     colour: "#c2410c",
   },
+  {
+    title: "Live Family Quiz",
+    description: "Host or join a real-time family revision quiz",
+    icon: "⚡",
+    route: "/family-quiz",
+    iconBackground: "#fef3c7",
+    colour: "#b45309",
+  },
 ];
 
 export default function SubjectsPage() {
