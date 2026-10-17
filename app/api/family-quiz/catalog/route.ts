@@ -25,6 +25,7 @@ export async function GET(request: Request) {
           chapterTitle: organiser.title,
           type: question.type,
           prompt: question.prompt,
+          options: question.type === "multiple-choice" ? question.options : [],
           marks: question.marks,
           interactive: Boolean(question.interaction),
           interactionKind: question.interaction?.kind,

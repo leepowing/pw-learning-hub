@@ -80,6 +80,7 @@ export type FamilyQuizCatalogQuestion = {
   chapterTitle: string;
   type: FamilyQuizQuestionType;
   prompt: string;
+  options: string[];
   marks: number;
   interactive: boolean;
   interactionKind?: FamilyQuizPublicInteraction["kind"];
