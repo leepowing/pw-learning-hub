@@ -52,6 +52,19 @@ function Diagram({ kind }: { kind: FamilyQuizDiagramKind }) {
   return <svg className="scienceDiagram" viewBox="0 0 900 720" role="img" aria-label="Digestive system diagram with positions 1 to 10"><rect width="900" height="720" fill="#fff"/><image href="/knowledge-organisers/science/digestive-system-label-diagram.jpg" x="250" y="15" width="400" height="665" preserveAspectRatio="xMidYMid meet"/><g stroke="#166534" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round">{labels.map(([number,x,y,targetX,targetY,bendX]) => <path key={`line-${number}`} d={`M ${x < 450 ? x + 34 : x - 34} ${y} H ${bendX} L ${targetX} ${targetY}`}/>)}</g><g>{labels.map(([number,,,targetX,targetY]) => <circle key={`target-${number}`} cx={targetX} cy={targetY} r="6" fill="#15803d" stroke="#fff" strokeWidth="2"/>)}</g>{labels.map(([number,x,y]) => <g key={number}><circle cx={x} cy={y} r="31" fill="#fff" stroke="#15803d" strokeWidth="4"/><text x={x} y={y + 11} fill="#050505" fontSize="31" fontWeight="800" textAnchor="middle">{number}</text></g>)}</svg>;
 }
 
+export function LiveFamilyQuizInteractivePreview({ interaction }: { interaction: FamilyQuizPublicInteraction }) {
+  return <div className="preview">
+    {interaction.kind === "diagram-labels" && <><Diagram kind={interaction.diagram}/><p><b>Labels to identify:</b> {interaction.labels.map((label, index) => `${index + 1}. ${label}`).join(" · ")}</p></>}
+    {interaction.kind === "fill-blanks" && <>{interaction.wordBank && <p className="bank"><b>Word bank:</b> {interaction.wordBank.join(" · ")}</p>}<ol>{interaction.sentences.map((sentence, index) => <li key={`${sentence}-${index}`}>{sentence}</li>)}</ol></>}
+    {interaction.kind === "matching" && <div className="matching"><div><b>Items</b>{interaction.left.map((item, index) => <p key={item}>{index + 1}. {item}</p>)}</div><div><b>Choices</b>{interaction.right.map((item, index) => <p key={item}>{String.fromCharCode(65 + index)}. {item}</p>)}</div></div>}
+    {interaction.kind === "ordering" && <><p><b>Put these items in the correct order:</b></p><div className="chips">{interaction.items.map(item => <span key={item}>{item}</span>)}</div></>}
+    {interaction.kind === "classification" && <><p><b>Classify each item:</b></p><div className="chips">{interaction.rows.map(item => <span key={item}>{item}</span>)}</div><p><b>Categories:</b> {interaction.categories.join(" · ")}</p></>}
+    <style jsx>{`
+      .preview{display:grid;gap:12px;margin:20px 0;padding:16px;border:1px solid #bbf7d0;border-radius:14px;background:#f0fdf4}.preview p{margin:0;line-height:1.55}.preview ol{margin:0;padding-left:24px}.preview li{margin:8px 0}.bank{padding:12px;border-radius:10px;background:#fffbeb}.matching{display:grid;grid-template-columns:1fr 1fr;gap:14px}.matching>div{padding:13px;border-radius:11px;background:white}.matching p{margin:7px 0}.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{padding:8px 11px;border:1px solid #a7f3d0;border-radius:999px;background:white}.scienceDiagram{width:min(640px,100%);height:auto;margin:auto;border:1px solid #cbd5e1;border-radius:12px;background:white}@media(max-width:650px){.matching{grid-template-columns:1fr}}
+    `}</style>
+  </div>;
+}
+
 export default function LiveFamilyQuizInteractiveQuestion({ interaction, values, onChange }: Props) {
   const set = (index: number, value: string) => { const next = Array.from({ length: getInteractionAnswerCount(interaction) }, (_, itemIndex) => values[itemIndex] ?? ""); next[index] = value; onChange(next); };
   return <div className="interactive">
