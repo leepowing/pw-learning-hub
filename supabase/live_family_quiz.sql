@@ -21,9 +21,12 @@ create table if not exists public.family_quiz_questions (
   type text not null check (type in ('multiple-choice','short-answer','long-answer')),
   prompt text not null,
   options jsonb not null default '[]'::jsonb,
+  interaction jsonb,
   marks integer not null check (marks between 1 and 20),
   unique (session_id, position)
 );
+
+alter table public.family_quiz_questions add column if not exists interaction jsonb;
 
 create table if not exists public.family_quiz_answer_keys (
   question_id uuid primary key references public.family_quiz_questions(id) on delete cascade,

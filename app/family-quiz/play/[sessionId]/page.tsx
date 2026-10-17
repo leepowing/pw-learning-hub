@@ -5,6 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { familyQuizFetch } from "@/lib/familyQuizClient";
 import type { FamilyQuizAnswer, FamilyQuizQuestion, FamilyQuizSession } from "@/lib/familyQuiz";
+import LiveFamilyQuizInteractiveQuestion, { getInteractionAnswerCount } from "@/components/family-quiz/LiveFamilyQuizInteractiveQuestion";
+
+function displayAnswer(value: string) {
+  try { const parsed = JSON.parse(value) as unknown; return Array.isArray(parsed) ? parsed.join(" · ") : value; } catch { return value; }
+}
 
 export default function FamilyQuizPlayerPage() {
   const router = useRouter();
@@ -14,6 +19,7 @@ export default function FamilyQuizPlayerPage() {
   const [question, setQuestion] = useState<FamilyQuizQuestion | null>(null);
   const [myAnswer, setMyAnswer] = useState<FamilyQuizAnswer | null>(null);
   const [answer, setAnswer] = useState("");
+  const [interactiveValues, setInteractiveValues] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -32,8 +38,8 @@ export default function FamilyQuizPlayerPage() {
       ]);
       setQuestion(questionData as FamilyQuizQuestion | null);
       setMyAnswer(answerData as FamilyQuizAnswer | null);
-      if (!answerData) setAnswer("");
-    } else { setQuestion(null); setMyAnswer(null); }
+      if (!answerData) { setAnswer(""); setInteractiveValues([]); }
+    } else { setQuestion(null); setMyAnswer(null); setInteractiveValues([]); }
   }, [router, sessionId]);
 
   useEffect(() => {
@@ -45,11 +51,11 @@ export default function FamilyQuizPlayerPage() {
     return () => { window.clearTimeout(initialLoad); void supabase.removeChannel(channel); };
   }, [load, sessionId]);
 
-  async function submitAnswer() {
-    if (!question || !answer.trim()) return;
+  async function submitAnswer(submittedAnswer: string) {
+    if (!question || !submittedAnswer.trim()) return;
     setSubmitting(true); setError("");
     try {
-      const result = await familyQuizFetch<{ answer: FamilyQuizAnswer }>("/api/family-quiz/answers", { method: "POST", body: JSON.stringify({ sessionId, questionId: question.id, answer }) });
+      const result = await familyQuizFetch<{ answer: FamilyQuizAnswer }>("/api/family-quiz/answers", { method: "POST", body: JSON.stringify({ sessionId, questionId: question.id, answer: submittedAnswer }) });
       setMyAnswer(result.answer);
     } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not submit the answer."); }
     setSubmitting(false);
@@ -62,8 +68,8 @@ export default function FamilyQuizPlayerPage() {
     <header><p>LIVE FAMILY QUIZ</p><h1>{session.title}</h1><span>Room {session.code}</span></header>
     {session.status === "waiting" && <section className="waiting"><span>YOU ARE IN</span><h2>Waiting for the host</h2><p>The first question will appear automatically.</p><div className="pulse">⚡</div></section>}
     {question && session.status !== "finished" && <section><div className="top"><span>Question {question.position + 1}</span><b>{question.marks} {question.marks === 1 ? "mark" : "marks"}</b></div><h2>{question.prompt}</h2>
-      {!myAnswer && session.status === "question" && <>{question.type === "multiple-choice" ? <div className="options">{question.options.map(option => <button key={option} className={answer === option ? "selected" : ""} onClick={() => setAnswer(option)}>{option}</button>)}</div> : <textarea rows={question.type === "long-answer" ? 10 : 6} value={answer} onChange={event => setAnswer(event.target.value)} placeholder="Write your answer…"/>}<button className="submit" disabled={!answer.trim() || submitting} onClick={() => void submitAnswer()}>{submitting ? "Submitting and marking…" : "Submit answer →"}</button></>}
-      {myAnswer && session.status === "question" && <div className="submitted"><span>✓ ANSWER SUBMITTED</span><h3>Waiting for the host to reveal the answer</h3><p>Your answer: {myAnswer.answer}</p></div>}
+      {!myAnswer && session.status === "question" && <>{question.interaction ? <LiveFamilyQuizInteractiveQuestion interaction={question.interaction} values={interactiveValues} onChange={setInteractiveValues}/> : question.type === "multiple-choice" ? <div className="options">{question.options.map(option => <button key={option} className={answer === option ? "selected" : ""} onClick={() => setAnswer(option)}>{option}</button>)}</div> : <textarea rows={question.type === "long-answer" ? 10 : 6} value={answer} onChange={event => setAnswer(event.target.value)} placeholder="Write your answer…"/>}<button className="submit" disabled={question.interaction ? interactiveValues.length !== getInteractionAnswerCount(question.interaction) || interactiveValues.some(value => !value.trim()) || submitting : !answer.trim() || submitting} onClick={() => void submitAnswer(question.interaction ? JSON.stringify(interactiveValues) : answer)}>{submitting ? "Submitting and marking…" : "Submit answer →"}</button></>}
+      {myAnswer && session.status === "question" && <div className="submitted"><span>✓ ANSWER SUBMITTED</span><h3>Waiting for the host to reveal the answer</h3><p>Your answer: {displayAnswer(myAnswer.answer)}</p></div>}
       {session.status === "revealed" && <div className="result"><span>{myAnswer?.awarded_marks === null ? "ANSWER RECEIVED" : "YOUR RESULT"}</span><strong>{myAnswer?.awarded_marks === null ? "Review" : `${myAnswer?.awarded_marks ?? 0}/${myAnswer?.max_marks ?? question.marks}`}</strong><p>{myAnswer?.feedback?.summary || "No answer was submitted for this question."}</p>{myAnswer?.feedback?.strengths && myAnswer.feedback.strengths.length > 0 && <div><h3>What went well</h3><ul>{myAnswer.feedback.strengths.map(item => <li key={item}>{item}</li>)}</ul></div>}{myAnswer?.feedback?.improvements && myAnswer.feedback.improvements.length > 0 && <div><h3>How to improve</h3><ul>{myAnswer.feedback.improvements.map(item => <li key={item}>{item}</li>)}</ul></div>}{myAnswer?.feedback?.modelAnswer && <div className="model"><h3>Answer guide</h3><p>{myAnswer.feedback.modelAnswer}</p></div>}<small>Waiting for the host to show the next question…</small></div>}
     </section>}
     {session.status === "finished" && <section className="waiting"><span>QUIZ COMPLETE</span><h2>Well done!</h2><p>The host can see the family results.</p><button className="submit" onClick={() => router.push("/family-quiz")}>Return to Live Family Quiz</button></section>}

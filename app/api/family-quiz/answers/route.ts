@@ -3,6 +3,29 @@ import { NextResponse } from "next/server";
 import { extractOpenAIText, getFamilyQuizAdmin, getFamilyQuizUser } from "@/lib/familyQuizServer";
 
 type Body = { sessionId?: unknown; questionId?: unknown; answer?: unknown };
+const normalise = (value: string) => value.trim().toLowerCase().replace(/[.]/g, "").replace(/\s+/g, " ");
+
+function markInteractive(interactionValue: unknown, answerKey: string, submitted: string, maximumMarks: number) {
+  if (!interactionValue || typeof interactionValue !== "object") return null;
+  const interaction = interactionValue as { kind?: string };
+  let values: string[];
+  let expected: unknown;
+  try {
+    values = JSON.parse(submitted) as string[];
+    expected = JSON.parse(answerKey) as unknown;
+  } catch { return null; }
+  if (!Array.isArray(values) || !Array.isArray(expected)) return null;
+  let results: boolean[] = [];
+  if (interaction.kind === "fill-blanks" || interaction.kind === "diagram-labels") {
+    results = values.map((value, index) => Array.isArray(expected[index]) && (expected[index] as unknown[]).some(item => typeof item === "string" && normalise(item) === normalise(value)));
+  } else if (interaction.kind === "matching") {
+    results = values.map((value, index) => Number(value) === Number(expected[index]));
+  } else if (interaction.kind === "ordering" || interaction.kind === "classification") {
+    results = values.map((value, index) => typeof expected[index] === "string" && normalise(value) === normalise(String(expected[index])));
+  } else return null;
+  const correct = results.filter(Boolean).length;
+  return { awardedMarks: Math.min(maximumMarks, correct), correct, total: results.length };
+}
 
 export async function POST(request: Request) {
   const user = await getFamilyQuizUser(request);
@@ -27,7 +50,14 @@ export async function POST(request: Request) {
   let awardedMarks: number | null = null;
   let status = "marked";
   let feedback: Record<string, unknown> = {};
-  if (question.type === "multiple-choice") {
+  const interactiveResult = markInteractive(question.interaction, String(key.answer), answer, question.marks);
+  if (interactiveResult) {
+    awardedMarks = interactiveResult.awardedMarks;
+    feedback = {
+      summary: `${interactiveResult.correct} of ${interactiveResult.total} entries correct.`,
+      modelAnswer: Array.isArray(key.marking_points) ? (key.marking_points as string[]).join(" · ") : "",
+    };
+  } else if (question.type === "multiple-choice") {
     const correct = answer.trim().toLocaleLowerCase() === String(key.answer).trim().toLocaleLowerCase();
     awardedMarks = correct ? question.marks : 0;
     feedback = { summary: correct ? "Correct." : "Not quite.", modelAnswer: key.answer };

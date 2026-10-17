@@ -23,7 +23,11 @@ export default function CreateFamilyQuizPage() {
 
   useEffect(() => { void familyQuizFetch<{ organisers: OrganiserOption[] }>("/api/family-quiz/catalog").then(result => { setOrganisers(result.organisers); setOrganiserIds(result.organisers[0] ? [result.organisers[0].id] : []); }).catch(reason => setError(reason instanceof Error ? reason.message : "Could not load question bank.")).finally(() => setLoading(false)); }, []);
   const selectedOrganisers = useMemo(() => organisers.filter(item => organiserIds.includes(item.id)), [organisers, organiserIds]);
-  const pool = useMemo(() => selectedOrganisers.flatMap(item => item.questions).filter(question => questionType === "mixed" || question.type === questionType), [selectedOrganisers, questionType]);
+  const pool = useMemo(() => selectedOrganisers.flatMap(item => item.questions).filter(question => {
+    if (questionType === "mixed") return true;
+    if (questionType === "interactive") return question.interactive;
+    return !question.interactive && question.type === questionType;
+  }), [selectedOrganisers, questionType]);
   const subjectGroups = useMemo(() => Object.entries(organisers.reduce<Record<string, OrganiserOption[]>>((groups, item) => { (groups[item.subject] ??= []).push(item); return groups; }, {})), [organisers]);
 
   function toggleOrganiser(id: string) {
@@ -56,8 +60,8 @@ export default function CreateFamilyQuizPage() {
       <div className="chapterLabel"><b>Chapters</b><span>{organiserIds.length} selected</span></div>
       <div className="chapterActions"><button type="button" onClick={() => setOrganiserIds(organisers.map(item => item.id))}>Select all</button><button type="button" onClick={() => setOrganiserIds([])}>Clear all</button></div>
       <div className="chapterPicker">{subjectGroups.map(([subject, items]) => <fieldset key={subject}><legend>{subject}</legend>{items.map(item => <label className="chapter" key={item.id}><input type="checkbox" checked={organiserIds.includes(item.id)} onChange={() => toggleOrganiser(item.id)} /><span><b>Chapter {item.chapter}</b><small>{item.title}</small></span></label>)}</fieldset>)}</div>
-      <div className="mode"><button className={sourceMode === "existing" ? "selected" : ""} onClick={() => setSourceMode("existing")}><b>Existing KO questions</b><small>Randomly select from the checked question bank.</small></button><button className={sourceMode === "ai" ? "selected" : ""} onClick={() => setSourceMode("ai")}><b>Generate with AI</b><small>Create new questions from this chapter’s KO facts.</small></button></div>
-      <label>Question type<select value={questionType} onChange={event => setQuestionType(event.target.value)}><option value="mixed">Mixed questions</option><option value="multiple-choice">Multiple choice</option><option value="short-answer">Short answer</option><option value="long-answer">Long answer</option></select></label>
+      <div className="mode"><button className={sourceMode === "existing" ? "selected" : ""} onClick={() => setSourceMode("existing")}><b>Existing KO questions</b><small>Randomly select standard and interactive questions from the checked question bank.</small></button><button className={sourceMode === "ai" ? "selected" : ""} onClick={() => { setSourceMode("ai"); if (questionType === "interactive") setQuestionType("mixed"); }}><b>Generate with AI</b><small>Create new written or multiple-choice questions from the selected KO facts.</small></button></div>
+      <label>Question type<select value={questionType} onChange={event => setQuestionType(event.target.value)}><option value="mixed">Mixed questions</option>{sourceMode === "existing" && <option value="interactive">Interactive questions</option>}<option value="multiple-choice">Multiple choice</option><option value="short-answer">Short answer</option><option value="long-answer">Long answer</option></select></label>
       <label>Number of questions<select value={count} onChange={event => setCount(Number(event.target.value))}>{[3,5,10,15,20].map(value => <option key={value} value={value}>{value}</option>)}</select></label>
       {sourceMode === "existing" && <p className="availability"><b>{pool.length}</b> matching questions across {organiserIds.length} selected {organiserIds.length === 1 ? "chapter" : "chapters"}. The room will use {Math.min(count, pool.length)}.</p>}
       {sourceMode === "ai" && <p className="availability">AI will balance the questions across <b>{organiserIds.length}</b> selected {organiserIds.length === 1 ? "chapter" : "chapters"}.</p>}

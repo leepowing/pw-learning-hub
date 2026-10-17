@@ -1,5 +1,21 @@
 export type FamilyQuizQuestionType = "multiple-choice" | "short-answer" | "long-answer";
 
+export type FamilyQuizDiagramKind =
+  | "photosynthesis"
+  | "leaf"
+  | "digestive-system"
+  | "separation-filtration"
+  | "separation-distillation"
+  | "separation-chromatography"
+  | "separation-evaporation";
+
+export type FamilyQuizPublicInteraction =
+  | { kind: "fill-blanks"; sentences: string[]; wordBank?: string[] }
+  | { kind: "matching"; left: string[]; right: string[] }
+  | { kind: "ordering"; items: string[]; count: number }
+  | { kind: "classification"; rows: string[]; categories: string[] }
+  | { kind: "diagram-labels"; diagram: FamilyQuizDiagramKind; labels: string[] };
+
 export type FamilyQuizSession = {
   id: string;
   code: string;
@@ -22,6 +38,7 @@ export type FamilyQuizQuestion = {
   prompt: string;
   options: string[];
   marks: number;
+  interaction: FamilyQuizPublicInteraction | null;
 };
 
 export type FamilyQuizParticipant = {
@@ -54,6 +71,8 @@ export type FamilyQuizCatalogQuestion = {
   type: FamilyQuizQuestionType;
   prompt: string;
   marks: number;
+  interactive: boolean;
+  interactionKind?: FamilyQuizPublicInteraction["kind"];
 };
 
 export type GeneratedFamilyQuizQuestion = {

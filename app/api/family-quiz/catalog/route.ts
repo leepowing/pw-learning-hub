@@ -16,7 +16,7 @@ export async function GET(request: Request) {
       chapter: organiser.chapter,
       title: organiser.title,
       questions: organiser.questions
-        .filter(question => !question.interaction)
+        .filter(question => question.interaction?.kind !== "table")
         .map(question => ({
           organiserId: organiser.id,
           questionId: question.id,
@@ -26,6 +26,8 @@ export async function GET(request: Request) {
           type: question.type,
           prompt: question.prompt,
           marks: question.marks,
+          interactive: Boolean(question.interaction),
+          interactionKind: question.interaction?.kind,
         })),
     })),
   });
