@@ -58,7 +58,17 @@ export type FamilyQuizAnswer = {
   awarded_marks: number | null;
   max_marks: number;
   status: "submitted" | "marked" | "needs_review";
-  feedback: { summary?: string; strengths?: string[]; improvements?: string[]; modelAnswer?: string } | null;
+  feedback: {
+    summary?: string;
+    automaticSummary?: string;
+    strengths?: string[];
+    improvements?: string[];
+    modelAnswer?: string;
+    parentComment?: string;
+    reviewedByHost?: boolean;
+    reviewedAt?: string;
+    automaticAwardedMarks?: number | null;
+  } | null;
   submitted_at: string;
 };
 
