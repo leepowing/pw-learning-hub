@@ -1,31 +1,57 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "next/navigation";
 import { getSpellingWeek } from "@/data/year8SpellingWeeks";
 import { calculateLevel } from "@/lib/rewards";
 import { getCurrentStudent } from "@/lib/studentStorage";
-
 import {
-  supabase,
   getSpellingProgress,
   getStudentXP,
-  saveSpellingProgress,
   saveStudentMistake,
+  saveYear8QuizSetProgress,
+  supabase,
 } from "@/lib/supabase";
+import {
+  createYear8QuizSets,
+  getNextQuizSetNumber,
+  normaliseCompletedSets,
+  normaliseSetScores,
+  YEAR8_QUIZ_SET_COUNT,
+  YEAR8_QUIZ_SET_SIZE,
+} from "@/lib/year8QuizSets";
+
+type SpellingProgressRow = {
+  week: number;
+  learned_words: string[] | null;
+  best_score: number | null;
+  mastered: boolean | null;
+  quiz_cycle: number | null;
+  quiz_completed_sets: number[] | null;
+  quiz_set_scores: number[] | null;
+};
 
 export default function WeekQuizPage() {
-  const currentStudent = getCurrentStudent();
   const params = useParams<{ week: string }>();
   const weekNumber = Number(params.week);
   const weekData = getSpellingWeek(weekNumber);
-  const quizWords = weekData?.words.map((item) => item.word) ?? [];
+  const quizWords = useMemo(
+    () => weekData?.words.map((item) => item.word) ?? [],
+    [weekData]
+  );
 
-
-  const [shuffledWords] = useState(() =>
-  [...quizWords].sort(() => Math.random() - 0.5)
-);
+  const [student, setStudent] = useState("guest");
+  const [quizCycle, setQuizCycle] = useState(1);
+  const [completedSets, setCompletedSets] = useState<number[]>([]);
+  const [setScores, setSetScores] = useState<number[]>([0, 0, 0]);
+  const [currentSetNumber, setCurrentSetNumber] = useState<number | null>(null);
   const [question, setQuestion] = useState(0);
   const [answer, setAnswer] = useState("");
   const [score, setScore] = useState(0);
@@ -33,430 +59,568 @@ export default function WeekQuizPage() {
   const [finished, setFinished] = useState(false);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [bestScore, setBestScore] = useState(0);
-const [learnedWords, setLearnedWords] = useState<string[]>([]);
-const [mastered, setMastered] = useState(false);
-const [progressLoaded, setProgressLoaded] = useState(false);    
+  const [learnedWords, setLearnedWords] = useState<string[]>([]);
+  const [mastered, setMastered] = useState(false);
+  const [progressLoaded, setProgressLoaded] = useState(false);
   const [practiceMode, setPracticeMode] = useState(false);
   const [practiceWords, setPracticeWords] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [earnedXP, setEarnedXP] = useState(0);
-  const [totalXP, setTotalXP] = useState(0);  
+  const [totalXP, setTotalXP] = useState(0);
+  const [resultCoverage, setResultCoverage] = useState(0);
+  const [resultCycleComplete, setResultCycleComplete] = useState(false);
+  const [resultCycleScore, setResultCycleScore] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
   const transitionTimerRef = useRef<number | null>(null);
+  const finishInProgressRef = useRef(false);
 
-useEffect(() => {
-  let cancelled = false;
+  useEffect(() => {
+    let cancelled = false;
 
-  async function loadQuizProgress() {
-    const student = getCurrentStudent();
-    const course = "year8-spelling";
+    async function loadQuizProgress() {
+      const selectedStudent = getCurrentStudent();
+      setStudent(selectedStudent);
 
-    if (student === "guest") {
-      if (!cancelled) {
-        setProgressLoaded(true);
+      if (selectedStudent === "guest") {
+        if (!cancelled) {
+          setCurrentSetNumber(1);
+          setProgressLoaded(true);
+        }
+
+        return;
       }
 
-      return;
-    }
+      const [rows, savedXP] = await Promise.all([
+        getSpellingProgress(selectedStudent, "year8-spelling"),
+        getStudentXP(selectedStudent, "year8-spelling"),
+      ]);
 
-    const [rows, savedXP] = await Promise.all([
-      getSpellingProgress(student, course),
-      getStudentXP(student, course),
-    ]);
+      if (cancelled) {
+        return;
+      }
 
-    if (cancelled) {
-      return;
-    }
-
-    const weekProgress = rows.find(
-      (row) => row.week === weekNumber
-    );
-
-    if (weekProgress) {
-      setLearnedWords(
-        Array.isArray(weekProgress.learned_words)
-          ? weekProgress.learned_words
-          : []
+      const weekProgress = (rows as SpellingProgressRow[]).find(
+        (row) => row.week === weekNumber
       );
 
-      setBestScore(weekProgress.best_score ?? 0);
-      setMastered(weekProgress.mastered ?? false);
+      const loadedCompletedSets = normaliseCompletedSets(
+        weekProgress?.quiz_completed_sets
+      );
+
+      if (weekProgress) {
+        setLearnedWords(
+          Array.isArray(weekProgress.learned_words)
+            ? weekProgress.learned_words
+            : []
+        );
+        setBestScore(weekProgress.best_score ?? 0);
+        setMastered(weekProgress.mastered ?? false);
+        setQuizCycle(Math.max(1, weekProgress.quiz_cycle ?? 1));
+        setSetScores(normaliseSetScores(weekProgress.quiz_set_scores));
+      }
+
+      setCompletedSets(loadedCompletedSets);
+      setCurrentSetNumber(getNextQuizSetNumber(loadedCompletedSets));
+      setTotalXP(savedXP);
+      setProgressLoaded(true);
     }
 
-    setTotalXP(savedXP);
-    setProgressLoaded(true);
-  }
+    void loadQuizProgress();
 
-  loadQuizProgress();
+    return () => {
+      cancelled = true;
+    };
+  }, [weekNumber]);
 
-  return () => {
-    cancelled = true;
-  };
-}, [weekNumber]);
+  const quizSets = useMemo(
+    () => createYear8QuizSets(quizWords, student, weekNumber, quizCycle),
+    [quizWords, student, weekNumber, quizCycle]
+  );
 
-useEffect(() => {
-  setTimeLeft(60);
-}, [question, practiceMode]);
+  const currentSetWords =
+    currentSetNumber === null ? [] : quizSets[currentSetNumber - 1] ?? [];
+  const activeWords = practiceMode ? practiceWords : currentSetWords;
+  const currentWord = activeWords[question];
+  const currentWordData = weekData?.words.find(
+    (item) => item.word === currentWord
+  );
 
-useEffect(() => {
-  const answerHasBeenChecked =
-    feedback.startsWith("✅") ||
-    feedback.startsWith("❌");
+  const speak = useCallback(() => {
+    if (!currentWord) {
+      return;
+    }
 
-  if (
-    finished ||
-    answerHasBeenChecked ||
-    timeLeft === 0
-  ) {
-    return;
-  }
+    window.speechSynthesis.cancel();
 
-  const timer = window.setTimeout(() => {
-    setTimeLeft((previousTime) =>
-      Math.max(previousTime - 1, 0)
+    const first = new SpeechSynthesisUtterance(`The word is ${currentWord}.`);
+    first.lang = "en-GB";
+    first.rate = 0.82;
+
+    const second = new SpeechSynthesisUtterance(
+      currentWordData?.sentence ?? currentWord
     );
-  }, 1000);
+    second.lang = "en-GB";
+    second.rate = 0.82;
 
-  return () => {
-    window.clearTimeout(timer);
-  };
-}, [timeLeft, finished, feedback]);
+    const third = new SpeechSynthesisUtterance(currentWord);
+    third.lang = "en-GB";
+    third.rate = 0.82;
 
+    first.onend = () => {
+      window.setTimeout(() => {
+        window.speechSynthesis.speak(second);
 
+        second.onend = () => {
+          window.setTimeout(() => {
+            window.speechSynthesis.speak(third);
+          }, 800);
+        };
+      }, 800);
+    };
 
-const activeWords = practiceMode ? practiceWords : shuffledWords;
-const currentWord = activeWords[question];
-const currentWordData = weekData?.words.find(
-  (item) => item.word === currentWord
-);
-const finishQuiz = async (finalScore: number) => {
-  const answerXP = practiceMode
-    ? finalScore * 3
-    : finalScore * 5;
+    window.speechSynthesis.speak(first);
+  }, [currentWord, currentWordData?.sentence]);
 
-  const perfectBonus =
-    !practiceMode &&
-    finalScore === activeWords.length
-      ? 20
-      : 0;
+  const finishQuiz = useCallback(async (finalScore: number) => {
+    if (finishInProgressRef.current) {
+      return;
+    }
 
-  const gainedXP = answerXP + perfectBonus;
-  const student = getCurrentStudent();
-  const course = "year8-spelling";
+    finishInProgressRef.current = true;
+    setIsSaving(true);
 
-  setEarnedXP(gainedXP);
+    const course = "year8-spelling";
+    let gainedXP = practiceMode ? finalScore * 3 : finalScore * 5;
+    let nextCoverage = completedSets.length * YEAR8_QUIZ_SET_SIZE;
+    let cycleComplete = false;
+    let cycleScore = setScores.reduce((total, item) => total + item, 0);
+    let nextBestScore = bestScore;
+    let nextMastered = mastered;
 
-  if (student === "guest") {
-    setFinished(true);
-    return;
-  }
+    if (!practiceMode && currentSetNumber !== null) {
+      const nextCompletedSets = normaliseCompletedSets([
+        ...completedSets,
+        currentSetNumber,
+      ]);
+      const nextSetScores = normaliseSetScores(setScores);
+      nextSetScores[currentSetNumber - 1] = finalScore;
 
-const {
-  data: { user },
-  error: userError,
-} = await supabase.auth.getUser();
+      nextCoverage = nextCompletedSets.length * YEAR8_QUIZ_SET_SIZE;
+      cycleComplete = nextCompletedSets.length === YEAR8_QUIZ_SET_COUNT;
+      cycleScore = nextSetScores.reduce((total, item) => total + item, 0);
+      nextBestScore = cycleComplete
+        ? Math.max(bestScore, cycleScore)
+        : bestScore;
+      nextMastered = mastered || (cycleComplete && cycleScore === quizWords.length);
 
-if (userError || !user) {
-  alert("Your session has expired. Please sign in again.");
-  setFinished(true);
-  return;
-}
+      if (cycleComplete && cycleScore === quizWords.length) {
+        gainedXP += 20;
+      }
 
-  const { error: scoreError } = await supabase
-    .from("scores")
-    .insert({
-      student,
-      course,
-      week: weekNumber,
-      score: finalScore,
-      best_score: finalScore,
-      xp: gainedXP,
-    });
+      if (student !== "guest") {
+        const progressSaved = await saveYear8QuizSetProgress(
+          student,
+          weekNumber,
+          learnedWords,
+          nextBestScore,
+          nextMastered,
+          {
+            quizCycle,
+            completedSets: nextCompletedSets,
+            setScores: nextSetScores,
+            lastCompletedAt: cycleComplete ? new Date().toISOString() : null,
+          }
+        );
 
-  if (scoreError) {
-    console.error(
-      "Score could not be saved:",
-      scoreError.message
-    );
-  }
+        if (!progressSaved) {
+          alert("Quiz progress could not be saved. Please try this set again.");
+          setIsSaving(false);
+          finishInProgressRef.current = false;
+          return;
+        }
+      }
 
-  if (!practiceMode) {
-    const nextBestScore = Math.max(
-      bestScore,
-      finalScore
-    );
-
-    const nextMastered =
-      mastered ||
-      finalScore === activeWords.length;
-
-    const progressSaved = await saveSpellingProgress(
-      student,
-      course,
-      weekNumber,
-      learnedWords,
-      nextBestScore,
-      nextMastered
-    );
-
-    if (progressSaved) {
+      setCompletedSets(nextCompletedSets);
+      setSetScores(nextSetScores);
       setBestScore(nextBestScore);
       setMastered(nextMastered);
     }
-  }
 
-  const updatedXP = await getStudentXP(
+    setEarnedXP(gainedXP);
+    setResultCoverage(nextCoverage);
+    setResultCycleComplete(cycleComplete);
+    setResultCycleScore(cycleScore);
+
+    if (student !== "guest") {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        alert("Your session has expired. Please sign in again.");
+      } else {
+        const { error: scoreError } = await supabase.from("scores").insert({
+          student,
+          course,
+          week: weekNumber,
+          score: finalScore,
+          best_score: finalScore,
+          xp: gainedXP,
+        });
+
+        if (scoreError) {
+          console.error("Score could not be saved:", scoreError.message);
+          alert("The set progress was saved, but its XP could not be added.");
+          setEarnedXP(0);
+        }
+
+        const updatedXP = await getStudentXP(student, course);
+        setTotalXP(updatedXP);
+      }
+    }
+
+    setFinished(true);
+    setIsSaving(false);
+    finishInProgressRef.current = false;
+  }, [
+    bestScore,
+    completedSets,
+    currentSetNumber,
+    learnedWords,
+    mastered,
+    practiceMode,
+    quizCycle,
+    quizWords.length,
+    setScores,
     student,
-    course
-  );
-
-  setTotalXP(updatedXP);
-  setFinished(true);
-};
-
-const speak = () => {
-  if (!currentWord) {
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const first = new SpeechSynthesisUtterance(
-    `The word is ${currentWord}.`
-  );
-  first.lang = "en-GB";
-  first.rate = 0.82;
-
-  const second = new SpeechSynthesisUtterance(
-    currentWordData?.sentence ?? currentWord
-  );
-  second.lang = "en-GB";
-  second.rate = 0.82;
-
-  const third = new SpeechSynthesisUtterance(currentWord);
-  third.lang = "en-GB";
-  third.rate = 0.82;
-
-  first.onend = () => {
-    window.setTimeout(() => {
-      window.speechSynthesis.speak(second);
-
-      second.onend = () => {
-        window.setTimeout(() => {
-          window.speechSynthesis.speak(third);
-        }, 800);
-      };
-    }, 800);
-  };
-
-  window.speechSynthesis.speak(first);
-};
-
-useEffect(() => {
-  if (
-    timeLeft !== 0 ||
-    finished ||
-    transitionTimerRef.current !== null
-  ) {
-    return;
-  }
-
-  setFeedback(
-    `⏰ Time's up! The correct spelling is: ${currentWord}`
-  );
-
-  setMistakes((previousMistakes) => {
-    if (previousMistakes.includes(currentWord)) {
-      return previousMistakes;
-    }
-
-    return [...previousMistakes, currentWord];
-  });
-
-if (currentWord) {
-  void saveStudentMistake(
-    getCurrentStudent(),
     weekNumber,
-    currentWord,
-    "year8-spelling"
-  );
-}
+  ]);
 
-  transitionTimerRef.current = window.setTimeout(() => {
-    transitionTimerRef.current = null;
+  useEffect(() => {
+    const answerHasBeenChecked =
+      feedback.startsWith("✅") || feedback.startsWith("❌");
 
-    if (question === activeWords.length - 1) {
-      finishQuiz(score);
-    } else {
-      setQuestion((previousQuestion) => previousQuestion + 1);
-      setAnswer("");
-      setFeedback("");
+    if (
+      !progressLoaded ||
+      !currentWord ||
+      finished ||
+      answerHasBeenChecked ||
+      timeLeft === 0
+    ) {
+      return;
     }
-  }, 1500);
 
-  return () => {
-    if (transitionTimerRef.current !== null) {
-      window.clearTimeout(transitionTimerRef.current);
+    const timer = window.setTimeout(() => {
+      setTimeLeft((previousTime) => Math.max(previousTime - 1, 0));
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [timeLeft, finished, feedback, progressLoaded, currentWord]);
+
+  useEffect(() => {
+    if (
+      timeLeft !== 0 ||
+      finished ||
+      !currentWord ||
+      transitionTimerRef.current !== null
+    ) {
+      return;
+    }
+
+    setFeedback(`⏰ Time's up! The correct spelling is: ${currentWord}`);
+    setMistakes((previousMistakes) =>
+      previousMistakes.includes(currentWord)
+        ? previousMistakes
+        : [...previousMistakes, currentWord]
+    );
+
+    if (!practiceMode && student !== "guest") {
+      void saveStudentMistake(
+        student,
+        weekNumber,
+        currentWord,
+        "year8-spelling"
+      );
+    }
+
+    transitionTimerRef.current = window.setTimeout(() => {
       transitionTimerRef.current = null;
+
+      if (question === activeWords.length - 1) {
+        void finishQuiz(score);
+      } else {
+        setQuestion((previousQuestion) => previousQuestion + 1);
+        setAnswer("");
+        setFeedback("");
+        setTimeLeft(60);
+      }
+    }, 1500);
+
+    return () => {
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+        transitionTimerRef.current = null;
+      }
+    };
+  }, [
+    timeLeft,
+    finished,
+    currentWord,
+    question,
+    activeWords.length,
+    practiceMode,
+    student,
+    weekNumber,
+    score,
+    finishQuiz,
+  ]);
+
+  useEffect(() => {
+    if (progressLoaded && !finished && currentWord) {
+      speak();
     }
-  };
-}, [
-  timeLeft,
-  finished,
-  currentWord,
-  question,
-  activeWords.length,
-]);
+  }, [
+    question,
+    practiceMode,
+    finished,
+    progressLoaded,
+    currentWord,
+    speak,
+  ]);
 
-useEffect(() => {
-  if (!finished && currentWord) {
-    speak();
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
+  if (!weekData) {
+    return (
+      <main className="home-page">
+        <Link href="/year8-spelling">← Back to spelling</Link>
+        <section className="quiz-card">
+          <h1>Week {weekNumber} not found</h1>
+          <p>This week has not been added yet.</p>
+        </section>
+      </main>
+    );
   }
-}, [question, practiceMode, finished]);
 
-if (!weekData) {
-  return (
-    <main className="home-page">
-      <Link href="/year8-spelling">← Back to spelling</Link>
+  if (!progressLoaded) {
+    return (
+      <main className="home-page">
+        <Link href={`/year8-spelling/${weekNumber}`}>← Back to Week {weekNumber}</Link>
+        <section className="quiz-card">
+          <p className="small-title">WEEK {weekNumber} QUIZ</p>
+          <h1>Loading your set…</h1>
+        </section>
+      </main>
+    );
+  }
 
-      <section className="quiz-card">
-        <h1>Week {weekNumber} not found</h1>
-        <p>This week has not been added yet.</p>
-      </section>
-    </main>
-  );
-}
-
+  if (currentSetNumber === null && !finished) {
+    return (
+      <main className="home-page">
+        <section className="quiz-card quiz-result">
+          <p className="small-title">WEEK {weekNumber} COMPLETED</p>
+          <h1>All three sets are complete.</h1>
+          <p>Return to the week page to review the 30 words or start a new cycle.</p>
+          <div className="quiz-actions">
+            <Link href={`/year8-spelling/${weekNumber}`} className="secondary-link">
+              ← Return to Week {weekNumber}
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   const checkAnswer = () => {
-    if (!answer.trim()) {
-      setFeedback("Please enter your answer.");
+    const answerIsLocked =
+      feedback.startsWith("✅") ||
+      feedback.startsWith("❌") ||
+      feedback.startsWith("⏰");
+
+    if (
+      !answer.trim() ||
+      !currentWord ||
+      isSaving ||
+      timeLeft === 0 ||
+      answerIsLocked
+    ) {
+      if (!answer.trim()) {
+        setFeedback("Please enter your answer.");
+      }
       return;
     }
 
     const isCorrect =
       answer.trim().toLowerCase() === currentWord.toLowerCase();
-
     const newScore = isCorrect ? score + 1 : score;
 
     setScore(newScore);
 
-if (isCorrect) {
-  setFeedback("✅ Correct!");
-} else {
-    void saveStudentMistake(
-    currentStudent,
-    weekNumber,
-    currentWord,
-    "year8-spelling"
-    );
+    if (isCorrect) {
+      setFeedback("✅ Correct!");
+    } else {
+      if (!practiceMode && student !== "guest") {
+        void saveStudentMistake(
+          student,
+          weekNumber,
+          currentWord,
+          "year8-spelling"
+        );
+      }
 
-  setMistakes((previousMistakes) => {
-    if (previousMistakes.includes(currentWord)) {
-      return previousMistakes;
+      setMistakes((previousMistakes) =>
+        previousMistakes.includes(currentWord)
+          ? previousMistakes
+          : [...previousMistakes, currentWord]
+      );
+      setFeedback(`❌ The correct spelling is: ${currentWord}`);
     }
 
-    return [...previousMistakes, currentWord];
-  });
+    transitionTimerRef.current = window.setTimeout(() => {
+      transitionTimerRef.current = null;
 
-  setFeedback(`❌ The correct spelling is: ${currentWord}`);
-}
-    setTimeout(() => {
-if (question === activeWords.length - 1) {
-
-
-      finishQuiz(newScore);
-}
-        else {
-        setQuestion(question + 1);
+      if (question === activeWords.length - 1) {
+        void finishQuiz(newScore);
+      } else {
+        setQuestion((previousQuestion) => previousQuestion + 1);
         setAnswer("");
         setFeedback("");
+        setTimeLeft(60);
       }
     }, 1400);
   };
 
+  const beginMistakePractice = () => {
+    setPracticeWords([...mistakes]);
+    setPracticeMode(true);
+    setQuestion(0);
+    setAnswer("");
+    setScore(0);
+    setFeedback("");
+    setMistakes([]);
+    setFinished(false);
+    setEarnedXP(0);
+    setTimeLeft(60);
+    finishInProgressRef.current = false;
+  };
+
   if (finished) {
+    const nextSetNumber = getNextQuizSetNumber(completedSets);
+
     return (
       <main className="home-page">
         <section className="quiz-card quiz-result">
-          <p className="small-title">QUIZ COMPLETE</p>
+          <p className="small-title">
+            {practiceMode
+              ? "PRACTICE COMPLETE"
+              : resultCycleComplete
+                ? "WEEK COMPLETE"
+                : `SET ${currentSetNumber} COMPLETE`}
+          </p>
           <h1>Your score</h1>
 
           <div className="score-display">
             {score} / {activeWords.length}
           </div>
-          <div className="xp-earned-card">
-              <strong>⭐ +{earnedXP} XP</strong>
 
-          <span>
-              Level {calculateLevel(totalXP).level}
-          </span>
+          <div className="xp-earned-card">
+            <strong>⭐ +{earnedXP} XP</strong>
+            <span>Level {calculateLevel(totalXP).level}</span>
           </div>
 
-{!practiceMode && (
-  <p className="best-score">
-    🏆 Best score: {Math.max(bestScore, score)} / {shuffledWords.length}
-  </p>
-)}
+          {!practiceMode && (
+            <div className="quiz-coverage-card">
+              <span>Weekly coverage</span>
+              <strong>{resultCoverage} / {quizWords.length}</strong>
+              <div className="progress">
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${(resultCoverage / quizWords.length) * 100}%`,
+                  }}
+                />
+              </div>
+              {resultCycleComplete && (
+                <small>
+                  Cycle score: {resultCycleScore} / {quizWords.length} · Best: {Math.max(bestScore, resultCycleScore)} / {quizWords.length}
+                </small>
+              )}
+            </div>
+          )}
 
           {mistakes.length > 0 ? (
-  <div className="mistakes-card">
-    <h2>Words to practise again</h2>
-
-    <ul>
-      {mistakes.map((word) => (
-        <li key={word}>{word}</li>
-      ))}
-    </ul>
-  </div>
-) : (
-  <div className="perfect-card">
-    🎉 Perfect! You spelled every word correctly.
-  </div>
-)}
+            <div className="mistakes-card">
+              <h2>Words to practise again</h2>
+              <ul>
+                {mistakes.map((word) => (
+                  <li key={word}>{word}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className="perfect-card">
+              🎉 Perfect! You spelled every word correctly.
+            </div>
+          )}
 
           <p>
             {score === activeWords.length
               ? "Excellent work! 🌟"
-              : score >= 8
+              : score >= Math.ceil(activeWords.length * 0.8)
                 ? "Great job! 👏"
                 : "Keep practising. You are improving! 💪"}
           </p>
 
-<div className="quiz-actions">
-  <Link
-    href={`/year8-spelling/${weekNumber}`}
-    className="secondary-link"
-  >
-    ← Return to Week {weekNumber}
-  </Link>
+          <div className="quiz-actions">
+            {mistakes.length > 0 && (
+              <button className="quiz-button" onClick={beginMistakePractice}>
+                🔁 Practise mistakes
+              </button>
+            )}
 
-  {mistakes.length > 0 && (
-    <button
-      className="quiz-button"
-      onClick={() => {
-        const wordsToPractice = [...mistakes];
+            {!practiceMode && !resultCycleComplete && nextSetNumber !== null && (
+              <button
+                className="quiz-button"
+                onClick={() => window.location.reload()}
+              >
+                Continue to Set {nextSetNumber} →
+              </button>
+            )}
 
-        setPracticeWords(wordsToPractice);
-        setPracticeMode(true);
-        setQuestion(0);
-        setAnswer("");
-        setScore(0);
-        setFeedback("");
-        setMistakes([]);
-        setFinished(false);
-      }}
-    >
-      🔁 Practise mistakes
-    </button>
-  )}
+            {!practiceMode && resultCycleComplete && (
+              <>
+                <Link href="/year8-spelling/review" className="secondary-link">
+                  Review Mistakes
+                </Link>
+                {getSpellingWeek(weekNumber + 1) && (
+                  <Link
+                    href={`/year8-spelling/${weekNumber + 1}`}
+                    className="quiz-link quiz-result-primary-link"
+                  >
+                    Next Week →
+                  </Link>
+                )}
+              </>
+            )}
 
-  <button
-    className="quiz-button"
-    onClick={() => window.location.reload()}
-  >
-    Try again
-  </button>
-</div>
+            <Link
+              href={`/year8-spelling/${weekNumber}`}
+              className="secondary-link"
+            >
+              ← Return to Week {weekNumber}
+            </Link>
+          </div>
         </section>
       </main>
     );
@@ -464,48 +628,46 @@ if (question === activeWords.length - 1) {
 
   return (
     <main className="home-page">
-<Link href={`/year8-spelling/${weekNumber}`}>
-  ← Back to Week {weekNumber}
-</Link>
+      <Link href={`/year8-spelling/${weekNumber}`}>
+        ← Back to Week {weekNumber}
+      </Link>
 
       <section className="quiz-card">
-        <p className="small-title">WEEK {weekNumber} QUIZ</p>
+        <p className="small-title">
+          {practiceMode
+            ? `WEEK ${weekNumber} MISTAKE PRACTICE`
+            : `WEEK ${weekNumber} · SET ${currentSetNumber} OF ${YEAR8_QUIZ_SET_COUNT}`}
+        </p>
 
         <h1>
           Question {question + 1} / {activeWords.length}
         </h1>
-<div className="quiz-progress-wrapper">
-  <div className="quiz-progress-info">
-    <span>Progress</span>
 
-    <span>
-      {Math.round(
-        ((question + 1) / activeWords.length) * 100
-      )}
-      %
-    </span>
-  </div>
+        <div className="quiz-progress-wrapper">
+          <div className="quiz-progress-info">
+            <span>Progress</span>
+            <span>
+              {Math.round(((question + 1) / activeWords.length) * 100)}%
+            </span>
+          </div>
+          <div className="quiz-progress-track">
+            <div
+              className="quiz-progress-fill"
+              style={{
+                width: `${((question + 1) / activeWords.length) * 100}%`,
+              }}
+            />
+          </div>
+        </div>
 
-  <div className="quiz-progress-track">
-    <div
-      className="quiz-progress-fill"
-      style={{
-        width: `${
-          ((question + 1) / activeWords.length) * 100
-        }%`,
-      }}
-    />
-  </div>
-</div>
-
-<div
-  className={`quiz-timer ${
-    timeLeft <= 10 ? "quiz-timer-warning" : ""
-  }`}
->
-  <span>⏰ Time remaining</span>
-  <strong>{timeLeft}s</strong>
-</div>
+        <div
+          className={`quiz-timer ${
+            timeLeft <= 10 ? "quiz-timer-warning" : ""
+          }`}
+        >
+          <span>⏰ Time remaining</span>
+          <strong>{timeLeft}s</strong>
+        </div>
 
         <p>Listen carefully, then type the spelling.</p>
 
@@ -517,13 +679,13 @@ if (question === activeWords.length - 1) {
           className="quiz-input"
           type="text"
           value={answer}
-onChange={(event) => {
-  setAnswer(event.target.value);
+          onChange={(event) => {
+            setAnswer(event.target.value);
 
-  if (feedback === "Please enter your answer.") {
-    setFeedback("");
-  }
-}}
+            if (feedback === "Please enter your answer.") {
+              setFeedback("");
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               checkAnswer();
@@ -532,14 +694,27 @@ onChange={(event) => {
           placeholder="Type the word here"
           autoComplete="off"
           autoFocus
-disabled={feedback.startsWith("✅") || feedback.startsWith("❌")}
-/>
+          disabled={
+            isSaving ||
+            timeLeft === 0 ||
+            feedback.startsWith("✅") ||
+            feedback.startsWith("❌") ||
+            feedback.startsWith("⏰")
+          }
+        />
 
         <button
           className="quiz-button"
           onClick={checkAnswer}
-disabled={feedback.startsWith("✅") || feedback.startsWith("❌")}        >
-          Check answer
+          disabled={
+            isSaving ||
+            timeLeft === 0 ||
+            feedback.startsWith("✅") ||
+            feedback.startsWith("❌") ||
+            feedback.startsWith("⏰")
+          }
+        >
+          {isSaving ? "Saving…" : "Check answer"}
         </button>
 
         {feedback && <p className="quiz-feedback">{feedback}</p>}

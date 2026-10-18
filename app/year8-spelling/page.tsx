@@ -11,11 +11,17 @@ import {
   getStudentMistakes,
   getStudentXP,
 } from "@/lib/supabase";
+import {
+  normaliseCompletedSets,
+  YEAR8_QUIZ_SET_COUNT,
+  YEAR8_QUIZ_SET_SIZE,
+} from "@/lib/year8QuizSets";
 
 type WeekProgress = {
   learned: number;
   bestScore: number;
   mastered: boolean;
+  quizSetsCompleted: number;
 };
 
 type SpellingProgressRow = {
@@ -23,6 +29,7 @@ type SpellingProgressRow = {
   learned_words: string[] | null;
   best_score: number | null;
   mastered: boolean | null;
+  quiz_completed_sets: number[] | null;
 };
 
 
@@ -72,6 +79,7 @@ useEffect(() => {
         learned: 0,
         bestScore: 0,
         mastered: false,
+        quizSetsCompleted: 0,
       };
     }
 
@@ -82,6 +90,9 @@ useEffect(() => {
           : 0,
         bestScore: row.best_score ?? 0,
         mastered: row.mastered ?? false,
+        quizSetsCompleted: normaliseCompletedSets(
+          row.quiz_completed_sets
+        ).length,
       };
     });
 
@@ -116,15 +127,9 @@ const masteredWeeks = availableWeekNumbers.filter(
 ).length;
 
 const completedWeeks = availableWeekNumbers.filter(
-  (weekNumber) => {
-    const totalWeekWords =
-      year8SpellingWeeks[weekNumber]?.words.length ?? 0;
-
-    return (
-      totalWeekWords > 0 &&
-      progress[weekNumber]?.learned === totalWeekWords
-    );
-  }
+  (weekNumber) =>
+    progress[weekNumber]?.quizSetsCompleted ===
+    YEAR8_QUIZ_SET_COUNT
 ).length;
 
 const attemptedWeeks = availableWeekNumbers.filter(
@@ -287,18 +292,25 @@ const unlockedAchievements = achievements.filter(
               learned: 0,
               bestScore: 0,
               mastered: false,
+              quizSetsCompleted: 0,
             };
 
             const totalWords = weekData?.words.length ?? 0;
+            const quizWordsCovered = Math.min(
+              totalWords,
+              weekProgress.quizSetsCompleted *
+                YEAR8_QUIZ_SET_SIZE
+            );
 
             const percentage =
               totalWords > 0
-                ? (weekProgress.learned / totalWords) * 100
+                ? (quizWordsCovered / totalWords) * 100
                 : 0;
 
             const completed =
               totalWords > 0 &&
-              weekProgress.learned === totalWords;
+              weekProgress.quizSetsCompleted ===
+                YEAR8_QUIZ_SET_COUNT;
 
             if (!weekData) {
               return (
@@ -340,6 +352,10 @@ const unlockedAchievements = achievements.filter(
                       }}
                     />
                   </div>
+
+                  <p className="progress-text">
+                    Quiz coverage: {quizWordsCovered} / {totalWords}
+                  </p>
 
                   <p className="progress-text">
                     {weekProgress.learned} / {totalWords} Learned

@@ -214,6 +214,67 @@ export async function saveSpellingProgress(
   return true;
 }
 
+export type Year8QuizSetProgress = {
+  quizCycle: number;
+  completedSets: number[];
+  setScores: number[];
+  lastCompletedAt: string | null;
+};
+
+export async function saveYear8QuizSetProgress(
+  student: string,
+  week: number,
+  learnedWords: string[],
+  bestScore: number,
+  mastered: boolean,
+  quizProgress: Year8QuizSetProgress
+): Promise<boolean> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    console.error(
+      "Could not get logged in user:",
+      userError
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from("spelling_progress")
+    .upsert(
+      {
+        user_id: user.id,
+        student,
+        course: "year8-spelling",
+        week,
+        learned_words: learnedWords,
+        best_score: bestScore,
+        mastered,
+        quiz_cycle: Math.max(1, Math.floor(quizProgress.quizCycle)),
+        quiz_completed_sets: quizProgress.completedSets,
+        quiz_set_scores: quizProgress.setScores,
+        quiz_last_completed_at: quizProgress.lastCompletedAt,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "user_id,student,course,week",
+      }
+    );
+
+  if (error) {
+    console.error(
+      "Could not save Year 8 quiz set progress:",
+      error
+    );
+    return false;
+  }
+
+  return true;
+}
+
 export async function saveStudentReviewResult(
   student: string,
   word: string,
