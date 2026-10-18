@@ -221,8 +221,11 @@ export type Year8QuizSetProgress = {
   lastCompletedAt: string | null;
 };
 
-export async function saveYear8QuizSetProgress(
+export type Year7QuizSetProgress = Year8QuizSetProgress;
+
+async function saveSpellingQuizSetProgress(
   student: string,
+  course: "year7-spelling" | "year8-spelling",
   week: number,
   learnedWords: string[],
   bestScore: number,
@@ -235,10 +238,7 @@ export async function saveYear8QuizSetProgress(
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    console.error(
-      "Could not get logged in user:",
-      userError
-    );
+    console.error("Could not get logged in user:", userError);
     return false;
   }
 
@@ -248,7 +248,7 @@ export async function saveYear8QuizSetProgress(
       {
         user_id: user.id,
         student,
-        course: "year8-spelling",
+        course,
         week,
         learned_words: learnedWords,
         best_score: bestScore,
@@ -265,14 +265,49 @@ export async function saveYear8QuizSetProgress(
     );
 
   if (error) {
-    console.error(
-      "Could not save Year 8 quiz set progress:",
-      error
-    );
+    console.error(`Could not save ${course} quiz set progress:`, error);
     return false;
   }
 
   return true;
+}
+
+export async function saveYear7QuizSetProgress(
+  student: string,
+  week: number,
+  learnedWords: string[],
+  bestScore: number,
+  mastered: boolean,
+  quizProgress: Year7QuizSetProgress
+): Promise<boolean> {
+  return saveSpellingQuizSetProgress(
+    student,
+    "year7-spelling",
+    week,
+    learnedWords,
+    bestScore,
+    mastered,
+    quizProgress
+  );
+}
+
+export async function saveYear8QuizSetProgress(
+  student: string,
+  week: number,
+  learnedWords: string[],
+  bestScore: number,
+  mastered: boolean,
+  quizProgress: Year8QuizSetProgress
+): Promise<boolean> {
+  return saveSpellingQuizSetProgress(
+    student,
+    "year8-spelling",
+    week,
+    learnedWords,
+    bestScore,
+    mastered,
+    quizProgress
+  );
 }
 
 export async function saveStudentReviewResult(
