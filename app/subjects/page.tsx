@@ -6,14 +6,6 @@ import { getCurrentStudent } from "@/lib/studentStorage";
 
 const subjects = [
   {
-    title: "English Writing",
-    description: "Year 8 writing skills, feedback and revision - AQA pathway",
-    icon: "\u270d\ufe0f",
-    route: "/english-writing",
-    iconBackground: "#e8f1e7",
-    colour: "#24685f",
-  },
-  {
     title: "Spelling",
     description: "Year 7 and Year 8 spelling courses",
     icon: "📚",
@@ -44,6 +36,14 @@ const subjects = [
     route: "/family-quiz",
     iconBackground: "#fef3c7",
     colour: "#b45309",
+  },
+  {
+    title: "English Writing",
+    description: "Year 8 writing skills, feedback and revision · AQA pathway",
+    icon: "✍️",
+    route: "/english-writing",
+    iconBackground: "#e8f1e7",
+    colour: "#24685f",
   },
 ];
 
