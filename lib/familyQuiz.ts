@@ -78,6 +78,7 @@ export type FamilyQuizCatalogQuestion = {
   subject: string;
   chapter: number;
   chapterTitle: string;
+  sectionIds: string[];
   type: FamilyQuizQuestionType;
   prompt: string;
   options: string[];
