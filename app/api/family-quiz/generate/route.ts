@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { getKnowledgeOrganiserById } from "@/data/knowledgeOrganisers/registry";
 import { extractOpenAIText, getFamilyQuizUser } from "@/lib/familyQuizServer";
 
-type Body = { organiserIds?: unknown; organiserId?: unknown; count?: unknown; questionType?: unknown };
+type SectionSelection = { organiserId?: unknown; sectionIds?: unknown };
+type Body = { organiserIds?: unknown; organiserId?: unknown; sectionSelections?: unknown; count?: unknown; questionType?: unknown };
 
 export async function POST(request: Request) {
   const user = await getFamilyQuizUser(request);
@@ -19,10 +20,21 @@ export async function POST(request: Request) {
   const organisers = organiserIds.map(getKnowledgeOrganiserById).filter((item): item is NonNullable<typeof item> => Boolean(item));
   if (!organisers.length || organisers.length !== organiserIds.length) return NextResponse.json({ error: "Choose one or more available chapters." }, { status: 404 });
 
+  const sectionSelections = new Map<string, Set<string>>();
+  if (Array.isArray(body.sectionSelections)) {
+    for (const value of body.sectionSelections as SectionSelection[]) {
+      if (!value || typeof value !== "object" || typeof value.organiserId !== "string" || !Array.isArray(value.sectionIds)) continue;
+      sectionSelections.set(value.organiserId, new Set(value.sectionIds.filter((id): id is string => typeof id === "string")));
+    }
+  }
+
   const source = organisers.map(organiser => ({
     organiserId: organiser.id, subject: organiser.subject, chapter: organiser.chapter, title: organiser.title,
-    sections: organiser.sections.map(section => ({ title: section.title, summary: section.summary, facts: section.keyFacts, terms: section.keyTerms })),
+    sections: organiser.sections
+      .filter(section => !sectionSelections.has(organiser.id) || sectionSelections.get(organiser.id)?.has(section.id))
+      .map(section => ({ id: section.id, title: section.title, summary: section.summary, facts: section.keyFacts, terms: section.keyTerms })),
   }));
+  if (source.some(chapter => chapter.sections.length === 0)) return NextResponse.json({ error: "Choose at least one section from every selected chapter." }, { status: 400 });
   const schema = {
     type: "object", additionalProperties: false,
     properties: { questions: { type: "array", minItems: count, maxItems: count, items: {
@@ -43,7 +55,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model: process.env.OPENAI_GRADING_MODEL || "gpt-6-luna", store: false,
         reasoning: { effort: "low" }, max_output_tokens: 6500,
-        input: [{ role: "system", content: `Create ${count} accurate Year 8 live family quiz questions using only the supplied knowledge organisers. Requested mode: ${requestedType}. Spread questions as evenly as possible across all selected chapters. Set organiserId to the exact organiserId belonging to the source chapter for each question. For multiple choice, supply exactly four unique options and put the exact correct option in answer. For written questions, options must be empty, answer may be empty, and each marking point is worth one mark. Keep prompts concise for an iPad.` }, { role: "user", content: JSON.stringify({ selectedChapters: source }) }],
+        input: [{ role: "system", content: `Create ${count} accurate Year 8 live family quiz questions using only the supplied selected sections. Requested mode: ${requestedType}. Do not use facts from any unlisted section. Spread questions as evenly as possible across all selected chapters and sections. Set organiserId to the exact organiserId belonging to the source chapter for each question. For multiple choice, supply exactly four unique options and put the exact correct option in answer. For written questions, options must be empty, answer may be empty, and each marking point is worth one mark. Keep prompts concise for an iPad.` }, { role: "user", content: JSON.stringify({ selectedChaptersAndSections: source }) }],
         text: { format: { type: "json_schema", name: "family_quiz_questions", strict: true, schema } },
       }),
     });
