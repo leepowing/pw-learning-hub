@@ -52,9 +52,26 @@ export async function POST(request: Request) {
         text: { format: { type: "json_object" } },
       }), signal: AbortSignal.timeout(45000),
     });
-    if (!response.ok) throw new Error("AI 服務暫時未能處理，請稍後再試");
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => null);
+      const code = String(errorBody?.error?.code ?? "unknown").slice(0, 80);
+      const type = String(errorBody?.error?.type ?? "unknown").slice(0, 80);
+      console.error("[Chinese handwriting] OpenAI request failed", { status: response.status, code, type });
+      return NextResponse.json({ error: `AI 服務回應錯誤（HTTP ${response.status}，代碼：${code}）` }, { status: 502 });
+    }
     const raw = await response.json();
-    const parsed = JSON.parse(outputText(raw));
+    const text = outputText(raw);
+    if (!text.trim()) {
+      console.error("[Chinese handwriting] Empty model output", { status: raw.status, incompleteReason: raw.incomplete_details?.reason ?? null });
+      return NextResponse.json({ error: "AI 沒有返回可用的批改內容，請檢查 Vercel Logs" }, { status: 502 });
+    }
+    let parsed: any;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      console.error("[Chinese handwriting] Invalid model JSON", { outputLength: text.length });
+      return NextResponse.json({ error: "AI 回傳格式不正確，請檢查 Vercel Logs" }, { status: 502 });
+    }
     const feedback = {
       transcription: String(parsed.transcription ?? "").slice(0, 6000),
       uncertain: Array.isArray(parsed.uncertain) ? parsed.uncertain.map(String).slice(0, 20) : [],
@@ -64,9 +81,13 @@ export async function POST(request: Request) {
       score_reason: String(parsed.score_reason ?? "").slice(0, 1000),
     };
     const save = await db.from("chinese_handwriting_reviews").insert({ user_id: user.id, assessment_version: "v3", task_id: taskId, feedback, source_ids: rows.data.map(r => r.id), status: "pending_review" });
-    if (save.error) throw new Error("評語儲存失敗");
+    if (save.error) {
+      console.error("[Chinese handwriting] Supabase review insert failed", { code: save.error.code, message: save.error.message });
+      return NextResponse.json({ error: `評語儲存失敗（${save.error.code || "unknown"}）` }, { status: 500 });
+    }
     return NextResponse.json({ ok: true, feedback });
   } catch (e) {
+    console.error("[Chinese handwriting] Unexpected failure", e instanceof Error ? { name: e.name, message: e.message } : { type: typeof e });
     return NextResponse.json({ error: e instanceof Error ? e.message : "處理失敗" }, { status: 500 });
   }
 }
