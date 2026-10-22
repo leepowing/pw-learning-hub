@@ -45,6 +45,14 @@ const subjects = [
     iconBackground: "#e8f1e7",
     colour: "#24685f",
   },
+  {
+    title: "GCSE Chinese",
+    description: "Traditional Chinese & Cantonese · Higher Tier Preparation",
+    icon: "🀄",
+    route: "/chinese-gcse",
+    iconBackground: "#eaf2ff",
+    colour: "#245e9b",
+  },
 ];
 
 export default function SubjectsPage() {
