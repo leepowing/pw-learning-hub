@@ -52,13 +52,31 @@ export async function POST(request: Request) {
         text: { format: { type: "json_object" } },
       }), signal: AbortSignal.timeout(45000),
     });
-    if (!response.ok) {
-      const errorBody = await response.json().catch(() => null);
-      const code = String(errorBody?.error?.code ?? "unknown").slice(0, 80);
-      const type = String(errorBody?.error?.type ?? "unknown").slice(0, 80);
-      console.error("[Chinese handwriting] OpenAI request failed", { status: response.status, code, type });
-      return NextResponse.json({ error: `AI 服務回應錯誤（HTTP ${response.status}，代碼：${code}）` }, { status: 502 });
-    }
+if (!response.ok) {
+  const errorBody = await response.json().catch(() => null);
+
+  const code = String(errorBody?.error?.code ?? "unknown");
+  const type = String(errorBody?.error?.type ?? "unknown");
+  const param = String(errorBody?.error?.param ?? "none");
+
+  // 只記錄必要的診斷資料，避免記錄學生原稿
+  const message = String(errorBody?.error?.message ?? "Unknown error");
+
+  console.error("[Chinese handwriting] OpenAI request failed", {
+    status: response.status,
+    code,
+    type,
+    param,
+    message: message.slice(0, 500),
+  });
+
+  return NextResponse.json(
+    {
+      error: `AI 請求失敗（HTTP ${response.status}）`,
+    },
+    { status: 502 }
+  );
+}
     const raw = await response.json();
     const text = outputText(raw);
     if (!text.trim()) {
