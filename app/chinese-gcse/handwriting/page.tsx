@@ -21,6 +21,7 @@ export default function ChineseHandwriting(){
  const [uploads,setUploads]=useState<Upload[]>([]);
  const [status,setStatus]=useState("正在確認登入…");
  const [busy,setBusy]=useState("");
+ const [reviews,setReviews]=useState<Record<string, any>>({});
  const [selected,setSelected]=useState("w1");
  const [mode,setMode]=useState<"grid"|"lined">("grid");
  async function reload(user:string){
@@ -49,6 +50,17 @@ export default function ChineseHandwriting(){
    await reload(userId);setStatus("已上傳並儲存至 Supabase");
   }catch(e){setStatus("上傳失敗："+(e instanceof Error?e.message:"未知錯誤"));}finally{setBusy("");}
  }
+ async function review(taskId:string){
+  if(!db||!userId)return;
+  setBusy(taskId);setStatus("AI 正在辨識手寫答案，請稍候…");
+  try{
+   const session=await db.auth.getSession();const token=session.data.session?.access_token;
+   if(!token)throw Error("請重新登入");
+   const res=await fetch("/api/chinese-gcse/handwriting/review",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({taskId})});
+   const data=await res.json();if(!res.ok)throw Error(data.error||"辨識失敗");
+   setReviews(old=>({...old,[taskId]:data.feedback}));setStatus("AI 初步評語已儲存，請家長核對原稿");
+  }catch(e){setStatus(e instanceof Error?e.message:"辨識失敗");}finally{setBusy("");}
+ }
  async function preview(path:string){if(!db)return;const {data,error}=await db.storage.from("chinese-handwriting").createSignedUrl(path,60);if(error||!data){setStatus("無法開啟："+(error?.message??"未知錯誤"));return;}window.open(data.signedUrl,"_blank","noopener,noreferrer");}
  function printSheet(){window.print();}
  return <main style={{maxWidth:920,margin:"30px auto",padding:"0 18px 60px",lineHeight:1.7}}>
@@ -63,7 +75,9 @@ export default function ChineseHandwriting(){
  {tasks.map(t=><section key={t.id} style={{padding:16,margin:"18px 0",border:"1px solid #ccc",borderRadius:12}}><h2 style={{fontSize:19}}>{t.title}</h2><p>{t.prompt}</p>
  <label style={{display:"inline-block",padding:10,border:"1px solid #aaa",borderRadius:8,cursor:"pointer"}}>{busy===t.id?"正在上傳…":"📷 拍照／選擇檔案"}<input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple disabled={!userId||!!busy} style={{display:"block",maxWidth:300}} onChange={async e=>{const files=Array.from(e.target.files??[]);e.target.value="";for(const file of files)await upload(t.id,file);}}/></label>
  <ul>{uploads.filter(u=>u.task_id===t.id).map(u=><li key={u.id}><button type="button" onClick={()=>preview(u.object_path)} style={{textDecoration:"underline"}}>{u.file_name}</button> <small>（{new Date(u.created_at).toLocaleString("en-GB")}）</small></li>)}</ul>
- </section>)}<p>Stage 2A 只儲存原稿，不會自動提交評分。請保留原始紙張；AI 辨識及家長覆核將於下一階段加入。</p></div>
+ {uploads.some(u=>u.task_id===t.id)&&<button type="button" disabled={!!busy} onClick={()=>review(t.id)} style={{padding:10,border:"1px solid #999",borderRadius:8}}>{busy===t.id?"AI 正在辨識…":"AI 辨識及初步批改"}</button>}
+ {reviews[t.id]&&<div style={{background:"#f4f7fb",padding:14,marginTop:12,borderRadius:8}}><h3>AI 初步評語（家長待覆核）</h3><strong>辨識原文</strong><p style={{whiteSpace:"pre-wrap"}}>{reviews[t.id].transcription}</p><strong>不確定字詞</strong><ul>{reviews[t.id].uncertain?.map((x:string,i:number)=><li key={i}>{x}</li>)}</ul><strong>優點</strong><ul>{reviews[t.id].strengths?.map((x:string,i:number)=><li key={i}>{x}</li>)}</ul><strong>改善建議</strong><ul>{reviews[t.id].feedback?.map((x:string,i:number)=><li key={i}>{x}</li>)}</ul><p>初步分數：{reviews[t.id].provisional_score}/10（非 GCSE 成績）</p><p>{reviews[t.id].score_reason}</p><small>請對照原稿核實。家長正式確認及修改功能將於後續更新加入。</small></div>}
+ </section>)}<p>原稿可儲存及預覽。AI 評語屬初步結果，請保留紙張及核對辨識內容；正式家長覆核流程尚未啟用。</p></div>
  {tasks.filter(t=>t.id===selected).map(t=><article className="sheet" key={t.id} style={{fontFamily:"serif",color:"black"}}><h2>PW Learning Hub · GCSE Chinese</h2><p>姓名：________________　日期：________________　題號：{t.id}</p><h3>{t.title}</h3><p>{t.prompt}</p>{mode==="grid"?<div className="grid-area"/>:<div>{Array.from({length:t.lines},(_,i)=><div className="writing-line" key={i}/>)}</div>}</article>)}
  </main>;
 }
