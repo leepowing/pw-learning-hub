@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       method: "POST", headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model: process.env.OPENAI_CHINESE_MODEL || "gpt-4.1-mini", store: false, max_output_tokens: 1800,
         instructions: "你是香港繁體中文手寫辨識及中文老師。只能按圖片可見內容逐字轉錄，不要默默修正錯字。不能辨識的字用□標示，並在uncertain列出疑點。評語使用繁體中文、正式書面語。提供具體但鼓勵性的句式、詞彙、內容建議。不能可靠辨認筆畫或字形時要明確說明。此為診斷回饋，不是正式GCSE評級。僅輸出JSON物件，包含 transcription (string), uncertain (string[]), feedback (string[]), strengths (string[]), provisional_score (integer 0-10), score_reason (string)。",
-        input: [{ role: "user", content: [{ type: "input_text", text: `題目：${tasks[taskId]}。以下為學生原稿，請辨識及初步評估。` }, ...images] }],
+input: [{ role: "user", content: [{ type: "input_text", text: `題目：${tasks[taskId]}。以下為學生原稿，請辨識及初步評估。請以有效的 JSON 格式輸出結果，不要加入 Markdown 或其他文字。` }, ...images] }],
         text: { format: { type: "json_object" } },
       }), signal: AbortSignal.timeout(45000),
     });
