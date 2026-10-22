@@ -15,6 +15,9 @@ export default function ChineseDiagnostic(){
  const [revision,setRevision]=useState(0);
  const isLoaded=useRef(false);
 const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
+ const [handwritingUploads,setHandwritingUploads]=useState<string[]>([]);
+ const [handwritingReviews,setHandwritingReviews]=useState<string[]>([]);
+ const [handwritingError,setHandwritingError]=useState("");
  const [audioId,setAudioId]=useState<string|null>(null);const [audioError,setAudioError]=useState("");const [audioUrl,setAudioUrl]=useState<string|null>(null);
  useEffect(()=>{
    let active=true;
@@ -46,6 +49,26 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
    },800);
    return()=>clearTimeout(timer);
  },[answers,userId,revision]);
+  useEffect(()=>{
+    if(loadState!=="ready"||!userId||!clientRef.current)return;
+    let active=true;
+    const db=clientRef.current;
+    async function loadHandwriting(){
+      const [uploaded,reviewed]=await Promise.all([
+        db!.from("chinese_handwriting_submissions").select("task_id").eq("user_id",userId).eq("assessment_version","v3"),
+        db!.from("chinese_handwriting_reviews").select("task_id").eq("user_id",userId).eq("assessment_version","v3")
+      ]);
+      if(!active)return;
+      if(uploaded.error||reviewed.error){setHandwritingError("手寫狀態暫時無法載入，請到手寫評估頁查看。");return;}
+      setHandwritingError("");
+      setHandwritingUploads([...new Set((uploaded.data??[]).map(r=>r.task_id))]);
+      setHandwritingReviews([...new Set((reviewed.data??[]).map(r=>r.task_id))]);
+    }
+    void loadHandwriting();
+    const onFocus=()=>{void loadHandwriting()};
+    window.addEventListener("focus",onFocus);
+    return()=>{active=false;window.removeEventListener("focus",onFocus)};
+  },[loadState,userId]);
  useEffect(()=>()=>{if(audioUrl)URL.revokeObjectURL(audioUrl)},[audioUrl]);
  function change(id:string,value:string){if(loadState!=="ready")return;setAnswers(prev=>({...prev,[id]:value}));setRevision(n=>n+1);setSaved(false);setFinishedAt(null)}
  async function play(id:string){setAudioError("");setAudioId(id);try{
@@ -57,14 +80,14 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
   const objectUrl=URL.createObjectURL(await res.blob());setAudioUrl(objectUrl);const audio=new Audio(objectUrl);await audio.play();
  }catch(e){setAudioError(e instanceof Error?e.message:"Audio failed")}finally{setAudioId(null)}}
  async function finish(){
-   const missing=[...questions.map(q=>q.id),...writing.map(w=>w.id)].filter(id=>!(answers[id]??" ").trim());
-   if(missing.length){setSyncState(`仍有 ${missing.length} 題未完成，請完成後再提交。`);return;}
+   const missing=questions.map(q=>q.id).filter(id=>answers[id]===undefined);
+   if(missing.length){setSyncState(`仍有 ${missing.length} 道選擇題未完成，請完成後再提交。`);return;}
    if(!userId||!clientRef.current)return;
    setSyncState("正在提交…");
    const now=new Date().toISOString();
    const {error}=await clientRef.current.from("chinese_diagnostic_progress").upsert({user_id:userId,answers,updated_at:now,completed_at:now},{onConflict:"user_id"});
    if(error){setSyncState("提交失敗："+error.message);return;}
-   setFinishedAt(now);setSyncState("已提交並儲存至 Supabase");setSaved(true);
+   setFinishedAt(now);setSyncState("選擇題已提交並儲存至 Supabase；手寫評估獨立完成。");setSaved(true);
  }
  const completed=questions.filter(q=>answers[q.id]!==undefined).length;
  const score=questions.filter(q=>answers[q.id]===String(q.correct)).length;
@@ -77,9 +100,17 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
  {q.audio&&<div style={{margin:"12px 0"}}><button type="button" onClick={()=>play(q.audio!)} disabled={audioId!==null} style={{padding:"9px 16px",border:"1px solid",borderRadius:8,cursor:"pointer"}}>{audioId===q.audio?"正在載入…":"▶ 播放廣東話錄音"}</button><p style={{fontSize:12}}>可以重播；測試時不會顯示錄音稿。</p></div>}
  <h2 style={{fontSize:18,fontWeight:650}}>{q.question}</h2>{q.choices.map((choice,j)=><label key={j} style={{display:"block",padding:"7px 0"}}><input type="radio" name={q.id} checked={answers[q.id]===String(j)} onChange={()=>change(q.id,String(j))}/> {choice}</label>)}</section>)}
  {audioError&&<p role="alert" style={{color:"#b91c1c"}}>錄音錯誤：{audioError}</p>}
- <h2 style={{fontSize:24,fontWeight:700,marginTop:30}}>中文寫作</h2>{writing.map(w=><section key={w.id} style={{margin:"22px 0"}}><h3 style={{fontWeight:650}}>{w.title}</h3><p>{w.prompt}</p><textarea value={answers[w.id]??""} onChange={e=>change(w.id,e.target.value)} rows={w.id==="w6"||w.id==="w7"?7:3} style={{width:"100%",border:"1px solid #888",borderRadius:8,padding:12,color:"#222",background:"#fff"}} placeholder="在這裏輸入繁體中文…"/><small>已輸入 {(answers[w.id]??"").length} 字元</small></section>)}
- <button type="button" onClick={()=>void finish()} style={{padding:"12px 20px",borderRadius:9,background:"#14532d",color:"white",cursor:"pointer"}}>完成並查看初步結果</button>
- {saved&&<div style={{padding:18,marginTop:18,border:"1px solid #888",borderRadius:12}}><h2 style={{fontWeight:700}}>初步結果</h2><p>選擇題：{score}/{questions.length}（{completed} 題已回答）</p><p>寫作暫未由 AI 評分；請家長先檢視。下一階段將加入 AI 批改及個別學習計劃。</p><button type="button" onClick={()=>{const text=JSON.stringify({answers,score,total:questions.length},null,2);navigator.clipboard.writeText(text)}} style={{textDecoration:"underline",cursor:"pointer"}}>複製評估結果（JSON）</button></div>}
+  <section style={{marginTop:32,padding:20,border:"1px solid #aaa",borderRadius:12}}>
+    <h2 style={{fontSize:24,fontWeight:700}}>中文手寫能力評估</h2>
+    <p>請用紙筆完成五題造句及改寫、兩題短文寫作，再拍照上傳。毋須在此輸入中文字。</p>
+    <p><Link href="/chinese-gcse/handwriting" style={{display:"inline-block",padding:"10px 16px",background:"#14532d",color:"white",borderRadius:8}}>前往手寫評估 →</Link></p>
+    {handwritingError&&<p role="status">{handwritingError}</p>}
+    <p>已上傳：{handwritingUploads.length}/7 題　｜　已有 AI 初步評語：{handwritingReviews.length}/7 題</p>
+    <ul>{writing.map(w=><li key={w.id} style={{marginBottom:8}}><strong>{w.id.toUpperCase()}</strong> · {w.title}：{handwritingReviews.includes(w.id)?"已有 AI 初步評語（待家長覆核）":handwritingUploads.includes(w.id)?"已上傳，尚未有 AI 評語":"尚未上傳"}</li>)}</ul>
+    <p style={{fontSize:13,color:"#555"}}>以上只顯示上傳及批改狀態，不代表已通過家長覆核。完成手寫後可重新開啟本頁更新狀態。</p>
+  </section>
+ <button type="button" onClick={()=>void finish()} style={{padding:"12px 20px",borderRadius:9,background:"#14532d",color:"white",cursor:"pointer"}}>提交選擇題並查看初步結果</button>
+ {saved&&<div style={{padding:18,marginTop:18,border:"1px solid #888",borderRadius:12}}><h2 style={{fontWeight:700}}>初步結果</h2><p>選擇題：{score}/{questions.length}（{completed} 題已回答）</p><p>手寫答案及 AI 初步評語請到手寫評估頁查看。兩部分進度分開儲存；本分數只計算選擇題，並非 GCSE 成績。</p><button type="button" onClick={()=>{const text=JSON.stringify({answers,score,total:questions.length},null,2);navigator.clipboard.writeText(text)}} style={{textDecoration:"underline",cursor:"pointer"}}>複製評估結果（JSON）</button></div>}
  </>}
  </main>
 }
