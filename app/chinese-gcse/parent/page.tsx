@@ -67,8 +67,8 @@ export default function ChineseParent(){
   finally{setBusy(false);}
  }
  const uploaded=new Set(uploads.map(x=>x.task_id)).size;
- const pending=Object.values(latest).filter(x=>x.status!=="reviewed").length;
- const approved=Object.values(latest).filter(x=>x.status==="reviewed").length;
+ const pending=Object.values(latest).filter(x=>x.status!=="confirmed").length;
+ const approved=Object.values(latest).filter(x=>x.status==="confirmed").length;
  return <main style={{maxWidth:1050,margin:"35px auto",padding:"0 18px 70px",lineHeight:1.65,color:"#17243a"}}>
   <Link href="/family">← 返回 Family Dashboard</Link><p style={{fontSize:12,letterSpacing:2,color:"#64748b",marginTop:25}}>PW LEARNING HUB · PARENT</p>
   <h1 style={{fontSize:"clamp(26px,5vw,38px)",fontWeight:800}}>GCSE Chinese 家長管理中心</h1><p>查看手寫原稿、AI 評語及確認評分</p>
@@ -77,17 +77,17 @@ export default function ChineseParent(){
    <div style={{display:"flex",gap:10,margin:"18px 0"}}>{students.map(s=><button key={s.id} onClick={()=>setStudent(s.id)} style={{...btn,background:student===s.id?"#1e3a8a":"white",color:student===s.id?"white":"#17243a"}}>{s.student}</button>)}</div>
    <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10,marginBottom:20}}>{[["已上傳",`${uploaded}/7`],["待覆核",pending],["已確認",approved]].map(([label,value])=><div key={label} style={panel}><small>{label}</small><div style={{fontSize:26,fontWeight:800}}>{value}</div></div>)}</div>
    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(270px,1fr))",gap:16}}>
-    <section style={panel}><h2 style={{fontSize:19,fontWeight:700}}>選擇手寫題目</h2>{Object.entries(tasks).map(([id,title])=><button key={id} onClick={()=>setTask(id)} style={{...btn,width:"100%",textAlign:"left",display:"block",marginBottom:8,background:task===id?"#eaf1ff":"white"}}><strong>{title}</strong><br/><small>{uploads.some(x=>x.task_id===id)?"已上傳":"未上傳"} · {latest[id]?(latest[id].status==="reviewed"?"已覆核":"待覆核"):"未批改"}</small></button>)}</section>
+    <section style={panel}><h2 style={{fontSize:19,fontWeight:700}}>選擇手寫題目</h2>{Object.entries(tasks).map(([id,title])=><button key={id} onClick={()=>setTask(id)} style={{...btn,width:"100%",textAlign:"left",display:"block",marginBottom:8,background:task===id?"#eaf1ff":"white"}}><strong>{title}</strong><br/><small>{uploads.some(x=>x.task_id===id)?"已上傳":"未上傳"} · {latest[id]?(latest[id].status==="confirmed"?"已覆核":"待覆核"):"未批改"}</small></button>)}</section>
     <section style={panel}><h2 style={{fontSize:19,fontWeight:700}}>{tasks[task]}</h2><strong>學生手寫原稿</strong><div style={{margin:"10px 0"}}>{uploads.filter(x=>x.task_id===task).map(x=><button key={x.id} style={{...btn,marginRight:6,marginBottom:6}} onClick={()=>void openOriginal(x.object_path)}>{x.file_name}</button>)}{!uploads.some(x=>x.task_id===task)&&<p>未上傳</p>}</div>
      {preview&&<p><a href={preview} target="_blank" rel="noopener noreferrer">查看私人原稿（連結有效約 2 分鐘）</a></p>}
      {current?<><h3 style={{fontWeight:700,marginTop:20}}>AI 原始辨識</h3><p style={{background:"#f1f5f9",padding:12,borderRadius:10,whiteSpace:"pre-wrap"}}>{current.feedback?.transcription}</p><p>AI 初步分數：{current.feedback?.provisional_score??"—"}/10</p><p>{current.feedback?.score_reason}</p>
       {!!current.feedback?.uncertain?.length&&<p>不確定字詞：{current.feedback.uncertain.join("、")}</p>}
       {!!current.feedback?.strengths?.length&&<><strong>優點</strong><ul>{current.feedback.strengths.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
       {!!current.feedback?.feedback?.length&&<><strong>改善建議</strong><ul>{current.feedback.feedback.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
-      <label style={{display:"block",fontWeight:700}}>家長核對後的原文</label><textarea rows={5} value={draft} disabled={current.status==="reviewed"||busy} onChange={e=>setDraft(e.target.value)} style={{width:"100%",boxSizing:"border-box",border:"1px solid #94a3b8",borderRadius:8,padding:10}}/>
-      <label style={{display:"block",fontWeight:700,marginTop:10}}>最終分數（0–10）</label><input type="number" min={0} max={10} step={1} value={score} disabled={current.status==="reviewed"||busy} onChange={e=>setScore(Number(e.target.value))} style={{...btn,width:90,display:"block",marginBottom:12}}/>
+      <label style={{display:"block",fontWeight:700}}>家長核對後的原文</label><textarea rows={5} value={draft} disabled={current.status==="confirmed"||busy} onChange={e=>setDraft(e.target.value)} style={{width:"100%",boxSizing:"border-box",border:"1px solid #94a3b8",borderRadius:8,padding:10}}/>
+      <label style={{display:"block",fontWeight:700,marginTop:10}}>最終分數（0–10）</label><input type="number" min={0} max={10} step={1} value={score} disabled={current.status==="confirmed"||busy} onChange={e=>setScore(Number(e.target.value))} style={{...btn,width:90,display:"block",marginBottom:12}}/>
       <p style={{fontSize:12,color:"#64748b"}}>原始 AI 評語及原稿不會被覆蓋；確認會記錄家長及時間。</p>
-      {current.status==="reviewed"?<p style={{color:"#166534",fontWeight:700}}>已確認覆核</p>:<button disabled={busy} onClick={()=>void confirm()} style={{...btn,background:"#166534",color:"white"}}>{busy?"正在儲存…":"確認家長覆核"}</button>}
+      {current.status==="confirmed"?<p style={{color:"#166534",fontWeight:700}}>已確認覆核</p>:<button disabled={busy} onClick={()=>void confirm()} style={{...btn,background:"#166534",color:"white"}}>{busy?"正在儲存…":"確認家長覆核"}</button>}
      </>:<p>尚未有 AI 評語。請先由學生在手寫頁面完成批改。</p>}
     </section>
    </div>
