@@ -13,6 +13,7 @@ type Feedback = {transcription?:string;provisional_score?:number;score_reason?:s
 type Review = {id:string;task_id:string;status:string;feedback:Feedback;corrected_transcription:string|null;final_score:number|null};
 const panel: React.CSSProperties = {padding:20,border:"1px solid #e2e8f0",borderRadius:18,background:"white"};
 const btn: React.CSSProperties = {padding:"10px 14px",borderRadius:10,border:"1px solid #cbd5e1",cursor:"pointer"};
+
 export default function ChineseParent(){
  const [students,setStudents]=useState<Student[]>([]),[student,setStudent]=useState(""),[task,setTask]=useState("w1");
  const [uploads,setUploads]=useState<Upload[]>([]),[reviews,setReviews]=useState<Review[]>([]);
@@ -20,7 +21,7 @@ export default function ChineseParent(){
  const [draft,setDraft]=useState(""),[score,setScore]=useState(0),[preview,setPreview]=useState("");
  useEffect(()=>{let active=true;(async()=>{try{
   if(!db)throw Error("Supabase 尚未設定");
-  const {data:{user}}=await db.auth.getUser();if(!user)throw Error("請先登入家長帳戶");
+  const {data:{user},error:authError}=await db.auth.getUser();if(authError||!user)throw Error("請先登入家長帳戶");
   const {data:p,error:e}=await db.from("profiles").select("role").eq("id",user.id).single();
   if(e||p?.role!=="parent")throw Error("此頁面只供已授權家長使用");
   const {data:links,error:l}=await db.from("parent_student_links").select("student_id").eq("parent_id",user.id);
@@ -43,9 +44,27 @@ export default function ChineseParent(){
  const current=latest[task];
  useEffect(()=>{setDraft(current?.corrected_transcription??current?.feedback?.transcription??"");setScore(current?.final_score??current?.feedback?.provisional_score??0);setPreview("");},[student,task,current?.id,current?.status]);
  async function openOriginal(path:string){if(!db)return;const {data,error}=await db.storage.from("chinese-handwriting").createSignedUrl(path,120);if(error||!data){setMessage(error?.message??"無法開啟原稿");return;}setPreview(data.signedUrl);}
- async function confirm(){if(!db||!current||busy)return;if(!draft.trim()||!Number.isInteger(score)||score<0||score>10){setMessage("請填寫文字及 0–10 的整數分數");return;}
-  setBusy(true);const {error}=await db.rpc("confirm_chinese_handwriting_review",{p_review_id:current.id,p_corrected_transcription:draft,p_final_score:score});
-  if(error)setMessage("覆核失敗："+error.message);else{await load(student);setMessage("家長覆核已儲存");}setBusy(false);
+ async function confirm(){
+  if(!db||!current||busy)return;
+  if(!draft.trim()||!Number.isInteger(score)||score<0||score>10){setMessage("請填寫文字及 0–10 的整數分數");return;}
+  setBusy(true);
+  try{
+   const {data:{user},error:authError}=await db.auth.getUser();
+   if(authError||!user)throw Error("登入已失效，請重新登入 Daddy 帳戶");
+   const {data:profile,error:profileError}=await db.from("profiles").select("role,student").eq("id",user.id).single();
+   if(profileError||profile?.role!=="parent")throw Error("目前登入帳戶不是家長帳戶");
+   const {data:review,error:reviewError}=await db.from("chinese_handwriting_reviews").select("id,user_id,task_id,status").eq("id",current.id).single();
+   if(reviewError||!review)throw Error("無法找到指定的 AI 評語："+(reviewError?.message??"查無資料"));
+   if(review.user_id!==student||review.task_id!==task)throw Error("評語所屬學生或題目與目前選擇不一致");
+   if(review.status!=="pending_review")throw Error("這份評語已確認或不在待覆核狀態");
+   const {data:link,error:linkError}=await db.from("parent_student_links").select("student_id").eq("parent_id",user.id).eq("student_id",review.user_id).maybeSingle();
+   if(linkError||!link)throw Error("目前家長帳戶沒有這名學生的覆核權限："+(linkError?.message??"找不到關聯"));
+   const {error}=await db.rpc("confirm_chinese_handwriting_review",{p_review_id:review.id,p_corrected_transcription:draft,p_final_score:score});
+   if(error)throw Error(`RPC ${error.code??""}: ${error.message}`);
+   await load(student);
+   setMessage("家長覆核已成功儲存");
+  }catch(e){setMessage("覆核失敗："+(e instanceof Error?e.message:"未知錯誤"));}
+  finally{setBusy(false);}
  }
  const uploaded=new Set(uploads.map(x=>x.task_id)).size;
  const pending=Object.values(latest).filter(x=>x.status!=="reviewed").length;
@@ -65,10 +84,10 @@ export default function ChineseParent(){
       {!!current.feedback?.uncertain?.length&&<p>不確定字詞：{current.feedback.uncertain.join("、")}</p>}
       {!!current.feedback?.strengths?.length&&<><strong>優點</strong><ul>{current.feedback.strengths.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
       {!!current.feedback?.feedback?.length&&<><strong>改善建議</strong><ul>{current.feedback.feedback.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
-      <label style={{display:"block",fontWeight:700}}>家長核對後的原文</label><textarea rows={5} value={draft} onChange={e=>setDraft(e.target.value)} style={{width:"100%",boxSizing:"border-box",border:"1px solid #94a3b8",borderRadius:8,padding:10}}/>
-      <label style={{display:"block",fontWeight:700,marginTop:10}}>最終分數（0–10）</label><input type="number" min={0} max={10} step={1} value={score} onChange={e=>setScore(Number(e.target.value))} style={{...btn,width:90,display:"block",marginBottom:12}}/>
+      <label style={{display:"block",fontWeight:700}}>家長核對後的原文</label><textarea rows={5} value={draft} disabled={current.status==="reviewed"||busy} onChange={e=>setDraft(e.target.value)} style={{width:"100%",boxSizing:"border-box",border:"1px solid #94a3b8",borderRadius:8,padding:10}}/>
+      <label style={{display:"block",fontWeight:700,marginTop:10}}>最終分數（0–10）</label><input type="number" min={0} max={10} step={1} value={score} disabled={current.status==="reviewed"||busy} onChange={e=>setScore(Number(e.target.value))} style={{...btn,width:90,display:"block",marginBottom:12}}/>
       <p style={{fontSize:12,color:"#64748b"}}>原始 AI 評語及原稿不會被覆蓋；確認會記錄家長及時間。</p>
-      <button disabled={busy} onClick={()=>void confirm()} style={{...btn,background:"#166534",color:"white"}}>{busy?"正在儲存…":"確認家長覆核"}</button>
+      {current.status==="reviewed"?<p style={{color:"#166534",fontWeight:700}}>已確認覆核</p>:<button disabled={busy} onClick={()=>void confirm()} style={{...btn,background:"#166534",color:"white"}}>{busy?"正在儲存…":"確認家長覆核"}</button>}
      </>:<p>尚未有 AI 評語。請先由學生在手寫頁面完成批改。</p>}
     </section>
    </div>
