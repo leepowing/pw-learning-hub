@@ -14,6 +14,7 @@ const tasks = [
 ];
 type Upload = {id:string;task_id:string;object_path:string;file_name:string;created_at:string};
 type Review = {transcription?:string;uncertain?:string[];feedback?:string[];strengths?:string[];provisional_score?:number;score_reason?:string};
+type ReviewRecord = {id:string;task_id:string;status:string;feedback:Review;corrected_transcription:string|null;final_score:number|null;reviewed_at:string|null;created_at:string};
 const supabaseUrl=process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const db=supabaseUrl&&supabaseKey?createClient(supabaseUrl,supabaseKey):null;
@@ -22,21 +23,21 @@ export default function ChineseHandwriting(){
  const [uploads,setUploads]=useState<Upload[]>([]);
  const [status,setStatus]=useState("正在確認登入…");
  const [busy,setBusy]=useState("");
- const [reviews,setReviews]=useState<Record<string, Review>>({});
+ const [reviews,setReviews]=useState<Record<string, ReviewRecord>>({});
  const [selected,setSelected]=useState("w1");
  const [reviewDates,setReviewDates]=useState<Record<string,string>>({});
  const [mode,setMode]=useState<"grid"|"lined">("grid");
  async function loadReviews(user:string){
   if(!db)return;
   const {data,error}=await db.from("chinese_handwriting_reviews")
-   .select("task_id,feedback,created_at")
+   .select("id,task_id,status,feedback,corrected_transcription,final_score,reviewed_at,created_at")
    .eq("user_id",user).eq("assessment_version","v3")
    .order("created_at",{ascending:false});
   if(error)throw Error("無法載入 AI 評語："+error.message);
-  const next:Record<string,Review>={};
+  const next:Record<string,ReviewRecord>={};
   const dates:Record<string,string>={};
   for(const row of data??[]){
-   if(!next[row.task_id] && row.feedback){next[row.task_id]=row.feedback as Review;dates[row.task_id]=row.created_at;}
+   if(!next[row.task_id] && row.feedback){next[row.task_id]=row as ReviewRecord;dates[row.task_id]=row.created_at;}
   }
   setReviews(next);setReviewDates(dates);
  }
@@ -74,7 +75,7 @@ export default function ChineseHandwriting(){
    if(!token)throw Error("請重新登入");
    const res=await fetch("/api/chinese-gcse/handwriting/review",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({taskId})});
    const data=await res.json();if(!res.ok)throw Error(data.error||"辨識失敗");
-   setReviews(old=>({...old,[taskId]:data.feedback}));await loadReviews(userId);setStatus("AI 初步評語已儲存，請家長核對原稿");
+   await loadReviews(userId);setStatus("AI 初步評語已儲存，請家長核對原稿");
   }catch(e){setStatus(e instanceof Error?e.message:"辨識失敗");}finally{setBusy("");}
  }
  async function preview(path:string){if(!db)return;const {data,error}=await db.storage.from("chinese-handwriting").createSignedUrl(path,60);if(error||!data){setStatus("無法開啟："+(error?.message??"未知錯誤"));return;}window.open(data.signedUrl,"_blank","noopener,noreferrer");}
@@ -84,16 +85,18 @@ export default function ChineseHandwriting(){
  <div className="hide-print">
  <Link href="/chinese-gcse">← 返回中文能力評估</Link>
  <h1 style={{fontSize:"clamp(26px,5vw,36px)",marginBottom:8}}>中文手寫能力評估</h1>
- <p style={{color:"#526173"}}>每次完成一題 · 紙筆作答 · 拍照上傳 · AI 初步評語</p>
+ <p style={{color:"#526173"}}>每次完成一題 · 紙筆作答 · 拍照上傳 · AI 初步評語及家長確認結果</p>
  <p role="status" style={{padding:"10px 14px",borderRadius:10,background:"#edf4fa"}}>{status}</p>
  <div style={{display:"flex",gap:8,flexWrap:"wrap",margin:"18px 0"}}>
- {tasks.map((t,i)=><button type="button" key={t.id} onClick={()=>setSelected(t.id)} aria-current={selected===t.id?"step":undefined} style={{padding:"8px 12px",borderRadius:10,border:"1px solid #d1d5db",background:selected===t.id?"#145c52":"white",color:selected===t.id?"white":"#243044",cursor:"pointer"}}>{i+1}{reviews[t.id]?" ✓":uploads.some(u=>u.task_id===t.id)?" •":""}</button>)}
+ {tasks.map((t,i)=><button type="button" key={t.id} onClick={()=>setSelected(t.id)} aria-current={selected===t.id?"step":undefined} style={{padding:"8px 12px",borderRadius:10,border:"1px solid #d1d5db",background:selected===t.id?"#145c52":"white",color:selected===t.id?"white":"#243044",cursor:"pointer"}}>{i+1}{reviews[t.id]?.status==="confirmed"?" ✓":reviews[t.id]?" ◌":uploads.some(u=>u.task_id===t.id)?" •":""}</button>)}
  </div>
  <p style={{fontSize:13,color:"#536273"}}>已上傳 {tasks.filter(t=>uploads.some(u=>u.task_id===t.id)).length}/7 題 · 已有 AI 評語 {tasks.filter(t=>!!reviews[t.id]).length}/7 題</p>
  {tasks.filter(t=>t.id===selected).map((t)=>{
   const index=tasks.findIndex(x=>x.id===t.id);
   const taskUploads=uploads.filter(u=>u.task_id===t.id);
-  const oldReview=reviews[t.id];
+  const reviewRecord=reviews[t.id];
+   const oldReview=reviewRecord?.feedback;
+   const isConfirmed=reviewRecord?.status==="confirmed";
   const hasNewUpload=!!oldReview&&!!reviewDates[t.id]&&taskUploads.some(u=>new Date(u.created_at)>new Date(reviewDates[t.id]));
   return <section key={t.id} style={{padding:"20px",margin:"18px 0",border:"1px solid #d5dce5",borderRadius:16,background:"#fff",boxShadow:"0 3px 14px rgba(0,0,0,.04)"}}>
    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center"}}><h2 style={{fontSize:23,margin:0}}>{t.title}</h2><small>題目 {index+1} / {tasks.length}</small></div>
@@ -106,14 +109,29 @@ export default function ChineseHandwriting(){
    {taskUploads.length>0&&<div style={{marginTop:14}}><strong>已上傳原稿（{taskUploads.length}）</strong><ul>{taskUploads.map(u=><li key={u.id}><button type="button" onClick={()=>preview(u.object_path)} style={{textDecoration:"underline",color:"#145c8a"}}>{u.file_name}</button> <small>（{new Date(u.created_at).toLocaleString("en-GB")}）</small></li>)}</ul></div>}
    {hasNewUpload&&<p style={{color:"#92400e",background:"#fff7ed",padding:10,borderRadius:8}}>注意：已有新上傳原稿，下方是較早的 AI 評語，尚未包含新圖片。</p>}
    {taskUploads.length>0&&!oldReview&&<button type="button" disabled={!!busy} onClick={()=>review(t.id)} style={{padding:"10px 16px",marginTop:10,background:"#145c52",color:"white",border:0,borderRadius:9}}>{busy===t.id?"AI 正在辨識…":"AI 辨識及初步批改"}</button>}
-   {oldReview&&<div style={{background:"#f1f6fc",padding:16,marginTop:18,borderRadius:12}}><h3 style={{fontSize:20,marginTop:0}}>AI 初步評語（家長待覆核）</h3><p style={{fontSize:13}}>已從 Supabase 載入 · 不需要再次呼叫 AI</p><strong>辨識原文</strong><p style={{whiteSpace:"pre-wrap"}}>{oldReview.transcription}</p><strong>不確定字詞</strong><ul>{(oldReview.uncertain??[]).map((x,i)=><li key={i}>{x}</li>)}</ul><strong>優點</strong><ul>{(oldReview.strengths??[]).map((x,i)=><li key={i}>{x}</li>)}</ul><strong>改善建議</strong><ul>{(oldReview.feedback??[]).map((x,i)=><li key={i}>{x}</li>)}</ul><p><strong>初步分數：</strong>{oldReview.provisional_score??"—"}/10（非 GCSE 成績）</p><p>{oldReview.score_reason}</p><small>請對照原稿核實。家長正式修改及確認功能將於後續更新加入。</small></div>}
+    {oldReview&&<div style={{background:isConfirmed?"#effaf4":"#f1f6fc",padding:16,marginTop:18,borderRadius:12,border:`1px solid ${isConfirmed?"#a7dfbd":"#d7e5f5"}`}}>
+      <h3 style={{fontSize:20,marginTop:0}}>{isConfirmed?"家長已確認評語":"AI 初步評語（等待家長覆核）"}</h3>
+      <p style={{fontSize:13}}>已從 Supabase 載入 · 不需要再次呼叫 AI</p>
+      {isConfirmed&&<div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:10,marginBottom:18}}>
+       <div style={{padding:12,background:"white",borderRadius:10}}><small>AI 初步分數</small><div style={{fontSize:24,fontWeight:800}}>{oldReview.provisional_score??"—"}/10</div></div>
+       <div style={{padding:12,background:"white",borderRadius:10}}><small>家長最終分數</small><div style={{fontSize:24,fontWeight:800,color:"#166534"}}>{reviewRecord.final_score??"—"}/10</div></div>
+      </div>}
+      {isConfirmed&&<><strong>家長核對後的原文</strong><p style={{whiteSpace:"pre-wrap",background:"white",padding:12,borderRadius:8}}>{reviewRecord.corrected_transcription||"尚未提供"}</p>{reviewRecord.reviewed_at&&<p style={{fontSize:12,color:"#526173"}}>確認時間：{new Date(reviewRecord.reviewed_at).toLocaleString("en-GB")}</p>}</>}
+      <strong>AI 原始辨識</strong><p style={{whiteSpace:"pre-wrap"}}>{oldReview.transcription}</p>
+      {!!oldReview.uncertain?.length&&<><strong>不確定字詞</strong><ul>{oldReview.uncertain.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
+      {!!oldReview.strengths?.length&&<><strong>優點</strong><ul>{oldReview.strengths.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
+      {!!oldReview.feedback?.length&&<><strong>改善建議</strong><ul>{oldReview.feedback.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
+      {!isConfirmed&&<p><strong>AI 初步分數：</strong>{oldReview.provisional_score??"—"}/10（非 GCSE 成績）</p>}
+      {oldReview.score_reason&&<p>{oldReview.score_reason}</p>}
+      <small>{isConfirmed?"以上為家長已確認的診斷評估結果，並非正式 GCSE 成績。":"請對照原稿核實；家長會在家長管理中心確認最終原文及分數。"}</small>
+     </div>}
    <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24}}>
     <button type="button" disabled={index===0} onClick={()=>setSelected(tasks[index-1].id)} style={{padding:"10px 15px",border:"1px solid #cbd5e1",borderRadius:9,opacity:index===0?0.4:1}}>← 上一題</button>
     <button type="button" disabled={index===tasks.length-1} onClick={()=>setSelected(tasks[index+1].id)} style={{padding:"10px 15px",border:"1px solid #cbd5e1",borderRadius:9,opacity:index===tasks.length-1?0.4:1}}>下一題 →</button>
    </div>
   </section>;
  })}
- <p style={{fontSize:13,color:"#64748b"}}>AI 評語屬初步結果；請保留紙張並核對辨識內容。</p>
+ <p style={{fontSize:13,color:"#64748b"}}>AI 初步評語不代表正式 GCSE 成績；已確認的家長評分會另外標示。請保留原稿。</p>
  </div>
  {tasks.filter(t=>t.id===selected).map(t=><article className="sheet" key={t.id} style={{fontFamily:"serif",color:"black"}}><h2>PW Learning Hub · GCSE Chinese</h2><p>姓名：________________　日期：________________　題號：{t.id}</p><h3>{t.title}</h3><p>{t.prompt}</p>{mode==="grid"?<div className="grid-area"/>:<div>{Array.from({length:t.lines},(_,i)=><div className="writing-line" key={i}/>)}</div>}</article>)}
  </main>;
