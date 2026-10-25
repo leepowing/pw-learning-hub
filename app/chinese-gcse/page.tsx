@@ -11,6 +11,7 @@ export default function ChineseDiagnostic(){
  const [questionIndex,setQuestionIndex]=useState<Record<string,number>>({});
  const [answers,setAnswers]=useState<Answer>({}); const [saved,setSaved]=useState(false);
  const [userId,setUserId]=useState<string|null>(null);
+ const [isParent,setIsParent]=useState(false);
  const [loadState,setLoadState]=useState<"loading"|"ready"|"error">("loading");
  const [syncState,setSyncState]=useState("正在確認登入…");
  const [finishedAt,setFinishedAt]=useState<string|null>(null);
@@ -35,6 +36,8 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
        if(!active)return;
        const remote=(data?.answers??{}) as Answer;
        setAnswers(remote);setFinishedAt(data?.completed_at??null);setUserId(user.id);
+       const {data:profile,error:profileError}=await db.from("profiles").select("role").eq("id",user.id).maybeSingle();
+       if(active)setIsParent(!profileError&&profile?.role==="parent");
        isLoaded.current=true;setLoadState("ready");setSyncState("已載入個人進度");
      }catch(e){if(active){setLoadState("error");setSyncState(e instanceof Error?e.message:"讀取失敗");}}
    }
@@ -149,6 +152,10 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
   <div className="chinese-status" role="status">{syncState}{finishedAt?` · 選擇題上次提交：${new Date(finishedAt).toLocaleString("en-GB")}`:""}</div>
   <p className="chinese-muted" style={{marginBottom:0}}>可分日完成，選擇題答案自動儲存至 Supabase。寫作請使用紙筆作答。本測試並非正式 GCSE 模擬試卷。</p>
  </section>
+ {loadState==="ready"&&isParent&&<section className="chinese-parent-entry" aria-label="家長管理中心">
+  <div><div className="chinese-eyebrow">PARENT ACCESS</div><h2 className="chinese-parent-title">家長管理中心</h2><p className="chinese-muted" style={{margin:0}}>查看 Greta 和 Mathis 的手寫原稿、AI 評語及確認評分。</p></div>
+  <Link href="/chinese-gcse/parent" className="chinese-parent-link">進入家長管理中心 →</Link>
+ </section>}
  <div className="chinese-tabs" role="tablist" aria-label="中文評估項目">
  {sections.map(s=><button type="button" role="tab" key={s.id} aria-selected={activeTab===s.id} className="chinese-tab" onClick={()=>changeTab(s.id)}>
   <span className="chinese-tab-symbol">{s.symbol}</span><span className="chinese-tab-label">{s.label}</span><span className="chinese-tab-small">{s.id==="寫作"?`${handwritingUploads.length}/7 已上傳`:`${countFor(s.id)}/${s.total} 已回答`}</span>
