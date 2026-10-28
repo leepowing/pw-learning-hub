@@ -218,6 +218,10 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
  .chinese-btn:disabled{opacity:.4;cursor:not-allowed}
  .chinese-btn-primary{background:#176b5c;color:#fff;border-color:#176b5c}
  .chinese-status{font-size:13px;color:#566b7c;margin-top:12px}
+ .chinese-stage3-card{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(115deg,#eaf8f4,#f4faf7);border:1px solid #b8ddcf;border-radius:20px;padding:22px 24px;margin:22px 0;box-shadow:0 4px 16px rgba(26,44,65,.04)}
+ .chinese-stage3-title{font-size:21px;font-weight:800;margin:4px 0 5px}
+ .chinese-stage3-link{display:inline-flex;align-items:center;justify-content:center;padding:12px 17px;border-radius:11px;background:#176b5c;color:white;text-decoration:none;font-size:14px;font-weight:750;white-space:nowrap}
+ .chinese-stage3-link:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
  .chinese-review{background:#fff;border:1px solid #d9e5e2;border-radius:20px;padding:24px;margin:22px 0;box-shadow:0 4px 16px rgba(26,44,65,.035)}
  .chinese-review-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
  .chinese-review-stat{border:1px solid #e3e9ee;border-radius:13px;padding:14px;background:#fbfcfd}
@@ -242,6 +246,16 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
  {loadState==="ready"&&isParent&&<section className="chinese-parent-entry" aria-label="家長管理中心">
   <div><div className="chinese-eyebrow">PARENT ACCESS</div><h2 className="chinese-parent-title">家長管理中心</h2><p className="chinese-muted" style={{margin:0}}>查看 Greta 和 Mathis 的手寫原稿、AI 評語及確認評分。</p></div>
   <Link href="/chinese-gcse/parent" className="chinese-parent-link">進入家長管理中心 →</Link>
+  <Link href="/chinese-gcse/learning/parent" className="chinese-parent-link" style={{marginLeft:10}}>Stage 3 家長進度 →</Link>
+ </section>}
+ {loadState==="ready"&&!isParent&&<section className="chinese-stage3-card" aria-label="Stage 3 GCSE 中文課程">
+  <div style={{flex:"1 1 260px"}}>
+   <div className="chinese-eyebrow">NEW COURSE · STAGE 3</div>
+   <h2 className="chinese-stage3-title">GCSE Chinese · 12 星期學習課程</h2>
+   <p className="chinese-muted" style={{margin:"0 0 5px"}}>Week 1 — School Life · 8 個核心詞彙 · 4 個 Sessions · Listening / Speaking / Reading / Writing</p>
+   <p className="chinese-muted" style={{margin:0}}>與診斷評估分開儲存進度；Greta 和 Mathis 學習相同內容。</p>
+  </div>
+  <Link href="/chinese-gcse/learning" className="chinese-stage3-link">開始 Week 1 →</Link>
  </section>}
  <div className="chinese-tabs" role="tablist" aria-label="中文評估項目">
  {sections.map(s=><button type="button" role="tab" key={s.id} aria-selected={activeTab===s.id} className="chinese-tab" onClick={()=>changeTab(s.id)}>

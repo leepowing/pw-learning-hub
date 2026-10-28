@@ -268,6 +268,9 @@ export default function ChineseParent() {
         .cg-parent .cg-tab{border:1px solid #dbe4ed;background:white;border-radius:13px;padding:13px 8px;cursor:pointer;text-align:center;font-weight:750;color:#1d3046}
         .cg-parent .cg-tab[aria-selected=true]{border-color:#187967;background:#eef8f4;color:#116555}
         .cg-parent .cg-tab small{display:block;color:#66788b;font-size:11px;font-weight:500}
+        .cg-parent .cg-stage3{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:linear-gradient(110deg,#edf8f4,#f6fbfa);border:1px solid #bbdecf;border-radius:17px;padding:18px 21px;margin:16px 0 20px}
+        .cg-parent .cg-stage3-link{display:inline-block;background:#176b5c;color:white;text-decoration:none;border-radius:10px;padding:11px 16px;font-weight:750;font-size:14px}
+        .cg-parent .cg-stage3-link:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
         .cg-parent .cg-kpi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
         .cg-parent .cg-kpi{background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px;min-width:0}
         .cg-parent .cg-kpi strong{display:block;font-size:26px;margin-top:4px}
@@ -296,6 +299,14 @@ export default function ChineseParent() {
           {students.map(s => <button type="button" key={s.id} onClick={() => {setStudent(s.id);setTask("w1");setShowAll(false);}} style={{...btn,background:student===s.id?"#1e3a8a":"white",color:student===s.id?"white":"#17243a",fontWeight:750}}>{s.student}</button>)}
         </div>
 
+        <section className="cg-stage3" aria-label="Stage 3 家長學習進度">
+          <div style={{flex:"1 1 260px"}}>
+            <div className="cg-mini" style={{fontWeight:800,letterSpacing:".1em",color:"#176b5c"}}>STAGE 3 · WEEKLY LEARNING</div>
+            <h2 style={{fontSize:20,fontWeight:800,margin:"4px 0"}}>GCSE Chinese · 12 星期學習進度</h2>
+            <p className="cg-muted" style={{margin:0}}>查看 Greta 和 Mathis 的 Week 1 詞彙、閱讀、聆聽、口說及手寫進度；與現有診斷評估獨立。</p>
+          </div>
+          <Link href="/chinese-gcse/learning/parent" className="cg-stage3-link">查看 Stage 3 家長進度 →</Link>
+        </section>
         <div className="cg-tabs" role="tablist" aria-label="家長成績分析分頁">
           {([{id:"overview",label:"總覽",en:"Overview"},{id:"詞彙",label:"詞彙",en:"Vocabulary"},{id:"閱讀",label:"閱讀",en:"Reading"},{id:"廣東話聆聽",label:"聆聽",en:"Listening"},{id:"writing",label:"寫作",en:"Writing"}] as {id:Section;label:string;en:string}[]).map(t =>
             <button key={t.id} type="button" className="cg-tab" role="tab" aria-selected={section===t.id} onClick={()=>chooseSection(t.id)}>{t.label}<small>{t.en}</small></button>
