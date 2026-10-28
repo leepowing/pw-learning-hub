@@ -268,9 +268,18 @@ export default function ChineseParent() {
         .cg-parent .cg-tab{border:1px solid #dbe4ed;background:white;border-radius:13px;padding:13px 8px;cursor:pointer;text-align:center;font-weight:750;color:#1d3046}
         .cg-parent .cg-tab[aria-selected=true]{border-color:#187967;background:#eef8f4;color:#116555}
         .cg-parent .cg-tab small{display:block;color:#66788b;font-size:11px;font-weight:500}
-        .cg-parent .cg-stage3{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:linear-gradient(110deg,#edf8f4,#f6fbfa);border:1px solid #bbdecf;border-radius:17px;padding:18px 21px;margin:16px 0 20px}
-        .cg-parent .cg-stage3-link{display:inline-block;background:#176b5c;color:white;text-decoration:none;border-radius:10px;padding:11px 16px;font-weight:750;font-size:14px}
-        .cg-parent .cg-stage3-link:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+        .cg-parent .cg-nav-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:21px 0 23px}
+        .cg-parent .cg-nav-card{min-width:0;display:flex;flex-direction:column;padding:21px;border:1px solid #d8e3ea;border-radius:18px;background:#fff;box-shadow:0 3px 12px rgba(26,44,65,.035)}
+        .cg-parent .cg-nav-card--course{border-color:#b1dbc9;background:#edf8f4}
+        .cg-parent .cg-nav-icon{display:inline-flex;align-items:center;justify-content:center;width:43px;height:43px;border-radius:12px;background:#edf3fa;color:#285477;font-size:19px;font-weight:800;margin-bottom:10px}
+        .cg-parent .cg-nav-card--course .cg-nav-icon{background:#d5ede3;color:#176b5c}
+        .cg-parent .cg-nav-card h2{font-size:19px;line-height:1.4;margin:5px 0 8px;font-weight:800}
+        .cg-parent .cg-nav-card p{font-size:13px;color:#566b7c;line-height:1.6;margin:0 0 14px}
+        .cg-parent .cg-nav-card .cg-nav-meta{margin-top:auto;margin-bottom:14px;font-size:12px;color:#53677b}
+        .cg-parent .cg-nav-link{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;border-radius:10px;text-decoration:none;border:1px solid #c8d6e3;background:#f8fbff;color:#245475;font-size:14px;font-weight:750}
+        .cg-parent .cg-nav-card--course .cg-nav-link{background:#176b5c;border-color:#176b5c;color:#fff}
+        .cg-parent .cg-nav-link:hover{filter:brightness(.97)}
+        .cg-parent .cg-nav-link:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
         .cg-parent .cg-kpi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
         .cg-parent .cg-kpi{background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px;min-width:0}
         .cg-parent .cg-kpi strong{display:block;font-size:26px;margin-top:4px}
@@ -282,7 +291,7 @@ export default function ChineseParent() {
         .cg-parent .cg-answer{background:#f1f5f9;padding:12px;border-radius:10px;white-space:pre-wrap}
         .cg-parent .cg-writing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
         .cg-parent .cg-submitted{color:#166534;font-weight:700}
-        @media(max-width:720px){.cg-parent{padding:0 14px 65px}.cg-parent .cg-tabs{gap:5px}.cg-parent .cg-tab{font-size:12px;padding:10px 3px}.cg-parent .cg-tab small{font-size:10px}.cg-parent .cg-writing-grid{grid-template-columns:1fr}}
+        @media(max-width:720px){.cg-parent .cg-nav-grid{grid-template-columns:1fr}.cg-parent .cg-nav-card{padding:17px}.cg-parent{padding:0 14px 65px}.cg-parent .cg-tabs{gap:5px}.cg-parent .cg-tab{font-size:12px;padding:10px 3px}.cg-parent .cg-tab small{font-size:10px}.cg-parent .cg-writing-grid{grid-template-columns:1fr}}
       `}</style>
 
       <nav className="cg-header-links" aria-label="返回頁面">
@@ -299,15 +308,25 @@ export default function ChineseParent() {
           {students.map(s => <button type="button" key={s.id} onClick={() => {setStudent(s.id);setTask("w1");setShowAll(false);}} style={{...btn,background:student===s.id?"#1e3a8a":"white",color:student===s.id?"white":"#17243a",fontWeight:750}}>{s.student}</button>)}
         </div>
 
-        <section className="cg-stage3" aria-label="Stage 3 家長學習進度">
-          <div style={{flex:"1 1 260px"}}>
-            <div className="cg-mini" style={{fontWeight:800,letterSpacing:".1em",color:"#176b5c"}}>STAGE 3 · WEEKLY LEARNING</div>
-            <h2 style={{fontSize:20,fontWeight:800,margin:"4px 0"}}>GCSE Chinese · 12 星期學習進度</h2>
-            <p className="cg-muted" style={{margin:0}}>查看 Greta 和 Mathis 的 Week 1 詞彙、閱讀、聆聽、口說及手寫進度；與現有診斷評估獨立。</p>
+        <nav className="cg-nav-grid" aria-label="家長管理工作區">
+          <div className="cg-nav-card">
+            <span className="cg-nav-icon" aria-hidden="true">診</span>
+            <div className="cg-mini" style={{letterSpacing:".1em",fontWeight:800}}>DIAGNOSTIC · V3</div>
+            <h2>診斷評估管理</h2>
+            <p>現有詞彙、閱讀、聆聽成績分析，以及手寫答案、AI 評語與家長確認分數。</p>
+            <div className="cg-nav-meta">Greta / Mathis · 49 選擇題 + 7 手寫題</div>
+            <a href="#cg-diagnostic-results" className="cg-nav-link">查看診斷評估 <span aria-hidden="true">→</span></a>
           </div>
-          <Link href="/chinese-gcse/learning/parent" className="cg-stage3-link">查看 Stage 3 家長進度 →</Link>
-        </section>
-        <div className="cg-tabs" role="tablist" aria-label="家長成績分析分頁">
+          <div className="cg-nav-card cg-nav-card--course">
+            <span className="cg-nav-icon" aria-hidden="true">學</span>
+            <div className="cg-mini" style={{letterSpacing:".1em",fontWeight:800}}>STAGE 3 · GCSE PREPARATION</div>
+            <h2>Stage 3 學習進度</h2>
+            <p>12 星期統一課程，查看 Week 1 詞彙、閱讀、廣東話聆聽與口說，以及手寫進度。</p>
+            <div className="cg-nav-meta">四份 GCSE Papers · 兩名學生獨立記錄</div>
+            <Link href="/chinese-gcse/learning/parent" className="cg-nav-link">查看 Stage 3 家長進度 <span aria-hidden="true">→</span></Link>
+          </div>
+        </nav>
+        <div id="cg-diagnostic-results" className="cg-tabs" role="tablist" aria-label="家長成績分析分頁">
           {([{id:"overview",label:"總覽",en:"Overview"},{id:"詞彙",label:"詞彙",en:"Vocabulary"},{id:"閱讀",label:"閱讀",en:"Reading"},{id:"廣東話聆聽",label:"聆聽",en:"Listening"},{id:"writing",label:"寫作",en:"Writing"}] as {id:Section;label:string;en:string}[]).map(t =>
             <button key={t.id} type="button" className="cg-tab" role="tab" aria-selected={section===t.id} onClick={()=>chooseSection(t.id)}>{t.label}<small>{t.en}</small></button>
           )}

@@ -218,10 +218,25 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
  .chinese-btn:disabled{opacity:.4;cursor:not-allowed}
  .chinese-btn-primary{background:#176b5c;color:#fff;border-color:#176b5c}
  .chinese-status{font-size:13px;color:#566b7c;margin-top:12px}
- .chinese-stage3-card{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(115deg,#eaf8f4,#f4faf7);border:1px solid #b8ddcf;border-radius:20px;padding:22px 24px;margin:22px 0;box-shadow:0 4px 16px rgba(26,44,65,.04)}
- .chinese-stage3-title{font-size:21px;font-weight:800;margin:4px 0 5px}
- .chinese-stage3-link{display:inline-flex;align-items:center;justify-content:center;padding:12px 17px;border-radius:11px;background:#176b5c;color:white;text-decoration:none;font-size:14px;font-weight:750;white-space:nowrap}
- .chinese-stage3-link:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+ /* GCSE Chinese navigation cards: diagnostic vs Stage 3 */
+ .chinese-nav-area{margin:24px 0 26px}
+ .chinese-nav-top{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:13px;flex-wrap:wrap}
+ .chinese-nav-top h2{font-size:21px;font-weight:800;line-height:1.3;margin:4px 0 0}
+ .chinese-nav-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .chinese-nav-card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1px solid #dce5e9;border-radius:19px;padding:22px;box-shadow:0 3px 14px rgba(26,44,65,.04)}
+ .chinese-nav-card--course{background:#edf8f4;border-color:#afdbca}
+ .chinese-nav-card--diagnostic{border-color:#d4ddec}
+ .chinese-nav-icon{display:inline-flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:13px;font-size:20px;font-weight:800;color:#254b6c;background:#e9f1fa;margin-bottom:12px}
+ .chinese-nav-card--course .chinese-nav-icon{background:#d5ede3;color:#176b5c}
+ .chinese-nav-card h3{font-size:20px;font-weight:800;line-height:1.4;margin:5px 0 9px;color:#15263e}
+ .chinese-nav-card p{font-size:14px;line-height:1.6;color:#506376;margin:0 0 13px}
+ .chinese-nav-meta{font-size:12px;color:#45647b;margin:auto 0 15px;padding-top:3px}
+ .chinese-nav-button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-decoration:none;border:1px solid #b7c8d9;border-radius:11px;background:#f8fbfd;color:#234f73;padding:12px 15px;font-size:14px;font-weight:750}
+ .chinese-nav-card--course .chinese-nav-button{color:#fff;background:#176b5c;border-color:#176b5c}
+ .chinese-nav-button:hover{filter:brightness(.97)}
+ .chinese-nav-button:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+ .chinese-nav-card--student{max-width:none}
+ @media(max-width:650px){.chinese-nav-grid{grid-template-columns:1fr}.chinese-nav-card{padding:17px}.chinese-nav-card h3{font-size:18px}.chinese-nav-area{margin:19px 0 23px}}
  .chinese-review{background:#fff;border:1px solid #d9e5e2;border-radius:20px;padding:24px;margin:22px 0;box-shadow:0 4px 16px rgba(26,44,65,.035)}
  .chinese-review-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
  .chinese-review-stat{border:1px solid #e3e9ee;border-radius:13px;padding:14px;background:#fbfcfd}
@@ -243,19 +258,36 @@ const clientRef = useRef<ReturnType<typeof createClient<any>> | null>(null);
   <p className="chinese-muted" style={{marginBottom:0}}>可分日完成，選擇題答案自動儲存至 Supabase。寫作請使用紙筆作答。本測試並非正式 GCSE 模擬試卷。</p>
   {submitted&&<div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap",marginTop:14}}><strong style={{color:"#176b5c"}}>已正式提交 · {score}/{questions.length} · 答錯 {wrongQuestions.length} 題</strong><a href="#chinese-review" className="chinese-btn chinese-btn-primary" style={{display:"inline-block",textDecoration:"none"}}>查看答案檢討 ↓</a></div>}
  </section>
- {loadState==="ready"&&isParent&&<section className="chinese-parent-entry" aria-label="家長管理中心">
-  <div><div className="chinese-eyebrow">PARENT ACCESS</div><h2 className="chinese-parent-title">家長管理中心</h2><p className="chinese-muted" style={{margin:0}}>查看 Greta 和 Mathis 的手寫原稿、AI 評語及確認評分。</p></div>
-  <Link href="/chinese-gcse/parent" className="chinese-parent-link">進入家長管理中心 →</Link>
-  <Link href="/chinese-gcse/learning/parent" className="chinese-parent-link" style={{marginLeft:10}}>Stage 3 家長進度 →</Link>
+ {loadState==="ready"&&isParent&&<section className="chinese-nav-area" aria-label="家長管理入口">
+   <div className="chinese-nav-top"><div><div className="chinese-eyebrow">PARENT ACCESS</div><h2>家長管理中心</h2></div></div>
+   <div className="chinese-nav-grid">
+     <article className="chinese-nav-card chinese-nav-card--diagnostic">
+       <span className="chinese-nav-icon" aria-hidden="true">診</span>
+       <div className="chinese-eyebrow">DIAGNOSTIC · V3</div>
+       <h3>診斷評估管理</h3>
+       <p>查看 Greta 和 Mathis 的詞彙、閱讀、聆聽成績、手寫原稿及 AI 評語，並確認寫作分數。</p>
+       <div className="chinese-nav-meta">49 題選擇題 + 7 題手寫評估</div>
+       <Link href="/chinese-gcse/parent" className="chinese-nav-button">查看診斷成績 <span aria-hidden="true">→</span></Link>
+     </article>
+     <article className="chinese-nav-card chinese-nav-card--course">
+       <span className="chinese-nav-icon" aria-hidden="true">學</span>
+       <div className="chinese-eyebrow">STAGE 3 · GCSE PREPARATION</div>
+       <h3>Stage 3 學習進度</h3>
+       <p>查看 Greta 和 Mathis 的 12 星期共同課程、Week 1 學習活動、練習及家長覆核進度。</p>
+       <div className="chinese-nav-meta">Week 1 — School Life · 四份 GCSE Papers</div>
+       <Link href="/chinese-gcse/learning/parent" className="chinese-nav-button">進入 Stage 3 家長中心 <span aria-hidden="true">→</span></Link>
+     </article>
+   </div>
  </section>}
- {loadState==="ready"&&!isParent&&<section className="chinese-stage3-card" aria-label="Stage 3 GCSE 中文課程">
-  <div style={{flex:"1 1 260px"}}>
-   <div className="chinese-eyebrow">NEW COURSE · STAGE 3</div>
-   <h2 className="chinese-stage3-title">GCSE Chinese · 12 星期學習課程</h2>
-   <p className="chinese-muted" style={{margin:"0 0 5px"}}>Week 1 — School Life · 8 個核心詞彙 · 4 個 Sessions · Listening / Speaking / Reading / Writing</p>
-   <p className="chinese-muted" style={{margin:0}}>與診斷評估分開儲存進度；Greta 和 Mathis 學習相同內容。</p>
-  </div>
-  <Link href="/chinese-gcse/learning" className="chinese-stage3-link">開始 Week 1 →</Link>
+ {loadState==="ready"&&!isParent&&<section className="chinese-nav-area" aria-label="Stage 3 GCSE 中文課程">
+   <div className="chinese-nav-top"><div><div className="chinese-eyebrow">NEW COURSE · STAGE 3</div><h2>GCSE Chinese — 學習課程</h2></div></div>
+   <article className="chinese-nav-card chinese-nav-card--course chinese-nav-card--student">
+     <span className="chinese-nav-icon" aria-hidden="true">學</span>
+     <h3>Week 1 — School Life</h3>
+     <p>學校生活 · 8 個核心詞彙 · 4 個 Sessions。包含廣東話聆聽及口說、繁體中文閱讀、手寫及中英翻譯。</p>
+     <div className="chinese-nav-meta">Greta 和 Mathis 學習同一套課程，成績及錯題獨立儲存。</div>
+     <Link href="/chinese-gcse/learning" className="chinese-nav-button">開始 Stage 3 Week 1 <span aria-hidden="true">→</span></Link>
+   </article>
  </section>}
  <div className="chinese-tabs" role="tablist" aria-label="中文評估項目">
  {sections.map(s=><button type="button" role="tab" key={s.id} aria-selected={activeTab===s.id} className="chinese-tab" onClick={()=>changeTab(s.id)}>
