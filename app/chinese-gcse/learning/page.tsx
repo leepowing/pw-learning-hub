@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
 import {
   emptyProgress, listeningClips, listeningQuestions, readingQuestions, readingText,
@@ -357,17 +358,15 @@ export default function ChineseStage3Week1(){
         </div>)}
         <h3>Speaking · Role play / Picture practice / Conversation</h3>
         <p className="ch3-muted">先用廣東話口頭回答，再錄下來聽一次。錄音只在目前裝置播放，不會上傳或由 AI 自動評分。</p>
-        <div className="ch3-picture" aria-label="原創教室示意圖：窗戶、書架、兩名學生及時鐘">
-          <svg viewBox="0 0 480 160" role="img" aria-label="Classroom illustration with books and two pupils">
-            <rect width="480" height="160" rx="14" fill="#eaf4f5"/>
-            <rect x="20" y="20" width="90" height="85" fill="#bfdfed" stroke="#6797a0" strokeWidth="3"/>
-            <path d="M65 20v85M20 62h90" stroke="#6797a0" strokeWidth="3"/>
-            <rect x="345" y="33" width="106" height="95" rx="4" fill="#bdb3a7"/><rect x="353" y="44" width="87" height="10" fill="#fff"/>
-            {[0,1,2,3].map(i=><rect key={i} x={357+i*20} y="60" width="15" height="40" fill={["#f0b76d","#5da59a","#9a85be","#d77e85"][i]}/>)}
-            <circle cx="255" cy="35" r="23" fill="#fff" stroke="#698996" strokeWidth="3"/><path d="M255 35v-12M255 35l13 6" stroke="#698996" strokeWidth="3"/>
-            <rect x="155" y="106" width="150" height="14" rx="4" fill="#b77f60"/>
-            {[183,274].map((x,i)=><g key={x}><circle cx={x} cy="80" r="16" fill={i?"#e1b18c":"#d49b74"}/><path d={`M${x-24} 116v-18q24-18 48 0v18`} fill={i?"#556cba":"#398a85"}/></g>)}
-          </svg>
+        <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="教室插圖：老師與兩名學生互動，背景有窗戶、時鐘、佈告板和書架">
+          <Image
+            src="/images/chinese-gcse/week1-classroom.webp"
+            alt="兩名學生在明亮的課室聆聽老師講解，背景有窗戶、時鐘、佈告板及書架"
+            width={2043}
+            height={770}
+            sizes="(max-width: 650px) 100vw, (max-width: 1200px) 85vw, 1000px"
+            style={{ display: "block", width: "100%", height: "auto" }}
+          />
         </div>
         <p className="ch3-muted">每題先錄製最多 28 秒粵語答案，再主動按 AI 評估。錄音在頁面內播放；只傳送至 Azure 作即時辨識，不會長期儲存音檔。AI 評分屬教學參考。</p>
         {speakingPrompts.map((s,i)=><div className="ch3-question" key={s.id}>
