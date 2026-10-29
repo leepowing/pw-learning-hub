@@ -16,6 +16,33 @@ const db=supabaseUrl&&supabaseKey?createClient(supabaseUrl,supabaseKey):null;
 type Upload={id:string;user_id:string;object_path:string;file_name:string;created_at:string};
 type Feedback={transcription:string;uncertain:string[];strengths:string[];improvements:string[];provisional_score:number;score_reason:string};
 type ParentReview={upload_id:string;corrected_transcription:string;final_score:number;reviewed_at:string};
+type SkillFeedback={transcription:string;provisional_score:number;strengths:string[];improvements:string[];score_reason:string;breakdown?:{content:number;language:number;clarity:number};pronunciation_reference?:{accuracy:number|null;fluency:number|null;note:string}};
+type SkillReview={id:string;skill:"speaking"|"translation";task_id:string;input_kind:string;input_text:string;object_path:string|null;feedback:SkillFeedback;final_score:number|null;corrected_text:string|null;reviewed_at:string|null};
+const skillKey=(skill:string,id:string)=>`${skill}:${id}`;
+// Browser MediaRecorder records compressed audio; Azure short-audio REST needs 16k mono PCM WAV.
+async function toAzureWav(recorded:Blob):Promise<Blob>{
+  const Context=window.AudioContext;
+  if(!Context)throw new Error("此瀏覽器不支援轉換錄音，請使用最新版 Safari 或 Chrome");
+  const ctx=new Context();
+  try{
+    const decoded=await ctx.decodeAudioData(await recorded.arrayBuffer());
+    if(decoded.duration>30.3)throw new Error("每次口說最長 30 秒，請重新錄製");
+    const samples=Math.round(decoded.duration*16000),mixed=new Float32Array(samples);
+    for(let i=0;i<samples;i++){
+      const source=i*decoded.sampleRate/16000,lower=Math.floor(source),upper=Math.min(decoded.length-1,lower+1),fraction=source-lower;
+      let v=0;
+      for(let c=0;c<decoded.numberOfChannels;c++){const channel=decoded.getChannelData(c);v+=((channel[lower]??0)*(1-fraction)+(channel[upper]??0)*fraction)/decoded.numberOfChannels;}
+      mixed[i]=Math.max(-1,Math.min(1,v));
+    }
+    const out=new ArrayBuffer(44+samples*2),view=new DataView(out);
+    const tag=(offset:number,text:string)=>{for(let i=0;i<text.length;i++)view.setUint8(offset+i,text.charCodeAt(i))};
+    tag(0,"RIFF");view.setUint32(4,36+samples*2,true);tag(8,"WAVE");tag(12,"fmt ");view.setUint32(16,16,true);
+    view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,16000,true);view.setUint32(28,32000,true);
+    view.setUint16(32,2,true);view.setUint16(34,16,true);tag(36,"data");view.setUint32(40,samples*2,true);
+    mixed.forEach((v,i)=>view.setInt16(44+i*2,Math.round(v<0?v*32768:v*32767),true));
+    return new Blob([out],{type:"audio/wav"});
+  }finally{await ctx.close()}
+}
 const has=(id:string,list:readonly string[])=>list.includes(id);
 
 export default function ChineseStage3Week1(){
@@ -40,6 +67,14 @@ export default function ChineseStage3Week1(){
   const [micBusy,setMicBusy]=useState(false);
   const [recordUrl,setRecordUrl]=useState("");
   const [micError,setMicError]=useState("");
+  const [recordingTask,setRecordingTask]=useState("");
+  const [recordedTask,setRecordedTask]=useState("");
+  const [recordBlob,setRecordBlob]=useState<Blob|null>(null);
+  const recordingTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const [skillReviews,setSkillReviews]=useState<Record<string,SkillReview>>({});
+  const [skillBusy,setSkillBusy]=useState("");
+  const [translationInputs,setTranslationInputs]=useState<Record<string,string>>({});
+  const [skillError,setSkillError]=useState("");
   const recorder=useRef<MediaRecorder|null>(null);
   const streamRef=useRef<MediaStream|null>(null);
   const recordUrlRef=useRef("");
@@ -86,6 +121,7 @@ export default function ChineseStage3Week1(){
       latestAudio.current?.pause();
       Object.values(audioCache.current).forEach(url=>URL.revokeObjectURL(url));
       if(recordUrlRef.current)URL.revokeObjectURL(recordUrlRef.current);
+      if(recordingTimer.current)clearTimeout(recordingTimer.current);
       streamRef.current?.getTracks().forEach(t=>t.stop());
     };
   },[]);
@@ -102,10 +138,12 @@ export default function ChineseStage3Week1(){
   }
   const s1QuestionsDone=readingQuestions.every(q=>Object.prototype.hasOwnProperty.call(progress.reading,q.id));
   const s2QuestionsDone=listeningQuestions.every(q=>Object.prototype.hasOwnProperty.call(progress.listening,q.id));
+  const speakingGraded=speakingPrompts.filter(t=>!!skillReviews[skillKey("speaking",t.id)]).length;
+  const translationGraded=translationTasks.filter(t=>!!skillReviews[skillKey("translation",t.id)]).length;
   const canComplete=[
     progress.vocabSeen.length===8&&s1QuestionsDone,
-    s2QuestionsDone&&progress.speakingPractised.length===3,
-    Object.keys(progress.dictation).length===8&&progress.translationChecked.length===2,
+    s2QuestionsDone&&speakingGraded===3,
+    Object.keys(progress.dictation).length===8&&translationGraded===2,
     uploads.length>0,
   ];
   function markSession(){
@@ -131,7 +169,62 @@ export default function ChineseStage3Week1(){
     }catch(e){setStatus(e instanceof Error?e.message:"錄音失敗");}finally{setAudioBusy("");}
   }
 
-  async function startRecording(){
+  async function loadSkills(user:string){
+    if(!db)return;
+    const {data,error}=await db.from("chinese_stage3_skill_reviews").select("*").eq("user_id",user).eq("week",1);
+    if(error){setSkillError("無法載入 Speaking / Translation 評語，請先執行 AI Grading v2 SQL："+error.message);return;}
+    setSkillReviews(Object.fromEntries(((data??[]) as SkillReview[]).map(r=>[skillKey(r.skill,r.task_id),r])));
+    setSkillError("");
+  }
+  useEffect(()=>{if(ready&&userId)void loadSkills(userId)},[ready,userId]);
+  useEffect(()=>{const onFocus=()=>{if(ready&&userId)void loadSkills(userId)};window.addEventListener("focus",onFocus);return()=>window.removeEventListener("focus",onFocus)},[ready,userId]);
+  async function submitSkill(skill:"speaking"|"translation",id:string,objectPath?:string){
+    if(!db||!userId||skillBusy)return;
+    setSkillBusy(skillKey(skill,id));setSkillError("");setStatus("AI 正在批改，請稍候…");
+    try{
+      const {data:{session}}=await db.auth.getSession();if(!session)throw new Error("登入已失效，請重新登入");
+      let res:Response;
+      if(skill==="speaking"){
+        if(!recordBlob||recordedTask!==id)throw new Error("請先錄製此題的廣東話答案");
+        const audio=await toAzureWav(recordBlob);
+        const form=new FormData();form.append("taskId",id);form.append("audio",audio,"response.wav");
+        res=await fetch("/api/chinese-gcse/learning/speaking",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`},body:form});
+      }else{
+        const answer=(translationInputs[id]??"").trim();
+        if(!objectPath&&!answer)throw new Error("請先輸入翻譯或上傳手寫圖片");
+        res=await fetch("/api/chinese-gcse/learning/translation",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({taskId:id,...(objectPath?{objectPath}:{answerText:answer})})});
+      }
+      const result=await res.json().catch(()=>({}));if(!res.ok)throw new Error(result.error??"AI 批改失敗");
+      await loadSkills(userId);setStatus(result.cached?"已讀取之前儲存的 AI 評語":"AI 初步評語已儲存 · 等待家長覆核");
+    }catch(e){const msg=e instanceof Error?e.message:"未知錯誤";setSkillError(msg);setStatus("批改失敗："+msg)}finally{setSkillBusy("");}
+  }
+  async function submitTranslationPhoto(taskId:string,file:File){
+    if(!db||!userId||skillBusy)return;
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>4*1024*1024){setSkillError("只支援 JPG / PNG / WebP，最大 4MB");return;}
+    setSkillBusy("upload:"+taskId);setSkillError("");
+    const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+    const path=`${userId}/stage3/week-01/translation/${taskId}/${crypto.randomUUID()}.${ext}`;
+    try{
+      const r=await db.storage.from("chinese-handwriting").upload(path,file,{contentType:file.type,upsert:false});
+      if(r.error)throw new Error(r.error.message);
+    }catch(e){setSkillError("手寫圖片上傳失敗："+(e instanceof Error?e.message:"未知錯誤"));setSkillBusy("");return;}
+    setSkillBusy("");await submitSkill("translation",taskId,path);
+  }
+  function renderSkillFeedback(skill:"speaking"|"translation",taskId:string){
+    const review=skillReviews[skillKey(skill,taskId)];if(!review)return null;
+    const f=review.feedback;
+    return <div className="ch3-review" role="status">
+      <strong>{review.reviewed_at?"✓ 家長已確認":"AI 初步評語 · 待家長確認"}</strong>
+      <p><strong>{skill==="speaking"?"粵語辨識文字":"學生作答原文"}：</strong>{f.transcription||review.input_text||"（沒有文字）"}</p>
+      <p>AI 初步分數：<strong>{f.provisional_score}/10</strong> · 內容 {f.breakdown?.content??"—"}/4 · 語言 {f.breakdown?.language??"—"}/4 · 清晰度 {f.breakdown?.clarity??"—"}/2</p>
+      {f.pronunciation_reference&&<p className="ch3-muted">Azure 發音參考：準確度 {f.pronunciation_reference.accuracy??"—"}/100、流暢度 {f.pronunciation_reference.fluency??"—"}/100。{f.pronunciation_reference.note}</p>}
+      {review.reviewed_at&&<p><strong>家長確認：{review.final_score}/10</strong> · {review.corrected_text}</p>}
+      {!!f.strengths?.length&&<><strong>優點</strong><ul>{f.strengths.map((v,i)=><li key={i}>{v}</li>)}</ul></>}
+      {!!f.improvements?.length&&<><strong>改善建議</strong><ul>{f.improvements.map((v,i)=><li key={i}>{v}</li>)}</ul></>}
+      <p className="ch3-muted">{f.score_reason}</p>
+    </div>;
+  }
+  async function startRecording(taskId:string){
     if(micBusy)return;
     setMicError("");
     try{
@@ -141,12 +234,16 @@ export default function ChineseStage3Week1(){
       const r=new MediaRecorder(stream);recorder.current=r;
       r.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
       r.onstop=()=>{
-        const url=URL.createObjectURL(new Blob(chunks,{type:r.mimeType||"audio/webm"}));
+        if(recordingTimer.current){clearTimeout(recordingTimer.current);recordingTimer.current=null;}
+        const audioBlob=new Blob(chunks,{type:r.mimeType||"audio/webm"});
+        const url=URL.createObjectURL(audioBlob);
+        setRecordBlob(audioBlob);setRecordedTask(taskId);setRecordingTask("");
         if(recordUrlRef.current)URL.revokeObjectURL(recordUrlRef.current);
         recordUrlRef.current=url;setRecordUrl(url);setMicBusy(false);
         stream.getTracks().forEach(t=>t.stop());streamRef.current=null;
       };
-      r.start();setMicBusy(true);
+      r.start();setMicBusy(true);setRecordingTask(taskId);setRecordBlob(null);setRecordedTask("");
+      recordingTimer.current=setTimeout(()=>{if(r.state==="recording")r.stop()},28000);
     }catch(e){setMicError(e instanceof Error?e.message:"錄音失敗");setMicBusy(false);}
   }
   function stopRecording(){if(recorder.current?.state==="recording")recorder.current.stop();}
@@ -272,16 +369,26 @@ export default function ChineseStage3Week1(){
             {[183,274].map((x,i)=><g key={x}><circle cx={x} cy="80" r="16" fill={i?"#e1b18c":"#d49b74"}/><path d={`M${x-24} 116v-18q24-18 48 0v18`} fill={i?"#556cba":"#398a85"}/></g>)}
           </svg>
         </div>
+        <p className="ch3-muted">每題先錄製最多 28 秒粵語答案，再主動按 AI 評估。錄音在頁面內播放；只傳送至 Azure 作即時辨識，不會長期儲存音檔。AI 評分屬教學參考。</p>
         {speakingPrompts.map((s,i)=><div className="ch3-question" key={s.id}>
           <strong>{i+1}. {s.label}</strong><p>{s.english}</p>
-          <button className="ch3-linkbutton" onClick={()=>setShownSpeaking(p=>has(s.id,p)?p.filter(x=>x!==s.id):[...p,s.id])}>{has(s.id,shownSpeaking)?"收起參考句":"回答後查看參考句"}</button>
+          <button className="ch3-linkbutton" onClick={()=>setShownSpeaking(p=>has(s.id,p)?p.filter(x=>x!==s.id):[...p,s.id])}>{has(s.id,shownSpeaking)?"收起參考句":"查看廣東話參考句（建議先回答）"}</button>
           {has(s.id,shownSpeaking)&&<p className="ch3-feedback">{s.sample}</p>}
-          <label className="ch3-inline"><input type="checkbox" checked={has(s.id,progress.speakingPractised)} onChange={()=>toggleKey("speakingPractised",s.id)}/> 我已用廣東話練習這一題</label>
+          {!skillReviews[skillKey("speaking",s.id)]&&<div className="ch3-record">
+            <div className="ch3-actions">
+              <button type="button" className="ch3-button" disabled={micBusy||!!skillBusy} onClick={()=>void startRecording(s.id)}>● 錄製本題</button>
+              <button type="button" className="ch3-button" disabled={!micBusy||recordingTask!==s.id} onClick={stopRecording}>■ 停止</button>
+              <button type="button" className="ch3-button ch3-primary" disabled={!recordBlob||recordedTask!==s.id||!!skillBusy||micBusy} onClick={()=>void submitSkill("speaking",s.id)}>{skillBusy===skillKey("speaking",s.id)?"AI 評估中…":"AI 評估這段廣東話"}</button>
+            </div>
+            {recordUrl&&recordedTask===s.id&&<audio controls src={recordUrl} preload="none"/>}
+            {micBusy&&recordingTask===s.id&&<p>正在錄音（最多約 28 秒）…</p>}
+            {micError&&<p className="ch3-error">{micError}</p>}
+          </div>}
+          {renderSkillFeedback("speaking",s.id)}
+          <label className="ch3-inline"><input type="checkbox" checked={has(s.id,progress.speakingPractised)} onChange={()=>toggleKey("speakingPractised",s.id)}/> 已練習本題（自評紀錄）</label>
         </div>)}
-        <div className="ch3-record">
-          <strong>錄音練習（只保留在本機）</strong><div className="ch3-actions"><button className="ch3-button ch3-primary" disabled={micBusy} onClick={()=>void startRecording()}>● 開始錄音</button><button className="ch3-button" disabled={!micBusy} onClick={stopRecording}>■ 停止</button></div>
-          {micError&&<p className="ch3-error">{micError}</p>}{recordUrl&&<audio controls src={recordUrl} preload="none"/>}
-        </div>
+        <p className="ch3-muted">Speaking AI 完成：{speakingGraded}/3 · 正式口試的發音與互動能力仍需真人評估。</p>
+        {skillError&&<p role="alert" className="ch3-error">{skillError}</p>}
       </section>}
       {session===2&&<section className="ch3-card">
         <div className="ch3-section-label">VOCABULARY MASTERY · PAPER 3 + PAPER 4 TRANSLATION</div>
@@ -300,10 +407,23 @@ export default function ChineseStage3Week1(){
         <h3>GCSE-style Translation（原創練習）</h3>
         {translationTasks.map((t,i)=><div key={t.id} className="ch3-question">
           <small>{i+1}. {t.direction}</small><p><strong>{t.prompt}</strong></p>
-          <p className="ch3-muted">請先在紙上作答，再核對參考答案。</p>
-          <button className="ch3-linkbutton" onClick={()=>setShownTranslation(p=>has(t.id,p)?p.filter(x=>x!==t.id):[...p,t.id])}>{has(t.id,shownTranslation)?"隱藏參考答案":"查看參考答案"}</button>
-          {has(t.id,shownTranslation)&&<div className="ch3-feedback"><strong>{t.sample}</strong><p>{t.note}</p><label className="ch3-inline"><input type="checkbox" checked={has(t.id,progress.translationChecked)} onChange={()=>toggleKey("translationChecked",t.id)}/> 已完成並核對</label></div>}
+          {!skillReviews[skillKey("translation",t.id)]&&<>
+            <label className="ch3-muted" htmlFor={`ch3-${t.id}`}>選擇以下其中一種方法交卷：</label>
+            <textarea id={`ch3-${t.id}`} rows={3} className="ch3-input" value={translationInputs[t.id]??""}
+              onChange={e=>setTranslationInputs(old=>({...old,[t.id]:e.target.value}))} placeholder="在此輸入翻譯答案（不支援自動翻譯）"/>
+            <div className="ch3-actions" style={{marginTop:10}}>
+              <button type="button" className="ch3-button ch3-primary" disabled={!translationInputs[t.id]?.trim()||!!skillBusy} onClick={()=>void submitSkill("translation",t.id)}>
+                {skillBusy===skillKey("translation",t.id)?"批改中…":"提交文字給 AI 批改"}
+              </button>
+              <label className="ch3-button">或者拍照上傳手寫答案 <input type="file" accept="image/jpeg,image/png,image/webp" style={{display:"block",maxWidth:240}} disabled={!!skillBusy} onChange={e=>{const file=e.target.files?.[0];e.target.value="";if(file)void submitTranslationPhoto(t.id,file)}}/></label>
+            </div>
+          </>}
+          {renderSkillFeedback("translation",t.id)}
+          {skillReviews[skillKey("translation",t.id)]&&<button className="ch3-linkbutton" onClick={()=>setShownTranslation(p=>has(t.id,p)?p.filter(x=>x!==t.id):[...p,t.id])}>{has(t.id,shownTranslation)?"隱藏參考譯法":"比較參考譯法"}</button>}
+          {has(t.id,shownTranslation)&&skillReviews[skillKey("translation",t.id)]&&<div className="ch3-feedback"><strong>{t.sample}</strong><p>{t.note}</p></div>}
         </div>)}
+        <p className="ch3-muted">Translation AI 完成：{translationGraded}/2 · 翻譯允許不同但意思正確的表達。</p>
+        {skillError&&<p role="alert" className="ch3-error">{skillError}</p>}
         <div className="ch3-note">個人錯詞數量：{Object.values(progress.dictation).filter(x=>x==="review").length}。下一星期會繼續重溫，兩人的課程週次保持一致。</div>
       </section>}
       {session===3&&<section className="ch3-card">

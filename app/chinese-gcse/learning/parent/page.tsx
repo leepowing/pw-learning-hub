@@ -13,6 +13,8 @@ type Upload={id:string;user_id:string;object_path:string;file_name:string;create
 type Feedback={transcription:string;uncertain:string[];strengths:string[];improvements:string[];provisional_score:number;score_reason:string};
 type AIReview={upload_id:string;feedback:Feedback};
 type Confirmed={upload_id:string;corrected_transcription:string;final_score:number;reviewed_at:string};
+type SkillFeedback={transcription:string;provisional_score:number;strengths:string[];improvements:string[];score_reason:string;breakdown?:{content:number;language:number;clarity:number};pronunciation_reference?:{accuracy:number|null;fluency:number|null;note:string}};
+type SkillReview={id:string;skill:"speaking"|"translation";task_id:string;input_kind:string;input_text:string;object_path:string|null;feedback:SkillFeedback;final_score:number|null;corrected_text:string|null;reviewed_at:string|null};
 
 export default function Week1Parent(){
  const [students,setStudents]=useState<Student[]>([]);
@@ -26,6 +28,9 @@ export default function Week1Parent(){
  const [draft,setDraft]=useState<Record<string,string>>({});
  const [scores,setScores]=useState<Record<string,number>>({});
  const [busy,setBusy]=useState(false);
+ const [skillReviews,setSkillReviews]=useState<SkillReview[]>([]);
+ const [skillDrafts,setSkillDrafts]=useState<Record<string,string>>({});
+ const [skillScores,setSkillScores]=useState<Record<string,number>>({});
  useEffect(()=>{let active=true;void (async()=>{
    try{
      if(!db)throw Error("Supabase 尚未設定");
@@ -44,19 +49,24 @@ export default function Week1Parent(){
  async function load(student:string){
    if(!db||!student)return;
    setStatus("正在載入學生 Week 1 進度…");
-   const [p,u,r,c]=await Promise.all([
+   const [p,u,r,c,skills]=await Promise.all([
      db.from("chinese_stage3_progress").select("answers").eq("user_id",student).eq("week",1).maybeSingle(),
      db.from("chinese_stage3_uploads").select("id,user_id,object_path,file_name,created_at").eq("user_id",student).eq("week",1).order("created_at",{ascending:false}),
      db.from("chinese_stage3_ai_reviews").select("upload_id,feedback").eq("user_id",student),
      db.from("chinese_stage3_parent_reviews").select("upload_id,corrected_transcription,final_score,reviewed_at").eq("student_id",student),
+     db.from("chinese_stage3_skill_reviews").select("*").eq("user_id",student).eq("week",1).order("created_at",{ascending:true}),
    ]);
-   if(p.error||u.error||r.error||c.error){setStatus(p.error?.message??u.error?.message??r.error?.message??c.error?.message??"載入失敗");return;}
+   if(p.error||u.error||r.error||c.error||skills.error){setStatus(p.error?.message??u.error?.message??r.error?.message??c.error?.message??skills.error?.message??"載入失敗 · 請檢查 Stage 3 v2 SQL");return;}
    const state={...emptyProgress(),...(p.data?.answers??{})} as ProgressState;
    const rs=Object.fromEntries((r.data??[]).map(x=>[x.upload_id,x.feedback as Feedback]));
    setProgress(state);setUploads((u.data??[]) as Upload[]);setFeedbacks(rs);
    setConfirmed(Object.fromEntries((c.data??[]).map(x=>[x.upload_id,x as Confirmed])));
    setDraft(Object.fromEntries((r.data??[]).map(x=>[x.upload_id,c.data?.find(z=>z.upload_id===x.upload_id)?.corrected_transcription??(x.feedback as Feedback).transcription??""])));
    setScores(Object.fromEntries((r.data??[]).map(x=>[x.upload_id,c.data?.find(z=>z.upload_id===x.upload_id)?.final_score??(x.feedback as Feedback).provisional_score??0])));
+   const rows=(skills.data??[]) as SkillReview[];
+   setSkillReviews(rows);
+   setSkillDrafts(Object.fromEntries(rows.map(row=>[row.id,row.corrected_text??row.feedback?.transcription??row.input_text??""])));
+   setSkillScores(Object.fromEntries(rows.map(row=>[row.id,row.final_score??row.feedback?.provisional_score??0])));
    setStatus("已載入學生資料");
  }
  useEffect(()=>{if(studentId)void load(studentId)},[studentId]);
@@ -71,6 +81,19 @@ export default function Week1Parent(){
      if(error)throw Error(error.message);
      await load(studentId);setStatus("家長已確認最終分數，結果已儲存");
    }catch(e){setStatus("確認失敗："+(e instanceof Error?e.message:"未知錯誤"));}finally{setBusy(false)}
+ }
+ async function confirmSkill(reviewId:string){
+   const review=skillReviews.find(r=>r.id===reviewId);
+   if(!db||busy||!review||review.reviewed_at)return;
+   const text=skillDrafts[reviewId]?.trim()??"",score=skillScores[reviewId];
+   if(!text||text.length>6000||!Number.isInteger(score)||score<0||score>10){setStatus("請提供原文及 0–10 整數分數");return;}
+   setBusy(true);
+   try{
+     const {data:{user}}=await db.auth.getUser();if(!user)throw Error("家長登入已失效");
+     const {error}=await db.rpc("confirm_chinese_stage3_skill_review",{p_review_id:reviewId,p_corrected_text:text,p_final_score:score});
+     if(error)throw Error(error.message);
+     await load(studentId);setStatus("Speaking / Translation 家長覆核已確認");
+   }catch(e){setStatus("覆核失敗："+(e instanceof Error?e.message:"未知錯誤"));}finally{setBusy(false)}
  }
  const readDone=Object.keys(progress.reading??{}).length;
  const listenDone=Object.keys(progress.listening??{}).length;
@@ -87,11 +110,30 @@ export default function Week1Parent(){
         <div className="ch3-note"><strong>Listening</strong><p>{listenDone}/6 answered · {correctness(progress.listening??{},listeningQuestions)}/6 correct</p></div>
         <div className="ch3-note"><strong>Vocabulary</strong><p>{progress.vocabSeen?.length??0}/8 learned</p></div>
         <div className="ch3-note"><strong>Dictation</strong><p>{Object.keys(progress.dictation??{}).length}/8 attempted · {Object.values(progress.dictation??{}).filter(x=>x==="review").length} need review</p></div>
-        <div className="ch3-note"><strong>Speaking</strong><p>{progress.speakingPractised?.length??0}/3 activities completed</p></div>
+        <div className="ch3-note"><strong>Speaking</strong><p>{skillReviews.filter(r=>r.skill==="speaking").length}/3 AI graded</p></div>
+        <div className="ch3-note"><strong>Translation</strong><p>{skillReviews.filter(r=>r.skill==="translation").length}/2 AI graded</p></div>
         <div className="ch3-note"><strong>Handwriting</strong><p>{writingDone?"Uploaded":"Not yet submitted"} · {uploads.length} attempts</p></div>
       </div>
       <h3>Words needing handwritten revision</h3>
       <p>{vocabulary.filter(v=>progress.dictation?.[v.id]==="review").map(v=>v.traditional+" ("+v.english+")").join("、") || "暫無錯詞紀錄"}</p>
+    </section>
+    <section className="ch3-card" style={{marginTop:18}}>
+      <h2>Speaking / Translation · AI 評語及家長覆核</h2>
+      <p className="ch3-muted">AI 分數是練習參考。廣東話音檔只作即時辨識，不長期儲存；家長可核對辨識文字及內容，但不能單靠文字確認發音。</p>
+      {skillReviews.length===0?<p className="ch3-muted">暫未有語音或翻譯 AI 評語。</p>:skillReviews.map(r=><div key={r.id} className="ch3-question">
+        <strong>{r.skill==="speaking"?"Speaking · 廣東話":"Translation · 翻譯"} / {r.task_id}</strong>
+        <p><b>學生答案／AI 辨識：</b>{r.feedback.transcription||r.input_text}</p>
+        {r.object_path&&<button className="ch3-linkbutton" onClick={()=>void viewImage(r.object_path!)}>查看手寫原稿</button>}
+        <p>AI 初步分數：<strong>{r.feedback.provisional_score}/10</strong>（內容 {r.feedback.breakdown?.content??"—"}/4 · 語言 {r.feedback.breakdown?.language??"—"}/4 · 清晰 {r.feedback.breakdown?.clarity??"—"}/2）</p>
+        {r.feedback.pronunciation_reference&&<p className="ch3-muted">Azure 參考指標：準確度 {r.feedback.pronunciation_reference.accuracy??"—"}/100 · 流暢度 {r.feedback.pronunciation_reference.fluency??"—"}/100。{r.feedback.pronunciation_reference.note}</p>}
+        {!!r.feedback.strengths?.length&&<><b>優點</b><ul>{r.feedback.strengths.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
+        {!!r.feedback.improvements?.length&&<><b>建議</b><ul>{r.feedback.improvements.map((x,i)=><li key={i}>{x}</li>)}</ul></>}
+        {r.reviewed_at?<p className="ch3-feedback"><strong>家長已確認：{r.final_score}/10</strong> · {r.corrected_text}</p>:<div className="ch3-review">
+          <label>家長核對文字<textarea className="ch3-input" rows={3} value={skillDrafts[r.id]??""} onChange={e=>setSkillDrafts(p=>({...p,[r.id]:e.target.value}))}/></label>
+          <label>最終分數（0–10）<input type="number" min={0} max={10} step={1} value={skillScores[r.id]??0} onChange={e=>setSkillScores(p=>({...p,[r.id]:Number(e.target.value)}))} style={{display:"block",width:100,padding:8,margin:"8px 0"}}/></label>
+          <button type="button" className="ch3-button ch3-primary" disabled={busy} onClick={()=>void confirmSkill(r.id)}>確認家長覆核（確認後鎖定）</button>
+        </div>}
+      </div>)}
     </section>
     <section className="ch3-card" style={{marginTop:18}}><h2>手寫原稿、AI 評語及家長覆核</h2>
       {uploads.length===0?<p>尚未有 Week 1 手寫答案。</p>:uploads.map(u=><div className="ch3-question" key={u.id}>
