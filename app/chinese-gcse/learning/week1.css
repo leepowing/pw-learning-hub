@@ -15,3 +15,9 @@
 @media print{.ch3-wrap>:not(.ch3-print-only){display:none!important}.ch3-print-only{display:block!important;background:#fff;color:black;font-family:serif}.ch3-print-lines div{height:44px;border-bottom:1px solid #aaa}.ch3-print-only h2{margin:10px 0}.ch3-wrap{max-width:none;padding:0}.ch3-print-only p{margin:8px 0}}
 
 .ch3-input{display:block;width:100%;border-radius:11px;padding:12px;border:1px solid #a9bec9;background:#fff;color:#1b2e43;font:inherit;min-height:90px;resize:vertical;margin-top:8px}.ch3-record audio{display:block;max-width:100%}.ch3-review p{white-space:pre-wrap}
+
+/* Submitted MCQ answers remain readable, but cannot be edited. */
+.ch3-choice.ch3-locked{cursor:default;background:#f3f6f7;color:#556875}
+.ch3-choice.ch3-locked:has(input:checked){background:#edf8f4;border-color:#7bb7a8}
+.ch3-choice input:disabled{cursor:not-allowed}
+.ch3-submitted{display:inline-block;font-size:13px;color:#176a5b;font-weight:700;margin-right:12px;margin-top:10px}

@@ -98,7 +98,10 @@ export default function ChineseStage3Week1(){
         if(files.error)throw new Error("無法讀取上傳紀錄："+files.error.message);
         if(!active)return;
         const incoming=saved.data?.answers as Partial<ProgressState>|undefined;
-        setProgress({...emptyProgress(),...incoming});
+        setProgress({...emptyProgress(),...incoming,
+          readingSubmitted: Array.isArray(incoming?.readingSubmitted)?incoming.readingSubmitted:[],
+          listeningSubmitted: Array.isArray(incoming?.listeningSubmitted)?incoming.listeningSubmitted:[],
+        });
         setUserId(user.id);setRole(profile.data?.role??"student");setUploads((files.data??[]) as Upload[]);
         setReady(true);setStatus("已載入個人進度 · 答案會自動儲存到 Supabase");
       }catch(e){if(active)setStatus(e instanceof Error?e.message:"載入失敗");}
@@ -129,16 +132,37 @@ export default function ChineseStage3Week1(){
 
   function update(fn:(old:ProgressState)=>ProgressState){setProgress(old=>fn(old));setRevision(x=>x+1);}
   function toggleKey<K extends "vocabSeen"|"translationChecked"|"speakingPractised">(key:K,id:string){
-    update(old=>({...old,[key]:has(id,old[key])?old[key].filter(x=>x!==id):[...old[key],id]}));
+    const sessionIndex=key==="vocabSeen"?0:key==="speakingPractised"?1:2;
+    if(progress.sessionsCompleted.includes(sessionIndex))return;
+    update(old=>old.sessionsCompleted.includes(sessionIndex)?old:{...old,[key]:has(id,old[key])?old[key].filter(x=>x!==id):[...old[key],id]});
+  }
+  // A choice becomes read-only once its answer is submitted, including after a reload.
+  // Previously completed sessions are treated as submitted for backwards compatibility.
+  function isChoiceLocked(type:"reading"|"listening",id:string,state:ProgressState=progress){
+    const completedSession=type==="reading"?0:1;
+    const submitted=type==="reading"?state.readingSubmitted:state.listeningSubmitted;
+    return state.sessionsCompleted.includes(completedSession)||Array.isArray(submitted)&&submitted.includes(id);
   }
   function selectAnswer(type:"reading"|"listening",id:string,choice:number){
-    update(old=>({...old,[type]:{...old[type],[id]:choice}}));
+    if(isChoiceLocked(type,id))return;
+    update(old=>isChoiceLocked(type,id,old)?old:{...old,[type]:{...old[type],[id]:choice}});
+  }
+  function submitChoice(type:"reading"|"listening",id:string){
+    if(isChoiceLocked(type,id))return;
+    if(!Object.prototype.hasOwnProperty.call(progress[type],id)){
+      setStatus("請先選擇一個答案，再按提交");return;
+    }
+    const key=type==="reading"?"readingSubmitted":"listeningSubmitted";
+    update(old=>isChoiceLocked(type,id,old)?old:{...old,[key]:[...(old[key]??[]),id]});
+    setCheckedAnswers(old=>has(id,old)?old:[...old,id]);
+    setStatus("答案已提交並鎖定，正在儲存至 Supabase…");
   }
   function setDictation(id:string,result:"correct"|"review"){
-    update(old=>({...old,dictation:{...old.dictation,[id]:result}}));
+    if(progress.sessionsCompleted.includes(2))return;
+    update(old=>old.sessionsCompleted.includes(2)?old:{...old,dictation:{...old.dictation,[id]:result}});
   }
-  const s1QuestionsDone=readingQuestions.every(q=>Object.prototype.hasOwnProperty.call(progress.reading,q.id));
-  const s2QuestionsDone=listeningQuestions.every(q=>Object.prototype.hasOwnProperty.call(progress.listening,q.id));
+  const s1QuestionsDone=readingQuestions.every(q=>isChoiceLocked("reading",q.id));
+  const s2QuestionsDone=listeningQuestions.every(q=>isChoiceLocked("listening",q.id));
   const speakingGraded=speakingPrompts.filter(t=>!!skillReviews[skillKey("speaking",t.id)]).length;
   const translationGraded=translationTasks.filter(t=>!!skillReviews[skillKey("translation",t.id)]).length;
   const canComplete=[
@@ -328,34 +352,39 @@ export default function ChineseStage3Week1(){
         </div>
         <div className="ch3-between ch3-actions">
           <button className="ch3-button" disabled={flashIndex===0} onClick={()=>{setFlashIndex(x=>x-1);setFlipped(false)}}>← 上一詞</button>
-          <label><input type="checkbox" checked={has(currentWord.id,progress.vocabSeen)} onChange={()=>toggleKey("vocabSeen",currentWord.id)}/> 已學習</label>
+          <label><input type="checkbox" checked={has(currentWord.id,progress.vocabSeen)} disabled={progress.sessionsCompleted.includes(0)} onChange={()=>toggleKey("vocabSeen",currentWord.id)}/> 已學習</label>
           <button className="ch3-button ch3-primary" disabled={flashIndex===vocabulary.length-1} onClick={()=>{setFlashIndex(x=>x+1);setFlipped(false)}}>下一詞 →</button>
         </div>
         <div className="ch3-vocab-pills">{vocabulary.map((v,i)=><button key={v.id} className={flashIndex===i?"active":""} onClick={()=>{setFlashIndex(i);setFlipped(false)}}>{i+1}{has(v.id,progress.vocabSeen)?" ✓":""}</button>)}</div>
         <div className="ch3-divider"/>
         <h3>Original GCSE-style Reading</h3>
-        <p className="ch3-muted">閱讀繁體中文文章，然後用英文理解題目。</p>
+        <p className="ch3-muted">閱讀繁體中文文章，然後用英文理解題目。每題選定答案後按「提交答案」；提交後立即鎖定，重新登入亦不能修改。</p>
         <div className="ch3-passage" lang="zh-Hant">{readingText}</div>
         {readingQuestions.map((q,i)=><div key={q.id} className="ch3-question">
           <strong>{i+1}. {q.question}</strong>
-          {q.choices.map((a,j)=><label key={a} className="ch3-choice"><input type="radio" name={q.id} checked={progress.reading[q.id]===j} onChange={()=>selectAnswer("reading",q.id,j)}/>{a}</label>)}
-          {Object.prototype.hasOwnProperty.call(progress.reading,q.id)&&<button className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"檢查答案與解釋"}</button>}
-          {has(q.id,checkedAnswers)&&<p className="ch3-feedback"><strong>{progress.reading[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong> · {q.explanation}</p>}
+          {q.choices.map((a,j)=><label key={a} className={`ch3-choice${isChoiceLocked("reading",q.id)?" ch3-locked":""}`}><input type="radio" name={q.id} disabled={isChoiceLocked("reading",q.id)} checked={progress.reading[q.id]===j} onChange={()=>selectAnswer("reading",q.id,j)}/>{a}</label>)}
+          {!isChoiceLocked("reading",q.id)?
+            <button type="button" className="ch3-button ch3-primary" disabled={!Object.prototype.hasOwnProperty.call(progress.reading,q.id)} onClick={()=>submitChoice("reading",q.id)}>提交答案（提交後不能修改）</button>:
+            <><small className="ch3-submitted">✓ 已提交 · 答案已鎖定</small><button type="button" className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"查看正確答案與解釋"}</button></>}
+          {isChoiceLocked("reading",q.id)&&has(q.id,checkedAnswers)&&<p className="ch3-feedback"><strong>{progress.reading[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
         </div>)}
-        <p className="ch3-muted">Reading 練習：{Object.keys(progress.reading).length}/4 題已答 · 正確 {correctness(progress.reading,readingQuestions)}/4</p>
+        <p className="ch3-muted">Reading：已提交 {readingQuestions.filter(q=>isChoiceLocked("reading",q.id)).length}/4 題 {s1QuestionsDone?`· 正確 ${correctness(progress.reading,readingQuestions)}/4`:"· 提交全部 4 題後才顯示總分"}</p>
       </section>}
       {session===1&&<section className="ch3-card">
         <div className="ch3-section-label">PAPER 1 · LISTENING / PAPER 2 · SPEAKING</div>
         <h2>Session 2 — 廣東話聆聽及口試</h2>
-        <p className="ch3-muted">先聽完整段錄音，再用英文回答。音檔由現有 Azure F0 產生，重播已載入音檔毋須重新合成。</p>
+        <p className="ch3-muted">先聽完整段錄音，再用英文回答。每題按「提交答案」後即鎖定，不能修改；重播已載入音檔毋須重新合成。</p>
         {listeningClips.map(clip=><div key={clip.id} className="ch3-clip">
           <div className="ch3-between"><strong>{clip.title}</strong><button className="ch3-button" disabled={!!audioBusy} onClick={()=>void playClip(clip.id)}>{audioBusy===clip.id?"正在載入…":"▶ 廣東話播放 / 重播"}</button></div>
           {listeningQuestions.filter(q=>q.clipId===clip.id).map(q=><div className="ch3-question" key={q.id}>
-            <strong>{q.question}</strong>{q.choices.map((c,i)=><label className="ch3-choice" key={c}><input type="radio" name={q.id} checked={progress.listening[q.id]===i} onChange={()=>selectAnswer("listening",q.id,i)}/>{c}</label>)}
-            {Object.prototype.hasOwnProperty.call(progress.listening,q.id)&&<button className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"檢查答案與解釋"}</button>}
-            {has(q.id,checkedAnswers)&&<p className="ch3-feedback">{progress.listening[q.id]===q.correct?"✓ Correct":"需要重溫"} · {q.explanation}</p>}
+            <strong>{q.question}</strong>{q.choices.map((c,i)=><label className={`ch3-choice${isChoiceLocked("listening",q.id)?" ch3-locked":""}`} key={c}><input type="radio" name={q.id} disabled={isChoiceLocked("listening",q.id)} checked={progress.listening[q.id]===i} onChange={()=>selectAnswer("listening",q.id,i)}/>{c}</label>)}
+            {!isChoiceLocked("listening",q.id)?
+              <button type="button" className="ch3-button ch3-primary" disabled={!Object.prototype.hasOwnProperty.call(progress.listening,q.id)} onClick={()=>submitChoice("listening",q.id)}>提交答案（提交後不能修改）</button>:
+              <><small className="ch3-submitted">✓ 已提交 · 答案已鎖定</small><button type="button" className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"查看正確答案與解釋"}</button></>}
+            {isChoiceLocked("listening",q.id)&&has(q.id,checkedAnswers)&&<p className="ch3-feedback"><strong>{progress.listening[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
           </div>)}
         </div>)}
+        <p className="ch3-muted">Listening：已提交 {listeningQuestions.filter(q=>isChoiceLocked("listening",q.id)).length}/6 題 {s2QuestionsDone?`· 正確 ${correctness(progress.listening,listeningQuestions)}/6`:"· 提交全部 6 題後才顯示總分"}</p>
         <h3>Speaking · Role play / Picture practice / Conversation</h3>
         <p className="ch3-muted">先用廣東話口頭回答，再錄下來聽一次。錄音只在目前裝置播放，不會上傳或由 AI 自動評分。</p>
         <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="教室插圖：老師與兩名學生互動，背景有窗戶、時鐘、佈告板和書架">
@@ -384,7 +413,7 @@ export default function ChineseStage3Week1(){
             {micError&&<p className="ch3-error">{micError}</p>}
           </div>}
           {renderSkillFeedback("speaking",s.id)}
-          <label className="ch3-inline"><input type="checkbox" checked={has(s.id,progress.speakingPractised)} onChange={()=>toggleKey("speakingPractised",s.id)}/> 已練習本題（自評紀錄）</label>
+          <label className="ch3-inline"><input type="checkbox" checked={has(s.id,progress.speakingPractised)} disabled={progress.sessionsCompleted.includes(1)} onChange={()=>toggleKey("speakingPractised",s.id)}/> 已練習本題（自評紀錄）</label>
         </div>)}
         <p className="ch3-muted">Speaking AI 完成：{speakingGraded}/3 · 正式口試的發音與互動能力仍需真人評估。</p>
         {skillError&&<p role="alert" className="ch3-error">{skillError}</p>}
@@ -398,7 +427,7 @@ export default function ChineseStage3Week1(){
             <div><small>{i+1}/8 · English clue</small><strong>{v.english}</strong></div>
             <div>
               <button className="ch3-button" onClick={()=>setShownDictation(p=>has(v.id,p)?p.filter(x=>x!==v.id):[...p,v.id])}>{has(v.id,shownDictation)?"隱藏答案":"寫完後顯示"}</button>
-              {has(v.id,shownDictation)&&<><p className="ch3-answer">{v.traditional} <small>{v.jyutping}</small></p><div className="ch3-actions"><button className="ch3-button" onClick={()=>setDictation(v.id,"correct")}>✓ 正確</button><button className="ch3-button" onClick={()=>setDictation(v.id,"review")}>需重溫</button></div></>}
+              {has(v.id,shownDictation)&&<><p className="ch3-answer">{v.traditional} <small>{v.jyutping}</small></p><div className="ch3-actions"><button className="ch3-button" disabled={progress.sessionsCompleted.includes(2)} onClick={()=>setDictation(v.id,"correct")}>✓ 正確</button><button className="ch3-button" disabled={progress.sessionsCompleted.includes(2)} onClick={()=>setDictation(v.id,"review")}>需重溫</button></div></>}
               {progress.dictation[v.id]&&<small className="ch3-muted">已記錄：{progress.dictation[v.id]==="correct"?"寫得正確":"需要重溫"}</small>}
             </div>
           </div>)}

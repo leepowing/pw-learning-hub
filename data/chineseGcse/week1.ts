@@ -82,6 +82,8 @@ export type ProgressState = {
   vocabSeen: string[];
   reading: Record<string, number>;
   listening: Record<string, number>;
+  readingSubmitted: string[];
+  listeningSubmitted: string[];
   dictation: Record<string, "correct" | "review">;
   translationChecked: string[];
   speakingPractised: string[];
@@ -89,7 +91,7 @@ export type ProgressState = {
 };
 
 export const emptyProgress = (): ProgressState => ({
-  vocabSeen: [], reading: {}, listening: {}, dictation: {},
+  vocabSeen: [], reading: {}, listening: {}, readingSubmitted: [], listeningSubmitted: [], dictation: {},
   translationChecked: [], speakingPractised: [], sessionsCompleted: [],
 });
 
