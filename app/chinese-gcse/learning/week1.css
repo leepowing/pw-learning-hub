@@ -21,3 +21,8 @@
 .ch3-choice.ch3-locked:has(input:checked){background:#edf8f4;border-color:#7bb7a8}
 .ch3-choice input:disabled{cursor:not-allowed}
 .ch3-submitted{display:inline-block;font-size:13px;color:#176a5b;font-weight:700;margin-right:12px;margin-top:10px}
+
+/* Wrong submitted answers: red rather than the correct-answer green. */
+.ch3-choice.ch3-locked.ch3-wrong-choice,.ch3-choice.ch3-locked.ch3-wrong-choice:has(input:checked){background:#fff0f0;border-color:#dc5555;color:#9b1c1c}
+.ch3-choice.ch3-wrong-choice input{accent-color:#bf3030}
+.ch3-feedback.ch3-wrong-feedback{background:#fff1f1;border-left-color:#dc4444;color:#8e2424}

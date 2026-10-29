@@ -20,6 +20,7 @@ type ParentReview={upload_id:string;corrected_transcription:string;final_score:n
 type SkillFeedback={transcription:string;provisional_score:number;strengths:string[];improvements:string[];score_reason:string;breakdown?:{content:number;language:number;clarity:number};pronunciation_reference?:{accuracy:number|null;fluency:number|null;note:string}};
 type SkillReview={id:string;skill:"speaking"|"translation";task_id:string;input_kind:string;input_text:string;object_path:string|null;feedback:SkillFeedback;final_score:number|null;corrected_text:string|null;reviewed_at:string|null};
 const skillKey=(skill:string,id:string)=>`${skill}:${id}`;
+type PrivateRecording={task_id:string;object_path:string;expires_at:string};
 // Browser MediaRecorder records compressed audio; Azure short-audio REST needs 16k mono PCM WAV.
 async function toAzureWav(recorded:Blob):Promise<Blob>{
   const Context=window.AudioContext;
@@ -76,6 +77,7 @@ export default function ChineseStage3Week1(){
   const [skillBusy,setSkillBusy]=useState("");
   const [translationInputs,setTranslationInputs]=useState<Record<string,string>>({});
   const [skillError,setSkillError]=useState("");
+  const [privateRecordings,setPrivateRecordings]=useState<Record<string,PrivateRecording>>({});
   const recorder=useRef<MediaRecorder|null>(null);
   const streamRef=useRef<MediaStream|null>(null);
   const recordUrlRef=useRef("");
@@ -194,6 +196,30 @@ export default function ChineseStage3Week1(){
     }catch(e){setStatus(e instanceof Error?e.message:"錄音失敗");}finally{setAudioBusy("");}
   }
 
+  async function loadPrivateRecordings(user:string){
+    if(!db)return;
+    const {data,error}=await db.from("chinese_stage3_speaking_recordings")
+      .select("task_id,object_path,expires_at").eq("user_id",user).eq("week",1);
+    if(!error)setPrivateRecordings(Object.fromEntries(((data??[]) as PrivateRecording[]).map(r=>[r.task_id,r])));
+  }
+  async function savePrivateRecording(taskId:string,blob:Blob){
+    if(!db||!userId)throw new Error("請先登入學生帳戶");
+    if(privateRecordings[taskId])return;
+    const ext=blob.type.includes("mp4")?"mp4":blob.type.includes("ogg")?"ogg":"webm";
+    const path=`${userId}/week-01/${taskId}/${crypto.randomUUID()}.${ext}`;
+    const {error:uploadError}=await db.storage.from("chinese-speaking-private").upload(path,blob,{upsert:false,contentType:blob.type||"audio/webm"});
+    if(uploadError)throw new Error(uploadError.message);
+    const {error:rowError}=await db.from("chinese_stage3_speaking_recordings")
+      .insert({user_id:userId,week:1,task_id:taskId,object_path:path});
+    if(rowError){await db.storage.from("chinese-speaking-private").remove([path]);throw new Error(rowError.message)}
+    await loadPrivateRecordings(userId);
+  }
+  async function playPrivateRecording(path:string){
+    if(!db)return;
+    const {data,error}=await db.storage.from("chinese-speaking-private").createSignedUrl(path,90);
+    if(error||!data){setSkillError("無法開啟私人錄音："+(error?.message??"未知錯誤"));return;}
+    const audio=new Audio(data.signedUrl);await audio.play().catch(()=>setSkillError("無法播放錄音，請檢查瀏覽器音訊權限"));
+  }
   async function loadSkills(user:string){
     if(!db)return;
     const {data,error}=await db.from("chinese_stage3_skill_reviews").select("*").eq("user_id",user).eq("week",1);
@@ -201,7 +227,7 @@ export default function ChineseStage3Week1(){
     setSkillReviews(Object.fromEntries(((data??[]) as SkillReview[]).map(r=>[skillKey(r.skill,r.task_id),r])));
     setSkillError("");
   }
-  useEffect(()=>{if(ready&&userId)void loadSkills(userId)},[ready,userId]);
+  useEffect(()=>{if(ready&&userId){void loadSkills(userId);void loadPrivateRecordings(userId)}},[ready,userId]);
   useEffect(()=>{const onFocus=()=>{if(ready&&userId)void loadSkills(userId)};window.addEventListener("focus",onFocus);return()=>window.removeEventListener("focus",onFocus)},[ready,userId]);
   async function submitSkill(skill:"speaking"|"translation",id:string,objectPath?:string){
     if(!db||!userId||skillBusy)return;
@@ -220,7 +246,11 @@ export default function ChineseStage3Week1(){
         res=await fetch("/api/chinese-gcse/learning/translation",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({taskId:id,...(objectPath?{objectPath}:{answerText:answer})})});
       }
       const result=await res.json().catch(()=>({}));if(!res.ok)throw new Error(result.error??"AI 批改失敗");
-      await loadSkills(userId);setStatus(result.cached?"已讀取之前儲存的 AI 評語":"AI 初步評語已儲存 · 等待家長覆核");
+      await loadSkills(userId);
+      if(skill==="speaking"&&recordBlob&&recordedTask===id&&!privateRecordings[id]){
+        try{await savePrivateRecording(id,recordBlob)}catch(e){setSkillError("AI 評語已儲存，但私人錄音未能保存："+(e instanceof Error?e.message:"未知錯誤"));}
+      }
+      setStatus(result.cached?"已讀取之前儲存的 AI 評語":"AI 初步評語已儲存 · 等待家長覆核");
     }catch(e){const msg=e instanceof Error?e.message:"未知錯誤";setSkillError(msg);setStatus("批改失敗："+msg)}finally{setSkillBusy("");}
   }
   async function submitTranslationPhoto(taskId:string,file:File){
@@ -362,11 +392,11 @@ export default function ChineseStage3Week1(){
         <div className="ch3-passage" lang="zh-Hant">{readingText}</div>
         {readingQuestions.map((q,i)=><div key={q.id} className="ch3-question">
           <strong>{i+1}. {q.question}</strong>
-          {q.choices.map((a,j)=><label key={a} className={`ch3-choice${isChoiceLocked("reading",q.id)?" ch3-locked":""}`}><input type="radio" name={q.id} disabled={isChoiceLocked("reading",q.id)} checked={progress.reading[q.id]===j} onChange={()=>selectAnswer("reading",q.id,j)}/>{a}</label>)}
+          {q.choices.map((a,j)=><label key={a} className={`ch3-choice${isChoiceLocked("reading",q.id)?" ch3-locked":""}${isChoiceLocked("reading",q.id)&&progress.reading[q.id]===j&&j!==q.correct?" ch3-wrong-choice":""}`}><input type="radio" name={q.id} disabled={isChoiceLocked("reading",q.id)} checked={progress.reading[q.id]===j} onChange={()=>selectAnswer("reading",q.id,j)}/>{a}</label>)}
           {!isChoiceLocked("reading",q.id)?
             <button type="button" className="ch3-button ch3-primary" disabled={!Object.prototype.hasOwnProperty.call(progress.reading,q.id)} onClick={()=>submitChoice("reading",q.id)}>提交答案（提交後不能修改）</button>:
             <><small className="ch3-submitted">✓ 已提交 · 答案已鎖定</small><button type="button" className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"查看正確答案與解釋"}</button></>}
-          {isChoiceLocked("reading",q.id)&&has(q.id,checkedAnswers)&&<p className="ch3-feedback"><strong>{progress.reading[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
+          {isChoiceLocked("reading",q.id)&&has(q.id,checkedAnswers)&&<p className={progress.reading[q.id]===q.correct?"ch3-feedback":"ch3-feedback ch3-wrong-feedback"}><strong>{progress.reading[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
         </div>)}
         <p className="ch3-muted">Reading：已提交 {readingQuestions.filter(q=>isChoiceLocked("reading",q.id)).length}/4 題 {s1QuestionsDone?`· 正確 ${correctness(progress.reading,readingQuestions)}/4`:"· 提交全部 4 題後才顯示總分"}</p>
       </section>}
@@ -377,16 +407,16 @@ export default function ChineseStage3Week1(){
         {listeningClips.map(clip=><div key={clip.id} className="ch3-clip">
           <div className="ch3-between"><strong>{clip.title}</strong><button className="ch3-button" disabled={!!audioBusy} onClick={()=>void playClip(clip.id)}>{audioBusy===clip.id?"正在載入…":"▶ 廣東話播放 / 重播"}</button></div>
           {listeningQuestions.filter(q=>q.clipId===clip.id).map(q=><div className="ch3-question" key={q.id}>
-            <strong>{q.question}</strong>{q.choices.map((c,i)=><label className={`ch3-choice${isChoiceLocked("listening",q.id)?" ch3-locked":""}`} key={c}><input type="radio" name={q.id} disabled={isChoiceLocked("listening",q.id)} checked={progress.listening[q.id]===i} onChange={()=>selectAnswer("listening",q.id,i)}/>{c}</label>)}
+            <strong>{q.question}</strong>{q.choices.map((c,i)=><label className={`ch3-choice${isChoiceLocked("listening",q.id)?" ch3-locked":""}${isChoiceLocked("listening",q.id)&&progress.listening[q.id]===i&&i!==q.correct?" ch3-wrong-choice":""}`} key={c}><input type="radio" name={q.id} disabled={isChoiceLocked("listening",q.id)} checked={progress.listening[q.id]===i} onChange={()=>selectAnswer("listening",q.id,i)}/>{c}</label>)}
             {!isChoiceLocked("listening",q.id)?
               <button type="button" className="ch3-button ch3-primary" disabled={!Object.prototype.hasOwnProperty.call(progress.listening,q.id)} onClick={()=>submitChoice("listening",q.id)}>提交答案（提交後不能修改）</button>:
               <><small className="ch3-submitted">✓ 已提交 · 答案已鎖定</small><button type="button" className="ch3-linkbutton" onClick={()=>setCheckedAnswers(p=>has(q.id,p)?p.filter(x=>x!==q.id):[...p,q.id])}>{has(q.id,checkedAnswers)?"收起解析":"查看正確答案與解釋"}</button></>}
-            {isChoiceLocked("listening",q.id)&&has(q.id,checkedAnswers)&&<p className="ch3-feedback"><strong>{progress.listening[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
+            {isChoiceLocked("listening",q.id)&&has(q.id,checkedAnswers)&&<p className={progress.listening[q.id]===q.correct?"ch3-feedback":"ch3-feedback ch3-wrong-feedback"}><strong>{progress.listening[q.id]===q.correct?"✓ Correct":"需要重溫"}</strong><span> · 正確答案：{q.choices[q.correct]}</span><br/>{q.explanation}</p>}
           </div>)}
         </div>)}
         <p className="ch3-muted">Listening：已提交 {listeningQuestions.filter(q=>isChoiceLocked("listening",q.id)).length}/6 題 {s2QuestionsDone?`· 正確 ${correctness(progress.listening,listeningQuestions)}/6`:"· 提交全部 6 題後才顯示總分"}</p>
         <h3>Speaking · Role play / Picture practice / Conversation</h3>
-        <p className="ch3-muted">先用廣東話口頭回答，再錄下來聽一次。錄音只在目前裝置播放，不會上傳或由 AI 自動評分。</p>
+        <p className="ch3-muted">先用廣東話回答，再錄下來重聽。按 AI 評估後會私人保存一段原音（180 日），供學生及 Daddy 覆核。</p>
         <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="教室插圖：老師與兩名學生互動，背景有窗戶、時鐘、佈告板和書架">
           <Image
             src="/images/chinese-gcse/week1-classroom.webp"
@@ -397,7 +427,7 @@ export default function ChineseStage3Week1(){
             style={{ display: "block", width: "100%", height: "auto" }}
           />
         </div>
-        <p className="ch3-muted">每題先錄製最多 28 秒粵語答案，再主動按 AI 評估。錄音在頁面內播放；只傳送至 Azure 作即時辨識，不會長期儲存音檔。AI 評分屬教學參考。</p>
+        <p className="ch3-muted">每題先錄製最多 28 秒粵語答案，再主動按 AI 評估。錄音先傳至 Azure 作即時辨識；AI 評估成功後另外保存在私人 Storage 180 日，供家長重聽。每題只保留一段；AI 評分屬教學參考。</p>
         {speakingPrompts.map((s,i)=><div className="ch3-question" key={s.id}>
           <strong>{i+1}. {s.label}</strong><p>{s.english}</p>
           <button className="ch3-linkbutton" onClick={()=>setShownSpeaking(p=>has(s.id,p)?p.filter(x=>x!==s.id):[...p,s.id])}>{has(s.id,shownSpeaking)?"收起參考句":"查看廣東話參考句（建議先回答）"}</button>
@@ -412,6 +442,7 @@ export default function ChineseStage3Week1(){
             {micBusy&&recordingTask===s.id&&<p>正在錄音（最多約 28 秒）…</p>}
             {micError&&<p className="ch3-error">{micError}</p>}
           </div>}
+          {privateRecordings[s.id]&&<p className="ch3-muted"><button type="button" className="ch3-linkbutton" onClick={()=>void playPrivateRecording(privateRecordings[s.id].object_path)}>▶ 重聽已儲存私人錄音</button> · 保存至 {new Date(privateRecordings[s.id].expires_at).toLocaleDateString("en-GB")}</p>}
           {renderSkillFeedback("speaking",s.id)}
           <label className="ch3-inline"><input type="checkbox" checked={has(s.id,progress.speakingPractised)} disabled={progress.sessionsCompleted.includes(1)} onChange={()=>toggleKey("speakingPractised",s.id)}/> 已練習本題（自評紀錄）</label>
         </div>)}

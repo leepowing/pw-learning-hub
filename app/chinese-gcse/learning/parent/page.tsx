@@ -9,6 +9,7 @@ const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const db=url&&key?createClient(url,key):null;
 type Student={id:string;student:string};
+type PrivateRecording={task_id:string;object_path:string;expires_at:string};
 type Upload={id:string;user_id:string;object_path:string;file_name:string;created_at:string};
 type Feedback={transcription:string;uncertain:string[];strengths:string[];improvements:string[];provisional_score:number;score_reason:string};
 type AIReview={upload_id:string;feedback:Feedback};
@@ -29,6 +30,7 @@ export default function Week1Parent(){
  const [scores,setScores]=useState<Record<string,number>>({});
  const [busy,setBusy]=useState(false);
  const [skillReviews,setSkillReviews]=useState<SkillReview[]>([]);
+ const [recordings,setRecordings]=useState<Record<string,PrivateRecording>>({});
  const [skillDrafts,setSkillDrafts]=useState<Record<string,string>>({});
  const [skillScores,setSkillScores]=useState<Record<string,number>>({});
  useEffect(()=>{let active=true;void (async()=>{
@@ -49,20 +51,22 @@ export default function Week1Parent(){
  async function load(student:string){
    if(!db||!student)return;
    setStatus("正在載入學生 Week 1 進度…");
-   const [p,u,r,c,skills]=await Promise.all([
+   const [p,u,r,c,skills,audios]=await Promise.all([
      db.from("chinese_stage3_progress").select("answers").eq("user_id",student).eq("week",1).maybeSingle(),
      db.from("chinese_stage3_uploads").select("id,user_id,object_path,file_name,created_at").eq("user_id",student).eq("week",1).order("created_at",{ascending:false}),
      db.from("chinese_stage3_ai_reviews").select("upload_id,feedback").eq("user_id",student),
      db.from("chinese_stage3_parent_reviews").select("upload_id,corrected_transcription,final_score,reviewed_at").eq("student_id",student),
      db.from("chinese_stage3_skill_reviews").select("*").eq("user_id",student).eq("week",1).order("created_at",{ascending:true}),
+     db.from("chinese_stage3_speaking_recordings").select("task_id,object_path,expires_at").eq("user_id",student).eq("week",1),
    ]);
-   if(p.error||u.error||r.error||c.error||skills.error){setStatus(p.error?.message??u.error?.message??r.error?.message??c.error?.message??skills.error?.message??"載入失敗 · 請檢查 Stage 3 v2 SQL");return;}
+   if(p.error||u.error||r.error||c.error||skills.error||audios.error){setStatus(p.error?.message??u.error?.message??r.error?.message??c.error?.message??skills.error?.message??audios.error?.message??"載入失敗 · 請檢查 Stage 3 v2 SQL");return;}
    const state={...emptyProgress(),...(p.data?.answers??{})} as ProgressState;
    const rs=Object.fromEntries((r.data??[]).map(x=>[x.upload_id,x.feedback as Feedback]));
    setProgress(state);setUploads((u.data??[]) as Upload[]);setFeedbacks(rs);
    setConfirmed(Object.fromEntries((c.data??[]).map(x=>[x.upload_id,x as Confirmed])));
    setDraft(Object.fromEntries((r.data??[]).map(x=>[x.upload_id,c.data?.find(z=>z.upload_id===x.upload_id)?.corrected_transcription??(x.feedback as Feedback).transcription??""])));
    setScores(Object.fromEntries((r.data??[]).map(x=>[x.upload_id,c.data?.find(z=>z.upload_id===x.upload_id)?.final_score??(x.feedback as Feedback).provisional_score??0])));
+   setRecordings(Object.fromEntries(((audios.data??[]) as PrivateRecording[]).map(a=>[a.task_id,a])));
    const rows=(skills.data??[]) as SkillReview[];
    setSkillReviews(rows);
    setSkillDrafts(Object.fromEntries(rows.map(row=>[row.id,row.corrected_text??row.feedback?.transcription??row.input_text??""])));
@@ -70,6 +74,12 @@ export default function Week1Parent(){
    setStatus("已載入學生資料");
  }
  useEffect(()=>{if(studentId)void load(studentId)},[studentId]);
+ async function playRecording(path:string){
+   if(!db)return;
+   const {data,error}=await db.storage.from("chinese-speaking-private").createSignedUrl(path,90);
+   if(error||!data){setStatus("無法讀取私人錄音："+(error?.message??"未知錯誤"));return;}
+   const audio=new Audio(data.signedUrl);await audio.play().catch(()=>setStatus("無法播放錄音，請檢查音訊權限"));
+ }
  async function viewImage(path:string){if(!db)return;const {data,error}=await db.storage.from("chinese-handwriting").createSignedUrl(path,90);if(error||!data){setStatus(error?.message??"無法開啟圖片");return;}window.open(data.signedUrl,"_blank","noopener,noreferrer");}
  async function confirm(uploadId:string){
    if(!db||busy||confirmed[uploadId])return;
@@ -119,9 +129,10 @@ export default function Week1Parent(){
     </section>
     <section className="ch3-card" style={{marginTop:18}}>
       <h2>Speaking / Translation · AI 評語及家長覆核</h2>
-      <p className="ch3-muted">AI 分數是練習參考。廣東話音檔只作即時辨識，不長期儲存；家長可核對辨識文字及內容，但不能單靠文字確認發音。</p>
+      <p className="ch3-muted">AI 分數是練習參考。已儲存的廣東話原音保留 180 日，家長可重聽核對；請勿單憑 Azure 分數判斷 GCSE 口試水平。</p>
       {skillReviews.length===0?<p className="ch3-muted">暫未有語音或翻譯 AI 評語。</p>:skillReviews.map(r=><div key={r.id} className="ch3-question">
         <strong>{r.skill==="speaking"?"Speaking · 廣東話":"Translation · 翻譯"} / {r.task_id}</strong>
+        {r.skill==="speaking"&&recordings[r.task_id]&&<p><button type="button" className="ch3-button" onClick={()=>void playRecording(recordings[r.task_id].object_path)}>▶ 重聽學生原始錄音</button><small className="ch3-muted"> · 到期 {new Date(recordings[r.task_id].expires_at).toLocaleDateString("en-GB")}</small></p>}
         <p><b>學生答案／AI 辨識：</b>{r.feedback.transcription||r.input_text}</p>
         {r.object_path&&<button className="ch3-linkbutton" onClick={()=>void viewImage(r.object_path!)}>查看手寫原稿</button>}
         <p>AI 初步分數：<strong>{r.feedback.provisional_score}/10</strong>（內容 {r.feedback.breakdown?.content??"—"}/4 · 語言 {r.feedback.breakdown?.language??"—"}/4 · 清晰 {r.feedback.breakdown?.clarity??"—"}/2）</p>

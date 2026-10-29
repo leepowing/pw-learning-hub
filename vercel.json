@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/chinese-gcse/learning/cleanup-recordings",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
