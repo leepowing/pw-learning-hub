@@ -353,7 +353,7 @@ export default function ChineseStage3Week1(){
   const currentWord=vocabulary[flashIndex];
   return <main className="ch3-wrap">
     <header className="ch3-header">
-      <Link href="/chinese-gcse" className="ch3-back">← 返回 GCSE Chinese</Link>
+      <Link href="/chinese-gcse" className="ch3-back">← 返回 GCSE Chinese</Link> <Link href="/chinese-gcse/learning/week2" className="ch3-parent-link">Week 2 — Daily Life →</Link>
       <div className="ch3-eyebrow">PW LEARNING HUB · STAGE 3 · WEEK 1</div>
       <h1>School Life <span>學校生活</span></h1>
       <p>Traditional Chinese · Hong Kong Cantonese · Edexcel GCSE preparation · 同一課程，各自儲存進度</p>

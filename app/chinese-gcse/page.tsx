@@ -121,6 +121,14 @@ export default function ChineseLearningHome() {
               <span>{page.data.role === "parent" ? "進入 Stage 3 家長中心" : "繼續 Week 1 學習"}</span><span aria-hidden="true">→</span>
             </Link>
           </article>
+          <article className="hub-card" style={{marginTop:14}}>
+            <div className="hub-icon" aria-hidden="true">2</div>
+            <h2>Week 2 — Daily Life（日常生活）</h2>
+            <p>8 個新詞語 · Reading、廣東話 Listening / Speaking、默寫、中英翻譯及手寫短文。</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week2/parent" : "/chinese-gcse/learning/week2"}>
+              <span>{page.data.role === "parent" ? "查看 Week 2 家長進度" : "進入 Week 2 課程"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </article>
         </section>
 
         <section className="hub-section" aria-label="歷史診斷評估">

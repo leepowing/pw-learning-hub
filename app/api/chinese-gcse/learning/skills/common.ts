@@ -25,9 +25,9 @@ export async function authenticate(request:Request){
   if(profileError||profile?.role!=="student")throw new Error("STUDENT_ONLY");
   return {db,user};
 }
-export async function existingReview(db:any,userId:string,skill:Skill,taskId:string){
+export async function existingReview(db:any,userId:string,skill:Skill,taskId:string,week=1){
   const {data,error}=await db.from("chinese_stage3_skill_reviews").select("*")
-    .eq("user_id",userId).eq("week",1).eq("skill",skill).eq("task_id",taskId).maybeSingle();
+    .eq("user_id",userId).eq("week",week).eq("skill",skill).eq("task_id",taskId).maybeSingle();
   if(error)throw new Error("REVIEW_READ_FAILED");
   return data;
 }
