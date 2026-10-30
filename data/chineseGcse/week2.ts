@@ -56,7 +56,7 @@ export const translationTasks = [
 
 export const speakingPrompts = [
  {id:"role",label:"Role play",english:"A teacher asks when you usually get up on school days and why. Answer in Cantonese.",sample:"我平日通常七點起身，因為要準備返學。"},
- {id:"picture",label:"Picture-based practice",english:"Look at the daily-routine illustration. Describe two things the student is doing and give one opinion in Cantonese.",sample:"我見到一個學生執書包同睇時鐘。我覺得早啲準備好好重要。"},
+ {id:"picture",label:"Picture-based practice",english:"Look at the picture. Describe two things you can see and give one opinion about preparing for study. Answer in Cantonese.",sample:"我見到一個學生坐喺書枱前面寫字，枱上面有打開咗嘅書。我覺得做功課之前準備好書同文具好重要。"},
  {id:"conversation",label:"Conversation",english:"Describe how you arrange your homework and free time after school, and explain your choice.",sample:"放學之後我會先做功課，再做運動，因為咁樣比較容易安排時間。"},
 ] as const;
 
