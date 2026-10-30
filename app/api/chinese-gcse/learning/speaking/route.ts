@@ -45,7 +45,67 @@ export async function POST(request:Request){
       const norm=(x:unknown)=>typeof x==="number"&&Number.isFinite(x)?Math.round(x):null;
       pron={accuracy:norm(best.AccuracyScore),fluency:norm(best.FluencyScore),note:"Azure 發音參考指標以辨識所得文字作比較，可能高估表現；不是正式口試評級，請家長聽取原錄音自行判斷。"};
     }catch{ /* If optional assessment fails, keep content grading available. */ }
-    const feedback=await askOpenAI(`GCSE Chinese Cantonese SPEAKING task ${task.label}: ${task.english}. Azure zh-HK speech-to-text transcript (recognition can be inaccurate): ${transcript}. Assess ONLY communicated content, appropriate Cantonese vocabulary/grammar and transcript clarity; DO NOT assert pronunciation from text. Use a 0-4 content,0-4 language,0-2 clarity practice rubric. Set transcription to the transcript. Provide specific Cantonese speaking suggestions in Traditional Chinese.`);
+
+
+    const pictureGuidance = taskId === "picture"
+      ? `
+PICTURE-BASED SPEAKING RULES:
+The illustration shows a teacher explaining something to two
+students in a classroom. Visible details include books, desks,
+a window, a wall clock and a noticeboard.
+
+This is a verified description of the picture. You have not
+directly viewed the image.
+
+Accept other reasonable Cantonese descriptions consistent
+with these visible details.
+
+The sample answer is an example, NOT a required script.
+Do not require exact wording.
+
+Credit the student for:
+- Two relevant, accurate observations about the picture.
+- One relevant opinion about the classroom or learning.
+- Appropriate Cantonese vocabulary and grammar.
+- Clear communication.
+
+Do not require the student to mention every object.
+Do not penalise natural colloquial Cantonese.
+Do not invent image details or reward clearly unsupported claims.
+
+If speech recognition seems unreliable, flag the uncertainty
+for parent review rather than assuming the student made
+a speaking mistake.
+`
+      : "";
+
+    const feedback = await askOpenAI(`
+GCSE Chinese Cantonese SPEAKING practice.
+
+Task: ${task.label}
+Question: ${task.english}
+
+Azure zh-HK transcript:
+${transcript}
+
+${pictureGuidance}
+
+Assess communicated content, appropriate Cantonese
+vocabulary and grammar, and transcript clarity.
+
+Practice rubric:
+- Content: 0–4
+- Language: 0–4
+- Clarity: 0–2
+
+Do NOT judge actual pronunciation from transcription alone.
+Do NOT present the score as an official GCSE grade.
+
+Set transcription to the Azure transcript.
+Provide specific improvement suggestions in Traditional Chinese.
+`);
+
+
     feedback.transcription=transcript;
     feedback.pronunciation_reference=pron;
     const saved=await db.from("chinese_stage3_skill_reviews").insert({user_id:user.id,week:1,skill:"speaking",task_id:taskId,input_kind:"audio",input_text:transcript,object_path:null,feedback}).select("*").single();

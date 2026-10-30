@@ -56,7 +56,7 @@ export const translationTasks = [
 
 export const speakingPrompts = [
   {id:"role", label:"Role play", english:"A teacher asks which subject you like and why. Give a full answer in Cantonese.", sample:"我最鍾意科學，因為可以做實驗。"},
-  {id:"picture", label:"Picture-based practice", english:"Look at the original classroom illustration. Say two things you can see and give one opinion in Cantonese.", sample:"我見到兩個同學同好多書。我覺得個課室好整齊。"},
+  {id:"picture", label:"Picture-based practice", english:"Look at the classroom picture. Describe two things you can clearly see and give one opinion about the classroom in Cantonese.", sample:"我見到一位老師正喺度同兩個學生講解，課室裏面有書架同書本。我覺得呢個課室好適合學習。"},
   {id:"conversation", label:"Conversation", english:"Describe one thing that you want to improve at school next term, and explain why.", sample:"下學期我想改善中文寫作，因為有時我唔記得啲字點寫。"},
 ] as const;
 
