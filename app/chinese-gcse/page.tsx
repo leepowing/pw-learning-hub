@@ -111,14 +111,14 @@ export default function ChineseLearningHome() {
         <section className="hub-section" aria-label="現時 GCSE 課程">
           <div className="hub-eyebrow">CURRENT COURSE · STAGE 3</div>
           <article className="hub-card hub-card--active" style={{marginTop:12}}>
-            <div className="hub-icon" aria-hidden="true">學</div>
-            <h2>{page.data.role === "parent" ? "Stage 3 — 家長學習進度" : "Week 1 — School Life"}</h2>
+            <div className="hub-icon" aria-hidden="true">1</div>
+            <h2>{"Week 1 — School Life（學校生活）"}</h2>
             <p>{page.data.role === "parent"
-              ? "查看 Greta 和 Mathis 的共同課程進度、四份 GCSE Papers 練習及個別成績。"
+              ? "查看 Greta 和 Mathis 的 Week 1 共同課程、四份 GCSE Papers 練習及個別成績。"
               : "學校生活 · 8 個核心詞語 · 4 個 Sessions。包括廣東話聆聽與口說、繁體中文閱讀、手寫及中英翻譯。"}</p>
             <div className="hub-meta">12 星期 GCSE 準備課程 · 繁體中文及廣東話</div>
             <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/parent" : "/chinese-gcse/learning"}>
-              <span>{page.data.role === "parent" ? "進入 Stage 3 家長中心" : "繼續 Week 1 學習"}</span><span aria-hidden="true">→</span>
+              <span>{page.data.role === "parent" ? "查看 Week 1 家長進度" : "繼續 Week 1 學習"}</span><span aria-hidden="true">→</span>
             </Link>
           </article>
           <article className="hub-card" style={{marginTop:14}}>
