@@ -417,12 +417,12 @@ export default function ChineseStage3Week3(){
         <p className="ch3-muted">Listening：已提交 {listeningQuestions.filter(q=>isChoiceLocked("listening",q.id)).length}/6 題 {s2QuestionsDone?`· 正確 ${correctness(progress.listening,listeningQuestions)}/6`:"· 提交全部 6 題後才顯示總分"}</p>
         <h3>Speaking · Role play / Picture practice / Conversation</h3>
         <p className="ch3-muted">先用廣東話回答，再錄下來重聽。按 AI 評估後會私人保存一段原音（180 日），供學生及 Daddy 覆核。</p>
-        <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="興趣與運動卡通圖：男生拿着籃球，旁邊有戴耳機的女生及閱讀的學生">
+        <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="家庭與朋友卡通圖：客廳內有生日蛋糕、禮物，幾位人物一起慶祝，兩位小朋友玩遊戲">
           <Image
-            src="/images/chinese-gcse/week4-sports.webp"
-            alt="興趣與運動插圖：男生拿着籃球，女生戴耳機，旁邊有學生閱讀，背景是戶外運動場"
-            width={1092}
-            height={711}
+            src="/images/chinese-gcse/week4-family.webp"
+            alt="家庭與朋友插圖：幾位人物在客廳慶祝生日，桌上有蛋糕及禮物，前方兩位小朋友使用遊戲手掣"
+            width={1517}
+            height={497}
             sizes="(max-width: 650px) 100vw, (max-width: 1200px) 85vw, 1000px"
             style={{ display: "block", width: "100%", height: "auto" }}
           />
