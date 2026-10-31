@@ -138,6 +138,15 @@ export default function ChineseLearningHome() {
             </Link>
           </article>
         </section>
+          <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">4</span>
+            <h2>Week 4 — Family &amp; Friends（家庭與朋友）</h2>
+            <p>8 個新詞 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting · Weeks 1–4 Checkpoint</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week4/parent" : "/chinese-gcse/learning/week4"}>
+              <span>{page.data.role === "parent" ? "查看 Week 4 家長進度" : "進入 Week 4 課程"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
 
         <section className="hub-section" aria-label="歷史診斷評估">
           <div className="hub-eyebrow">BASELINE · DIAGNOSTIC V3</div>
