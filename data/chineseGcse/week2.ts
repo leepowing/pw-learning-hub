@@ -60,6 +60,19 @@ export const speakingPrompts = [
  {id:"conversation",label:"Conversation",english:"Describe how you arrange your homework and free time after school, and explain your choice.",sample:"放學之後我會先做功課，再做運動，因為咁樣比較容易安排時間。"},
 ] as const;
 
+
+// Verified against the Week 2 illustration (student at a desk writing).
+// These are visible facts, not assumptions about the student's intentions.
+export const pictureVisibleFacts = [
+  "One student is seated at a desk",
+  "The student is writing with a pencil or pen in an open book or notebook",
+  "Books and stationery are visible on the desk",
+  "A window and wall clock are visible in the background",
+  "A noticeboard or board with notes is visible in the room",
+] as const;
+
+export const pictureGrading = `Picture-based Week 2 Daily Life. The actual image is not sent to this AI request. Verified visible facts: ${pictureVisibleFacts.join("; ")}. Accept any TWO accurate visible observations plus ONE relevant personal opinion about preparing for study or everyday routines. The sample is illustrative, not an exact script. Accept equivalent natural Cantonese and other reasonable factually supported observations. Do not demand specific wording. Do not infer that the student is packing a bag, checking the time, or intending to do homework: those actions are not visible. Do not treat uncertainty in Azure transcription as a speaking error; flag for Daddy review. Practice rubric: Content 0–4, Language 0–4, Clarity 0–2. Never claim formal GCSE grades.`;
+
 export const writingTask = {
  title:"My daily routine — short original writing task",
  instruction:"Write 3–4 complete sentences in Traditional Chinese about how you organise a school day.",

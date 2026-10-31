@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import {authenticate,askOpenAI,existingReview,errorResponse,type SkillFeedback} from "../../skills/common";
-import {speakingPrompts} from "@/data/chineseGcse/week2";
+import {speakingPrompts,pictureGrading} from "@/data/chineseGcse/week2";
 export const runtime="nodejs";
 export const maxDuration=60;
 
@@ -45,7 +45,7 @@ export async function POST(request:Request){
       const norm=(x:unknown)=>typeof x==="number"&&Number.isFinite(x)?Math.round(x):null;
       pron={accuracy:norm(best.AccuracyScore),fluency:norm(best.FluencyScore),note:"Azure 發音參考指標以辨識所得文字作比較，可能高估表現；不是正式口試評級，請家長聽取原錄音自行判斷。"};
     }catch{ /* If optional assessment fails, keep content grading available. */ }
-    const feedback=await askOpenAI(`GCSE Chinese Cantonese SPEAKING task ${task.label}: ${task.english}. Azure zh-HK speech-to-text transcript (recognition can be inaccurate): ${transcript}. Assess ONLY communicated content, appropriate Cantonese vocabulary/grammar and transcript clarity; DO NOT assert pronunciation from text. Use a 0-4 content,0-4 language,0-2 clarity practice rubric. Set transcription to the transcript. Provide specific Cantonese speaking suggestions in Traditional Chinese.`);
+    const feedback=await askOpenAI(`Picture-based verified visual facts and marking rules: ${taskId === "picture" ? pictureGrading : "Not a picture-based task."}. GCSE Chinese Cantonese SPEAKING task ${task.label}: ${task.english}. Azure zh-HK speech-to-text transcript (recognition can be inaccurate): ${transcript}. Assess ONLY communicated content, appropriate Cantonese vocabulary/grammar and transcript clarity; DO NOT assert pronunciation from text. Use a 0-4 content,0-4 language,0-2 clarity practice rubric. Set transcription to the transcript. Provide specific Cantonese speaking suggestions in Traditional Chinese.`);
     feedback.transcription=transcript;
     feedback.pronunciation_reference=pron;
     const saved=await db.from("chinese_stage3_skill_reviews").insert({user_id:user.id,week:2,skill:"speaking",task_id:taskId,input_kind:"audio",input_text:transcript,object_path:null,feedback}).select("*").single();
