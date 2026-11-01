@@ -57,6 +57,8 @@ export default function ChineseStage3Week5(){
   const [revision,setRevision]=useState(0);
   const [flashIndex,setFlashIndex]=useState(0);
   const [flipped,setFlipped]=useState(false);
+  const [reviewIndex,setReviewIndex]=useState(0);
+  const [reviewFlipped,setReviewFlipped]=useState(false);
   const [checkedAnswers,setCheckedAnswers]=useState<string[]>([]);
   const [shownTranslation,setShownTranslation]=useState<string[]>([]);
   const [shownDictation,setShownDictation]=useState<string[]>([]);
@@ -388,8 +390,17 @@ export default function ChineseStage3Week5(){
         <div className="ch3-vocab-pills">{vocabulary.map((v,i)=><button key={v.id} className={flashIndex===i?"active":""} onClick={()=>{setFlashIndex(i);setFlipped(false)}}>{i+1}{has(v.id,progress.vocabSeen)?" ✓":""}</button>)}</div>
         <div className="ch3-divider"/>
         <h3>Smart Review · 6 個舊詞（不計入新詞及正式默寫）</h3>
-        <p className="ch3-muted">遮住中文，先憑英文意思在紙上寫出繁體字，然後對照核對。這部分是自主重溫，不影響 10 個新詞的學習進度。</p>
-        <div className="ch3-vocab-pills">{reviewVocabulary.map(v=><span key={`${v.week}-${v.traditional}`} className="ch3-muted" style={{display:"inline-block",margin:5,padding:"8px 10px",border:"1px solid #d5e3d6",borderRadius:10}}><strong>{v.traditional}</strong> · {v.english} · Week {v.week}</span>)}</div>
+        <p className="ch3-muted">先看英文，在紙上默寫對應的繁體中文；寫完才按卡片翻面核對答案。6 個舊詞只作自主複習，不計入 10 個新詞或正式默寫成績。</p>
+        <button type="button" className="ch3-flash" style={{width:"100%",textAlign:"center",cursor:"pointer"}} onClick={()=>setReviewFlipped(x=>!x)} aria-label={reviewFlipped?"顯示英文提示":"翻卡顯示繁體中文答案"} aria-pressed={reviewFlipped}>
+          <small>{reviewIndex+1} / {reviewVocabulary.length} · {reviewFlipped?"答案（按此返回英文）":"英文提示（點擊翻卡）"}</small>
+          <strong lang={reviewFlipped?"zh-Hant":"en"}>{reviewFlipped?reviewVocabulary[reviewIndex].traditional:reviewVocabulary[reviewIndex].english}</strong>
+          <span>{reviewFlipped?`來自 Week ${reviewVocabulary[reviewIndex].week} · 請對照你的手寫答案` : "先在紙上寫出繁體字，再點擊翻卡查看答案"}</span>
+        </button>
+        <div className="ch3-between ch3-actions">
+          <button type="button" className="ch3-button" disabled={reviewIndex===0} onClick={()=>{setReviewIndex(i=>i-1);setReviewFlipped(false)}}>← 上一詞</button>
+          <button type="button" className="ch3-button ch3-primary" disabled={reviewIndex===reviewVocabulary.length-1} onClick={()=>{setReviewIndex(i=>i+1);setReviewFlipped(false)}}>下一詞 →</button>
+        </div>
+        <div className="ch3-vocab-pills" aria-label="選擇舊詞複習卡">{reviewVocabulary.map((v,i)=><button type="button" key={`${v.week}-${v.traditional}`} className={reviewIndex===i?"active":""} onClick={()=>{setReviewIndex(i);setReviewFlipped(false)}} aria-label={`第 ${i+1} 張舊詞卡`}>{i+1}</button>)}</div>
         <div className="ch3-divider"/>
         <h3>Original GCSE-style Reading</h3>
         <p className="ch3-muted">閱讀繁體中文文章，然後用英文理解題目。每題選定答案後按「提交答案」；提交後立即鎖定，重新登入亦不能修改。</p>
