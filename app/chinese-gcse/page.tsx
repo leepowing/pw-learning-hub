@@ -111,7 +111,7 @@ export default function ChineseLearningHome() {
         <section className="hub-section" aria-label="現時 GCSE 課程">
           <div className="hub-eyebrow">CURRENT COURSE · STAGE 3</div>
           <article className="hub-card hub-card--active" style={{marginTop:12}}>
-            <div className="hub-icon" aria-hidden="true">學</div>
+            <div className="hub-icon" aria-hidden="true">1</div>
             <h2>Week 1 — School Life（學校生活）</h2>
             <p>{page.data.role === "parent"
               ? "查看 Greta 和 Mathis 的 Week 1 學校生活學習進度、四份 GCSE Papers 練習及各自成績。"
