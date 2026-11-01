@@ -435,10 +435,10 @@ export default function ChineseStage3Week8(){
         <p className="ch3-muted">Listening：已提交 {listeningQuestions.filter(q=>isChoiceLocked("listening",q.id)).length}/6 題 {s2QuestionsDone?`· 正確 ${correctness(progress.listening,listeningQuestions)}/6`:"· 提交全部 6 題後才顯示總分"}</p>
         <h3>Speaking · Role play / Picture practice / Conversation</h3>
         <p className="ch3-muted">先用廣東話回答，再錄下來重聽。按 AI 評估後會私人保存一段原音（180 日），供學生及 Daddy 覆核。</p>
-        <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="科技與通訊練習圖：兩名學生在室內桌旁，桌上有手提電腦，旁邊有手機">
+        <div className="ch3-picture" style={{ maxWidth: "100%" }} aria-label="科技與通訊練習圖：一名男學生使用手提電腦視像通話，另一名女學生使用手機">
           <Image
             src="/images/chinese-gcse/week8-technology-communication.webp"
-            alt="科技與通訊練習插圖：兩名學生在室內書桌旁，有手提電腦及手機"
+            alt="科技與通訊插圖：男學生戴耳機在手提電腦前視像通話，女學生坐在旁邊使用手機"
             width={646}
             height={420}
             sizes="(max-width: 650px) 100vw, (max-width: 1200px) 85vw, 1000px"

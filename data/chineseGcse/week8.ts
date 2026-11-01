@@ -48,20 +48,24 @@ export const translationTasks=[
 ] as const;
 export const speakingPrompts=[
  {id:"role",label:"Role play",english:"Your friend cannot open a school website. In Cantonese, ask what device they are using and suggest one helpful step.",sample:"你而家用緊手機定電腦呀？不如試下重新連接網絡。"},
- {id:"picture",label:"Picture-based practice",english:"Look at the Technology & Communication illustration. Describe TWO visible things and give ONE opinion about using technology. Answer in Cantonese.",sample:"我見到兩個學生坐喺枱前面，一個用手提電腦，另外有一部手機放喺旁邊。我覺得科技幫我哋聯絡朋友好方便。"},
+ {id:"picture",label:"Picture-based practice",english:"Look at the Technology & Communication illustration. Describe TWO visible things and give ONE opinion about using technology. Answer in Cantonese.",sample:"我見到一個男學生喺電腦前面舉手，同畫面上嘅人視像通話。另一個女學生就坐喺旁邊用手機。我覺得科技幫我哋同朋友聯絡好方便。"},
  {id:"conversation",label:"Conversation",english:"Explain how you use technology to learn or contact friends, give one benefit and one safety precaution in Cantonese.",sample:"我平時會用電腦查資料，又會用手機同朋友聯絡。咁樣好方便，但係我唔會隨便公開私人資料。"},
 ] as const;
 export const pictureVisibleFacts=[
- "Two students are seated at a table with a laptop and a smartphone",
- "A laptop screen is visible",
- "A smartphone is upright next to the laptop",
- "The setting is a bright indoor study area"
+ "An illustrated boy wearing headphones is seated at a desk with an open laptop",
+ "The boy is raising one hand while looking towards the laptop",
+ "The laptop screen visibly shows multiple people in a video call",
+ "A notebook and pen are on the desk; the boy is holding a pen over the notebook",
+ "An illustrated girl is seated nearby and looking down at a smartphone in her hands",
+ "A tablet is lying on the desk",
+ "A small cat is lying on the couch next to the girl"
 ] as const;
 export const pictureNotSupported=[
- "The image cannot prove the content of any message or website",
- "Do not assert that the students are video calling without visible evidence",
- "Do not infer their identities or relationship",
- "Do not infer if any website or device is secure from appearance alone"
+ "Do not infer the exact words spoken during the video call or what messages are being written",
+ "Do not infer that the two young people are siblings, friends or a couple",
+ "Do not infer any person's real name or identity",
+ "Do not infer that the internet connection is secure or that devices protect private information merely from their appearance",
+ "Do not require students to mention the cat, tablet, or router to obtain full marks if they otherwise describe two accurate visible details"
 ] as const;
 export const pictureGrading=`Week 8 Technology & Communication. VISIBLE FACTS (MUST BE VISUALLY REVERIFIED ON THE FINAL IMAGE): ${pictureVisibleFacts.join("; ")}. NOT SUPPORTED: ${pictureNotSupported.join("; ")}. Describe TWO observed details and give ONE Cantonese opinion about technology. Accept all accurate alternative descriptions. Do not require sample wording. Assess content 0–4, language 0–4, clarity 0–2; not an official GCSE grade. Azure transcription is uncertain and requires parent review.`;
 export const writingTask={title:"Technology & Communication — original handwriting task",instruction:"Write 4–6 sentences in Traditional Chinese about how you use technology and communicate with others.",requirements:["Describe a device you use and what you do with it.","Explain one benefit of technology with a reason.","Mention one problem or safety precaution."],guidance:"Write by hand using some Week 8 vocabulary and upload a clear photo; this is original GCSE-style practice, not an official exam question."} as const;
