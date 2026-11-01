@@ -158,6 +158,15 @@ export default function ChineseLearningHome() {
           </section>
 
 
+          <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">6</span>
+            <h2>Week 6 — Shopping &amp; Money（購物與金錢）</h2>
+            <p>10 個新詞 + 6 張舊詞翻卡 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week6/parent" : "/chinese-gcse/learning/week6"}>
+              <span>{page.data.role === "parent" ? "查看 Week 6 家長進度" : "進入 Week 6 課程"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
         <section className="hub-section" aria-label="歷史診斷評估">
           <div className="hub-eyebrow">BASELINE · DIAGNOSTIC V3</div>
           <article className="hub-card" style={{marginTop:12}}>
