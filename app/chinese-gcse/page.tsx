@@ -212,6 +212,15 @@ export default function ChineseLearningHome() {
             </Link>
           </section>
 
+          <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">11</span>
+            <h2>Week 12 — GCSE Integrated Practice（GCSE 綜合應用）</h2>
+            <p>10 個新詞 + 6 張舊詞翻卡 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week12/parent" : "/chinese-gcse/learning/week12"}>
+              <span>{page.data.role === "parent" ? "查看 Week 12 家長進度" : "進入 Week 12 課程"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
         <section className="hub-section" aria-label="歷史診斷評估">
           <div className="hub-eyebrow">BASELINE · DIAGNOSTIC V3</div>
           <article className="hub-card" style={{marginTop:12}}>
