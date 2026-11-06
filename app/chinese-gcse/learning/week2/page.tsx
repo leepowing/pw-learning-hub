@@ -65,6 +65,8 @@ export default function ChineseStage3Week2(){
   const [feedbacks,setFeedbacks]=useState<Record<string,Feedback>>({});
   const [parentReviews,setParentReviews]=useState<Record<string,ParentReview>>({});
   const [busy,setBusy]=useState(false);
+  const [markBusyId,setMarkBusyId]=useState("");
+  const [markErrors,setMarkErrors]=useState<Record<string,string>>({});
   const [audioBusy,setAudioBusy]=useState("");
   const [micBusy,setMicBusy]=useState(false);
   const [recordUrl,setRecordUrl]=useState("");
@@ -339,15 +341,44 @@ export default function ChineseStage3Week2(){
     window.open(data.signedUrl,"_blank","noopener,noreferrer");
   }
   async function markUpload(id:string){
-    if(!db)return;
-    setBusy(true);setStatus("AI 正在辨識及批改手寫原稿…");
+    if(!db||busy)return;
+    setBusy(true);
+    setMarkBusyId(id);
+    setMarkErrors(old=>{const next={...old};delete next[id];return next;});
+    setStatus("AI 正在辨識及批改手寫原稿…");
+    // Slightly longer than the API's 60-second maxDuration, so a stuck request
+    // cannot leave the browser in a permanent loading state.
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),70000);
     try{
       const {data:{session}}=await db.auth.getSession();
       if(!session)throw new Error("請重新登入");
-      const result=await fetch("/api/chinese-gcse/learning/week2/mark",{method:"POST",headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},body:JSON.stringify({uploadId:id})});
-      const json=await result.json();if(!result.ok)throw new Error(json.error??"批改失敗");
-      await reloadWriting();setStatus(json.cached?"已載入之前儲存的 AI 評語":"AI 初步評語已儲存；請家長核對原稿");
-    }catch(e){setStatus(e instanceof Error?e.message:"批改失敗");}finally{setBusy(false);}
+      const result=await fetch("/api/chinese-gcse/learning/week2/mark",{
+        method:"POST",
+        headers:{Authorization:`Bearer ${session.access_token}`,"Content-Type":"application/json"},
+        body:JSON.stringify({uploadId:id}),
+        signal:controller.signal,
+      });
+      const json:unknown=await result.json().catch(()=>null);
+      const payload=json&&typeof json==="object"?json as {error?:unknown;ok?:unknown;cached?:unknown}:null;
+      if(!result.ok){
+        const message=typeof payload?.error==="string"?payload.error:"伺服器暫時無法完成批改";
+        throw new Error(`${message}（HTTP ${result.status}）`);
+      }
+      if(payload?.ok!==true)throw new Error("伺服器未返回有效的批改結果，請稍後重試");
+      await reloadWriting();
+      setStatus(payload.cached?"已載入之前儲存的 AI 評語":"AI 初步評語已儲存；請家長核對原稿");
+    }catch(e){
+      const message=controller.signal.aborted
+        ?"AI 批改等候逾時，原稿已保留。請稍後按『重新批改』；如果已成功儲存，系統會讀取原有評語。"
+        :e instanceof Error?e.message:"批改失敗，請稍後重試";
+      setMarkErrors(old=>({...old,[id]:message}));
+      setStatus("AI 批改失敗："+message);
+    }finally{
+      clearTimeout(timer);
+      setMarkBusyId("");
+      setBusy(false);
+    }
   }
 
   const currentWord=vocabulary[flashIndex];
@@ -495,7 +526,13 @@ export default function ChineseStage3Week2(){
           {uploads.map(u=><div key={u.id} className="ch3-upload-item">
             <div className="ch3-between"><strong>{u.file_name}</strong><button className="ch3-linkbutton" onClick={()=>void viewUpload(u.object_path)}>查看原稿</button></div>
             <small>{new Date(u.created_at).toLocaleString("en-GB")}</small>
-            {!feedbacks[u.id]?<button disabled={busy} className="ch3-button ch3-primary" onClick={()=>void markUpload(u.id)}>{busy?"處理中…":"AI 辨識及初步批改"}</button>:<div className="ch3-review">
+            {!feedbacks[u.id]?<>
+              <button type="button" disabled={busy} className="ch3-button ch3-primary" onClick={()=>void markUpload(u.id)}>
+                {markBusyId===u.id?"AI 批改中…":markErrors[u.id]?"重新批改":"AI 辨識及初步批改"}
+              </button>
+              {markBusyId===u.id&&<p className="ch3-muted" role="status">正在辨識原稿及產生評語，請勿重複提交…</p>}
+              {markErrors[u.id]&&<p className="ch3-error" role="alert">批改未完成：{markErrors[u.id]}。原稿仍已儲存，毋須重新上載。</p>}
+            </>:<div className="ch3-review">
               <strong>{parentReviews[u.id]?"家長已確認":"AI 初步評語 · 等待家長覆核"}</strong>
               <p>AI 辨識原文：{feedbacks[u.id].transcription}</p>
               <p>AI 初步分數：{feedbacks[u.id].provisional_score}/10</p>

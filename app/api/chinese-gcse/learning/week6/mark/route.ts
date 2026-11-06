@@ -4,6 +4,28 @@ import { writingTask } from "@/data/chineseGcse/week6";
 export const runtime="nodejs";
 export const maxDuration=60;
 type Feedback={transcription:string;uncertain:string[];strengths:string[];improvements:string[];provisional_score:number;score_reason:string};
+// Structured Outputs: require all fields. Empty arrays are legitimate when there is no evidence.
+const feedbackSchema={
+  type:"object",additionalProperties:false,
+  properties:{
+    transcription:{type:"string"},
+    uncertain:{type:"array",items:{type:"string"}},
+    strengths:{type:"array",items:{type:"string"}},
+    improvements:{type:"array",items:{type:"string"}},
+    provisional_score:{type:"number"},
+    score_reason:{type:"string"}
+  },
+  required:["transcription","uncertain","strengths","improvements","provisional_score","score_reason"]
+};
+function isFeedback(value:any):value is Feedback {
+  return !!value && typeof value==="object" &&
+    typeof value.transcription==="string" &&
+    Array.isArray(value.uncertain) && value.uncertain.every((x:unknown)=>typeof x==="string") &&
+    Array.isArray(value.strengths) && value.strengths.every((x:unknown)=>typeof x==="string") &&
+    Array.isArray(value.improvements) && value.improvements.every((x:unknown)=>typeof x==="string") &&
+    typeof value.provisional_score==="number" && Number.isFinite(value.provisional_score) &&
+    typeof value.score_reason==="string";
+}
 function textOut(raw:any):string {return (raw.output??[]).flatMap((o:any)=>o.content??[]).filter((c:any)=>c.type==="output_text").map((c:any)=>c.text).join("");}
 export async function POST(request:Request){
   try{
@@ -36,10 +58,10 @@ export async function POST(request:Request){
     const response=await fetch("https://api.openai.com/v1/responses",{
       method:"POST",headers:{Authorization:`Bearer ${key}`,"Content-Type":"application/json"},
       body:JSON.stringify({
-        model:process.env.OPENAI_CHINESE_MODEL||"gpt-4.1-mini",store:false,max_output_tokens:1600,
+        model:process.env.OPENAI_CHINESE_MODEL||"gpt-4.1-mini",store:false,max_output_tokens:2400,
         instructions:"你是繁體中文初級寫作診斷老師。逐字轉錄圖片中的學生真正手寫內容，不要自動補字或糾錯；看不清的字用□並列在uncertain。評估應按三個英文要求是否回答、詞彙用法、完整句子及書寫準確性。評分0至10只是教學用暫定分數，不是GCSE官方分數。不要猜測筆畫是否正確。請嚴格只輸出 JSON object，key為transcription, uncertain, strengths, improvements, provisional_score, score_reason；所有說明用繁體中文。",
         input:[{role:"user",content:[{type:"input_text",text:`Please return valid JSON only. Original writing task: ${writingTask.instruction} Requirements: ${writingTask.requirements.join(" / ")}. Recognise the actual handwritten answer and assess it without supplying missing content.`},{type:"input_image",image_url:`data:${upload.content_type};base64,${image}`}]}],
-        text:{format:{type:"json_object"}},
+        text:{format:{type:"json_schema",name:"handwriting_feedback",strict:true,schema:feedbackSchema}},
       }),signal:AbortSignal.timeout(45000)
     });
     if(!response.ok){
@@ -48,16 +70,36 @@ export async function POST(request:Request){
       return NextResponse.json({error:"AI 暫時未能批改，請稍後再試"},{status:502});
     }
     const raw=await response.json();
-    let parsed:any;
-    try{parsed=JSON.parse(textOut(raw));}catch{return NextResponse.json({error:"AI 回傳格式不完整，請稍後再試"},{status:502});}
-    if(typeof parsed.transcription!=="string" || !Array.isArray(parsed.improvements)) return NextResponse.json({error:"AI 批改資料不完整"},{status:502});
+    // Do not store partial output or invent marks when the model output is incomplete.
+    if(raw.status!=="completed") {
+      console.error("[stage3-chinese-ai] Incomplete OpenAI response",{
+        status:raw.status??"missing",reason:raw.incomplete_details?.reason??"unknown"
+      });
+      return NextResponse.json({error:"AI 批改未完成，請稍後重試；原稿已保留"},{status:502});
+    }
+    const output=textOut(raw);
+    let parsed:unknown;
+    try{parsed=JSON.parse(output);}catch{
+      console.error("[stage3-chinese-ai] Invalid JSON",{outputLength:output.length});
+      return NextResponse.json({error:"AI 回傳格式不完整，請稍後再試"},{status:502});
+    }
+    if(!isFeedback(parsed)) {
+      console.error("[stage3-chinese-ai] Invalid feedback shape",{
+        keys:parsed&&typeof parsed==="object"?Object.keys(parsed):[],
+        missingOrInvalid:parsed&&typeof parsed==="object"?[
+          ...["transcription","uncertain","strengths","improvements","provisional_score","score_reason"]
+            .filter(k=>!(k in parsed))
+        ]:["not_object"]
+      });
+      return NextResponse.json({error:"AI 批改資料不完整，請稍後重試；原稿已保留"},{status:502});
+    }
     const feedback:Feedback={
       transcription:parsed.transcription.slice(0,6000),
-      uncertain:Array.isArray(parsed.uncertain)?parsed.uncertain.map(String).slice(0,12):[],
-      strengths:Array.isArray(parsed.strengths)?parsed.strengths.map(String).slice(0,8):[],
-      improvements:parsed.improvements.map(String).slice(0,10),
-      provisional_score:Math.min(10,Math.max(0,Math.round(Number(parsed.provisional_score)||0))),
-      score_reason:String(parsed.score_reason??"").slice(0,1200)
+      uncertain:parsed.uncertain.slice(0,12),
+      strengths:parsed.strengths.slice(0,8),
+      improvements:parsed.improvements.slice(0,10),
+      provisional_score:Math.min(10,Math.max(0,Math.round(parsed.provisional_score))),
+      score_reason:parsed.score_reason.slice(0,1200)
     };
     const saved=await db.from("chinese_stage3_ai_reviews").insert({upload_id:uploadId,user_id:user.id,feedback});
     if(saved.error){
