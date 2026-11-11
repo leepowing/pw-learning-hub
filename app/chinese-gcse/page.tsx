@@ -149,6 +149,15 @@ export default function ChineseLearningHome() {
 
 
           <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">✓</span>
+            <h2>Checkpoint 1 — Weeks 1–4 綜合評估</h2>
+            <p>完成 Week 1–4 所有 Sessions 後，各學生自動解鎖。32 個詞彙、閱讀、粵語聆聽及口說、翻譯和手寫；原稿由 Daddy 覆核。</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/checkpoint1/parent" : "/chinese-gcse/learning/checkpoint1"}>
+              <span>{page.data.role === "parent" ? "Daddy · Checkpoint 1 家長覆核" : "進入 Checkpoint 1（完成 Weeks 1–4 後解鎖）"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
+          <section className="hub-card" style={{marginTop:16}}>
             <span className="hub-icon">5</span>
             <h2>Week 5 — Food &amp; Health（食物與健康）</h2>
             <p>10 個新詞 + 6 個舊詞複習 · Reading / 廣東話 Listening &amp; Speaking / Translation / Handwriting</p>
