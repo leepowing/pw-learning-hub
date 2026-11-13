@@ -195,6 +195,15 @@ export default function ChineseLearningHome() {
           </section>
 
           <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">✓</span>
+            <h2>Checkpoint 2 — Weeks 5–8 綜合評估</h2>
+            <p>完成 Week 5–8 所有 Sessions 後，各學生自動解鎖。40 個詞彙、閱讀、粵語聆聽及口說、翻譯和手寫；原稿由 Daddy 覆核。</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/checkpoint2/parent" : "/chinese-gcse/learning/checkpoint2"}>
+              <span>{page.data.role === "parent" ? "Daddy · Checkpoint 2 家長覆核" : "進入 Checkpoint 2（完成 Weeks 5–8 後解鎖）"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
+          <section className="hub-card" style={{marginTop:16}}>
             <span className="hub-icon">9</span>
             <h2>Week 9 — School Pressure（學校壓力）</h2>
             <p>10 個新詞 + 6 張舊詞翻卡 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting</p>
