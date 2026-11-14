@@ -13,8 +13,12 @@ export async function POST(req:Request){
  if(!token||!url||!pub)return NextResponse.json({error:'請先登入'},{status:401});
  const db=createClient(url,pub,{global:{headers:{Authorization:`Bearer ${token}`}},auth:{persistSession:false,autoRefreshToken:false}});
  const {data:{user},error}=await db.auth.getUser(token);if(error||!user)return NextResponse.json({error:'登入已失效'},{status:401});
- const {data:eligible,error:gateError}=await db.rpc('ch3_cp1_eligible',{p_uid:user.id});
- if(gateError||!eligible)return NextResponse.json({error:'未完成 Week 1–4，Checkpoint 尚未解鎖'},{status:403});
+ const {data:profile,error:profileError}=await db.from('profiles').select('role').eq('id',user.id).maybeSingle();
+ if(profileError)return NextResponse.json({error:'未能核實使用者身份'},{status:403});
+ if(profile?.role!=='parent'){
+  const {data:eligible,error:gateError}=await db.rpc('ch3_cp1_eligible',{p_uid:user.id});
+  if(gateError||!eligible)return NextResponse.json({error:'未完成 Week 1–4，Checkpoint 尚未解鎖'},{status:403});
+ }
  const body=await req.json().catch(()=>null);const script=typeof body?.clipId==='string'?scripts[body.clipId]:null;
  if(!script)return NextResponse.json({error:'錄音題目無效'},{status:400});
  const key=process.env.AZURE_SPEECH_KEY,region=process.env.AZURE_SPEECH_REGION;
