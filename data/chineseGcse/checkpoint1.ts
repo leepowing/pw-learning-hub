@@ -17,6 +17,7 @@ export const listeningScripts=[
 ];
 export const speaking=[
  {id:'role',title:'Role play',q:'A classmate asks about your favourite school subject and your hobby. Answer in Cantonese.',points:['Name a school subject','Name a hobby','Give one reason']},
+ {id:'picture',title:'Picture-based task',q:'Look at the classroom picture. Describe at least three visible details, explain what the people are doing, and give your opinion of the classroom. Answer in Cantonese.',points:['Describe three visible details','Explain one action','Give an opinion with a reason'],image:'/chinese-gcse/checkpoints/checkpoint1-classroom.png'},
  {id:'conversation',title:'Conversation',q:'Talk about your daily routine and something you do with family or friends. Answer in Cantonese.',points:['Daily routine','Shared activity','Opinion or reason']},
 ];
 export const translations=[

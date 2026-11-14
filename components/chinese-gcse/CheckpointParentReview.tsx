@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {createClient} from "@supabase/supabase-js";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -11,7 +12,7 @@ const db = url && key ? createClient(url, key) : null;
 type Student = {id: string; student: string};
 type Question = {id: string; q: string; options: string[]};
 type ListeningClip = {id: string; questions: Question[]};
-type SpeakingTask = {id: string; title: string; q: string; points: string[]};
+type SpeakingTask = {id: string; title: string; q: string; points: string[]; image?: string};
 type TranslationTask = {id: string; direction: string; q: string; example: string};
 type WritingTask = {q: string; points: string[]};
 type Word = {traditional: string; english: string};
@@ -216,7 +217,7 @@ export default function CheckpointParentReview(props: Props) {
 
         <div style={subpanel}>
           <h3>4. Cantonese Speaking</h3>
-          {props.speaking.map(task => <div key={task.id} style={{margin: "16px 0"}}><strong>{task.title}</strong><p>{task.q}</p>{showAnswers && <ul>{task.points.map(point => <li key={point}>{point}</li>)}</ul>}</div>)}
+          {props.speaking.map(task => <div key={task.id} style={{margin: "16px 0"}}><strong>{task.title}</strong>{task.image && <a href={task.image} target="_blank" rel="noreferrer" title="按一下查看完整圖片"><Image src={task.image} alt={`${task.title} assessment scene`} width={1448} height={1086} style={{display:"block",width:"100%",height:"auto",objectFit:"contain",borderRadius:12,margin:"12px 0",border:"1px solid #d8e0e6"}}/></a>}<p>{task.q}</p>{showAnswers && <ul>{task.points.map(point => <li key={point}>{point}</li>)}</ul>}</div>)}
         </div>
 
         <div style={subpanel}>

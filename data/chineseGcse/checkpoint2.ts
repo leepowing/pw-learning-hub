@@ -22,6 +22,7 @@ export const listeningScripts=[
 
 export const speaking=[
  {id:'role',title:'Role play',q:'You are planning a day trip. Ask about the ticket price and departure time, then say how you would pay. Answer in Cantonese.',points:['Ask the price','Ask the departure time','Explain a payment choice']},
+ {id:'picture',title:'Picture-based task',q:'Look at the railway station picture. Describe at least three visible details and explain how technology or a healthy choice helps the journey. Answer in Cantonese.',points:['Describe three visible details','Mention technology or online safety','Explain one healthy choice'],image:'/chinese-gcse/checkpoints/checkpoint2-station.png'},
  {id:'conversation',title:'Conversation',q:'Talk about one healthy choice and one way technology helps you in daily life or travel. Give a reason and one online safety precaution. Answer in Cantonese.',points:['Healthy choice','Useful technology','Reason','Online safety']},
 ];
 
