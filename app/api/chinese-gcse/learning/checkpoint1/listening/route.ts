@@ -25,7 +25,12 @@ export async function POST(req:Request){
  if(!key||!region||!/^[a-z0-9-]+$/i.test(region))return NextResponse.json({error:'Azure 粵語服務未設定'},{status:503});
  const ssml=`<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-HK"><voice name="zh-HK-HiuMaanNeural">${escapeXml(script)}</voice></speak>`;
  try{const res=await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`,{method:'POST',headers:{'Ocp-Apim-Subscription-Key':key,'Content-Type':'application/ssml+xml','X-Microsoft-OutputFormat':'audio-16khz-32kbitrate-mono-mp3','User-Agent':'PWLearningHub'},body:ssml,signal:AbortSignal.timeout(15000)});
-  if(!res.ok)return NextResponse.json({error:'廣東話語音暫時未能播放'},{status:502});
+  if(!res.ok){
+   const detail=await res.text().catch(()=>'');
+   console.error(`[Checkpoint 1 Azure TTS ${res.status}]`,detail.slice(0,500));
+   const reason=res.status===401||res.status===403?'Azure Speech 認證或地區設定不正確':res.status===429?'Azure Speech 免費配額或速率已達上限':res.status===400?'Azure Speech 不接受這段語音格式':`Azure Speech 服務錯誤（${res.status}）`;
+   return NextResponse.json({error:reason},{status:502});
+  }
   return new NextResponse(await res.arrayBuffer(),{headers:{'Content-Type':'audio/mpeg','Cache-Control':'private, no-store'}});
  }catch{return NextResponse.json({error:'Azure 語音服務逾時'},{status:502});}
 }
