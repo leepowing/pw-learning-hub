@@ -187,7 +187,7 @@ const path = `${user}/checkpoint2/${kind}/${taskId}/${uploadId}.${ext}`;
 
  return <main style={{maxWidth:980,margin:'30px auto',padding:'0 16px 80px',color:'#173047',lineHeight:1.7}}>
   <Link href="/chinese-gcse">← 返回 GCSE Chinese Learning Hub</Link>
-  <p style={{fontSize:12,color:'#176b5c',fontWeight:700,letterSpacing:2}}>STAGE 3 · WEEKS 1–4 · PROGRESS CHECKPOINT</p>
+  <p style={{fontSize:12,color:'#176b5c',fontWeight:700,letterSpacing:2}}>STAGE 3 · WEEKS 5–8 · PROGRESS CHECKPOINT</p>
   <h1 style={{fontSize:'clamp(26px,5vw,38px)',fontWeight:800}}>Weeks 5–8 綜合評估</h1>
   <p>Greta 和 Mathis 使用相同題目，獨立儲存成績。完成 Week 5–8 後才能解鎖；這是原創練習，不是 Edexcel 官方試卷或 GCSE Grade。</p>
   <div role="status" style={{...card,background:'#eef6f5'}}>{message}{submitted&&<strong> · 已鎖定</strong>}{reviewed!==null&&<p>家長確認綜合分數：{reviewed}/100</p>}</div>
