@@ -66,6 +66,8 @@ export default function CheckpointParentReview(props: Props) {
   const [showPreview, setShowPreview] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
   const [listeningBusy, setListeningBusy] = useState("");
+  const [clipUrls, setClipUrls] = useState<Record<string, string>>({});
+  const [listeningNotice, setListeningNotice] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -116,7 +118,18 @@ export default function CheckpointParentReview(props: Props) {
 
   async function playClip(clipId: string) {
     if (!db || listeningBusy) return;
+    const loadedSource = clipUrls[clipId];
+    if (loadedSource) {
+      setListeningNotice("");
+      try {
+        await new Audio(loadedSource).play();
+      } catch {
+        setListeningNotice("瀏覽器阻止自動播放，請使用下面的音訊控制列按 ▶。 ");
+      }
+      return;
+    }
     setListeningBusy(clipId);
+    setListeningNotice("");
     try {
       const {data: {session}} = await db.auth.getSession();
       if (!session) throw Error("請重新登入 Daddy");
@@ -130,11 +143,12 @@ export default function CheckpointParentReview(props: Props) {
         throw Error(body.error ?? "廣東話錄音未能播放");
       }
       const source = URL.createObjectURL(await response.blob());
-      const audio = new Audio(source);
-      audio.onended = () => URL.revokeObjectURL(source);
-      await audio.play();
+      setClipUrls(current => ({...current, [clipId]: source}));
+      setListeningNotice(`Clip ${clipId.toUpperCase()} 已載入。請再按一次「播放廣東話」，或使用下面的音訊控制列。`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "廣東話錄音未能播放");
+      const errorMessage = error instanceof Error ? error.message : "廣東話錄音未能播放";
+      setMessage(errorMessage);
+      setListeningNotice(errorMessage);
     } finally {
       setListeningBusy("");
     }
@@ -207,7 +221,9 @@ export default function CheckpointParentReview(props: Props) {
           <p>按播放鍵聆聽廣東話錄音；逐字稿不會顯示，以保留測驗效度。</p>
           {props.listening.map((clip, clipIndex) => <div key={clip.id} style={{margin: "18px 0", paddingBottom: 8, borderBottom: "1px solid #d8e0e6"}}>
             <h4>Clip {clipIndex + 1}</h4>
-            <button style={button} disabled={!!listeningBusy} onClick={() => void playClip(clip.id)}>{listeningBusy === clip.id ? "載入中…" : "▶ 播放廣東話"}</button>
+            <button style={button} disabled={!!listeningBusy} onClick={() => void playClip(clip.id)}>{listeningBusy === clip.id ? "載入中…" : clipUrls[clip.id] ? "▶ 播放廣東話" : "↓ 載入廣東話錄音"}</button>
+            {clipUrls[clip.id] && <audio controls preload="metadata" src={clipUrls[clip.id]} style={{display:"block",width:"100%",maxWidth:520,marginTop:10}}>你的瀏覽器不支援音訊播放。</audio>}
+            {listeningNotice && (listeningBusy === clip.id || clipUrls[clip.id]) && <p role="status" style={{color:"#6b4f00",background:"#fff8d8",padding:10,borderRadius:8}}>{listeningNotice}</p>}
             {clip.questions.map((question, questionIndex) => {
               const answerIndex = props.listening.slice(0, clipIndex).reduce((total, item) => total + item.questions.length, 0) + questionIndex;
               return <div key={question.id} style={{margin: "14px 0"}}><strong>{answerIndex + 1}. {question.q}</strong><ol type="A">{question.options.map((option, optionIndex) => <li key={option}>{option}{showAnswers && props.listeningAnswers[answerIndex] === optionIndex && <strong> ✓</strong>}</li>)}</ol></div>;
