@@ -206,7 +206,10 @@ const path = `${user}/checkpoint3/${kind}/${taskId}/${uploadId}.${ext}`;
   }catch(e){activeStream.current?.getTracks().forEach(t=>t.stop());activeStream.current=null;setMediaError(e instanceof Error?e.message:'無法錄音');}
  }
  function stopRecording(){if(audioRecorder)finishRecording(audioRecorder);}
- useEffect(()=>()=>{if(audioRecorder?.state==='recording')audioRecorder.stop();activeStream.current?.getTracks().forEach(t=>t.stop());},[audioRecorder]);
+ // Only release the microphone when leaving the page. Depending on
+ // audioRecorder here would run the previous cleanup immediately after a
+ // recording starts and stop the newly opened iPhone microphone stream.
+ useEffect(()=>()=>{activeStream.current?.getTracks().forEach(t=>t.stop());},[]);
 
  return <main style={{maxWidth:980,margin:'30px auto',padding:'0 16px 80px',color:'#173047',lineHeight:1.7}}>
   <Link href="/chinese-gcse">← 返回 GCSE Chinese Learning Hub</Link>
