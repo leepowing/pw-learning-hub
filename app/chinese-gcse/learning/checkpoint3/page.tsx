@@ -176,14 +176,15 @@ const path = `${user}/checkpoint3/${kind}/${taskId}/${uploadId}.${ext}`;
   if(error||!data){setMediaError('原稿讀取失敗');return;}window.open(data.signedUrl,'_blank','noopener,noreferrer');}
  function finishRecording(recorder:MediaRecorder){
   if(recorder.state!=='recording')return;
-  try{recorder.requestData();}catch{/* Some WebKit builds flush only on stop. */}
-  window.setTimeout(()=>{if(recorder.state==='recording')recorder.stop();},200);
+  recorder.stop();
  }
  async function startRecording(id:string){if(audioRecorder||submitted)return;
   try{if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined')throw Error('此瀏覽器不支援錄音');
    setMediaError('');
    const stream=await navigator.mediaDevices.getUserMedia({audio:true});activeStream.current=stream;recorderChunks.current=[];
-   const preferred=['audio/mp4;codecs=mp4a.40.2','audio/mp4','audio/webm;codecs=opus','audio/webm'];
+   // Safari 26 may emit empty MP4 blobs for short slices. Prefer WebM/Opus
+   // where supported, then fall back to Safari's AAC-in-MP4 implementation.
+   const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4;codecs=mp4a.40.2','audio/mp4'];
    const selected=preferred.find(t=>typeof MediaRecorder.isTypeSupported!=='function'||MediaRecorder.isTypeSupported(t));
    const r=selected?new MediaRecorder(stream,{mimeType:selected}):new MediaRecorder(stream);
    r.ondataavailable=e=>{if(e.data.size)recorderChunks.current.push(e.data)};
@@ -198,7 +199,9 @@ const path = `${user}/checkpoint3/${kind}/${taskId}/${uploadId}.${ext}`;
     if(blob.size===0){setMediaError('未能取得錄音資料，請錄製至少 3 秒後再停止');return;}
     void uploadEvidence('speaking',id,blob);
    };
-   r.start(250);setAudioRecorder(r);setRecordingTask(id);
+   // WebKit's recorder needs roughly one second before it can emit a
+   // complete media segment. Smaller slices can be returned as empty blobs.
+   r.start(1000);setAudioRecorder(r);setRecordingTask(id);
    window.setTimeout(()=>finishRecording(r),28000);
   }catch(e){activeStream.current?.getTracks().forEach(t=>t.stop());activeStream.current=null;setMediaError(e instanceof Error?e.message:'無法錄音');}
  }
