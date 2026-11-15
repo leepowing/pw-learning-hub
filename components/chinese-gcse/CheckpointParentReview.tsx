@@ -33,10 +33,10 @@ type Evidence = {
 };
 
 type Props = {
-  checkpointId: "weeks1-4" | "weeks5-8";
+  checkpointId: "weeks1-4" | "weeks5-8" | "weeks9-12";
   title: string;
   wordCount: number;
-  confirmRpc: "ch3_confirm_checkpoint" | "ch3_confirm_checkpoint2";
+  confirmRpc: "ch3_confirm_checkpoint" | "ch3_confirm_checkpoint2" | "ch3_confirm_checkpoint3";
   listeningEndpoint: string;
   words: readonly Word[];
   readingText: string;

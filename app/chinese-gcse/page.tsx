@@ -222,7 +222,7 @@ export default function ChineseLearningHome() {
           </section>
 
           <section className="hub-card" style={{marginTop:16}}>
-            <span className="hub-icon">11</span>
+            <span className="hub-icon">12</span>
             <h2>Week 11 — Future Plans（未來計劃）</h2>
             <p>10 個新詞 + 6 張舊詞翻卡 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting</p>
             <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week11/parent" : "/chinese-gcse/learning/week11"}>
@@ -236,6 +236,15 @@ export default function ChineseLearningHome() {
             <p>10 個新詞 + 6 張舊詞翻卡 · Reading / Cantonese Listening &amp; Speaking / Translation / Handwriting</p>
             <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/week12/parent" : "/chinese-gcse/learning/week12"}>
               <span>{page.data.role === "parent" ? "查看 Week 12 家長進度" : "進入 Week 12 課程"}</span><span aria-hidden="true">→</span>
+            </Link>
+          </section>
+
+          <section className="hub-card" style={{marginTop:16}}>
+            <span className="hub-icon">✓</span>
+            <h2>Checkpoint 3 — Weeks 9–12 最終綜合評估</h2>
+            <p>完成 Week 9–12 所有 Sessions 後，各學生自動解鎖。40 個詞彙、閱讀、粵語聆聽及三項口說、翻譯和較長手寫作文；原稿由 Daddy 覆核。</p>
+            <Link className="hub-action" href={page.data.role === "parent" ? "/chinese-gcse/learning/checkpoint3/parent" : "/chinese-gcse/learning/checkpoint3"}>
+              <span>{page.data.role === "parent" ? "Daddy · Checkpoint 3 家長覆核" : "進入 Checkpoint 3（完成 Weeks 9–12 後解鎖）"}</span><span aria-hidden="true">→</span>
             </Link>
           </section>
 
