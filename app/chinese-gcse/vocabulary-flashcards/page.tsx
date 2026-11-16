@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import {
   EDEXCEL_VOCABULARY_CARDS,
@@ -56,6 +56,11 @@ export default function OfficialVocabularyFlashcardsPage() {
   const [message, setMessage] = useState("");
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [sessionIncorrect, setSessionIncorrect] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const dragStartX = useRef(0);
+  const didDrag = useRef(false);
+  const swipeLocked = useRef(false);
 
   const db = useMemo(() => {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -168,6 +173,8 @@ export default function OfficialVocabularyFlashcardsPage() {
     setSaving(false);
     if (error) {
       setMessage(`未能儲存：${error.message}`);
+      setDragX(0);
+      swipeLocked.current = false;
       return;
     }
     setProgress(previousProgress => ({ ...previousProgress, [current.id]: nextRow }));
@@ -175,6 +182,44 @@ export default function OfficialVocabularyFlashcardsPage() {
     else setSessionIncorrect(value => value + 1);
     setFlipped(false);
     window.setTimeout(() => setCurrentIndex(value => value + 1), 180);
+  };
+
+  useEffect(() => {
+    setDragX(0);
+    setDragging(false);
+    didDrag.current = false;
+    swipeLocked.current = false;
+  }, [currentIndex]);
+
+  const finishSwipe = (correct: boolean) => {
+    if (!flipped || saving || swipeLocked.current) return;
+    swipeLocked.current = true;
+    setDragging(false);
+    setDragX(correct ? Math.max(window.innerWidth, 760) : -Math.max(window.innerWidth, 760));
+    window.setTimeout(() => void recordResult(correct), 220);
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!flipped || saving || swipeLocked.current) return;
+    dragStartX.current = event.clientX;
+    didDrag.current = false;
+    setDragging(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging || !flipped || swipeLocked.current) return;
+    const nextDragX = Math.max(-190, Math.min(190, event.clientX - dragStartX.current));
+    if (Math.abs(nextDragX) > 5) didDrag.current = true;
+    setDragX(nextDragX);
+  };
+
+  const handlePointerEnd = () => {
+    if (!dragging || swipeLocked.current) return;
+    setDragging(false);
+    if (dragX <= -85) finishSwipe(false);
+    else if (dragX >= 85) finishSwipe(true);
+    else setDragX(0);
   };
 
   useEffect(() => {
@@ -213,20 +258,21 @@ export default function OfficialVocabularyFlashcardsPage() {
         .vf-kpi{flex:1 1 150px;background:#f5f8fb;border:1px solid #e0e8ef;border-radius:13px;padding:13px 15px}.vf-kpi strong{display:block;font-size:22px;color:#15324e}.vf-kpi span{font-size:13px;color:#607387}
         .vf-note{border-radius:12px;background:#eaf6f2;color:#1d5d51;padding:12px 15px;margin-top:14px}.vf-note.error{background:#fff1ef;color:#9a3128}
         .vf-study{margin-top:18px}.vf-study-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:12px;color:#597084}
-        .vf-card-shell{perspective:1300px;max-width:720px;height:380px;margin:0 auto;cursor:pointer}.vf-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .58s cubic-bezier(.2,.72,.2,1)}.vf-card.flipped{transform:rotateY(180deg)}
+        .vf-swipe-stage{position:relative;max-width:720px;height:380px;margin:0 auto;transition:transform .26s ease,opacity .26s ease;touch-action:pan-y;user-select:none;-webkit-user-select:none}.vf-swipe-stage.dragging{transition:none}.vf-card-shell{perspective:1300px;width:100%;height:100%;cursor:pointer}.vf-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .58s cubic-bezier(.2,.72,.2,1)}.vf-card.flipped{transform:rotateY(180deg)}
         .vf-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid #bad7d0;border-radius:26px;background:linear-gradient(145deg,#fff,#edf8f5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:38px;text-align:center;box-shadow:0 18px 45px rgba(20,68,76,.11)}
         .vf-face.back{transform:rotateY(180deg);background:linear-gradient(145deg,#e7f7f1,#fff)}.vf-word{font-size:clamp(31px,6vw,58px);font-weight:850;line-height:1.25;overflow-wrap:anywhere}.vf-hint{position:absolute;bottom:21px;color:#638178;font-size:13px}.vf-badge{position:absolute;top:20px;left:20px;border-radius:999px;background:#d9eee7;color:#155f52;padding:6px 10px;font-size:12px;font-weight:800}.vf-source{position:absolute;right:20px;top:20px;color:#768a9a;font-size:12px}
-        .vf-marking{justify-content:center;margin-top:16px}.vf-button.wrong{background:#fff2f0;color:#a1302a;border-color:#e7b2ad}.vf-button.correct{background:#e8f7ef;color:#176943;border-color:#a8d8be}.vf-button.large{min-width:170px;padding:14px 20px;font-size:17px}
+        .vf-swipe-label{position:absolute;z-index:5;top:24px;border:3px solid;border-radius:12px;padding:7px 12px;font-size:22px;font-weight:900;letter-spacing:.08em;pointer-events:none}.vf-swipe-label.wrong{right:24px;color:#ad3029;border-color:#ad3029;transform:rotate(8deg)}.vf-swipe-label.correct{left:24px;color:#17704a;border-color:#17704a;transform:rotate(-8deg)}
+        .vf-swipe-help{display:flex;justify-content:center;gap:22px;align-items:center;margin-top:16px;color:#5d7285;font-weight:750}.vf-swipe-help .wrong{color:#a1302a}.vf-swipe-help .correct{color:#176943}
         .vf-empty{text-align:center;padding:45px 15px}.vf-empty h2{font-size:27px;margin:0 0 8px}.vf-muted{color:#62768a}.vf-progress{height:8px;border-radius:999px;background:#e4ebf0;overflow:hidden;margin-top:8px}.vf-progress>span{display:block;height:100%;background:#16806b;transition:width .25s}
-        @media(max-width:760px){.vf-grid{grid-template-columns:1fr 1fr}.vf-card-shell{height:340px}.vf-face{padding:28px 20px}.vf-panel{padding:17px}}
-        @media(max-width:470px){.vf-page{padding:20px 12px 70px}.vf-grid{grid-template-columns:1fr}.vf-card-shell{height:320px}.vf-actions .vf-button{flex:1}.vf-source{display:none}}
+        @media(max-width:760px){.vf-grid{grid-template-columns:1fr 1fr}.vf-swipe-stage{height:340px}.vf-face{padding:28px 20px}.vf-panel{padding:17px}}
+        @media(max-width:470px){.vf-page{padding:20px 12px 70px}.vf-grid{grid-template-columns:1fr}.vf-swipe-stage{height:320px}.vf-actions .vf-button{flex:1}.vf-source{display:none}.vf-swipe-help{gap:12px;font-size:13px}}
         @media(prefers-reduced-motion:reduce){.vf-card{transition:none}}
       `}</style>
       <div className="vf-wrap">
         <Link className="vf-back" href="/chinese-gcse">← 返回 GCSE Chinese 學習中心</Link>
         <div className="vf-eyebrow">Pearson Edexcel 1CN0 · Official Vocabulary</div>
         <h1 className="vf-title">GCSE 官方詞彙 Flashcards</h1>
-        <p className="vf-intro">PDF第 88–111 頁繁體中文詞彙。可選英→中或中→英，翻卡後自行標記答對／答錯；每名學生的紀錄分開儲存。</p>
+        <p className="vf-intro">PDF第 88–111 頁繁體中文詞彙。可選英→中或中→英，翻卡後向左滑答錯、向右滑答對；每名學生的紀錄分開儲存。</p>
 
         <section className="vf-panel" aria-labelledby="choose-title">
           <h2 id="choose-title">1. 選擇溫習內容</h2>
@@ -283,16 +329,24 @@ export default function OfficialVocabularyFlashcardsPage() {
           {completed && <div className="vf-empty"><h2>本輪完成</h2><p>答對 {sessionCorrect} 張 · 答錯 {sessionIncorrect} 張</p><div className="vf-actions" style={{justifyContent:"center"}}><button className="vf-button primary" onClick={startSession}>再來一輪</button>{sessionIncorrect > 0 && <button className="vf-button" onClick={() => {setReviewMode("wrong");setSessionCards([]);}}>重溫錯卡</button>}</div></div>}
           {current && !completed && <>
             <div className="vf-study-head"><span>{activeCategory?.labelZh}</span><strong>{currentIndex + 1} / {sessionCards.length}</strong></div>
-            <div className="vf-card-shell" role="button" tabIndex={0} aria-label="按一下翻轉卡片" onClick={() => setFlipped(value => !value)} onKeyDown={event => {if(event.key === "Enter"){event.preventDefault();setFlipped(value => !value);}}}>
-              <div className={`vf-card ${flipped ? "flipped" : ""}`}>
-                <div className="vf-face front"><span className="vf-badge">{tierLabel(current.tier)}</span><span className="vf-source">PDF p.{current.sourcePage}</span><div className="vf-word">{front}</div><span className="vf-hint">按卡片翻轉 · Space</span></div>
-                <div className="vf-face back"><span className="vf-badge">答案</span><span className="vf-source">PDF p.{current.sourcePage}</span><div className="vf-word">{back}</div><span className="vf-hint">看完答案後標記結果</span></div>
+            <div
+              className={`vf-swipe-stage ${dragging ? "dragging" : ""}`}
+              style={{transform:`translateX(${dragX}px) rotate(${dragX / 28}deg)`,opacity:Math.max(.58,1-Math.abs(dragX)/520)}}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={() => {setDragging(false);setDragX(0);}}
+            >
+              {flipped && dragX < 0 && <span className="vf-swipe-label wrong" style={{opacity:Math.min(1,Math.abs(dragX)/85)}}>答錯</span>}
+              {flipped && dragX > 0 && <span className="vf-swipe-label correct" style={{opacity:Math.min(1,dragX/85)}}>答對</span>}
+              <div className="vf-card-shell" role="button" tabIndex={0} aria-label={flipped ? "向左拖動答錯，向右拖動答對" : "按一下翻轉卡片"} onClick={() => {if(didDrag.current){didDrag.current=false;return;}if(!swipeLocked.current)setFlipped(value => !value);}} onKeyDown={event => {if(event.key === "Enter"){event.preventDefault();setFlipped(value => !value);}}}>
+                <div className={`vf-card ${flipped ? "flipped" : ""}`}>
+                  <div className="vf-face front"><span className="vf-badge">{tierLabel(current.tier)}</span><span className="vf-source">PDF p.{current.sourcePage}</span><div className="vf-word">{front}</div><span className="vf-hint">按卡片翻轉 · Space</span></div>
+                  <div className="vf-face back"><span className="vf-badge">答案</span><span className="vf-source">PDF p.{current.sourcePage}</span><div className="vf-word">{back}</div><span className="vf-hint">向左答錯 · 向右答對</span></div>
+                </div>
               </div>
             </div>
-            <div className="vf-actions vf-marking">
-              <button className="vf-button wrong large" disabled={!flipped || saving} onClick={() => void recordResult(false)}>✕ 答錯 <small>（1）</small></button>
-              <button className="vf-button correct large" disabled={!flipped || saving} onClick={() => void recordResult(true)}>✓ 答對 <small>（2）</small></button>
-            </div>
+            <div className="vf-swipe-help"><span className="wrong">← 答錯</span><span>{flipped ? "拖動卡片" : "先按卡片查看答案"}</span><span className="correct">答對 →</span></div>
             <p className="vf-muted" style={{textAlign:"center",marginBottom:0}}>本輪：答對 {sessionCorrect} · 答錯 {sessionIncorrect}</p>
           </>}
         </section>
