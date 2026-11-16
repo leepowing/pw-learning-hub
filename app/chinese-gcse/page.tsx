@@ -108,6 +108,14 @@ export default function ChineseLearningHome() {
       {page.kind === "error" && <div className="hub-status" role="alert">{page.message}　<Link href="/login">前往登入 →</Link></div>}
       {page.kind === "ready" && <>
         {page.warning && <p className="hub-status" role="status">{page.warning}</p>}
+        <section className="hub-card" style={{marginTop:16}}>
+          <span className="hub-icon" aria-hidden="true">字</span>
+          <h2>GCSE 官方詞彙 Flashcards</h2>
+          <p>Pearson Edexcel 1CN0 官方繁體詞彙：771 張卡、28 個分類。可選英→中或中→英，記錄答對／答錯及重溫錯卡。</p>
+          <Link className="hub-action" href="/chinese-gcse/vocabulary-flashcards">
+            <span>進入官方詞彙 Flashcards</span><span aria-hidden="true">→</span>
+          </Link>
+        </section>
         <section className="hub-section" aria-label="現時 GCSE 課程">
           <div className="hub-eyebrow">CURRENT COURSE · STAGE 3</div>
           <article className="hub-card hub-card--active" style={{marginTop:12}}>
