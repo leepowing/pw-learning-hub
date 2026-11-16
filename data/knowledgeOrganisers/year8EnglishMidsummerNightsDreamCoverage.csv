@@ -1,0 +1,53 @@
+source_id,section_id,source_entry,learn,mind_map,flashcards,quiz_questions,status
+AMND-S1-01,historical-context,Authorship and 1595-96 dating,Historical Context,Historical Context,eng-amnd-f001|eng-amnd-f002,eng-amnd-q001,complete
+AMND-S1-02,historical-context,Elizabethan period and Elizabeth I,Historical Context,Historical Context,eng-amnd-f003|eng-amnd-f004|eng-amnd-f005,eng-amnd-q002|eng-amnd-q006|eng-amnd-q010,complete
+AMND-S1-03,historical-context,Patriarchy and arranged marriage,Historical Context,Historical Context,eng-amnd-f006|eng-amnd-f007,eng-amnd-q003|eng-amnd-q007|eng-amnd-q010,complete
+AMND-S1-04,historical-context,Fairy beliefs and Midsummer traditions,Historical Context,Historical Context,eng-amnd-f008|eng-amnd-f009,eng-amnd-q008|eng-amnd-q010,complete
+AMND-S1-05,historical-context,Athens and forest symbolism,Historical Context,Historical Context,eng-amnd-f010|eng-amnd-f011|eng-amnd-f012,eng-amnd-q004|eng-amnd-q005|eng-amnd-q009|eng-amnd-q010,complete
+AMND-S2-01,genre-overview,Ridicule of men and women,Overview of the Genre,Overview of the Genre,eng-amnd-f013,eng-amnd-q020,complete
+AMND-S2-02,genre-overview,Love relationships and marriage,Overview of the Genre,Overview of the Genre,eng-amnd-f014,eng-amnd-q011|eng-amnd-q016|eng-amnd-q020,complete
+AMND-S2-03,genre-overview,Obstacles to relationships,Overview of the Genre,Overview of the Genre,eng-amnd-f015,eng-amnd-q016|eng-amnd-q020|eng-amnd-q079,complete
+AMND-S2-04,genre-overview,Mistakes and misunderstandings,Overview of the Genre,Overview of the Genre,eng-amnd-f016,eng-amnd-q012|eng-amnd-q017|eng-amnd-q020,complete
+AMND-S2-05,genre-overview,Hero or heroine fortune and villain,Overview of the Genre,Overview of the Genre,eng-amnd-f017,eng-amnd-q020,complete
+AMND-S2-06,genre-overview,Trickery and deception,Overview of the Genre,Overview of the Genre,eng-amnd-f018,eng-amnd-q018|eng-amnd-q020,complete
+AMND-S2-07,genre-overview,Clowns disguise and mistaken identity,Overview of the Genre,Overview of the Genre,eng-amnd-f019,eng-amnd-q013|eng-amnd-q015|eng-amnd-q018|eng-amnd-q020,complete
+AMND-S2-08,genre-overview,Resolution and wedding,Overview of the Genre,Overview of the Genre,eng-amnd-f020,eng-amnd-q014|eng-amnd-q019|eng-amnd-q020,complete
+AMND-S3-01,key-characters,Puck,Key Characters,Key Characters,eng-amnd-f021|eng-amnd-f022,eng-amnd-q021|eng-amnd-q029|eng-amnd-q036|eng-amnd-q077,complete
+AMND-S3-02,key-characters,Oberon,Key Characters,Key Characters,eng-amnd-f023|eng-amnd-f024,eng-amnd-q022|eng-amnd-q030|eng-amnd-q036|eng-amnd-q077,complete
+AMND-S3-03,key-characters,Titania,Key Characters,Key Characters,eng-amnd-f025|eng-amnd-f026,eng-amnd-q022|eng-amnd-q030|eng-amnd-q032|eng-amnd-q036|eng-amnd-q077,complete
+AMND-S3-04,key-characters,Egeus,Key Characters,Key Characters,eng-amnd-f027|eng-amnd-f028,eng-amnd-q023|eng-amnd-q031|eng-amnd-q035|eng-amnd-q078,complete
+AMND-S3-05,key-characters,Hermia,Key Characters,Key Characters,eng-amnd-f029|eng-amnd-f030,eng-amnd-q024|eng-amnd-q031|eng-amnd-q035|eng-amnd-q037|eng-amnd-q078|eng-amnd-q079,complete
+AMND-S3-06,key-characters,Lysander,Key Characters,Key Characters,eng-amnd-f031|eng-amnd-f032,eng-amnd-q025|eng-amnd-q032|eng-amnd-q035|eng-amnd-q037|eng-amnd-q077|eng-amnd-q079,complete
+AMND-S3-07,key-characters,Helena,Key Characters,Key Characters,eng-amnd-f033|eng-amnd-f034,eng-amnd-q026|eng-amnd-q032|eng-amnd-q037|eng-amnd-q079,complete
+AMND-S3-08,key-characters,Demetrius,Key Characters,Key Characters,eng-amnd-f035|eng-amnd-f036,eng-amnd-q033|eng-amnd-q037|eng-amnd-q077|eng-amnd-q079,complete
+AMND-S3-09,key-characters,Theseus,Key Characters,Key Characters,eng-amnd-f037|eng-amnd-f038,eng-amnd-q027|eng-amnd-q034|eng-amnd-q035|eng-amnd-q078,complete
+AMND-S3-10,key-characters,Hippolyta,Key Characters,Key Characters,eng-amnd-f039|eng-amnd-f040,eng-amnd-q028|eng-amnd-q034,complete
+AMND-S4-01,keywords-definitions,Protagonist,Keywords and Definitions,Keywords and Definitions,eng-amnd-f041,eng-amnd-q038|eng-amnd-q046,complete
+AMND-S4-02,keywords-definitions,Antagonist,Keywords and Definitions,Keywords and Definitions,eng-amnd-f042,eng-amnd-q039|eng-amnd-q046,complete
+AMND-S4-03,keywords-definitions,Unrequited love,Keywords and Definitions,Keywords and Definitions,eng-amnd-f043,eng-amnd-q040|eng-amnd-q076,complete
+AMND-S4-04,keywords-definitions,Chaos,Keywords and Definitions,Keywords and Definitions,eng-amnd-f044,eng-amnd-q041|eng-amnd-q047,complete
+AMND-S4-05,keywords-definitions,Conflict,Keywords and Definitions,Keywords and Definitions,eng-amnd-f045,eng-amnd-q047|eng-amnd-q051,complete
+AMND-S4-06,keywords-definitions,Ephemeral,Keywords and Definitions,Keywords and Definitions,eng-amnd-f046,eng-amnd-q042|eng-amnd-q050,complete
+AMND-S4-07,keywords-definitions,Elopement,Keywords and Definitions,Keywords and Definitions,eng-amnd-f047,eng-amnd-q043|eng-amnd-q051,complete
+AMND-S4-08,keywords-definitions,Submissive,Keywords and Definitions,Keywords and Definitions,eng-amnd-f048,eng-amnd-q050,complete
+AMND-S4-09,keywords-definitions,Patriarchy,Keywords and Definitions,Keywords and Definitions,eng-amnd-f049,eng-amnd-q049|eng-amnd-q051|eng-amnd-q078,complete
+AMND-S4-10,keywords-definitions,Consent,Keywords and Definitions,Keywords and Definitions,eng-amnd-f050,eng-amnd-q048|eng-amnd-q051|eng-amnd-q078,complete
+AMND-S4-11,keywords-definitions,Hierarchy,Keywords and Definitions,Keywords and Definitions,eng-amnd-f051,eng-amnd-q045|eng-amnd-q049|eng-amnd-q051,complete
+AMND-S4-12,keywords-definitions,Autonomy,Keywords and Definitions,Keywords and Definitions,eng-amnd-f052,eng-amnd-q044|eng-amnd-q048|eng-amnd-q051|eng-amnd-q075|eng-amnd-q078,complete
+AMND-S5-01,writers-methods,Imagery,Writer’s Methods,Writer’s Methods,eng-amnd-f053|eng-amnd-f065,eng-amnd-q061|eng-amnd-q066,complete
+AMND-S5-02,writers-methods,Metaphor,Writer’s Methods,Writer’s Methods,eng-amnd-f054|eng-amnd-f066,eng-amnd-q053|eng-amnd-q060|eng-amnd-q066,complete
+AMND-S5-03,writers-methods,Simile,Writer’s Methods,Writer’s Methods,eng-amnd-f055|eng-amnd-f066,eng-amnd-q052|eng-amnd-q060|eng-amnd-q066,complete
+AMND-S5-04,writers-methods,Personification,Writer’s Methods,Writer’s Methods,eng-amnd-f056|eng-amnd-f067,eng-amnd-q054|eng-amnd-q066,complete
+AMND-S5-05,writers-methods,Symbolism,Writer’s Methods,Writer’s Methods,eng-amnd-f057|eng-amnd-f067,eng-amnd-q055|eng-amnd-q066,complete
+AMND-S5-06,writers-methods,Alliteration,Writer’s Methods,Writer’s Methods,eng-amnd-f058|eng-amnd-f068,eng-amnd-q062|eng-amnd-q066,complete
+AMND-S5-07,writers-methods,Repetition,Writer’s Methods,Writer’s Methods,eng-amnd-f059|eng-amnd-f068,eng-amnd-q062|eng-amnd-q068,complete
+AMND-S5-08,writers-methods,Soliloquy,Writer’s Methods,Writer’s Methods,eng-amnd-f060|eng-amnd-f069,eng-amnd-q056|eng-amnd-q063|eng-amnd-q067,complete
+AMND-S5-09,writers-methods,Dramatic irony,Writer’s Methods,Writer’s Methods,eng-amnd-f061|eng-amnd-f069,eng-amnd-q057|eng-amnd-q064|eng-amnd-q067,complete
+AMND-S5-10,writers-methods,Iambic pentameter,Writer’s Methods,Writer’s Methods,eng-amnd-f062,eng-amnd-q058|eng-amnd-q068,complete
+AMND-S5-11,writers-methods,Tension,Writer’s Methods,Writer’s Methods,eng-amnd-f063|eng-amnd-f070,eng-amnd-q064|eng-amnd-q065|eng-amnd-q067|eng-amnd-q068,complete
+AMND-S5-12,writers-methods,Comic relief,Writer’s Methods,Writer’s Methods,eng-amnd-f064|eng-amnd-f070,eng-amnd-q059|eng-amnd-q065|eng-amnd-q067,complete
+AMND-S6-01,big-ideas,Dreams and Magic,Big Ideas,Big Ideas,eng-amnd-f071|eng-amnd-f072,eng-amnd-q069|eng-amnd-q073|eng-amnd-q077,complete
+AMND-S6-02,big-ideas,Power,Big Ideas,Big Ideas,eng-amnd-f073|eng-amnd-f074,eng-amnd-q070|eng-amnd-q074|eng-amnd-q078,complete
+AMND-S6-03,big-ideas,Gender,Big Ideas,Big Ideas,eng-amnd-f075|eng-amnd-f076,eng-amnd-q071|eng-amnd-q075|eng-amnd-q078,complete
+AMND-S6-04,big-ideas,Love,Big Ideas,Big Ideas,eng-amnd-f077|eng-amnd-f078,eng-amnd-q072|eng-amnd-q076|eng-amnd-q079,complete
+
