@@ -111,7 +111,7 @@ export default function ChineseLearningHome() {
         <section className="hub-card" style={{marginTop:16}}>
           <span className="hub-icon" aria-hidden="true">字</span>
           <h2>GCSE 官方詞彙 Flashcards</h2>
-          <p>Pearson Edexcel 1CN0 官方繁體詞彙：771 張卡、28 個分類。可選英→中或中→英，記錄答對／答錯及重溫錯卡。</p>
+          <p>Pearson Edexcel 1CN0 官方繁體詞彙：771 張卡、28 個分類。每日隨機10張，同一輪不重複；可選英→中或中→英、跨日接續及重溫錯卡。</p>
           <Link className="hub-action" href="/chinese-gcse/vocabulary-flashcards">
             <span>進入官方詞彙 Flashcards</span><span aria-hidden="true">→</span>
           </Link>
