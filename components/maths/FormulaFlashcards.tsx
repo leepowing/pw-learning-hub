@@ -214,7 +214,7 @@ export default function FormulaFlashcards({
     );
   }
 
-  const useContentSizedFaces = (currentCard.level === "s1" && (currentCard.chapter === 9 || currentCard.chapter === 10)) || currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11 || currentCard.chapter === 12);
+  const useContentSizedFaces = (currentCard.level === "s1" && (currentCard.chapter === 9 || currentCard.chapter === 10)) || currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11 || currentCard.chapter === 12 || currentCard.chapter === 13);
   const hasFrontVisual = Boolean(currentCard.s2Chapter12Diagram || currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
@@ -299,6 +299,8 @@ export default function FormulaFlashcards({
           </article>
         </div>
       </div>
+
+      {currentCard.level === "s2" && currentCard.chapter === 13 && <button type="button" disabled={exitDirection !== null} aria-pressed={flipped} onClick={() => setFlipped(value => !value)} style={{ ...primaryButton("#0f766e"), marginTop: 22 }}>{flipped ? "Show question" : "Reveal answer"}</button>}
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 22 }}>
         <button type="button" disabled={!flipped || exitDirection !== null} onClick={() => gradeCard("correct")} style={gradeButton(flipped, "#16a34a")}>← I remembered</button>
