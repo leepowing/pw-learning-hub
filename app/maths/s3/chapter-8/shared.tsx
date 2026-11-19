@@ -1,9 +1,24 @@
 import Link from "next/link";
+import katex from "katex";
+import type { ReactNode } from "react";
+import styles from "./chapter.module.css";
 
-export function Back() { return <Link href="/maths/s3/chapter-8">← Chapter 8 · Quadrilaterals</Link>; }
+export function Back() { return <Link href="/maths/s3/chapter-8">← Back to Chapter 8</Link>; }
+
+export function Lesson({number,title,goal,children}:{number:string;title:string;goal:string;children:ReactNode}) {
+  return <main className={styles.lesson}><Back/><header><strong>SECTION {number}</strong><h1>{title}</h1><p>{goal}</p></header>{children}<footer><Back/></footer></main>;
+}
+
+export function Working({children}:{children:ReactNode}) {
+  return <table><thead><tr><th>Working</th><th>Reason</th></tr></thead><tbody>{children}</tbody></table>;
+}
 
 export function Step({reason,hk,result}:{reason:string;hk:string;result:string}) {
-  return <li><strong>{reason}</strong><small>HKDSE · {hk}</small>{result}</li>;
+  return <tr><td>{result}</td><td>{reason}<small>HKDSE · {hk}</small></td></tr>;
+}
+
+export function Answer({formula}:{formula:string}) {
+  return <p className={styles.answer}><b>Answer </b><span dangerouslySetInnerHTML={{__html:katex.renderToString(formula)}}/></p>;
 }
 
 export function Diagram({both=false}:{both?:boolean}) {

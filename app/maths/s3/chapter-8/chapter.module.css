@@ -1,9 +1,29 @@
-.chapter { max-width: 860px; margin: 3rem auto; padding: 0 1.25rem; color: #173530; line-height: 1.65; }
-.chapter h1 { font-size: clamp(2rem,5vw,3rem); line-height: 1.1; }
-.chapter section, .chapter details { margin: 1rem 0; padding: 1rem 1.4rem; border: 1px solid #cfdfda; border-radius: 14px; background: white; }
-.chapter h2 { margin: .3rem 0; }
-.chapter a { color: #006953; font-weight: 700; }
-.chapter summary { cursor: pointer; font-weight: 700; }
-.chapter small { color: #476359; display:block; }
-.chapter svg { display:block; width: min(100%,320px); margin: 1rem auto; }
-.chapter li { margin-bottom:.6rem; }
+.lesson {width:calc(100% - 40px);max-width:1050px;margin:40px auto 70px;color:#172033;line-height:1.65}
+.lesson a,.lesson summary {color:#047857;font-size:17px;font-weight:800}
+.lesson summary {cursor:pointer}
+.lesson header {margin:26px 0}
+.lesson header p {font-size:20px;color:#64748b;margin:0}
+.lesson header strong,.lesson section>strong {font-size:14px;font-weight:900;letter-spacing:.09em;color:#047857}
+.lesson h1 {font-size:44px;line-height:1.15;margin:5px 0 12px}
+.lesson h2 {font-size:27px;line-height:1.25;margin:6px 0 12px}
+.lesson section,.lesson>details {margin:18px 0;padding:28px;border:1px solid #e2e8f0;border-radius:22px;background:white;box-shadow:0 6px 18px rgb(0 0 0 / 4%)}
+.lesson section[data-kind="mistakes"] {background:#fff7ed;border-color:#fed7aa}
+.lesson section[data-kind="summary"] {background:#ecfdf5;border-color:#a7f3d0}
+.lesson svg {display:block;width:min(100%,340px);height:auto;margin:16px auto}
+.lesson table {width:100%;border-collapse:collapse;table-layout:fixed}
+.lesson th,.lesson td {padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid #dce5e8;overflow-wrap:anywhere}
+.lesson th {background:#edf7f3}
+.lesson small {display:block;color:#526375;margin-top:3px}
+.answer {padding:12px 16px;background:#ecfdf5;border-left:4px solid #059669}
+.lesson footer {margin-top:22px}
+@media(max-width:760px){
+.lesson {width:calc(100% - 24px);margin-top:25px}
+.lesson h1 {font-size:36px}
+.lesson section,.lesson>details {padding:22px}
+.lesson table,.lesson tbody,.lesson tr,.lesson td {display:block}
+.lesson thead {position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+.lesson td {padding:8px 0;border:0}
+.lesson td:nth-child(2)::before {content:"Reason";display:block;font-weight:800;color:#047857}
+.lesson tr {border-bottom:1px solid #dce5e8}
+.answer :global(.katex) {white-space:normal;font-size:1em}
+}
