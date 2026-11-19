@@ -4,7 +4,6 @@ import { s3Chapter9Flashcards } from "@/data/maths/flashcards/s3chapter9";
 import { useRouter } from "next/navigation";
 
 const sections = [
-  { number: "9.0", title: "Pre-Learning", description: "Recall the faces, edges and vertices of familiar solids.", available: false, route: "" },
   { number: "9.1", title: "Cross Sections of Solids", description: "Predict the shape and size of a new face made by a plane cut.", available: true, route: "/maths/s3/chapter-9/cross-sections" },
   { number: "9.2", title: "2-D Representations of Pyramids and Circular Cones", description: "Represent three-dimensional solids on a flat page.", available: true, route: "/maths/s3/chapter-9/sketches" }
 ];
