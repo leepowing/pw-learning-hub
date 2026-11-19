@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "../../chapter-8/chapter.module.css";
 import SliceExplorer from "./SliceExplorer";
@@ -34,6 +35,20 @@ const topics = [
   },
 ];
 
+const conceptFigures = [
+  ["prism", "A parallel cut through a triangular prism reproduces its triangular end."],
+  ["inclined", "A tilted plane meets the curved wall of a cylinder and exposes an ellipse."],
+  ["apex", "The plane contains the cone’s axis and a diameter of its base."],
+  ["sphere", "A cut above the centre of a sphere still exposes a circle."],
+];
+
+function Diagram({ name, caption }: { name: string; caption: string }) {
+  return <figure style={{ margin: "18px 0", padding: 12, background: "#f4f9fb", borderRadius: 14 }}>
+    <Image src={`/maths/s3/ch9/${name}.svg`} alt={caption} width={495} height={233} style={{ display: "block", width: "100%", maxWidth: 495, height: "auto", margin: "auto" }} />
+    <figcaption style={{ textAlign: "center" }}>{caption}</figcaption>
+  </figure>;
+}
+
 function CornerCut() {
   return <svg role="img" aria-label="A plane joins the midpoints of three edges at the top front right corner of a cube. Face-on, the section is an equilateral triangle." viewBox="0 0 310 145">
     <g stroke="#334155" strokeWidth="2" strokeLinejoin="round">
@@ -51,8 +66,11 @@ export default function CrossSections() {
     <header><strong>SECTION 9.1</strong><h1>Cross Sections of Solids</h1><p>Predict the flat shape exposed by a cut, then describe how its size changes as the cutting plane moves.</p></header>
     <section><h2>Look straight at the cut</h2><p>A cross section is the flat region where a plane passes through a solid. Compare the highlighted section inside each solid with its face-on view. Move the cut before changing solids.</p><SliceExplorer /></section>
     {topics.map((topic, i) => <div key={topic.title}>
-      <section><strong>LEARNING CARD {i + 1}</strong><h2>{topic.title}</h2><p>{topic.rule}</p></section>
-      <section><strong>WORKED EXAMPLE {i + 1}</strong><h2>{topic.question}</h2>{i === 1 && <CornerCut />}<ol>{topic.steps.map(step => <li key={step}>{step}</li>)}</ol>{i === 1 && <p><b>GCSE:</b> Corresponding sides of congruent squares are equal, and their diagonals are equal in length.<small>HKDSE: corresponding diagonals of congruent squares</small></p>}<p className={styles.answer}><b>Answer</b> {topic.answer}</p></section>
+      <section><strong>LEARNING CARD {i + 1}</strong><h2>{topic.title}</h2><p>{topic.rule}</p><Diagram name={conceptFigures[i][0]} caption={conceptFigures[i][1]} /></section>
+      <section><strong>WORKED EXAMPLE {i + 1}</strong><h2>{topic.question}</h2>{i === 0 && <Diagram name="axial" caption="The centre line runs along the cylinder. The rectangle spans its full length and one diameter." />}
+      {i === 1 && <CornerCut />}
+      {i === 2 && <><Diagram name="pyramid" caption="The halfway section has half the base side of 12 cm." /><Diagram name="frustum" caption="Slice the remaining frustum vertically to see its unequal parallel edges." /></>}
+      {i === 3 && <Diagram name="diameter" caption="The solid outline is the central circle. The dashed circle, from the plane 2 cm higher, fits just inside it." />}<ol>{topic.steps.map(step => <li key={step}>{step}</li>)}</ol>{i === 1 && <p><b>GCSE:</b> Corresponding sides of congruent squares are equal, and their diagonals are equal in length.<small>HKDSE: corresponding diagonals of congruent squares</small></p>}<p className={styles.answer}><b>Answer</b> {topic.answer}</p></section>
     </div>)}
     <section data-kind="mistakes"><h2>Common mistakes</h2><p>A circle viewed at an angle looks oval. Decide whether the plane itself is tilted relative to the base before naming the shape.</p><p>A perpendicular cut through a right prism with a convex base gives a rectangle. For a pyramid, check whether the cut passes through the apex before predicting a triangle.</p></section>
     <section data-kind="summary"><h2>Section summary</h2><p>Identify the solid and its base. Check the direction and position of the plane. Trace the boundary, imagine facing the plane, and name the shape. Compare sizes separately.</p>
