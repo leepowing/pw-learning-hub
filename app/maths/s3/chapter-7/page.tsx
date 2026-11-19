@@ -13,9 +13,9 @@ const sections = [
   {
     "number": "7.2",
     "title": "Lines in Triangles",
-    "description": "Explore special lines in a triangle.",
-    "available": false,
-    "route": ""
+    "description": "Identify four special lines and use equal distances to prove geometric results.",
+    "available": true,
+    "route": "/maths/s3/chapter-7/lines-in-triangles"
   },
   {
     "number": "7.3",

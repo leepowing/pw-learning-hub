@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+<polyline points="225.00,25.00 36.00,88.00 225.00,151.00" fill="none" stroke="#243752" stroke-width="2" />
+<polyline points="36.00,88.00 146.00,88.00" fill="none" stroke="#243752" stroke-width="2" />
+<polyline points="146.00,88.00 135.00,55.00" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="5 3"/>
+<polyline points="146.00,88.00 135.00,121.00" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="5 3"/>
+<path d="M52.127616066858735 82.62412797771375 A17 17 0 0 1 53.0 88.0" fill="none" stroke="#1671b0" stroke-width="2"/>
+<path d="M53.0 88.0 A17 17 0 0 1 52.127616066858735 93.37587202228625" fill="none" stroke="#1671b0" stroke-width="2"/>
+<polyline points="127.41,57.53 129.94,65.12 137.53,62.59" fill="none" stroke="#1671b0" stroke-width="2" />
+<polyline points="127.41,118.47 129.94,110.88 137.53,113.41" fill="none" stroke="#1671b0" stroke-width="2" />
+<text x="24" y="93" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">O</text>
+<text x="237" y="25" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">A</text>
+<text x="237" y="156" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">B</text>
+<text x="158" y="93" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">P</text>
+<text x="132" y="47" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">E</text>
+<text x="132" y="137" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">F</text>
+</svg>

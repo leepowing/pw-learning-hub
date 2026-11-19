@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+<polyline points="94.00,25.00 36.00,143.00 276.00,143.00 94.00,25.00" fill="none" stroke="#243752" stroke-width="2" />
+<polyline points="156.00,24.00 156.00,165.00" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="5 3"/>
+<polyline points="96.00,147.00 96.00,139.00" fill="none" stroke="#087b68" stroke-width="2" />
+<polyline points="216.00,147.00 216.00,139.00" fill="none" stroke="#087b68" stroke-width="2" />
+<polyline points="156.00,135.00 164.00,135.00 164.00,143.00" fill="none" stroke="#1671b0" stroke-width="2" />
+<text x="94" y="18" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">A</text>
+<text x="26" y="150" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">B</text>
+<text x="286" y="150" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">C</text>
+<text x="168" y="159" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">M</text>
+<text x="168" y="24" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">P</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+<polyline points="94.00,25.00 36.00,143.00 276.00,143.00 94.00,25.00" fill="none" stroke="#243752" stroke-width="2" />
+<polyline points="94.00,25.00 126.58,143.00" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="5 3"/>
+<path d="M86.50097954877414 40.25662781456296 A17 17 0 0 0 98.52407677504165 41.38696827767506" fill="none" stroke="#1671b0" stroke-width="2"/>
+<path d="M98.52407677504165 41.38696827767506 A17 17 0 0 0 108.26427576147805 34.24826670249675" fill="none" stroke="#1671b0" stroke-width="2"/>
+<text x="94" y="18" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">A</text>
+<text x="26" y="150" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">B</text>
+<text x="286" y="150" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">C</text>
+<text x="126.5771704935926" y="162" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">D</text>
+</svg>
