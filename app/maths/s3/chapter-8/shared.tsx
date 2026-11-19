@@ -14,7 +14,7 @@ export function Working({children}:{children:ReactNode}) {
 }
 
 export function Step({reason,hk,result}:{reason:string;hk:string;result:string}) {
-  return <tr><td>{result}</td><td>{reason}<small>HKDSE · {hk}</small></td></tr>;
+  return <tr><td>{result}</td><td>GCSE: {reason}<small>HKDSE: {hk}</small></td></tr>;
 }
 
 export function Answer({formula}:{formula:string}) {

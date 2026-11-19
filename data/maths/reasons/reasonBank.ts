@@ -1,4 +1,14 @@
 export const reasonBank = {
+  "quad.adjacentAngles": {"gcse": "Adjacent angles of a parallelogram add up to 180°.", "hkdse": "adj. ∠s of ∥gram", "variants": {}},
+  "quad.equalParallel": {"gcse": "A quadrilateral with one pair of equal and parallel opposite sides is a parallelogram.", "hkdse": "2 opp. sides equal and ∥", "variants": {}},
+  "quad.bisect": {"gcse": "The diagonals of a parallelogram bisect each other.", "hkdse": "diags. of ∥gram", "variants": {}},
+  "quad.rhombusDiagonals": {"gcse": "The diagonals of a rhombus meet at right angles.", "hkdse": "diags. of rhombus", "variants": {}},
+  "quad.rectangleDiagonals": {"gcse": "The diagonals of a rectangle are equal and bisect each other.", "hkdse": "diags. of rect.", "variants": {}},
+  "quad.squareAngles": {"gcse": "Each diagonal of a square bisects two right angles.", "hkdse": "diags. bisect ∠s of square", "variants": {}},
+  "triangle.midsegment": {"gcse": "The segment joining two side midpoints is parallel to the third side and half its length.", "hkdse": "mid-pt. theorem", "variants": {}},
+  "triangle.parallelMidpoint": {"gcse": "A line through the midpoint of one side of a triangle, parallel to another side, bisects the third side.", "hkdse": "intercept theorem", "variants": {}},
+  "geometry.equalIntercepts": {"gcse": "Three parallel lines cutting equal intercepts on one transversal also cut equal intercepts on any other transversal.", "hkdse": "intercept theorem", "variants": {}},
+
   "angles.straightLine": {
     "gcse": "Angles on a straight line add up to 180°.",
     "hkdse": "adj. angles on a st. line",

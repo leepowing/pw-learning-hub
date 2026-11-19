@@ -8,7 +8,7 @@ type Step = [statement: string, reason: string, shorthand: string];
 function Proof({ steps }: { steps: Step[] }) {
   return <table><thead><tr><th>Statement</th><th>Reason</th></tr></thead>
     <tbody>{steps.map(([statement, reason, shorthand]) => <tr key={statement}>
-      <td>{statement}</td><td>{reason}<small>HKDSE · {shorthand}</small></td>
+      <td>{statement}</td><td>GCSE: {reason}<small>HKDSE: {shorthand}</small></td>
     </tr>)}</tbody></table>;
 }
 
@@ -24,8 +24,8 @@ const examples: Example[] = [
     title: "Which vertex matches B?",
     question: "D lies on AB and E lies on AC. AB = 8 cm, AC = 12 cm, AD = 6 cm and AE = 4 cm. Prove that triangles ABC and AED are similar.",
     steps: [
-      ["AB / AE = 8 / 4 = 2; AC / AD = 12 / 6 = 2", "The given lengths give the same ratio for two pairs of sides.", "ratio of corr. sides"],
-      ["∠BAC = ∠EAD", "Both angles are formed by the same two rays from A.", "common ∠"],
+      ["AB / AE = 8 / 4 = 2; AC / AD = 12 / 6 = 2", "The corresponding side lengths are proportional.", "ratio of corr. sides"],
+      ["∠BAC = ∠EAD", "The angle at A is common to both triangles.", "common ∠"],
       ["△ABC ∼ △AED", "Two pairs of corresponding sides are proportional and their included angles are equal.", "ratio of 2 sides, inc. ∠"]
     ],
     conclusion: "B matches E and C matches D. The scale factor from AED to ABC is 2.",
@@ -38,8 +38,8 @@ const examples: Example[] = [
     question: "In kite KLMN, KL = KN and LM = NM. Join K to M and prove that ∠KLM = ∠KNM.",
     steps: [
       ["KL = KN and LM = NM", "The two pairs of equal sides are given.", "given"],
-      ["KM = KM", "The triangles share side KM.", "common side"],
-      ["△KLM ≅ △KNM", "All three pairs of corresponding sides are equal.", "SSS"],
+      ["KM = KM", "KM is a common side.", "common side"],
+      ["△KLM ≅ △KNM", "The triangles are congruent by SSS because all three pairs of corresponding sides are equal.", "SSS"],
       ["∠KLM = ∠KNM", "Corresponding angles in congruent triangles are equal.", "corr. ∠s, ≅ △s"]
     ],
     conclusion: "The added diagonal lets us compare L with N.",
@@ -66,7 +66,7 @@ const examples: Example[] = [
     steps: [
       ["∠BEM = ∠CFM = 90°", "Perpendicular lines meet at right angles.", "⊥ lines"],
       ["BM = CM; ME = MF", "A midpoint divides a segment into equal halves. The perpendicular distances are given equal.", "mid-pt.; given"],
-      ["△BME ≅ △CMF", "The right-angled triangles have equal hypotenuses and one other pair of equal sides.", "RHS"],
+      ["△BME ≅ △CMF", "The triangles are congruent by RHS because their hypotenuses and one other pair of corresponding sides are equal.", "RHS"],
       ["∠ABC = ∠ACB", "Corresponding angles at B and C are equal. BE lies along BA and CF lies along CA.", "corr. ∠s, ≅ △s"],
       ["AB = AC", "The sides opposite those equal angles are equal.", "sides opp. eq. ∠s"]
     ],

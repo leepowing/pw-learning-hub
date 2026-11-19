@@ -9,7 +9,7 @@ function Diagram({name, alt}: {name: string, alt: string}) {
 type Step = [string, string, string];
 function Proof({steps}: {steps: Step[]}) {
   return <table><thead><tr><th>Statement</th><th>Reason</th></tr></thead><tbody>
-    {steps.map(([statement,reason,short]) => <tr key={statement}><td>{statement}</td><td>{reason}<small>HKDSE · {short}</small></td></tr>)}
+    {steps.map(([statement,reason,short]) => <tr key={statement}><td>{statement}</td><td>GCSE: {reason}<small>HKDSE: {short}</small></td></tr>)}
   </tbody></table>;
 }
 const lines = [
@@ -33,13 +33,13 @@ export default function LinesInTriangles() {
     <section><strong>WORKED EXAMPLE 3</strong><h2>Prove the angle bisector property in both directions</h2><p>In the diagram above, start with OP bisecting angle AOB.</p><Proof steps={[
     ["∠OEP = ∠OFP = 90°","Each distance is measured perpendicular to its side.","⊥ distances"],
     ["∠EOP = ∠FOP","OP divides the angle into two equal parts.","∠ bisector"],
-    ["△OEP ≅ △OFP","Two pairs of angles are equal and OP is a shared corresponding side.","AAS"],
+    ["△OEP ≅ △OFP","The angles at P are equal because the angles in each triangle add up to 180°. The angles at O are equal and OP is a common included side, so the triangles are congruent by ASA.","AAS"],
     ["PE = PF","Corresponding sides of congruent triangles are equal.","corr. sides, ≅ △s"]
     ]}/><p className={styles.answer}>Reverse the argument starting with PE = PF. The right triangles have equal hypotenuse OP and an equal shorter side, so they are congruent by RHS. Their corresponding angles at O are equal, which proves OP bisects angle AOB.</p></section>
     <section className={styles.learning}><strong>LEARNING CARD 3</strong><h2>Equal distances from two endpoints</h2><Diagram name="equal" alt="P above the midpoint M of AB, with PM perpendicular to AB."/><p>Every point on the perpendicular bisector of AB is the same distance from A and B. Conversely, PA = PB places P on that perpendicular bisector.</p></section>
     <section><strong>WORKED EXAMPLE 4</strong><h2>Why does the midpoint matter?</h2><p>Use the diagram above to prove PA = PB.</p><Proof steps={[
     ["AM = BM and ∠AMP = ∠BMP = 90°","A perpendicular bisector crosses the segment at its midpoint at right angles.","⊥ bisector"],
-    ["△AMP ≅ △BMP","AM and BM are equal, MP is shared and the included angles are equal.","SAS"],
+    ["△AMP ≅ △BMP","AM = BM, MP is a common side and the included angles are equal, so the triangles are congruent (SAS).","SAS"],
     ["PA = PB","Corresponding sides of congruent triangles are equal.","corr. sides, ≅ △s"]
     ]}/><p className={styles.answer}>Conversely, given PA = PB and midpoint M, triangles AMP and BMP are congruent by SSS. Their equal angles at M form a straight angle, so both are 90°. Hence PM is the perpendicular bisector. If P coincides with M, it already lies on the bisector.</p></section>
     <section><strong>WORKED EXAMPLE 5</strong><h2>Find a side from two perimeters</h2><p>E lies between A and C and on the perpendicular bisector of AB. Triangles ABC and BCE have perimeters 48 cm and 31 cm. Find AB.</p><Proof steps={[

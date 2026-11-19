@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "../chapter.module.css";
 
 const home = "/maths/s3/chapter-8";
-type Item = { prompt: string; answer: string; why: string; topic: string; options?: string[]; image?: string; alt?: string };
+type Item = { prompt: string; answer: string; why: string; hk: string; topic: string; options?: string[]; image?: string; alt?: string };
 const groups: { title: string; lead?: string; items: Item[] }[] = [
   {
     "title": "Part A · Correct or wrong?",
@@ -13,6 +13,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "In parallelogram ABCD, AD = BC.",
         "answer": "Correct",
+        "hk": "opp. sides of ∥gram",
         "why": "Opposite sides are equal.",
         "topic": "8.2 · Parallelograms",
         "options": [
@@ -23,6 +24,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "In every rhombus ABCD with diagonals meeting at O, angles OAD and ODA are equal.",
         "answer": "Wrong",
+        "hk": "diags. bisect ∠s of rhombus",
         "why": "A rhombus with angles 60° and 120° has adjacent half-angles of 30° and 60°.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums",
         "options": [
@@ -33,6 +35,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "The diagonals of a rectangle have equal lengths.",
         "answer": "Correct",
+        "hk": "equal diags. of rect.",
         "why": "Both are hypotenuses of right triangles with matching leg lengths.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums",
         "options": [
@@ -43,6 +46,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "The four half-diagonals of a square have equal lengths.",
         "answer": "Correct",
+        "hk": "diags. of square",
         "why": "Its diagonals are equal and bisect each other.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums",
         "options": [
@@ -53,6 +57,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "If just one diagonal bisects the other, the quadrilateral must be a parallelogram.",
         "answer": "Wrong",
+        "hk": "counterexample: kite",
         "why": "A non-rhombus kite can have just one diagonal bisecting the other.",
         "topic": "8.2 · Parallelograms",
         "options": [
@@ -63,6 +68,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "One pair of opposite sides both equal and parallel proves a parallelogram.",
         "answer": "Correct",
+        "hk": "2 sides equal and ∥",
         "why": "Joining their endpoints by a diagonal gives congruent triangles by SAS.",
         "topic": "8.4 · Proofs Related to Parallelograms",
         "options": [
@@ -73,6 +79,7 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "A quadrilateral with both pairs of opposite sides equal must be a parallelogram.",
         "answer": "Correct",
+        "hk": "opp. sides equal",
         "why": "Both pairs of equal opposite sides form a sufficient condition.",
         "topic": "8.2 · Parallelograms",
         "options": [
@@ -88,30 +95,35 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "Three angles of a quadrilateral are 90°, 104° and 78°. Find the fourth in degrees.",
         "answer": "88",
-        "why": "Subtract 272° from 360°.",
+        "hk": "∠ sum of quad.",
+        "why": "The interior angles of a quadrilateral add up to 360°.",
         "topic": "8.1 · Basic Knowledge of Quadrilaterals"
       },
       {
         "prompt": "Rhombus ABCD has side CD = 9 cm. Find AB in cm.",
         "answer": "9",
+        "hk": "sides of rhombus",
         "why": "All four sides are equal.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums"
       },
       {
         "prompt": "Its diagonals meet at O and DO = 4 cm. Find OB in cm.",
         "answer": "4",
+        "hk": "diags. of ∥gram",
         "why": "The diagonals bisect each other.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums"
       },
       {
         "prompt": "In rectangle ABCD the diagonals meet at O and ∠AOB = 110°. Find ∠OAB in degrees.",
         "answer": "35",
-        "why": "OA = OB. Each base angle is (180° − 110°) ÷ 2.",
+        "hk": "diags. of rect.; base ∠s, isos. △",
+        "why": "The diagonals of a rectangle are equal and bisect each other, so OA = OB. The base angles of isosceles triangle AOB are equal. Each base angle is (180° − 110°) ÷ 2.",
         "topic": "8.3 · Properties of Rhombuses, Rectangles, Squares and Trapeziums"
       },
       {
         "prompt": "In square ABCD, E lies on AC beyond C. Which property proves EB = ED?",
         "answer": "AC is the perpendicular bisector of BD.",
+        "hk": "property of ⊥ bisector",
         "why": "Every point on the perpendicular bisector is equally distant from B and D.",
         "topic": "8.4 · Proofs Related to Parallelograms",
         "options": [
@@ -123,24 +135,28 @@ const groups: { title: string; lead?: string; items: Item[] }[] = [
       {
         "prompt": "M and N bisect AB and AC in triangle ABC. If ∠B = 58° and ∠A = 42°, find ∠ANM in degrees.",
         "answer": "80",
+        "hk": "mid-pt. theorem; corr. ∠s; ∠ sum of △",
         "why": "MN ∥ BC. The angle at C is 180° − 58° − 42°.",
         "topic": "8.5 · Mid-point Theorem and Intercept Theorem"
       },
       {
         "prompt": "Three parallel lines cut equal adjacent intercepts on one transversal. On another, the outer crossings are 22 cm apart. Find one intercept in cm.",
         "answer": "11",
+        "hk": "intercept theorem",
         "why": "The two intercepts are equal and sum to 22 cm.",
         "topic": "8.5 · Mid-point Theorem and Intercept Theorem"
       },
       {
         "prompt": "In triangle ABC, M bisects AB and MN ∥ BC with N on AC. If NC = 6 cm, find AC in cm.",
         "answer": "12",
+        "hk": "intercept theorem",
         "why": "The intercept theorem gives AN = NC.",
         "topic": "8.5 · Mid-point Theorem and Intercept Theorem"
       },
       {
         "prompt": "In the same triangle, MN = 7 cm. Find BC in cm.",
         "answer": "14",
+        "hk": "mid-pt. theorem",
         "why": "Now both midpoints are established, so BC = 2MN.",
         "topic": "8.5 · Mid-point Theorem and Intercept Theorem"
       }
@@ -170,7 +186,7 @@ export default function Checkpoint() {
         <label htmlFor={id}><b>{i+1}. {item.prompt}</b></label>
         <div style={{marginTop:8}}>{item.options ? <select id={id} style={{maxWidth:"100%"}} disabled={marked} value={answers[i]??""} onChange={e=>setAnswers({...answers,[i]:e.target.value})}><option value="">Choose an answer</option>{item.options.map(option=><option key={option}>{option}</option>)}</select> :
         <input id={id} disabled={marked} value={answers[i]??""} onChange={e=>setAnswers({...answers,[i]:e.target.value})}/>}</div>
-        {marked && <p><b>{matches(item,answers[i])?"Correct":"Review"} · {item.answer}</b><br/>{item.why}</p>}
+        {marked && <p><b>{matches(item,answers[i])?"Correct":"Review"} · {item.answer}</b><br/>GCSE: {item.why}<small>HKDSE: {item.hk}</small></p>}
       </div>;
     })}</section>)}
     <section data-kind="summary"><p aria-live="polite">Answered {attempted} of {items.length}</p>

@@ -10,7 +10,7 @@ const centres = [
 ];
 const proofs = [
   ["Why does the third angle bisector pass through I?", [
-    ["Let the bisectors at A and B meet at I.","Each bisector lies inside its vertex angle.","construction"],
+    ["Let the bisectors at A and B meet at I.","By construction, I is the intersection of the two internal angle bisectors.","construction"],
     ["I is equally far from AB and AC, and from AB and BC.","A point on an angle bisector has equal perpendicular distances to its two sides.","property of ∠ bisector"],
     ["CI bisects angle ACB.","The perpendicular distances from I to AC and BC are equal. An interior point with this property lies on their angle bisector.","converse of ∠ bisector property"]
   ]],
@@ -26,11 +26,11 @@ export default function CentresPage() {
     <header><strong>SECTION 7.3</strong><h1>Centres of Triangles</h1><p>Choose a centre from its defining lines, justify where it lies and locate it with compasses and a straight edge.</p></header>
     <section className={styles.learning}><h2>Four ways for three lines to meet</h2><p>Three lines are concurrent when all three pass through one point. Look at the same scalene triangle below. Changing the construction changes the point of intersection.</p>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:24}}>{centres.map(([symbol,name,lines,description])=><article key={symbol}><h3>{name} · {symbol}</h3><img className={styles.figure} src={home+"/centres/"+symbol+".svg"} alt={lines+" meeting at "+symbol} width="250" height="215"/><b>{lines}</b><p>{description}</p></article>)}</div></section>
-    {proofs.map(([title,steps])=><section key={title}><strong>WORKED PROOF</strong><h2>{title}</h2><table><thead><tr><th>Statement</th><th>Reason</th></tr></thead><tbody>{steps.map(([statement,reason,short])=><tr key={statement}><td>{statement}</td><td>{reason}<small>HKDSE · {short}</small></td></tr>)}</tbody></table></section>)}
+    {proofs.map(([title,steps])=><section key={title}><strong>WORKED PROOF</strong><h2>{title}</h2><table><thead><tr><th>Statement</th><th>Reason</th></tr></thead><tbody>{steps.map(([statement,reason,short])=><tr key={statement}><td>{statement}</td><td>GCSE: {reason}<small>HKDSE: {short}</small></td></tr>)}</tbody></table></section>)}
     <section><h2>Using the centre in a calculation</h2>
-    <h3>Recover a perimeter from medians</h3><p>Two medians meet AB and AC at their midpoints F and E. If AF = 5 cm, AE = 6 cm and BC = 9 cm, then AB = 10 cm and AC = 12 cm. The perimeter is <b>31 cm</b>.</p>
-    <h3>Find an angle at the incentre</h3><p>If angle A = 64°, the angles at B and C sum to 116°. BI and CI bisect them, so the two angles at B and C in triangle BIC sum to 58°. Hence angle BIC = 180° − 58° = <b>122°</b>.</p>
-    <h3>Use two radii</h3><p>O is the circumcentre and angle BOC = 124°. OB = OC because both are radii. Triangle BOC has equal base angles, so angle OBC = (180° − 124°) ÷ 2 = <b>28°</b>.</p></section>
+    <h3>Recover a perimeter from medians</h3><p>Two medians meet AB and AC at their midpoints F and E. If AF = 5 cm, AE = 6 cm and BC = 9 cm, then AB = 10 cm and AC = 12 cm. The perimeter is <b>31 cm</b>.</p><p><b>Reason</b><br/>GCSE: A median joins a vertex to the midpoint of the opposite side. The perimeter is the sum of the three sides.<small>HKDSE: def. of median; perimeter of △</small></p>
+    <h3>Find an angle at the incentre</h3><p>If angle A = 64°, the angles at B and C sum to 116°. BI and CI bisect them, so the two angles at B and C in triangle BIC sum to 58°. Hence angle BIC = 180° − 58° = <b>122°</b>.</p><p><b>Reason</b><br/>GCSE: An angle bisector halves an angle. The interior angles of a triangle add up to 180°.<small>HKDSE: ∠ bisectors; ∠ sum of △</small></p>
+    <h3>Use two radii</h3><p>O is the circumcentre and angle BOC = 124°. OB = OC because both are radii. Triangle BOC has equal base angles, so angle OBC = (180° − 124°) ÷ 2 = <b>28°</b>.</p><p><b>Reason</b><br/>GCSE: Radii of the same circle are equal. The base angles of an isosceles triangle are equal and its angles add up to 180°.<small>HKDSE: radii; base ∠s, isos. △; ∠ sum of △</small></p></section>
     <section><h2>Construct each centre on paper</h2><p>Draw a scalene triangle. Use an unmarked straight edge and compasses. Keep the construction arcs visible. Two lines locate the centre and the third checks it.</p>
     <ol><li><b>Incentre.</b> Draw an arc centred at A cutting both arms of angle A. From the two cuts draw equal arcs meeting inside the angle away from A. Join A to their intersection. Repeat at B and mark I.</li>
     <li><b>Circumcentre.</b> Open the compasses wider than half AB. From A and B draw equal arcs crossing on both sides of AB. Join the crossings. Repeat on BC and mark O. Check that a circle centred at O passes through all three vertices.</li>
