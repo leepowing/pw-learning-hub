@@ -1,5 +1,6 @@
 "use client";
 
+import { s3Chapter7Flashcards } from "@/data/maths/flashcards/s3chapter7";
 import { useRouter } from "next/navigation";
 
 const sections = [
@@ -21,8 +22,8 @@ const sections = [
     "number": "7.3",
     "title": "Centres of Triangles",
     "description": "Locate and compare the centres of a triangle.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-7/centres"
   }
 ];
 
@@ -233,9 +234,10 @@ export default function ChapterSevenPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · 0 cards available
+            {s3Chapter7Flashcards.length} cards available
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-7/flashcards")} style={{background: "#4f46e5", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start Flashcards →</button>
 
 
       </section>
@@ -283,9 +285,10 @@ export default function ChapterSevenPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Covers Sections 7.1–7.3.
+            Practise after completing Sections 7.1–7.3.
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-7/checkpoint")} style={{background: "#7c3aed", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start →</button>
 
 
       </section>

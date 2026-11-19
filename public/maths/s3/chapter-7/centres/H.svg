@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 215">
+<polygon points="100.00,34.00 45.00,166.00 199.00,166.00" fill="#f1faf7" stroke="#263955" stroke-width="2"/>
+<polyline points="100.00,34.00 100.00,166.00" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="94.72,166.00 94.72,160.72" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="94.72,160.72 100.00,160.72" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="45.00,166.00 143.56,92.08" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="146.73,96.30 142.50,99.47" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="142.50,99.47 139.34,95.25" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="199.00,166.00 67.78,111.33" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="69.81,106.45 74.69,108.48" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="74.69,108.48 72.65,113.36" fill="none" stroke="#158070" stroke-width="1.8"/>
+<text x="96.0" y="28.0" font-family="Arial" font-size="13">A</text>
+<text x="32.0" y="173.0" font-family="Arial" font-size="13">B</text>
+<text x="204.0" y="173.0" font-family="Arial" font-size="13">C</text>
+<circle cx="100.00" cy="124.75" r="3" fill="#12324b"/>
+<text x="105.0" y="120.75" font-family="Arial" font-size="13">H</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 215">
+<polygon points="100.00,34.00 45.00,166.00 199.00,166.00" fill="#f1faf7" stroke="#263955" stroke-width="2"/>
+<polyline points="100.00,34.00 116.50,166.00" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="45.00,166.00 147.67,97.56" fill="none" stroke="#158070" stroke-width="1.8"/>
+<polyline points="199.00,166.00 71.55,102.28" fill="none" stroke="#158070" stroke-width="1.8"/>
+<circle cx="111.00" cy="122.00" r="44" fill="none" stroke="#5485b4" stroke-dasharray="4 3"/>
+<text x="96.0" y="28.0" font-family="Arial" font-size="13">A</text>
+<text x="32.0" y="173.0" font-family="Arial" font-size="13">B</text>
+<text x="204.0" y="173.0" font-family="Arial" font-size="13">C</text>
+<circle cx="111.00" cy="122.00" r="3" fill="#12324b"/>
+<text x="116.0" y="118.0" font-family="Arial" font-size="13">I</text>
+</svg>
