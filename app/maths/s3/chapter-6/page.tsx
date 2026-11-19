@@ -1,5 +1,6 @@
 "use client";
 
+import { s3Chapter6Flashcards } from "@/data/maths/flashcards/s3chapter6";
 import { useRouter } from "next/navigation";
 
 const sections = [
@@ -28,15 +29,15 @@ const sections = [
     "number": "6.4",
     "title": "Weighted Mean",
     "description": "Combine values with different weights.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-6/weighted-mean"
   },
   {
     "number": "6.5",
     "title": "Misuses of Measures of Central Tendency",
     "description": "Evaluate claims based on averages.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-6/misuses"
   }
 ];
 
@@ -201,7 +202,7 @@ export default function ChapterSixPage() {
           </article>
         ))}
       </section>
-      {/* Chapter 6 Flashcards */}
+
       <section
         style={{
           marginTop: "28px",
@@ -247,13 +248,14 @@ export default function ChapterSixPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · 0 cards available
+            {s3Chapter6Flashcards.length} cards available
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-6/flashcards")} style={{background: "#4f46e5", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start Flashcards →</button>
 
-
+        
       </section>
-
+      
       <section
         style={{
           marginTop: "22px",
@@ -297,9 +299,10 @@ export default function ChapterSixPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Covers Sections 6.1–6.5.
+            Review Sections 6.1–6.5 before starting.
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-6/checkpoint")} style={{background: "#7c3aed", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start →</button>
 
 
       </section>
