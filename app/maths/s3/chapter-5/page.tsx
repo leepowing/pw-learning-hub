@@ -1,5 +1,6 @@
 "use client";
 
+import { s3Chapter5Flashcards } from "@/data/maths/flashcards/s3chapter5";
 import { useRouter } from "next/navigation";
 
 const sections = [
@@ -13,16 +14,16 @@ const sections = [
   {
     "number": "5.2",
     "title": "Methods of Listing Possible Outcomes",
-    "description": "Organise possible outcomes systematically.",
-    "available": false,
-    "route": ""
+    "description": "List outcomes with tree diagrams and two-way tables.",
+    "available": true,
+    "route": "/maths/s3/chapter-5/listing-outcomes"
   },
   {
     "number": "5.3",
     "title": "Expected Values",
     "description": "Combine outcome values with their probabilities.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-5/expected-values"
   }
 ];
 
@@ -233,9 +234,10 @@ export default function ChapterFivePage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · 0 cards available
+            {s3Chapter5Flashcards.length} cards available
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-5/flashcards")} style={{background: "#4f46e5", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start Flashcards →</button>
 
         
       </section>
@@ -283,9 +285,10 @@ export default function ChapterFivePage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Covers Sections 5.1–5.3.
+            Review Sections 5.1–5.3 before starting.
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-5/checkpoint")} style={{background: "#7c3aed", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start →</button>
 
 
       </section>
