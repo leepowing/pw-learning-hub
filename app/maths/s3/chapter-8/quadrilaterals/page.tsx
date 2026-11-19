@@ -1,0 +1,17 @@
+import Link from "next/link";
+import {Back, Diagram, Step} from "../shared";
+
+export default function Basics() {
+  return <><Back/><h1>8.1 Basic Knowledge of Quadrilaterals</h1>
+    <section><h2>Read the vertices in order</h2><Diagram/><p>Trace A → B → C → D → A. AB and BC are adjacent sides because they meet at B. AB and CD are opposite sides. Angles A and B share side AB, so they are adjacent. Angles A and C are opposite.</p><p>A diagonal joins two non-adjacent vertices. AC splits this figure into two triangles. Their angle sums give 180° + 180° = 360° for the quadrilateral. BD is the other diagonal.</p></section>
+    <section><h2>Recognise the shape</h2><ul>
+      <li><b>Trapezium</b> · Exactly one pair of opposite sides is parallel in this textbook.</li>
+      <li><b>Parallelogram</b> · Both pairs of opposite sides are parallel.</li>
+      <li><b>Rhombus</b> · All four sides are equal.</li>
+      <li><b>Rectangle</b> · All four angles are right angles.</li>
+      <li><b>Square</b> · Four equal sides and four right angles. A square satisfies both the rectangle and rhombus definitions.</li></ul></section>
+    <section><h2>Worked examples</h2><p>In trapezium ABCD, AB ∥ DC and angle B is 47°. Find angle C.</p><ol><Step reason="Co-interior angles on parallel lines add up to 180°." hk="int. ∠s, AB ∥ DC" result="BC crosses the parallel sides, so ∠C = 180° − 47° = 133°."/></ol>
+    <p>A diagonal splits one corner of a rectangle into 36° and x.</p><ol><Step reason="Each interior angle of a rectangle is 90°." hk="∠ of rectangle" result="x = 90° − 36° = 54°."/></ol></section>
+    <details><summary>Check yourself · Two sides of a square measure (3x − 2) cm and 10 cm. Find x.</summary><p>All sides of a square are equal (HKDSE · sides of square). Hence 3x − 2 = 10, giving x = 4.</p></details>
+    <section><h2>Common mistake</h2><p>A diagonal of a rectangle can split a corner into unequal angles, as the 36° and 54° example shows. Use the marked angles and the shape’s definition.</p><h2>Summary</h2><p>Read vertices around the boundary. Use shared vertices to identify adjacent sides and use parallel sides, equal lengths and right angles to classify shapes.</p></section><Link href="/maths/s3/chapter-8/parallelograms">Continue to 8.2 · Parallelograms →</Link></>;
+}

@@ -1,0 +1,9 @@
+.chapter { max-width: 860px; margin: 3rem auto; padding: 0 1.25rem; color: #173530; line-height: 1.65; }
+.chapter h1 { font-size: clamp(2rem,5vw,3rem); line-height: 1.1; }
+.chapter section, .chapter details { margin: 1rem 0; padding: 1rem 1.4rem; border: 1px solid #cfdfda; border-radius: 14px; background: white; }
+.chapter h2 { margin: .3rem 0; }
+.chapter a { color: #006953; font-weight: 700; }
+.chapter summary { cursor: pointer; font-weight: 700; }
+.chapter small { color: #476359; display:block; }
+.chapter svg { display:block; width: min(100%,320px); margin: 1rem auto; }
+.chapter li { margin-bottom:.6rem; }
