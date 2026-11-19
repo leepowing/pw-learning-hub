@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+<polyline points="54.00,142.00 279.00,142.00 135.00,34.00 54.00,142.00" fill="none" stroke="#243752" stroke-width="2" />
+<polyline points="135.00,34.00 135.00,142.00" fill="none" stroke="#243752" stroke-width="2" />
+<text x="45" y="151" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">A</text>
+<text x="288" y="151" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">B</text>
+<text x="135" y="161" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">D</text>
+<text x="135" y="27" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16">C</text>
+</svg>

@@ -1,0 +1,16 @@
+.lesson {width:min(1050px,calc(100% - 40px));margin:42px auto 70px;color:#17233b;line-height:1.65}
+.lesson a,.lesson summary {color:#047857;font-weight:750;cursor:pointer}
+.lesson header {margin:28px 0;font-size:20px}
+.lesson h1 {font-size:44px;line-height:1.15;margin:4px 0 12px}
+.lesson h2 {font-size:27px;line-height:1.25;margin:6px 0 12px}
+.lesson section {padding:28px;margin:18px 0;background:white;border:1px solid #dbe3ec;border-radius:22px}
+.lesson .learning {background:#effbf6}
+.lesson strong {font-size:14px;color:#08745d;letter-spacing:.09em}
+.figure {display:block;width:min(100%,400px);height:auto;margin:18px auto}
+.lesson table {width:100%;border-collapse:collapse;font-size:16px}
+.lesson th,.lesson td {padding:11px;text-align:left;vertical-align:top;border-bottom:1px solid #d8e2e8}
+.lesson th {background:#edf4f6}
+.lesson td:first-child {width:36%;font-weight:650}
+.lesson small {display:block;color:#506477;margin-top:3px}
+.answer {border-left:4px solid #059669;padding:10px 14px;background:#edf9f2;font-weight:650}
+@media(max-width:760px){.lesson{width:calc(100% - 24px)}.lesson section{padding:22px}.lesson h1{font-size:36px}.lesson td,.lesson th{padding:7px 4px}.lesson table{font-size:15px}}
