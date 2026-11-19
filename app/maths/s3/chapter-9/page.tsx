@@ -1,11 +1,12 @@
 "use client";
 
+import { s3Chapter9Flashcards } from "@/data/maths/flashcards/s3chapter9";
 import { useRouter } from "next/navigation";
 
 const sections = [
   { number: "9.0", title: "Pre-Learning", description: "Recall the faces, edges and vertices of familiar solids.", available: false, route: "" },
   { number: "9.1", title: "Cross Sections of Solids", description: "Predict the shape and size of a new face made by a plane cut.", available: true, route: "/maths/s3/chapter-9/cross-sections" },
-  { number: "9.2", title: "2-D Representations of Pyramids and Circular Cones", description: "Represent three-dimensional solids on a flat page.", available: false, route: "" }
+  { number: "9.2", title: "2-D Representations of Pyramids and Circular Cones", description: "Represent three-dimensional solids on a flat page.", available: true, route: "/maths/s3/chapter-9/sketches" }
 ];
 
 export default function ChapterNinePage() {
@@ -215,10 +216,10 @@ export default function ChapterNinePage() {
               fontSize: "17px",
             }}
           >
-            0 cards available
+            {s3Chapter9Flashcards.length} cards available
           </p>
         </div>
-        <strong>Coming soon</strong>
+        <button type="button" style={{background:"#4f46e5",color:"white",padding:"14px 22px",borderRadius:14,border:0,fontWeight:800,cursor:"pointer"}} onClick={() => router.push("/maths/s3/chapter-9/flashcards")}>Start Flashcards →</button>
 
 
       </section>
@@ -269,7 +270,7 @@ export default function ChapterNinePage() {
             Practise after completing Sections 9.1 and 9.2.
           </p>
         </div>
-        <strong>Coming soon</strong>
+        <button type="button" style={{background:"#4f46e5",color:"white",padding:"14px 22px",borderRadius:14,border:0,fontWeight:800,cursor:"pointer"}} onClick={() => router.push("/maths/s3/chapter-9/checkpoint")}>Start →</button>
 
 
       </section>
