@@ -21,8 +21,8 @@ const sections = [
     "number": "6.3",
     "title": "Effects of Changing Data on Measures of Central Tendency",
     "description": "Track how a change in the observations affects their centre.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-6/changing-data"
   },
   {
     "number": "6.4",
