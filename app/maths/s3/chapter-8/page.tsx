@@ -1,5 +1,6 @@
 "use client";
 
+import { s3Chapter8Flashcards } from "@/data/maths/flashcards/s3chapter8";
 import { useRouter } from "next/navigation";
 
 const sections = [
@@ -28,15 +29,15 @@ const sections = [
     "number": "8.4",
     "title": "Proofs Related to Parallelograms",
     "description": "Use parallel lines and congruent triangles to build a proof.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-8/proofs"
   },
   {
     "number": "8.5",
     "title": "Mid-point Theorem and Intercept Theorem",
     "description": "Use midpoints and parallel lines to relate lengths in triangles.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-8/mid-point-and-intercept"
   }
 ];
 
@@ -247,9 +248,10 @@ export default function ChapterEightPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · 0 cards available
+            {s3Chapter8Flashcards.length} cards available
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-8/flashcards")} style={{background: "#4f46e5", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start Flashcards →</button>
 
 
       </section>
@@ -297,9 +299,10 @@ export default function ChapterEightPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Study Sections 8.1–8.5 before attempting the checkpoint.
+            Practise after completing Sections 8.1–8.5.
           </p>
         </div>
+        <button type="button" onClick={() => router.push("/maths/s3/chapter-8/checkpoint")} style={{background: "#7c3aed", color: "white", border: 0, borderRadius: 14, padding: "14px 20px", fontWeight: 800, fontSize: 17, cursor: "pointer"}}>Start →</button>
 
 
       </section>
