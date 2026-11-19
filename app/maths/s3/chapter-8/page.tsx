@@ -21,8 +21,8 @@ const sections = [
     "number": "8.3",
     "title": "Properties of Rhombuses, Rectangles, Squares and Trapeziums",
     "description": "Compare the side, angle and diagonal properties of special quadrilaterals.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-8/special-quadrilaterals"
   },
   {
     "number": "8.4",
