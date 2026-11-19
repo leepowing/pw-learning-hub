@@ -1,0 +1,32 @@
+.lesson { max-width:1080px; width:calc(100% - 32px); margin:36px auto 70px; font-family:Arial,sans-serif; color:#24364b; line-height:1.65; overflow-wrap:break-word }
+.lesson * { box-sizing:border-box }
+.lesson a, .lesson summary { color:#0f766e; font-weight:700 }
+.lesson header { background:#ecfeff; border:1px solid #a5f3fc; border-radius:24px; padding:32px; margin-top:22px }
+.lesson small { font-size:13px; font-weight:800; letter-spacing:.08em; color:#0e7490 }
+.lesson h1 { font-size:clamp(32px,5vw,48px); line-height:1.2 }
+.lesson h2 { font-size:28px; line-height:1.3 }
+.lesson h3 { font-size:22px; line-height:1.4 }
+.lesson :is(header,section) > :last-child { margin-bottom:0 }
+.lesson nav { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px }
+.lesson nav a { padding:8px 12px; background:#ecfeff; border-radius:8px }
+.lesson section { background:white; border:1px solid #dce5ee; border-radius:22px; padding:28px; margin:24px 0; scroll-margin-top:16px }
+.lesson section > h2:first-child, .lesson article > h3:first-child { margin-top:0 }
+.lesson article { padding:22px; margin:16px 0; background:#f8fafc; border-radius:16px }
+.formula { background:#f5f3ff; color:#5b21b6; font-weight:700; padding:18px; border-radius:12px }
+.lesson summary { cursor:pointer; padding:10px 0 }
+.lesson :is(summary,a):focus-visible { outline:3px solid #d97706; outline-offset:3px }
+.lesson table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums }
+.lesson caption { text-align:left; font-weight:700; padding:12px 0 }
+.lesson th, .lesson td { border:1px solid #cbd5e1; padding:10px; text-align:center }
+.lesson th { background:#ecfeff }
+.lesson th:first-child { text-align:left }
+@media(max-width:700px) {
+ .lesson header,.lesson section { padding:18px }
+ .lesson article { padding:14px }
+ .lesson h2 { font-size:25px }
+ .lesson th,.lesson td { padding:6px 3px }
+}
+
+.lesson fieldset {margin:16px 0;padding:16px;border:1px solid #cbd5e1;border-radius:12px;min-width:0}
+.lesson select,.lesson button {padding:9px;font:inherit;max-width:100%}
+.lesson svg {display:block;width:260px;max-width:100%;height:auto}
