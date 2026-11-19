@@ -81,12 +81,12 @@ export default function S3MathematicsPage() {
           <div className="chapterGrid">
             {(index === 0 ? chapters.slice(0, 7) : chapters.slice(7)).map((title, i) => {
               const number = i + (index === 0 ? 1 : 8);
-              if (number === 4) return (
+              if (number === 4 || number === 5) return (
                 <article className="chapterCard availableCard" key={number}>
                   <div className="chapterInformation"><span className="chapterNumber availableNumber">{number}</span>
                     <div><span className="chapterLabel">Chapter {number}</span><strong className="chapterTitle">{title}</strong></div>
                   </div>
-                  <a className="chapterStatus" href="/maths/s3/chapter-4">Start →</a>
+                  <a className="chapterStatus" href={`/maths/s3/chapter-${number}`}>Start →</a>
                 </article>
               );              if (number === 3) return (
                 <article className="chapterCard availableCard" key={number}>
