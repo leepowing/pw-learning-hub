@@ -233,9 +233,10 @@ export default function ChapterTwelvePage() {
               fontSize: "17px",
             }}
           >
-            0 cards available · Coming soon
+            36 cards · Choose sections and shuffle
           </p>
         </div>
+        <a href="/maths/s3/chapter-12/flashcards" style={{fontWeight: 800, textDecoration: "underline"}}>Start Flashcards →</a>
 
 
 
@@ -284,9 +285,10 @@ export default function ChapterTwelvePage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Practise after completing Sections 12.1–12.3.
+            10 statements · Figures A–D
           </p>
         </div>
+        <a href="/maths/s3/chapter-12/checkpoint" style={{fontWeight: 800, textDecoration: "underline"}}>Start Checkpoint →</a>
 
 
 

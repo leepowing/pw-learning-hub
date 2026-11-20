@@ -1,3 +1,4 @@
+import { s3Chapter12Flashcards } from "./s3chapter12";
 import { s3Chapter11Flashcards } from "./s3chapter11";
 import { s3Chapter10Flashcards } from "./s3chapter10";
 import { s3Chapter9Flashcards } from "./s3chapter9";
@@ -45,7 +46,7 @@ export const mathsFlashcardsByLevel: Record<
 > = {
   s1: s1Flashcards,
   s2: s2Flashcards,
-  s3: [...s3Chapter11Flashcards, ...s3Chapter10Flashcards, ...s3Chapter9Flashcards, ...s3Chapter8Flashcards, ...s3Chapter7Flashcards, ...s3Chapter6Flashcards, ...s3Chapter5Flashcards, ...s3Chapter4Flashcards, ...s3Chapter1Flashcards, ...s3Chapter2Flashcards, ...s3Chapter3Flashcards],
+  s3: [...s3Chapter12Flashcards, ...s3Chapter11Flashcards, ...s3Chapter10Flashcards, ...s3Chapter9Flashcards, ...s3Chapter8Flashcards, ...s3Chapter7Flashcards, ...s3Chapter6Flashcards, ...s3Chapter5Flashcards, ...s3Chapter4Flashcards, ...s3Chapter1Flashcards, ...s3Chapter2Flashcards, ...s3Chapter3Flashcards],
   s4: [],
   s5: [],
   s6: [],
