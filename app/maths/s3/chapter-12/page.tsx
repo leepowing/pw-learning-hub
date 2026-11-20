@@ -13,16 +13,16 @@ const sections = [
   {
     "number": "12.2",
     "title": "Angles of Elevation and Depression",
-    "description": "Use a horizontal line of sight to model heights and distances.",
-    "available": false,
-    "route": ""
+    "description": "Use angles above and below the horizontal to model heights and distances.",
+    "available": true,
+    "route": "/maths/s3/chapter-12/elevation-depression"
   },
   {
     "number": "12.3",
     "title": "Bearings",
     "description": "Describe directions using compass points and three-figure bearings.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-12/bearings"
   }
 ];
 
