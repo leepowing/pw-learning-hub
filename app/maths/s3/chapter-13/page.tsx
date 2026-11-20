@@ -4,13 +4,6 @@ import { useRouter } from "next/navigation";
 
 const sections = [
   {
-    "number": "13.0",
-    "title": "Pre-Learning",
-    "description": "Read coordinates and measure horizontal and vertical gaps.",
-    "available": true,
-    "route": "/maths/s3/chapter-13/pre-learning"
-  },
-  {
     "number": "13.1",
     "title": "Distance between Two Points",
     "description": "Build a right triangle to measure the distance between any two points.",
@@ -21,15 +14,15 @@ const sections = [
     "number": "13.2",
     "title": "Slope of a Straight Line",
     "description": "Calculate slope from coordinate changes.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-13/slope"
   },
   {
     "number": "13.3",
     "title": "Parallel Lines and Perpendicular Lines",
     "description": "Use slopes to identify parallel and perpendicular lines.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-13/parallel-perpendicular"
   },
   {
     "number": "13.4",
