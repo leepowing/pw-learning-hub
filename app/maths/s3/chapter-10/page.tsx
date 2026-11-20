@@ -1,3 +1,4 @@
+import { s3Chapter10Flashcards } from "@/data/maths/flashcards/s3chapter10";
 import Link from "next/link";
 import { Header,root } from "./lesson";
 const sections = [
@@ -6,10 +7,10 @@ const sections = [
   ["10.3","Circular Cones","Find the capacity of a cone and the area of its paper net.","circular-cones"],
   ["10.4","Spheres","Measure spheres and hemispheres, then combine them with other solids.","spheres"],
   ["10.5","Relations among Lengths, Areas and Volumes of Similar Figures","Use length ratios to predict areas and volumes.","similar-figures"],
-  ["10.6","Frustums of Pyramids and Circular Cones","Measure the solid left after a parallel cut.",""]
+  ["10.6","Frustums of Pyramids and Circular Cones","Measure the solid left after a parallel cut.","frustums"]
 ];
 export default function ChapterTen(){
   return <><Link href="/maths/s3">← Back to S3 Mathematics</Link><Header tag="S3 MATHEMATICS" title="Chapter 10 · Mensuration (III)">Explore heights, pyramids, cones and spheres. Use volume to measure the space inside a solid and surface area to measure its exposed faces.</Header>
   <div className="tiles">{sections.map(([n,title,description,slug])=><article key={n}><small>{n} · {slug?"Available":"Coming soon"}</small><h2>{title}</h2><p>{description}</p>{slug && <Link className="start" href={root+"/"+slug}>Start →</Link>}</article>)}</div>
-  <aside style={{background:"#eef2ff"}}><h2>Chapter 10 Flashcards</h2>Coming soon · 0 cards available</aside><aside style={{background:"#fffbeb"}}><h2>Checkpoint Activity</h2>Coming soon · Study the chapter lessons first.</aside></>;
+  <aside style={{background:"#eef2ff"}}><h2>Chapter 10 Flashcards</h2><Link href={root+"/flashcards"}>Practise with {s3Chapter10Flashcards.length} flashcards →</Link></aside><aside style={{background:"#fffbeb"}}><h2>Checkpoint Activity</h2><Link href={root+"/checkpoint"}>Start the chapter checkpoint →</Link></aside></>;
 }
