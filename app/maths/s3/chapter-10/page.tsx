@@ -5,7 +5,7 @@ const sections = [
   ["10.2","Pyramids","Use the base and perpendicular height for volume. Unfold the faces to find surface area.","pyramids"],
   ["10.3","Circular Cones","Find the capacity of a cone and the area of its paper net.","circular-cones"],
   ["10.4","Spheres","Measure spheres and hemispheres, then combine them with other solids.","spheres"],
-  ["10.5","Relations among Lengths, Areas and Volumes of Similar Figures","Compare corresponding measurements in similar figures.",""],
+  ["10.5","Relations among Lengths, Areas and Volumes of Similar Figures","Use length ratios to predict areas and volumes.","similar-figures"],
   ["10.6","Frustums of Pyramids and Circular Cones","Measure the solid left after a parallel cut.",""]
 ];
 export default function ChapterTen(){
