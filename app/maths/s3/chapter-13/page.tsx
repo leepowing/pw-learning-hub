@@ -28,15 +28,15 @@ const sections = [
     "number": "13.4",
     "title": "Point of Division",
     "description": "Locate a point that divides a segment in a given ratio.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-13/division"
   },
   {
     "number": "13.5",
     "title": "Using Coordinate Geometry to Perform Geometric Proofs",
     "description": "Use coordinates to justify geometric properties.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-13/coordinate-proofs"
   }
 ];
 
@@ -247,12 +247,10 @@ export default function ChapterThirteenPage() {
               fontSize: "17px",
             }}
           >
-            0 cards available · Coming soon
+            30 cards across Sections 13.1–13.5
           </p>
         </div>
-
-
-
+        <a href="/maths/s3/chapter-13/flashcards" style={{fontWeight: 800, textDecoration: "underline"}}>Start Flashcards →</a>
       </section>
 
       <section
@@ -298,12 +296,10 @@ export default function ChapterThirteenPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Practise after completing Sections 13.1–13.5.
+            Practise after completing Sections 13.1–13.5.
           </p>
         </div>
-
-
-
+        <a href="/maths/s3/chapter-13/checkpoint" style={{fontWeight: 800, textDecoration: "underline"}}>Start Checkpoint →</a>
       </section>
     </main>
   );
