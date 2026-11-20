@@ -1,5 +1,6 @@
 "use client";
 
+import { s3Chapter11Flashcards } from "@/data/maths/flashcards/s3chapter11";
 import { useRouter } from "next/navigation";
 
 const sections = [
@@ -21,8 +22,8 @@ const sections = [
     "number": "11.3",
     "title": "Trigonometric Relations",
     "description": "Explore relationships between sine, cosine and tangent.",
-    "available": false,
-    "route": ""
+    "available": true,
+    "route": "/maths/s3/chapter-11/relations"
   }
 ];
 
@@ -233,10 +234,10 @@ export default function ChapterElevenPage() {
               fontSize: "17px",
             }}
           >
-            0 cards available · Coming soon
+            {s3Chapter11Flashcards.length} cards available
           </p>
         </div>
-
+        <button type="button" style={{background:"#4f46e5",color:"white",padding:"14px 22px",borderRadius:14,border:0,fontWeight:800,cursor:"pointer"}} onClick={() => router.push("/maths/s3/chapter-11/flashcards")}>Start Flashcards →</button>
 
 
       </section>
@@ -284,10 +285,10 @@ export default function ChapterElevenPage() {
               fontSize: "17px",
             }}
           >
-            Coming soon · Practise after completing Sections 11.1–11.3.
+            Practise after completing Sections 11.1–11.3.
           </p>
         </div>
-
+        <button type="button" style={{background:"#7c3aed",color:"white",padding:"14px 22px",borderRadius:14,border:0,fontWeight:800,cursor:"pointer"}} onClick={() => router.push("/maths/s3/chapter-11/checkpoint")}>Start →</button>
 
 
       </section>
