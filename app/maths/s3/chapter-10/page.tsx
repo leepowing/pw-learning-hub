@@ -3,7 +3,7 @@ import { Header,root } from "./lesson";
 const sections = [
   ["10.1","Heights of Solids","Locate the perpendicular from a point to a plane and pair a face with its height.","heights"],
   ["10.2","Pyramids","Use the base and perpendicular height for volume. Unfold the faces to find surface area.","pyramids"],
-  ["10.3","Circular Cones","Measure solids with a circular base and an apex.",""]
+  ["10.3","Circular Cones","Find the capacity of a cone and the area of its paper net.","circular-cones"]
 ];
 export default function ChapterTen(){
   return <><Link href="/maths/s3">← Back to S3 Mathematics</Link><Header tag="S3 MATHEMATICS" title="Chapter 10 · Mensuration (III)">Choose a base, identify its corresponding height, then decide whether you are measuring space or covering faces.</Header>
