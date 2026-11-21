@@ -1,3 +1,5 @@
+import { s1FormulaCards, newS1ReviewCards } from "./s1Formula";
+export { s1FormulaCards } from "./s1Formula";
 import { s3Chapter13Flashcards } from "./s3chapter13";
 import { s3Chapter12Flashcards } from "./s3chapter12";
 import { s3Chapter11Flashcards } from "./s3chapter11";
@@ -55,6 +57,7 @@ export const mathsFlashcardsByLevel: Record<
 
 // Used by the Smart Review page.
 export const allMathsFlashcards: MathsFlashcard[] = [
+  ...newS1ReviewCards,
   ...mathsFlashcardsByLevel.s1,
   ...mathsFlashcardsByLevel.s2,
   ...mathsFlashcardsByLevel.s3,
@@ -76,7 +79,7 @@ export function getFlashcardsForChapter(
 export function getFlashcardsForSelection(
   selection: FlashcardSelection
 ): MathsFlashcard[] {
-  const cards = mathsFlashcardsByLevel[selection.level] ?? [];
+  const cards = selection.level === "s1" ? s1FormulaCards : mathsFlashcardsByLevel[selection.level] ?? [];
   return cards.filter((card) =>
     selection.chapters.includes(card.chapter)
   );
@@ -97,7 +100,7 @@ export function getMathsFlashcards(
 }
 
 export function getMathsFlashcardChapters(level: MathsLevel) {
-  const cards = mathsFlashcardsByLevel[level] ?? [];
+  const cards = level === "s1" ? s1FormulaCards : mathsFlashcardsByLevel[level] ?? [];
 
   return Array.from(new Set(cards.map((card) => card.chapter)))
     .sort((a, b) => a - b)

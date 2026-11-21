@@ -6,7 +6,7 @@ import Link from "next/link";
 import FormulaFlashcards from "@/components/maths/FormulaFlashcards";
 import {
   getFlashcardsForSelections,
-  s1Flashcards,
+  s1FormulaCards as s1Flashcards,
 } from "@/data/maths/flashcards";
 
 import type { MathsFlashcard } from "@/data/maths/flashcards";

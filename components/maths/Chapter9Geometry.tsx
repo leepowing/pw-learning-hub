@@ -36,7 +36,7 @@ export function Parallel({kind="corresponding",converse=false,numeric=false,plai
  {names?<><Label p={[45,y1]} text="A" vertex/><Label p={[555,y1]} text="B" vertex/><Label p={[45,y2]} text="C" vertex/><Label p={[555,y2]} text="D" vertex/></>:<><Label p={[553,y1]} text="p" vertex/><Label p={[553,y2]} text="q" vertex/></>}
  <Label p={polar(u,98,theta)} text="t" vertex/>
  {!plain&&<><Angle v={u} start={top[0]} end={top[1]} label={labels[0]} lr={62}/><Angle v={v} start={bottom[0]} end={bottom[1]} label={labels[1]} lr={62} color={teal}/></>}
- {!converse&&<Label p={[480,345]} text="p // q" color={teal}/>}
+ {!converse&&<Label p={[480,345]} text={names ? "AB // CD" : "p // q"} color={teal}/>}
  </Frame>
 }
 export function Triangle({kind="sum"}:{kind?:string}){

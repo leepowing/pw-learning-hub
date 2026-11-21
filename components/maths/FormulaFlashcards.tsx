@@ -1,4 +1,5 @@
 "use client";
+import S1FormulaDiagram from "./S1FormulaDiagram";
 import { S2Chapter12Triangle } from "@/components/maths/S2Chapter12Triangle";
 import { ReasonContent } from "@/components/maths/DualReason";
 
@@ -215,7 +216,7 @@ export default function FormulaFlashcards({
   }
 
   const useContentSizedFaces = (currentCard.level === "s1" && (currentCard.chapter === 9 || currentCard.chapter === 10)) || currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11 || currentCard.chapter === 12 || currentCard.chapter === 13);
-  const hasFrontVisual = Boolean(currentCard.s2Chapter12Diagram || currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
+  const hasFrontVisual = Boolean(currentCard.id.startsWith("s1-formula-8-") || currentCard.id.startsWith("s1-formula-9-") || currentCard.s2Chapter12Diagram || currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -276,6 +277,7 @@ export default function FormulaFlashcards({
           <article style={{ ...cardFace("linear-gradient(135deg, #eef2ff, #ffffff)", "#c7d2fe"), ...(useContentSizedFaces ? { position: "relative" as const, inset: "auto", gridArea: "1 / 1", minWidth: 0, padding: "clamp(18px, 4vw, 34px)" } : {}) }}>
             <p style={{ color: "#4f46e5", fontWeight: 800, letterSpacing: 1 }}>{currentCard.level.toUpperCase()} · CHAPTER {currentCard.chapter}</p>
             {currentCard.s2Chapter12Diagram && <S2Chapter12Triangle />}
+            {<S1FormulaDiagram id={currentCard.id} />}
             {currentCard.frontDiagram && <Chapter9FlashcardDiagram kind={currentCard.frontDiagram} />}
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
@@ -286,6 +288,7 @@ export default function FormulaFlashcards({
             {currentCard.s2Chapter8Diagram && <S2Chapter8FlashcardDiagram kind={currentCard.s2Chapter8Diagram} />}
             {currentCard.s2Chapter7Diagram && <S2Chapter7FlashcardDiagram kind={currentCard.s2Chapter7Diagram} />}
             <h2 style={{ margin: hasFrontVisual ? "4px 0 10px" : undefined, fontSize: hasFrontVisual ? 28 : 34, lineHeight: 1.3 }}>{currentCard.prompt}</h2>
+            {currentCard.id.startsWith("s1-formula-") && currentCard.questionFormula && <MathFormula formula={currentCard.questionFormula} />}
             <p style={{ color: "#6b7280" }}>Click the card to reveal the answer.</p>
           </article>
 
