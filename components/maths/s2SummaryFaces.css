@@ -1,0 +1,23 @@
+.s2-summary-6 svg{width:100%}
+.s2-summary-6 path{fill:none;stroke:#263b45;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.s2-summary-6 .arc{stroke:#297e91;stroke-width:1.25}
+.s2-summary-6 text{text-anchor:middle;font:italic 14px Georgia;fill:#125563}
+.s2-summary-8 svg{width:100%}
+.s2-summary-8 .frac{display:inline-flex;vertical-align:middle;flex-direction:column;text-align:center}
+.s2-summary-8 .frac span:first-child{border-bottom:1px solid}
+.s2-summary-9 svg{width:100%}
+.s2-summary-9 polygon{fill:#ecf5f4;stroke:#264853;stroke-width:1.6}
+.s2-summary-9 path{fill:none;stroke:#147888;stroke-width:1.8}
+.s2-summary-9 text{text-anchor:middle;font:italic 14px Georgia}
+.s2-summary-9 .result path{stroke:#a84213;stroke-width:3}
+.s2-summary-9 .result .pair path{stroke:#155b9b;stroke-dasharray:6 3}
+.s2-summary-9 .result text{fill:#92370f;font:12px system-ui}
+.s2-summary-9 svg{background:#faf8f3;border-radius:8px}
+.s2-summary-10 svg{width:min(100%,290px);display:inline-block;vertical-align:middle;stroke-width:1.6}
+.s2-summary-11 svg{width:min(100%,300px);font:15px system-ui}
+.s2-summary-11 math{font-size:1.2em}
+.s2-summary-12 svg{width:min(100%,300px);font:15px system-ui}
+.s2-summary-12 math{font-size:1.2em}
+.s2-summary-13 svg{width:min(100%,300px);font:15px system-ui}
+.s2-summary-13 math{font-size:1.2em}
+.s2-summary-face svg{max-width:min(100%,320px);height:auto}.s2-summary-face h2{font-size:1.45rem}.s2-summary-face p{margin:.75em 0}
