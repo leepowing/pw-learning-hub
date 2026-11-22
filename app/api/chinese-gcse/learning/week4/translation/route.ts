@@ -28,7 +28,7 @@ export async function POST(request:Request){
     const taskId=typeof body?.taskId==="string"?body.taskId:"";
     const task=translationTasks.find(x=>x.id===taskId);
     if(!task)return NextResponse.json({error:"題目無效"},{status:400});
-    const existing=await existingReview(db,user.id,"translation",taskId,3);
+    const existing=await existingReview(db,user.id,"translation",taskId,4);
     if(existing)return NextResponse.json({ok:true,review:existing,cached:true});
     const text=typeof body?.answerText==="string"?body.answerText.trim():"";
     const objectPath=typeof body?.objectPath==="string"?body.objectPath:"";
@@ -50,7 +50,7 @@ export async function POST(request:Request){
     }
     const inserted=await db.from("chinese_stage3_skill_reviews").insert({user_id:user.id,week:4,skill:"translation",task_id:taskId,input_kind,input_text:text,object_path:objectPath||null,feedback}).select("*").single();
     if(inserted.error){
-      const fallback=await existingReview(db,user.id,"translation",taskId,3);
+      const fallback=await existingReview(db,user.id,"translation",taskId,4);
       if(fallback)return NextResponse.json({ok:true,cached:true,review:fallback});
       console.error("[stage3-trans] save failed",inserted.error.code);
       return NextResponse.json({error:"AI 批改完成但未能儲存；請不要重複提交，檢查資料庫 SQL"},{status:500});

@@ -27,7 +27,7 @@ export async function POST(request:Request){
     const taskId=String(form.get("taskId")||"");
     const task=speakingPrompts.find(x=>x.id===taskId);
     if(!task)return NextResponse.json({error:"口說題目無效"},{status:400});
-    const existing=await existingReview(db,user.id,"speaking",taskId,3);
+    const existing=await existingReview(db,user.id,"speaking",taskId,4);
     if(existing)return NextResponse.json({ok:true,cached:true,review:existing});
     const file=form.get("audio");
     if(!(file instanceof File))return NextResponse.json({error:"請先錄製一段廣東話答案"},{status:400});
@@ -50,7 +50,7 @@ export async function POST(request:Request){
     feedback.pronunciation_reference=pron;
     const saved=await db.from("chinese_stage3_skill_reviews").insert({user_id:user.id,week:4,skill:"speaking",task_id:taskId,input_kind:"audio",input_text:transcript,object_path:null,feedback}).select("*").single();
     if(saved.error){
-      const old=await existingReview(db,user.id,"speaking",taskId,3);
+      const old=await existingReview(db,user.id,"speaking",taskId,4);
       if(old)return NextResponse.json({ok:true,cached:true,review:old});
       console.error("[stage3-speaking] Save rejected",saved.error.code);
       return NextResponse.json({error:"語音已批改但儲存失敗；請檢查 SQL 是否執行"},{status:500});
