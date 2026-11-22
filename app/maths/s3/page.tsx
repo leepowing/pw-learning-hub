@@ -48,7 +48,7 @@ export default function S3MathematicsPage() {
       <button
         type="button"
         className="flashcardButton"
-        onClick={() => window.location.assign("/maths/s3/chapter-1/flashcards")}
+        onClick={() => window.location.assign("/maths/s3/flashcards")}
       >
         <span className="flashcardInformation">
           <span className="flashcardIcon">
@@ -65,13 +65,13 @@ export default function S3MathematicsPage() {
             </strong>
 
             <span className="flashcardDescription">
-              Practise formulae from your S3 lessons.
+              Choose one or more chapters and practise the formulas together.
             </span>
           </span>
         </span>
 
         <span className="chooseButton">
-          Start Flashcards →
+          Choose chapters →
         </span>
       </button>
 

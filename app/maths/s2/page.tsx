@@ -100,7 +100,7 @@ Chapters 1–12 are available; Chapter 13 overview is now available
         type="button"
         className="flashcardButton"
         onClick={() =>
-          router.push("/maths/flashcards")
+          router.push("/maths/s2/flashcards")
         }
       >
         <span className="flashcardInformation">
@@ -118,8 +118,7 @@ Chapters 1–12 are available; Chapter 13 overview is now available
             </strong>
 
             <span className="flashcardDescription">
-              Choose Chapter 3 and practise all
-              identities together.
+              Choose one or more chapters and practise the formulas together.
             </span>
           </span>
         </span>
