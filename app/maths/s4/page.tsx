@@ -21,9 +21,9 @@ export default function S4MathematicsPage() {
         <div className="holdCopy">
           <p className="holdEyebrow">FORMULA PRACTICE</p>
           <h2>S4 Formula Flashcards</h2>
-          <p>Cards will be added after their content has been reviewed and approved.</p>
+          <p>Choose Chapter 1 to practise 9 approved formula cards, including optional enrichment.</p>
         </div>
-        <span className="holdStatus">Coming soon</span>
+        <Link className="holdStatus" href="/maths/flashcards?level=s4&chapter=1">Choose chapters →</Link>
       </section>
       <h2>Maths beyond 4A</h2>
       <div className="chapters">
@@ -54,7 +54,7 @@ export default function S4MathematicsPage() {
         .holdEyebrow { margin:0 0 4px; color:#4f46e5; font-weight:900; font-size:15px; letter-spacing:.08em; }
         .holdCopy h2 { margin:0 0 6px; font-size:28px; }
         .holdCopy p:last-child { margin:0; color:#64748b; font-size:17px; line-height:1.5; }
-        .holdStatus { border-radius:13px; padding:13px 18px; background:#e2e8f0; color:#64748b; font-size:16px; font-weight:800; white-space:nowrap; }
+        :global(.holdStatus) { text-decoration:none; border-radius:13px; padding:13px 18px; background:#4f46e5; color:white; font-size:16px; font-weight:800; white-space:nowrap; }
         .note { color:#64748b; font-size:16px; line-height:1.6; margin-top:24px; }
         @media(max-width:620px) { .flashcardsHold { padding:19px; flex-wrap:wrap; gap:13px; } .holdIcon { width:56px;height:56px;font-size:27px; } .holdCopy { flex-basis:calc(100% - 75px); } .holdCopy h2 {font-size:23px;} .holdStatus {width:100%;text-align:center;}
  .page{width:calc(100% - 24px);margin-top:28px} :global(.chapter){padding:18px;gap:14px;flex-wrap:wrap} .number{width:54px;height:54px;font-size:25px;border-radius:16px} .start{margin-left:auto} }
