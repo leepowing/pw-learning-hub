@@ -22,12 +22,12 @@ export default function S4ChapterOnePage() {
         ))}
       </section>
       <section className="feature flashcards" aria-label="Chapter 1 flashcards">
-        <div><p className="featureLabel purple">FORMULA PRACTICE</p><h2>Chapter 1 Flashcards</h2><p>Formula recall and concept review will become available after the cards are created and checked.</p></div>
-        <span className="unavailable">Coming soon</span>
+        <div><p className="featureLabel purple">FORMULA PRACTICE</p><h2>Chapter 1 Flashcards</h2><p>Practise 39 questions across the eight sections, with cross-chapter review and Smart Review.</p></div>
+        <Link className="featureStart purpleStart" href="/maths/s4/chapter-1/flashcards">Start Flashcards →</Link>
       </section>
       <section className="feature checkpoint" aria-label="Chapter 1 checkpoint">
-        <div><p className="featureLabel amber">FINAL ACTIVITY</p><h2>Checkpoint Activity</h2><p>Complete the chapter lessons before attempting the checkpoint.</p></div>
-        <span className="unavailable">Coming soon</span>
+        <div><p className="featureLabel amber">FINAL ACTIVITY</p><h2>Checkpoint Activity</h2><p>Check your understanding across Sections 1.1–1.7, with optional enrichment.</p></div>
+        <Link className="featureStart checkpointStart" href="/maths/s4/chapter-1/checkpoint">Start →</Link>
       </section>
       <style jsx>{`
         .page { max-width:1100px; width:calc(100% - 40px); margin:42px auto 70px; box-sizing:border-box; }
@@ -54,6 +54,10 @@ export default function S4ChapterOnePage() {
         .amber { color:#b45309; }
         .flashcards { background:linear-gradient(135deg,#eef2ff,#f5f3ff); border:1px solid #c7d2fe; }
         .checkpoint { background:#fffbeb; border:1px solid #fde68a; }
+        .featureStart { padding:14px 22px; color:white; border-radius:14px; font-size:17px; font-weight:800; text-decoration:none; white-space:nowrap; text-align:center; }
+        .purpleStart { background:#4f46e5; }
+        .checkpointStart { background:#7c3aed; }
+        .featureStart:focus-visible { outline:3px solid #2563eb; outline-offset:3px; }
         .unavailable { padding:14px 20px; color:#64748b; background:#e2e8f0; border-radius:14px; font-size:16px; font-weight:800; white-space:nowrap; }
         @media(max-width:760px) { .grid{grid-template-columns:1fr} .page{width:calc(100% - 24px);margin-top:28px} .card{padding:22px;min-height:0} .feature{padding:22px;align-items:flex-start;flex-direction:column} .unavailable{width:100%;box-sizing:border-box;text-align:center} }
       `}</style>
