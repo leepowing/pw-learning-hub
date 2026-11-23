@@ -22,8 +22,8 @@ export default function S4ChapterOnePage() {
         ))}
       </section>
       <section className="feature flashcards" aria-label="Chapter 1 flashcards">
-        <div><p className="featureLabel purple">FORMULA PRACTICE</p><h2>Chapter 1 Flashcards</h2><p>Practise 39 questions across the eight sections, with cross-chapter review and Smart Review.</p></div>
-        <Link className="featureStart purpleStart" href="/maths/s4/chapter-1/flashcards">Start Flashcards →</Link>
+        <div><p className="featureLabel purple">FORMULA PRACTICE</p><h2>Chapter 1 Flashcards</h2><p>Flashcards will be available once their content has been reviewed and approved.</p></div>
+        <span className="unavailable">Coming soon</span>
       </section>
       <section className="feature checkpoint" aria-label="Chapter 1 checkpoint">
         <div><p className="featureLabel amber">FINAL ACTIVITY</p><h2>Checkpoint Activity</h2><p>Check your understanding across Sections 1.1–1.7, with optional enrichment.</p></div>

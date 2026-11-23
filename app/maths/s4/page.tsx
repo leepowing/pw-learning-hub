@@ -16,6 +16,15 @@ export default function S4MathematicsPage() {
       <Link className="back" href="/subjects/mathematics">← Back to mathematics courses</Link>
       <h1>S4 Mathematics</h1>
       <p className="subtitle">Hong Kong Secondary 4 Mathematics · Compulsory Part</p>
+      <section className="flashcardsHold" aria-label="S4 Formula Flashcards">
+        <div className="holdIcon" aria-hidden="true">▣</div>
+        <div className="holdCopy">
+          <p className="holdEyebrow">FORMULA PRACTICE</p>
+          <h2>S4 Formula Flashcards</h2>
+          <p>Cards will be added after their content has been reviewed and approved.</p>
+        </div>
+        <span className="holdStatus">Coming soon</span>
+      </section>
       <h2>Maths beyond 4A</h2>
       <div className="chapters">
         <Link className="chapter" href="/maths/s4/chapter-1">
@@ -24,7 +33,7 @@ export default function S4MathematicsPage() {
           <span className="start">Start →</span>
         </Link>
       </div>
-      <p className="note">Additional chapters and S4 Formula Flashcards will be added as their lessons are developed.</p>
+      <p className="note">Additional chapters will be added as their lessons are developed.</p>
       <style jsx>{`
         .page { max-width:1100px; width:calc(100% - 40px); margin:42px auto 70px; }
         :global(.back) { display:inline-block; color:#047857; font-size:17px; font-weight:700; margin-bottom:25px; text-decoration:none; }
@@ -39,8 +48,16 @@ export default function S4MathematicsPage() {
         .label { color:#64748b; font-size:14px; font-weight:800; letter-spacing:.08em; }
         strong { font-size:clamp(21px,3vw,27px); line-height:1.3; overflow-wrap:anywhere; }
         .start { flex-shrink:0; color:#047857; font-size:18px; font-weight:800; white-space:nowrap; }
+        .flashcardsHold { display:flex; gap:22px; align-items:center; padding:28px; border:2px solid #c7d2fe; background:linear-gradient(135deg,#eef2ff,#f5f3ff); border-radius:23px; margin:0 0 34px; }
+        .holdIcon { display:flex; align-items:center; justify-content:center; width:80px; height:80px; border-radius:23px; background:#e0e7ff; color:#4f46e5; font-size:39px; font-weight:900; flex-shrink:0; }
+        .holdCopy { flex:1; min-width:0; }
+        .holdEyebrow { margin:0 0 4px; color:#4f46e5; font-weight:900; font-size:15px; letter-spacing:.08em; }
+        .holdCopy h2 { margin:0 0 6px; font-size:28px; }
+        .holdCopy p:last-child { margin:0; color:#64748b; font-size:17px; line-height:1.5; }
+        .holdStatus { border-radius:13px; padding:13px 18px; background:#e2e8f0; color:#64748b; font-size:16px; font-weight:800; white-space:nowrap; }
         .note { color:#64748b; font-size:16px; line-height:1.6; margin-top:24px; }
-        @media(max-width:620px) { .page{width:calc(100% - 24px);margin-top:28px} :global(.chapter){padding:18px;gap:14px;flex-wrap:wrap} .number{width:54px;height:54px;font-size:25px;border-radius:16px} .start{margin-left:auto} }
+        @media(max-width:620px) { .flashcardsHold { padding:19px; flex-wrap:wrap; gap:13px; } .holdIcon { width:56px;height:56px;font-size:27px; } .holdCopy { flex-basis:calc(100% - 75px); } .holdCopy h2 {font-size:23px;} .holdStatus {width:100%;text-align:center;}
+ .page{width:calc(100% - 24px);margin-top:28px} :global(.chapter){padding:18px;gap:14px;flex-wrap:wrap} .number{width:54px;height:54px;font-size:25px;border-radius:16px} .start{margin-left:auto} }
       `}</style>
     </main>
   );
