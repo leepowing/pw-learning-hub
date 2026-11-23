@@ -1,17 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
-const sections = [
-  { number: "1.1", title: "Number Systems", description: "Classify integers, rational numbers, irrational numbers and real numbers." },
-  { number: "1.2", title: "Quadratic Equations in One Unknown", description: "Recognise quadratic equations and write them in general form." },
-  { number: "1.3", title: "Solving Quadratic Equations by the Factor Method", description: "Factorise a quadratic expression and use the zero-product property." },
-  { number: "1.4", title: "Solving Quadratic Equations by the Quadratic Formula", description: "Apply the quadratic formula and study complex roots." },
-  { number: "1.5", title: "The Nature of Roots of Quadratic Equations", description: "Use the discriminant to determine the nature of roots." },
-  { number: "1.6", title: "Forming Quadratic Equations", description: "Form a quadratic equation when its roots are known." },
-  { number: "1.7", title: "Simple Practical Problems Leading to Quadratic Equations", description: "Model practical problems and reject invalid solutions." },
-  { number: "1.8", title: "Superfood in Mathematics: Development of the Complex Number System", description: "Optional enrichment: explore how the complex number system developed.", enrichment: true },
-];
+import { sections as lessonSections } from "./sectionData";
 
 export default function S4ChapterOnePage() {
   return (
@@ -19,14 +9,15 @@ export default function S4ChapterOnePage() {
       <Link className="back" href="/maths/s4">← Back to S4 Mathematics</Link>
       <p className="eyebrow">S4 MATHEMATICS · MATHS BEYOND 4A</p>
       <h1>Chapter 1 · Quadratic Equations and Number Systems</h1>
-      <p className="intro">Explore number systems, methods for solving quadratic equations, the nature of their roots and applications. Lessons will open one by one as they are completed.</p>
+      <p className="intro">Explore number systems, methods for solving quadratic equations, the nature of their roots and applications. All eight sections are available, with Section 1.8 marked as optional enrichment.</p>
       <section className="grid" aria-label="Chapter 1 sections">
-        {sections.map((section) => (
+        {lessonSections.map((section) => (
           <article className="card" key={section.number}>
-            <div className="top"><span className="number">{section.number}</span><span className="status">Coming soon</span></div>
+            <div className="top"><span className="number">{section.number}</span><span className="status">Available</span></div>
             {section.enrichment && <p className="enrichment">OPTIONAL ENRICHMENT</p>}
             <h2>{section.title}</h2>
             <p className="description">{section.description}</p>
+            <Link className="start" href={`/maths/s4/chapter-1/${section.slug}`}>Start →</Link>
           </article>
         ))}
       </section>
@@ -52,6 +43,9 @@ export default function S4ChapterOnePage() {
         .enrichment { color:#b45309; margin:14px 0 -8px; font-size:12px; font-weight:900; letter-spacing:.07em; }
         .card h2 { margin:22px 0 8px; font-size:clamp(22px,3vw,27px); line-height:1.28; overflow-wrap:anywhere; }
         .description { margin:0; color:#64748b; font-size:17px; line-height:1.6; }
+        .start { display:block; margin-top:20px; background:#059669; color:white; border-radius:12px; text-align:center; padding:14px; text-decoration:none; font-size:17px; font-weight:800; }
+        .start:hover { background:#047857; }
+        .start:focus-visible { outline:3px solid #60a5fa; outline-offset:3px; }
         .feature { display:flex; align-items:center; justify-content:space-between; gap:22px; padding:28px; margin-top:25px; border-radius:24px; flex-wrap:wrap; }
         .feature h2 { font-size:29px; margin:0 0 7px; }
         .feature p:last-child { color:#64748b; font-size:17px; line-height:1.5; margin:0; }
