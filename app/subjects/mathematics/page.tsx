@@ -26,8 +26,8 @@ const mathsCourses = [
   {
     level: "S4",
     description: "Hong Kong Secondary 4 Mathematics",
-    route: "",
-    available: false,
+    route: "/maths/s4",
+    available: true,
   },
   {
     level: "S5",
