@@ -118,7 +118,8 @@ function shuffleCards(cards: MathsFlashcard[]) {
   return shuffled;
 }
 
-export default function MathematicsFlashcardsPage() {
+export default function MathematicsFlashcardsPage({ onlyLevel }: { onlyLevel?: MathsLevel } = {}) {
+  const visibleLevelConfigs = onlyLevel ? levelConfigs.filter((config) => config.level === onlyLevel) : levelConfigs;
   const [selectedChapters, setSelectedChapters] = useState<
     Record<MathsLevel, number[]>
   >(emptySelections);
@@ -132,7 +133,7 @@ export default function MathematicsFlashcardsPage() {
 
   const [started, setStarted] = useState(false);
 
-  const selections: FlashcardSelection[] = levelConfigs
+  const selections: FlashcardSelection[] = visibleLevelConfigs
     .filter(
       (config) =>
         selectedChapters[config.level].length > 0
@@ -220,7 +221,7 @@ export default function MathematicsFlashcardsPage() {
             cursor: "pointer",
           }}
         >
-          ← Change levels and chapters
+          {onlyLevel ? "← Change S4 chapters" : "← Change levels and chapters"}
         </button>
 
         <header style={{ marginBottom: "30px" }}>
@@ -252,7 +253,7 @@ export default function MathematicsFlashcardsPage() {
             }}
           >
             This session contains {sessionCards.length}{" "}
-            cards from your selected levels and chapters.
+            cards from your selected {onlyLevel ? "S4 chapters" : "levels and chapters"}.
           </p>
         </header>
 
@@ -270,7 +271,7 @@ export default function MathematicsFlashcardsPage() {
       }}
     >
       <Link
-        href="/subjects/mathematics"
+        href={onlyLevel ? "/maths/s4" : "/subjects/mathematics"}
         style={{
           display: "inline-block",
           marginBottom: "26px",
@@ -280,7 +281,7 @@ export default function MathematicsFlashcardsPage() {
           textDecoration: "none",
         }}
       >
-        ← Back to mathematics courses
+        {onlyLevel ? "← Back to S4 Mathematics" : "← Back to mathematics courses"}
       </Link>
 
       <header style={{ marginBottom: "32px" }}>
@@ -301,7 +302,7 @@ export default function MathematicsFlashcardsPage() {
             fontSize: "46px",
           }}
         >
-          Choose levels and chapters
+          {onlyLevel ? "Choose S4 chapters" : "Choose levels and chapters"}
         </h1>
 
         <p
@@ -312,11 +313,13 @@ export default function MathematicsFlashcardsPage() {
             lineHeight: 1.5,
           }}
         >
-          Combine chapters from S1–S6 in one flashcard
-          session.
+          {onlyLevel
+            ? "Choose one or more S4 chapters to practise formula flashcards."
+            : "Combine chapters from S1–S6 in one flashcard session."}
         </p>
       </header>
 
+{!onlyLevel && (
 <div
   style={{
     display: "flex",
@@ -357,6 +360,7 @@ export default function MathematicsFlashcardsPage() {
     View my progress →
   </Link>
 </div>
+)}
 
       <section
         style={{
@@ -365,7 +369,7 @@ export default function MathematicsFlashcardsPage() {
           marginBottom: "24px",
         }}
       >
-        {levelConfigs.map((config) => {
+        {visibleLevelConfigs.map((config) => {
           const chapters = getAvailableChapters(
             config.cards
           );

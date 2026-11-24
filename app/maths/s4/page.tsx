@@ -23,7 +23,7 @@ export default function S4MathematicsPage() {
           <h2>S4 Formula Flashcards</h2>
           <p>Choose Chapter 1 to practise 9 approved formula cards, including optional enrichment.</p>
         </div>
-        <Link className="holdStatus" href="/maths/flashcards?level=s4&chapter=1">Choose chapters →</Link>
+        <Link className="holdStatus" href="/maths/s4/flashcards">Choose chapters →</Link>
       </section>
       <h2>Maths beyond 4A</h2>
       <div className="chapters">
