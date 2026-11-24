@@ -21,7 +21,7 @@ export default function S4MathematicsPage() {
         <div className="holdCopy">
           <p className="holdEyebrow">FORMULA PRACTICE</p>
           <h2>S4 Formula Flashcards</h2>
-          <p>Choose Chapter 1 to practise 9 approved formula cards, including optional enrichment.</p>
+          <p>Choose Chapter 1 or Chapter 2 to practise 21 approved formula cards, including optional enrichment.</p>
         </div>
         <Link className="holdStatus" href="/maths/s4/flashcards">Choose chapters →</Link>
       </section>

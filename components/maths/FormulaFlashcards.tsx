@@ -1,5 +1,6 @@
 "use client";
 import { s3FormulaFaces } from "../../data/maths/flashcards/s3Formula";
+import S4Chapter2FormulaDiagram from "./S4Chapter2FormulaDiagram";
 import summaryFaces from "./s2SummaryFaces.json";
 import "./s2SummaryFaces.css";
 import S1FormulaDiagram from "./S1FormulaDiagram";
@@ -221,7 +222,7 @@ export default function FormulaFlashcards({
   const summary = s3FormulaFaces[currentCard.id] ?? summaryFaces[currentCard.id as keyof typeof summaryFaces];
   const summaryClass = "s2-summary-face s2-summary-" + currentCard.chapter;
   const useContentSizedFaces = Boolean(summary) || (currentCard.level === "s1" && (currentCard.chapter === 9 || currentCard.chapter === 10)) || currentCard.level === "s2" && (currentCard.chapter === 6 || currentCard.chapter === 7 || currentCard.chapter === 8 || currentCard.chapter === 9 || currentCard.chapter === 10 || currentCard.chapter === 11 || currentCard.chapter === 12 || currentCard.chapter === 13);
-  const hasFrontVisual = Boolean(currentCard.id.startsWith("s1-formula-8-") || currentCard.id.startsWith("s1-formula-9-") || currentCard.s2Chapter12Diagram || currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
+  const hasFrontVisual = Boolean(currentCard.id.startsWith("s4-c2-") || currentCard.id.startsWith("s1-formula-8-") || currentCard.id.startsWith("s1-formula-9-") || currentCard.s2Chapter12Diagram || currentCard.frontDiagram || currentCard.chapter10Diagram || currentCard.chapter12Diagram || currentCard.s2Chapter6Diagram || currentCard.s2Chapter7Diagram || currentCard.s2Chapter8Diagram || currentCard.s2Chapter9Diagram || currentCard.s2Chapter10Diagram || currentCard.s2Chapter11Diagram);
   const cardOffset = exitDirection === "left" ? -900 : exitDirection === "right" ? 900 : dragOffset;
 
   return (
@@ -283,6 +284,7 @@ export default function FormulaFlashcards({
             <p style={{ color: "#4f46e5", fontWeight: 800, letterSpacing: 1 }}>{currentCard.level.toUpperCase()} · CHAPTER {currentCard.chapter}</p>
             {currentCard.s2Chapter12Diagram && <S2Chapter12Triangle />}
             {<S1FormulaDiagram id={currentCard.id} />}
+            {currentCard.id.startsWith("s4-c2-") && <S4Chapter2FormulaDiagram id={currentCard.id} />}
             {currentCard.frontDiagram && <Chapter9FlashcardDiagram kind={currentCard.frontDiagram} />}
             {currentCard.chapter10Diagram && <Chapter10FlashcardDiagram kind={currentCard.chapter10Diagram} />}
             {currentCard.chapter12Diagram && <Chapter12FlashcardDiagram kind={currentCard.chapter12Diagram} />}
