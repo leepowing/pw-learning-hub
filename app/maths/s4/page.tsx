@@ -32,6 +32,11 @@ export default function S4MathematicsPage() {
           <span className="details"><span className="label">CHAPTER 1</span><strong>Quadratic Equations and Number Systems</strong></span>
           <span className="start">Start →</span>
         </Link>
+              <Link className="chapter" href="/maths/s4/chapter-2">
+          <span className="number">2</span>
+          <span className="details"><span className="label">CHAPTER 2</span><strong>Equations of Straight Lines</strong></span>
+          <span className="start">Start →</span>
+        </Link>
       </div>
       <p className="note">Additional chapters will be added as their lessons are developed.</p>
       <style jsx>{`
