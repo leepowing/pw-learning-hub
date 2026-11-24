@@ -174,17 +174,39 @@ const path = `${user}/checkpoint2/${kind}/${taskId}/${uploadId}.${ext}`;
  function showFeedback(k:string){const f=aiFeedback[k];if(!f)return null;return <div style={{background:'#edf8f4',padding:12,borderRadius:8,marginTop:8}}><strong>AI 初步評分 {f.provisional_score}/10（須家長覆核）</strong><p>辨識文字：{f.transcription}</p><p>優點：{f.strengths.join('；')}</p><p>建議：{f.improvements.join('；')}</p><p>{f.score_reason}</p></div>}
  async function viewEvidence(k:string){const m=media[k];if(!m||!db)return;const {data,error}=await db.storage.from('chinese-checkpoint-private').createSignedUrl(m.object_path,90);
   if(error||!data){setMediaError('原稿讀取失敗');return;}window.open(data.signedUrl,'_blank','noopener,noreferrer');}
+ function finishRecording(recorder:MediaRecorder){
+  if(recorder.state!=='recording')return;
+  recorder.stop();
+ }
  async function startRecording(id:string){if(audioRecorder||submitted)return;
   try{if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined')throw Error('此瀏覽器不支援錄音');
+   setMediaError('');
    const stream=await navigator.mediaDevices.getUserMedia({audio:true});activeStream.current=stream;recorderChunks.current=[];
-   const r=new MediaRecorder(stream);r.ondataavailable=e=>{if(e.data.size)recorderChunks.current.push(e.data)};
-   r.onstop=()=>{const blob=new Blob(recorderChunks.current,{type:(r.mimeType||'audio/webm').split(';')[0]});stream.getTracks().forEach(t=>t.stop());activeStream.current=null;setAudioRecorder(null);setRecordingTask('');void uploadEvidence('speaking',id,blob)};
-   r.start();setAudioRecorder(r);setRecordingTask(id);
-   window.setTimeout(()=>{if(r.state==='recording')r.stop()},28000);
-  }catch(e){setMediaError(e instanceof Error?e.message:'無法錄音');}
+   // Prefer WebM/Opus where available, then use Safari's AAC-in-MP4 recorder.
+   const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4;codecs=mp4a.40.2','audio/mp4'];
+   const selected=preferred.find(t=>typeof MediaRecorder.isTypeSupported!=='function'||MediaRecorder.isTypeSupported(t));
+   const r=selected?new MediaRecorder(stream,{mimeType:selected}):new MediaRecorder(stream);
+   r.ondataavailable=e=>{if(e.data.size)recorderChunks.current.push(e.data)};
+   r.onerror=()=>setMediaError('錄音器發生錯誤，請重新整理後再試');
+   r.onstop=()=>{
+    const firstBlob=recorderChunks.current.find((part):part is Blob=>part instanceof Blob&&Boolean(part.type));
+    const reported=(r.mimeType||firstBlob?.type||selected||'').split(';')[0].toLowerCase();
+    const fallback=selected?.startsWith('audio/mp4')?'audio/mp4':'audio/webm';
+    const safeType=(['audio/mp4','audio/webm','audio/wav'] as const).includes(reported as 'audio/mp4'|'audio/webm'|'audio/wav')?reported:fallback;
+    const blob=new Blob(recorderChunks.current,{type:safeType});
+    stream.getTracks().forEach(t=>t.stop());activeStream.current=null;setAudioRecorder(null);setRecordingTask('');
+    if(blob.size===0){setMediaError('未能取得錄音資料，請錄製至少 3 秒後再停止');return;}
+    void uploadEvidence('speaking',id,blob);
+   };
+   // WebKit needs time slices to emit a complete, non-empty media segment.
+   r.start(1000);setAudioRecorder(r);setRecordingTask(id);
+   window.setTimeout(()=>finishRecording(r),28000);
+  }catch(e){activeStream.current?.getTracks().forEach(t=>t.stop());activeStream.current=null;setMediaError(e instanceof Error?e.message:'無法錄音');}
  }
- function stopRecording(){if(audioRecorder?.state==='recording')audioRecorder.stop();}
- useEffect(()=>()=>{if(audioRecorder?.state==='recording')audioRecorder.stop();activeStream.current?.getTracks().forEach(t=>t.stop());},[audioRecorder]);
+ function stopRecording(){if(audioRecorder)finishRecording(audioRecorder);}
+ // Release the microphone only when leaving the page. Do not depend on
+ // audioRecorder: that cleanup would stop a newly opened iPad microphone.
+ useEffect(()=>()=>{activeStream.current?.getTracks().forEach(t=>t.stop());},[]);
 
  return <main style={{maxWidth:980,margin:'30px auto',padding:'0 16px 80px',color:'#173047',lineHeight:1.7}}>
   <Link href="/chinese-gcse">← 返回 GCSE Chinese Learning Hub</Link>
