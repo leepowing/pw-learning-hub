@@ -14,7 +14,7 @@ export default function S4ChapterTwoPage(){
     <Link className="start" href={`/maths/s4/chapter-2/${s.slug}`}>Start →</Link>
   </article>)}</section>
   <section className="feature checkpoint"><div><p className="featureLabel amber">FINAL ACTIVITY</p><h2>Checkpoint Activity</h2><p>Check concepts and calculate answers for all five sections.</p></div><Link className="cta" href="/maths/s4/chapter-2/checkpoint">Start →</Link></section>
-  <section className="feature flashcards"><div><p className="featureLabel purple">FORMULA PRACTICE</p><h2>Chapter 2 Formula Flashcards</h2><p>Formula list awaiting parent review and approval; no Chapter 2 cards added yet.</p></div><span className="unavailable">Coming soon</span></section>
+  <section className="feature flashcards"><div><p className="featureLabel purple">LESSON PRACTICE</p><h2>Chapter 2 Flashcards</h2><p>30 lesson cards across Sections 2.1–2.5, including worked examples, practice and common mistakes. Separate from Formula Flashcards.</p></div><Link className="cta" href="/maths/s4/chapter-2/flashcards">Start Flashcards →</Link></section>
   <style jsx>{`
    .page{max-width:1100px;width:calc(100% - 40px);margin:42px auto 70px;box-sizing:border-box}
    .back{display:inline-block;margin-bottom:26px;color:#047857;text-decoration:none;font-size:17px;font-weight:700}
