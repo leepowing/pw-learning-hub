@@ -37,6 +37,12 @@ export default function S4MathematicsPage() {
           <span className="details"><span className="label">CHAPTER 2</span><strong>Equations of Straight Lines</strong></span>
           <span className="start">Start →</span>
         </Link>
+        <Link className="chapter" href="/maths/s4/chapter-3">
+          <span className="number">3</span>
+          <span className="details"><span className="label">CHAPTER 3</span><strong>Basic Knowledge of Functions</strong></span>
+          <span className="start">Start &rarr;</span>
+
+        </Link>
       </div>
       <p className="note">Additional chapters will be added as their lessons are developed.</p>
       <style jsx>{`

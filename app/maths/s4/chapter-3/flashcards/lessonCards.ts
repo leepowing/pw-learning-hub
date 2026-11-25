@@ -1,0 +1,267 @@
+import type { MathsFlashcard } from "@/data/maths/flashcards/types";
+export const s4Chapter3LessonCards: MathsFlashcard[] = [
+  {
+    "id": "s4-c3-lesson-s1-01",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "If f(x)=x²+5, find f(−2).",
+    "answer": "=4+5=9",
+    "explanation": "Evaluate the square before adding."
+  },
+  {
+    "id": "s4-c3-lesson-s1-02",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "The cost of n notebooks is C(n)=3n+2. Find C(4).",
+    "answer": "C(4)=3(4)+2=14",
+    "explanation": "Substitute the given input into the expression."
+  },
+  {
+    "id": "s4-c3-lesson-s1-03",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "Complete the outputs for y=2x+1 when x=0,1,2.",
+    "answer": "y(0)=1,\\quad y(1)=3,\\quad y(2)=5",
+    "explanation": "Substitute each x into the same rule."
+  },
+  {
+    "id": "s4-c3-lesson-s1-04",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "For g(x)=3x−4, find g(−1).",
+    "answer": "−7",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s1-05",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "For f(x)=x², find f(1/2).",
+    "answer": "1/4",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s1-06",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.1 Basic Concepts of Functions",
+    "type": "rule",
+    "prompt": "Identify the error: Mistaking f(2) for 2f, or assuming the codomain always equals the range.",
+    "answer": "f(2) is a function value; the range contains actual outputs only.",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s2-01",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "Find f(−3) for f(x)=2x²−x+1.",
+    "answer": "=18+3+1=22",
+    "explanation": "A negative input must be placed in brackets."
+  },
+  {
+    "id": "s4-c3-lesson-s2-02",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "If h(x)=x+2 and g(x)=x−1, expand h(x)g(x).",
+    "answer": "=x^2+x-2",
+    "explanation": "Apply distributive multiplication."
+  },
+  {
+    "id": "s4-c3-lesson-s2-03",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "If f(x)=x²+3, simplify f(x+2).",
+    "answer": "=x^2+4x+7",
+    "explanation": "Expand the square after substitution."
+  },
+  {
+    "id": "s4-c3-lesson-s2-04",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "For f(x)=x²−3x, find f(−2).",
+    "answer": "10",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s2-05",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "If f(x)=2x+3, simplify f(x+1).",
+    "answer": "2x+5",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s2-06",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.2 Notation of Functions",
+    "type": "rule",
+    "prompt": "Identify the error: Writing f(x+2)=f(x)+2 without checking the function rule.",
+    "answer": "For f(x)=x², f(x+2)=(x+2)², not x²+2.",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s3-01",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "Give three points on y=2x−1.",
+    "answer": "y=-3,-1,1",
+    "explanation": "Plot ordered pairs using equal axis units."
+  },
+  {
+    "id": "s4-c3-lesson-s3-02",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "Find values of y=x²−2x−3 for x=−1,0,1,2,3.",
+    "answer": "y=0,-3,-4,-3,0",
+    "explanation": "Evaluate each x and preserve the symmetry of the parabola."
+  },
+  {
+    "id": "s4-c3-lesson-s3-03",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "For y=x³−x, find y at x=−2,−1,0,1,2.",
+    "answer": "y=-6,0,0,0,6",
+    "explanation": "Evaluate the cubic and linear terms before subtraction."
+  },
+  {
+    "id": "s4-c3-lesson-s3-04",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "For y=2x+1, find the y-intercept.",
+    "answer": "1",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s3-05",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "For y=x²−4, find y at x=3.",
+    "answer": "5",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s3-06",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.3 Graphs of Some Special Functions",
+    "type": "rule",
+    "prompt": "Identify the error: Joining quadratic graph values with straight line segments, or ignoring a restricted domain.",
+    "answer": "Use a smooth curve through the calculated points and check the permitted x-interval.",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s4-01",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "A={−1,0,2}, f(x)=x². List the mapped outputs.",
+    "answer": "-1\\mapsto1,\\quad0\\mapsto0,\\quad2\\mapsto4",
+    "explanation": "Apply the same function rule to every domain member."
+  },
+  {
+    "id": "s4-c3-lesson-s4-02",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "Domain {−1,0,2}; codomain {0,1,4,9}; f(x)=x². Find range.",
+    "answer": "\\operatorname{range}(f)=\\{0,1,4\\}",
+    "explanation": "9 is in the codomain but receives no arrow."
+  },
+  {
+    "id": "s4-c3-lesson-s4-03",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "Is mapping 1→3, 2→3, 3→4 a function?",
+    "answer": "\\text{Yes: each input has exactly one output.}",
+    "explanation": "The function condition concerns outputs per input."
+  },
+  {
+    "id": "s4-c3-lesson-s4-04",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "Is {1→2, 1→3, 2→4} a function?",
+    "answer": "No",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s4-05",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "For inputs {−2,2}, f(x)=x², how many distinct range values?",
+    "answer": "1",
+    "explanation": ""
+  },
+  {
+    "id": "s4-c3-lesson-s4-06",
+    "level": "s4",
+    "chapter": 3,
+    "chapterTitle": "Basic Knowledge of Functions",
+    "section": "3.4 Superfood in Mathematics: Another Representation of Functions",
+    "type": "rule",
+    "prompt": "Identify the error: Believing two inputs cannot share the same output.",
+    "answer": "Many-to-one mappings can be functions; one-to-many mappings cannot.",
+    "explanation": ""
+  }
+];
