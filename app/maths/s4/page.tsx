@@ -48,6 +48,11 @@ export default function S4MathematicsPage() {
           <span className="details"><span className="label">CHAPTER 4</span><strong>Quadratic Functions and their Graphs</strong></span>
           <span className="start">Start &rarr;</span>
         </Link>
+        <Link className="chapter" href="/maths/s4/chapter-5">
+          <span className="number">5</span>
+          <span className="details"><span className="label">CHAPTER 5</span><strong>More about Polynomials</strong></span>
+          <span className="start">Start &rarr;</span>
+        </Link>
       </div>
       <p className="note">Additional chapters will be added as their lessons are developed.</p>
       <style jsx>{`

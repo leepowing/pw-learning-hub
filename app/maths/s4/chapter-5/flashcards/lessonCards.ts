@@ -1,0 +1,278 @@
+import type {MathsFlashcard} from "@/data/maths/flashcards/types";
+export const s4Chapter5LessonCards:MathsFlashcard[] = [
+  {
+    "id": "s4-c5-lesson-s1-01",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.1 Long Division of Polynomials",
+    "type": "rule",
+    "prompt": "State the quotient and remainder of (2x³+3x²−5x+6) ÷ (x+2).",
+    "formula": "Q=2x^2-x-3,\\quad R=12",
+    "explanation": "Use long division; the remainder is constant."
+  },
+  {
+    "id": "s4-c5-lesson-s1-02",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.1 Long Division of Polynomials",
+    "type": "rule",
+    "prompt": "What is the quotient of (x³−4x+7) ÷ (x−2)?",
+    "formula": "Q=x^2+2x,\\quad R=7",
+    "explanation": "Include the zero x² coefficient."
+  },
+  {
+    "id": "s4-c5-lesson-s1-03",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.1 Long Division of Polynomials",
+    "type": "rule",
+    "prompt": "Divide x²+5x+6 by x+2.",
+    "formula": "Q=x+3,\\quad R=0",
+    "explanation": "The polynomial factors exactly."
+  },
+  {
+    "id": "s4-c5-lesson-s1-04",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.1 Long Division of Polynomials",
+    "type": "rule",
+    "prompt": "What is the maximum remainder degree if the divisor has degree 3?",
+    "formula": "\\deg R\\leq2",
+    "explanation": "Remainder degree is smaller than the divisor degree."
+  },
+  {
+    "id": "s4-c5-lesson-s1-05",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.1 Long Division of Polynomials",
+    "type": "rule",
+    "prompt": "Why include 0x² when dividing x³−4x+7?",
+    "formula": "x^3+0x^2-4x+7",
+    "explanation": "Missing powers must retain their place in long division."
+  },
+  {
+    "id": "s4-c5-lesson-s2-01",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.2 Division Algorithm of Polynomials",
+    "type": "rule",
+    "prompt": "State the polynomial division algorithm.",
+    "formula": "P(x)=D(x)Q(x)+R(x)",
+    "explanation": "The remainder has lower degree than the nonzero divisor."
+  },
+  {
+    "id": "s4-c5-lesson-s2-02",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.2 Division Algorithm of Polynomials",
+    "type": "rule",
+    "prompt": "Express the division of 2x³+3x²−5x+6 by x+2 as an identity.",
+    "formula": "2x^3+3x^2-5x+6=(x+2)(2x^2-x-3)+12",
+    "explanation": "Dividend = divisor × quotient + remainder."
+  },
+  {
+    "id": "s4-c5-lesson-s2-03",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.2 Division Algorithm of Polynomials",
+    "type": "rule",
+    "prompt": "Find P(x) if D=x−1, Q=2x²+3x+4 and R=5.",
+    "formula": "P(x)=2x^3+x^2+x+1",
+    "explanation": "Multiply out DQ and add R."
+  },
+  {
+    "id": "s4-c5-lesson-s2-04",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.2 Division Algorithm of Polynomials",
+    "type": "rule",
+    "prompt": "Find the remainder if P=(x−3)(x+2)+4 and divisor is x−3.",
+    "formula": "R=4",
+    "explanation": "The constant remainder is visible in the identity."
+  },
+  {
+    "id": "s4-c5-lesson-s2-05",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.2 Division Algorithm of Polynomials",
+    "type": "rule",
+    "prompt": "Is a remainder of degree 2 valid for division by a linear polynomial?",
+    "formula": "\\text{No};\\ \\deg R<1",
+    "explanation": "A nonzero remainder must be constant."
+  },
+  {
+    "id": "s4-c5-lesson-s3-01",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.3 Remainder Theorem",
+    "type": "rule",
+    "prompt": "Find remainder of (2x³−3x+4) ÷ (x−2).",
+    "formula": "P(2)=2(8)-6+4=14",
+    "explanation": "Use the remainder theorem."
+  },
+  {
+    "id": "s4-c5-lesson-s3-02",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.3 Remainder Theorem",
+    "type": "rule",
+    "prompt": "Find remainder of (4x²−5x+3) ÷ (2x−1).",
+    "formula": "P\\left(\\frac12\\right)=\\frac32",
+    "explanation": "Substitute the zero of the divisor."
+  },
+  {
+    "id": "s4-c5-lesson-s3-03",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.3 Remainder Theorem",
+    "type": "rule",
+    "prompt": "Find remainder of (x³+2x+1) ÷ (x−1).",
+    "formula": "P(1)=4",
+    "explanation": "Use P(h)."
+  },
+  {
+    "id": "s4-c5-lesson-s3-04",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.3 Remainder Theorem",
+    "type": "rule",
+    "prompt": "Find remainder of (x²+1) ÷ (x+2).",
+    "formula": "P(-2)=5",
+    "explanation": "Use h = −2."
+  },
+  {
+    "id": "s4-c5-lesson-s3-05",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.3 Remainder Theorem",
+    "type": "rule",
+    "prompt": "For P=x²+ax+b with P(1)=4 and P(−2)=7, find a and b.",
+    "formula": "a=0,\\quad b=3",
+    "explanation": "Set up and solve the two equations."
+  },
+  {
+    "id": "s4-c5-lesson-s4-01",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.4 Factor Theorem",
+    "type": "rule",
+    "prompt": "Test whether x−2 divides x³−4x²+x+6.",
+    "formula": "P(2)=0\\Rightarrow (x-2)\\mid P(x)",
+    "explanation": "Factor theorem."
+  },
+  {
+    "id": "s4-c5-lesson-s4-02",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.4 Factor Theorem",
+    "type": "rule",
+    "prompt": "Fully factorise x³−6x²+11x−6.",
+    "formula": "(x-1)(x-2)(x-3)",
+    "explanation": "Test x=1 then factorise the quadratic quotient."
+  },
+  {
+    "id": "s4-c5-lesson-s4-03",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.4 Factor Theorem",
+    "type": "rule",
+    "prompt": "Test whether 2x−1 divides 4x²−4x+1.",
+    "formula": "P\\left(\\frac12\\right)=0",
+    "explanation": "Use the zero x=1/2."
+  },
+  {
+    "id": "s4-c5-lesson-s4-04",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.4 Factor Theorem",
+    "type": "rule",
+    "prompt": "Test whether x−2 divides x²−2x+3.",
+    "formula": "P(2)=3\\ne0",
+    "explanation": "Not a factor."
+  },
+  {
+    "id": "s4-c5-lesson-s4-05",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.4 Factor Theorem",
+    "type": "rule",
+    "prompt": "If P(−3)=0, what is a linear factor of P(x)?",
+    "formula": "x+3",
+    "explanation": "The factor has the opposite sign."
+  },
+  {
+    "id": "s4-c5-lesson-s5-01",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.5 Superfood in Mathematics: Factorization of a³ ± b³ and Synthetic Division",
+    "type": "rule",
+    "prompt": "Factorise the difference 8x³−27.",
+    "formula": "(2x-3)(4x^2+6x+9)",
+    "explanation": "Enrichment: difference of cubes."
+  },
+  {
+    "id": "s4-c5-lesson-s5-02",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.5 Superfood in Mathematics: Factorization of a³ ± b³ and Synthetic Division",
+    "type": "rule",
+    "prompt": "Factorise the sum x³+64.",
+    "formula": "(x+4)(x^2-4x+16)",
+    "explanation": "Enrichment: sum of cubes."
+  },
+  {
+    "id": "s4-c5-lesson-s5-03",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.5 Superfood in Mathematics: Factorization of a³ ± b³ and Synthetic Division",
+    "type": "rule",
+    "prompt": "Factorise x³−8.",
+    "formula": "(x-2)(x^2+2x+4)",
+    "explanation": "Difference of cubes."
+  },
+  {
+    "id": "s4-c5-lesson-s5-04",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.5 Superfood in Mathematics: Factorization of a³ ± b³ and Synthetic Division",
+    "type": "rule",
+    "prompt": "Give quotient and remainder of (2x³−3x²−8x+12) ÷ (x−2).",
+    "formula": "Q=2x^2+x-6,\\quad R=0",
+    "explanation": "Synthetic division using h=2."
+  },
+  {
+    "id": "s4-c5-lesson-s5-05",
+    "level": "s4",
+    "chapter": 5,
+    "chapterTitle": "More about Polynomials",
+    "section": "5.5 Superfood in Mathematics: Factorization of a³ ± b³ and Synthetic Division",
+    "type": "rule",
+    "prompt": "Synthetic divide x²+3x+2 by x+1: quotient and remainder?",
+    "formula": "Q=x+2,\\quad R=0",
+    "explanation": "Use h=−1."
+  }
+];
