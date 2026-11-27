@@ -1,4 +1,5 @@
-import type {MathsFlashcard} from "@/data/maths/flashcards/types";
+import type { MathsFlashcard } from "@/data/maths/flashcards/types";
+
 export const s4Chapter4LessonCards: MathsFlashcard[] = [
   {
     "id": "s4-c4-lesson-s1-01",
@@ -8,8 +9,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "For y=−x²+4x+5, state its opening direction and y-intercept.",
-    "answer": "a=-1<0\\Rightarrow\\text{opens downwards}; y(0)=5\\Rightarrow(0,5)",
-    "explanation": "Read the leading coefficient and substitute x=0."
+    "answer": "Opens downwards; y-intercept (0, 5).",
+    "explanation": "Read the leading coefficient and substitute x=0.",
+    "formula": "\\begin{aligned}a&=-1<0\\\\y(0)&=5\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s1-02",
@@ -19,8 +21,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "Find the x-intercepts of y=x²−2x−3.",
-    "answer": "0=x^2-2x-3; 0=(x-3)(x+1); x=-1\\ \\text{or}\\ x=3; \\text{Intercepts: }(-1,0),(3,0)",
-    "explanation": "Set y=0 and factorise."
+    "answer": "x-intercepts: (−1, 0) and (3, 0).",
+    "explanation": "Set y=0 and factorise.",
+    "formula": "\\begin{aligned}0&=x^2-2x-3\\\\0&=(x-3)(x+1)\\\\x&=-1\\ \\text{or}\\ x=3\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s1-03",
@@ -30,8 +33,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "Find the vertex of y=x²−2x−3.",
-    "answer": "x=-\\frac{-2}{2(1)}=1; y(1)=1-2-3=-4; \\text{Vertex: }(1,-4)",
-    "explanation": "Use the axis formula then substitute the x-coordinate."
+    "answer": "Vertex: (1, −4).",
+    "explanation": "Use the axis formula then substitute the x-coordinate.",
+    "formula": "\\begin{aligned}x&=\\frac{-(-2)}{2(1)}=1\\\\y(1)&=1-2-3=-4\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s1-04",
@@ -41,30 +45,33 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "Does y=x²+2x+5 intersect the x-axis?",
-    "answer": "\\Delta=2^2-4(1)(5); =4-20=-16<0; \\text{No real x-intercepts.}",
-    "explanation": "The discriminant is negative, so y=0 has no real roots."
+    "answer": "No real x-intercepts.",
+    "explanation": "The discriminant is negative, so y=0 has no real roots.",
+    "formula": "\\Delta=2^2-4(1)(5)=-16<0"
   },
   {
-    "id": "s4-c4-lesson-s1-05",
+    "id": "s4-c4-lesson-s1-05-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "For y=−3x²+6x+7, state the opening direction and y-intercept.",
+    "answer": "Opens downwards; y-intercept (0, 7).",
+    "explanation": "Negative leading coefficient means downward opening; at x=0, y=7.",
+    "formula": "\\begin{aligned}a&=-3<0\\\\f(0)&=7\\end{aligned}"
   },
   {
-    "id": "s4-c4-lesson-s1-06",
+    "id": "s4-c4-lesson-s1-06-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "Find the x-intercepts of y=−(x−2)(x+3).",
+    "answer": "x-intercepts: (2, 0) and (−3, 0).",
+    "explanation": "The x-intercepts occur where y=0; apply the zero-product property.",
+    "formula": "\\begin{aligned}y&=-(x-2)(x+3)\\\\0&=-(x-2)(x+3)\\\\x&=2\\ \\text{or}\\ x=-3\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s1-07",
@@ -74,8 +81,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "Give the vertex of y=x²−2x−3.",
-    "answer": "(1,−4)",
-    "explanation": "Axis x=1; y(1)=−4."
+    "answer": "",
+    "explanation": "Axis x=1; y(1)=−4.",
+    "formula": "\\left(1,-4\\right)"
   },
   {
     "id": "s4-c4-lesson-s1-08",
@@ -85,8 +93,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.1 Graphs of Quadratic Functions",
     "type": "rule",
     "prompt": "Identify the mistake: y-intercept found by setting y=0.",
-    "answer": "Set x=0 for y-intercept.",
-    "explanation": "Setting y=0 finds x-intercepts."
+    "answer": "",
+    "explanation": "Setting y=0 finds x-intercepts.",
+    "formula": "x=0\\ \\text{for the }y\\text{-intercept}"
   },
   {
     "id": "s4-c4-lesson-s2-01",
@@ -96,8 +105,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "For y=−2(x−3)²+5, find the vertex, axis and optimum value.",
-    "answer": "\\text{Vertex: }(3,5); \\text{Axis: }x=3; a=-2<0\\Rightarrow\\text{maximum}=5",
-    "explanation": "Read h and k, then check the sign of a."
+    "answer": "Vertex (3, 5); axis x = 3; maximum value 5.",
+    "explanation": "Read h and k, then check the sign of a.",
+    "formula": "\\begin{aligned}(h,k)&=(3,5)\\\\x&=3\\\\a&=-2<0\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s2-02",
@@ -107,8 +117,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "Rewrite y=2x²−8x+3 in vertex form.",
-    "answer": "y=2(x^2-4x)+3; =2\\big((x-2)^2-4\\big)+3; =2(x-2)^2-5",
-    "explanation": "Factor the leading coefficient, complete the square, then simplify."
+    "answer": "",
+    "explanation": "Factor the leading coefficient, complete the square, then simplify.",
+    "formula": "\\begin{aligned}y&=2(x^2-4x)+3\\\\&=2((x-2)^2-4)+3\\\\&=2(x-2)^2-5\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s2-03",
@@ -118,30 +129,33 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "Find the minimum of y=(x+1)²−4 for all real x.",
-    "answer": "(x+1)^2\\ge0; y\\ge-4; \\text{Minimum }=-4\\text{ at }x=-1",
-    "explanation": "The squared term reaches zero at x=−1."
+    "answer": "Minimum −4, attained at x = −1.",
+    "explanation": "The squared term reaches zero at x=−1.",
+    "formula": "\\begin{aligned}(x+1)^2&\\ge 0\\\\y&\\ge -4\\end{aligned}"
   },
   {
-    "id": "s4-c4-lesson-s2-04",
+    "id": "s4-c4-lesson-s2-04-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "Find the vertex and axis of symmetry of y=x²−6x+5.",
+    "answer": "Vertex (3, −4); axis x = 3.",
+    "explanation": "The vertex x-coordinate is −b/(2a); substitute x=3.",
+    "formula": "\\begin{aligned}x&=-\\frac{-6}{2(1)}=3\\\\f(3)&=9-18+5=-4\\end{aligned}"
   },
   {
-    "id": "s4-c4-lesson-s2-05",
+    "id": "s4-c4-lesson-s2-05-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "For y=3(x+2)²−7, find the minimum value and where it occurs.",
+    "answer": "Minimum −7 at x = −2.",
+    "explanation": "The squared term is nonnegative, so the minimum occurs when x+2=0.",
+    "formula": "\\begin{aligned}y&=3(x+2)^2-7\\\\x&=-2,\\quad y=-7\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s2-06",
@@ -151,8 +165,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "Find the vertex of y=4(x−1)²+2.",
-    "answer": "(1,2)",
-    "explanation": "Vertex form has h=1 and k=2."
+    "answer": "",
+    "explanation": "Vertex form has h=1 and k=2.",
+    "formula": "(1,2)"
   },
   {
     "id": "s4-c4-lesson-s2-07",
@@ -162,8 +177,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "Give the axis for y=−3(x+4)²−1.",
-    "answer": "x=−4",
-    "explanation": "The squared term vanishes at x=−4."
+    "answer": "",
+    "explanation": "The squared term vanishes at x=−4.",
+    "formula": "x=-4"
   },
   {
     "id": "s4-c4-lesson-s2-08",
@@ -173,8 +189,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.2 Vertex Form of Quadratic Functions",
     "type": "rule",
     "prompt": "Identify the mistake: vertex of y=(x+2)²−3 taken as (2,−3).",
-    "answer": "Vertex is (−2,−3).",
-    "explanation": "Set x+2=0."
+    "answer": "",
+    "explanation": "Set x+2=0.",
+    "formula": "(-2,-3)"
   },
   {
     "id": "s4-c4-lesson-s3-01",
@@ -184,8 +201,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "Solve x²−2x−3=0 from its graph.",
-    "answer": "y=x^2-2x-3; \\text{x-intercepts: }(-1,0),(3,0); \\therefore x=-1\\ \\text{or}\\ x=3",
-    "explanation": "Roots are the x-coordinates where y=0."
+    "answer": "Roots are the x-axis intersections.",
+    "explanation": "Roots are the x-coordinates where y=0.",
+    "formula": "\\begin{aligned}0&=x^2-2x-3\\\\&=(x-3)(x+1)\\\\x&=-1\\ \\text{or}\\ x=3\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s3-02",
@@ -195,8 +213,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "Use the graph y=x²−2x−3 to solve x²−2x−3=1.",
-    "answer": "(x-1)^2-4=1; (x-1)^2=5; x=1\\pm\\sqrt5\\ \\approx-1.24,\\ 3.24",
-    "explanation": "Intersections with y=1 give the approximate x-values."
+    "answer": "",
+    "explanation": "Intersections with y=1 give the approximate x-values.",
+    "formula": "\\begin{aligned}x^2-2x-3&=1\\\\(x-1)^2&=5\\\\x&=1\\pm\\sqrt5\\\\&\\approx -1.24,\\ 3.24\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s3-03",
@@ -206,30 +225,33 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "For x²−2x+1=0, how many real solutions appear on the graph?",
-    "answer": "y=(x-1)^2; \\text{The curve touches the x-axis at }(1,0).; x=1\\ \\text{(a repeated root)}",
-    "explanation": "The graph touches the x-axis once and Δ=0."
+    "answer": "One distinct real root (repeated).",
+    "explanation": "The graph touches the x-axis once and Δ=0.",
+    "formula": "\\begin{aligned}y&=(x-1)^2\\\\x&=1\\end{aligned}"
   },
   {
-    "id": "s4-c4-lesson-s3-04",
+    "id": "s4-c4-lesson-s3-04-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "How many real roots does x²+1=0 have? Explain using its graph.",
+    "answer": "No real roots; no x-axis intersections.",
+    "explanation": "For all real x, x²+1>0; the parabola stays above the x-axis.",
+    "formula": "\\begin{aligned}x^2+1&=0\\\\x^2&=-1\\end{aligned}"
   },
   {
-    "id": "s4-c4-lesson-s3-05",
+    "id": "s4-c4-lesson-s3-05-v2",
     "level": "s4",
     "chapter": 4,
     "chapterTitle": "Quadratic Functions and their Graphs",
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
-    "prompt": "q",
-    "answer": "a",
-    "explanation": "Review the corresponding section method."
+    "prompt": "Where does the graph of y=x²−4x+4 touch the x-axis?",
+    "answer": "One x-axis intersection at (2, 0).",
+    "explanation": "The graph y=(x−2)² touches the x-axis once at its vertex.",
+    "formula": "\\begin{aligned}x^2-4x+4&=0\\\\(x-2)^2&=0\\\\x&=2\\end{aligned}"
   },
   {
     "id": "s4-c4-lesson-s3-06",
@@ -239,8 +261,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "Solve x²−9=0 using x-axis intersections.",
-    "answer": "x=−3 or 3",
-    "explanation": "The curve meets the x-axis at ±3."
+    "answer": "",
+    "explanation": "The curve meets the x-axis at ±3.",
+    "formula": "x=-3\\ \\text{or}\\ x=3"
   },
   {
     "id": "s4-c4-lesson-s3-07",
@@ -250,8 +273,9 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "For f(x)=(x−2)², how many distinct roots of f(x)=0?",
-    "answer": "One",
-    "explanation": "A repeated root at x=2."
+    "answer": "One distinct real root (repeated).",
+    "explanation": "A repeated root at x=2.",
+    "formula": "x=2"
   },
   {
     "id": "s4-c4-lesson-s3-08",
@@ -261,7 +285,8 @@ export const s4Chapter4LessonCards: MathsFlashcard[] = [
     "section": "4.3 Solving Quadratic Equations by Graphical Method",
     "type": "rule",
     "prompt": "Identify mistake: read the root from the y-axis.",
-    "answer": "Read the x-coordinate where y=0.",
-    "explanation": "The x-axis intersection determines the root."
+    "answer": "",
+    "explanation": "The x-axis intersection determines the root.",
+    "formula": "y=0\\quad\\Rightarrow\\quad\\text{read the }x\\text{-coordinate}"
   }
 ];
